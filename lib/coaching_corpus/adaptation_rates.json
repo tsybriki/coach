@@ -1,0 +1,9 @@
+{
+  "id": "adaptation_rates_per_disc",
+  "title": "Per-discipline адаптационные rates",
+  "topics": ["adaptation_rates", "volume_distribution"],
+  "source": "internal: goal_allocator.py v13",
+  "principle": "ЧСС-час бега ≠ ЧСС-час вело ≠ ЧСС-час плавания. Коэффициенты (HR-cost нормированы на бег): run=1.0, bike=0.7, swim=0.55, strength=1.5. Это значит 1ч велосипеда в low-Z2 ≈ 0.7ч бега в low-Z2 по адаптационной нагрузке.",
+  "application": "При распределении объёма между целями (goal_allocator.py) переводить raw hours → effective_cost hours через эти rates. Это позволяет честно сравнивать.",
+  "_phase": 1
+}

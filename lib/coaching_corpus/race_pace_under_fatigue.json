@@ -1,0 +1,9 @@
+{
+  "id": "race_pace_under_fatigue",
+  "title": "Темп 10К после 40К вело",
+  "topics": ["triathlon", "run_leg", "fatigue"],
+  "source": "Sleator/Ironman running research",
+  "principle": "После 40К вело бег 10К на 30-60с/км медленнее, чем чистый 10К PB. Это нормально. Тренировка: brick 40К вело + 8К бег @ goal-pace +15с/км.",
+  "application": "Если в brick 8К < goal+15с → готов к гонке. Если > goal+30с → добавить brick-сессий или скорректировать goal.",
+  "_phase": 1
+}

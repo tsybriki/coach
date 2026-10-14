@@ -1,0 +1,5 @@
+{
+  "schema_version": "0.1.0",
+  "fit_ttl_days": 14,
+  "_note": "fit_retention.py раз в неделю удаляет FIT старше fit_ttl_days."
+}

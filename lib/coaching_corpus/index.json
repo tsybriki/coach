@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1.0",
+  "principles": [
+    {"id": "hr_drift_baseline",      "topics": ["hr_drift", "long_run", "thermoregulation"], "source": "Daniels Running Formula ch.4 + USMS notes"},
+    {"id": "cadence_lengthening",    "topics": ["cadence", "form"], "source": "coach-onboarding notes + cadence.md"},
+    {"id": "long_run_z2_low",        "topics": ["long_run", "hr_zones", "aerobic_base"], "source": "Pfitzinger 'Advanced Marathoning'"},
+    {"id": "interval_progression",   "topics": ["intervals", "vo2max", "specific_endurance"], "source": "Daniels Running Formula ch.5"},
+    {"id": "recovery_hr_drop",       "topics": ["recovery", "autonomic"], "source": "Seiler research"},
+    {"id": "taper_volume_quality",   "topics": ["taper", "race_prep"], "source": "Banister + club history 2026-10-04_cards.json"},
+    {"id": "lookback_interpretation","topics": ["lookback", "trends"], "source": "internal: coach-fit-review spec"},
+    {"id": "brick_workout_intro",    "topics": ["brick", "triathlon", "transition"], "source": "Joe Friel 'Triathlon Science'"},
+    {"id": "transition_efficiency",  "topics": ["transition", "triathlon"], "source": "Joe Friel + ITU race analysis"},
+    {"id": "race_pace_under_fatigue","topics": ["triathlon", "run_leg", "fatigue"], "source": "Sleator/Ironman running research"},
+    {"id": "adaptation_rates_per_disc","topics": ["adaptation_rates", "volume_distribution"], "source": "internal: goal_allocator.py v13"}
+  ],
+  "_phase": "1 — принципы зарегистрированы, application-поля пока пустые. Phase 2 наполнит текстом."
+}

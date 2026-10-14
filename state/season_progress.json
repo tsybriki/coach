@@ -1,0 +1,19 @@
+{
+  "schema_version": "0.1.0",
+  "weeks": {
+    "2026-W42": {
+      "planned_hours": 6.5,
+      "actual_hours": null,
+      "goal_breakdown": {
+        "g_run_spring": 6.5,
+        "g_tri_autumn": 0
+      },
+      "slots_completed": 0,
+      "slots_planned": 9,
+      "notes": "W42 = 12-18 окт. Старт фазы run_base."
+    }
+  },
+  "control_points": {},
+  "deviations": [],
+  "_source": "history/2026-10-04_Вс.json (Вс 4 окт: 13.6К за 70мин, HR avg 153, TE TEMPO) + plans/plan-w1.json (W42 planned 6.5ч)."
+}

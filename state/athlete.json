@@ -1,0 +1,71 @@
+{
+  "schema_version": "0.1.0",
+  "goals": [
+    "spring_10k_2027_under_41",
+    "tri_olympic_2027_finish"
+  ],
+  "current_form": {
+    "vo2max": 51,
+    "race_pace_10k": "44:06",
+    "training_paces": {
+      "Z2_low_pace": "5:40-5:50",
+      "tempo_pace": "4:50-5:20",
+      "threshold_pace": "4:20-4:35",
+      "vo2max_pace": "< 4:10"
+    }
+  },
+  "form_trend_4w": "recovering_after_back_injury",
+  "hr_zones": {
+    "hr_max": 182,
+    "rhr": 54,
+    "hrr": 128,
+    "method": "Karvonen + %HRmax",
+    "zones": {
+      "Z1": "100-118",
+      "Z2_low": "118-136",
+      "Z2": "125-145",
+      "Z3": "136-146",
+      "Z4": "146-160",
+      "Z5": "160-175",
+      "Z6": "175-182"
+    },
+    "notes": "low-Z2 сдвинута вниз (118-136) — намеренно для длинных"
+  },
+  "injuries": [
+    {
+      "date": "2026-09",
+      "type": "back_pinched_nerve",
+      "status": "resolved_w_care",
+      "notes": "2 нед out в сентябре; с октября — превентивный core 2×/нед"
+    }
+  ],
+  "adaptation_rates": {
+    "run": 1.0,
+    "bike": 0.7,
+    "swim": 0.55,
+    "strength": 1.5,
+    "notes": "HR-cost нормированы на бег. Используются goal_allocator.py"
+  },
+  "weight_kg_current": 101.7,
+  "weight_history": [
+    {"date": "2026-09-30", "kg": 101.7, "source": "manual"},
+    {"date": "2026-10-07", "kg": 101.4, "source": "garmin"},
+    {"date": "2026-10-12", "kg": 101.1, "source": "garmin"}
+  ],
+  "context": {
+    "age": 42,
+    "running_streak_years": 15,
+    "pb_10k": "40:04 (при ~100 кг)",
+    "pb_marathon": "3:18",
+    "current_weight_kg": 101.7,
+    "target_weight_kg": 96,
+    "sleep_h_avg": 7,
+    "work_type": "нервная, сидячая",
+    "infrastructure": {
+      "stadium": "400м тафтан, открыт; январь-февраль — мёртвый сезон (не чистят)",
+      "forest": "рабочая поверхность летом; зимой — шоссе",
+      "bike_stationary": "дома"
+    }
+  },
+  "_source": "plans/spring-10k-2027-v2.md (анкета) + plan-w1.json (HR-зоны) + history/2026-10-04_cards.json (taper/race context)"
+}

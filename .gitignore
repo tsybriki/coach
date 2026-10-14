@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+*.swp
+.venv/
+.pytest_cache/
+# Реальные FIT-данные (только структура в репо)
+state/fit_store/*.fit
+# Личные конфиги
+.env

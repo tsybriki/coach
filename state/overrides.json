@@ -1,0 +1,6 @@
+{
+  "schema_version": "0.1.0",
+  "version": 1,
+  "overrides": [],
+  "_note": "Append-only. Каждый override имеет reason. Создаётся командой Кирилла через coach-plan-week."
+}

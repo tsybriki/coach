@@ -1,0 +1,9 @@
+{
+  "id": "interval_progression",
+  "title": "Прогрессия интервалов",
+  "topics": ["intervals", "vo2max", "specific_endurance"],
+  "source": "Daniels Running Formula ch.5",
+  "principle": "От 400м к 1К к 2К. Каждый шаг — отдельная адаптация. Отдых — активный (jog), не стоя.",
+  "application": "Phase 1 (W1-W12): 10×400, 6×400, 4×1К. Phase 2 (W13-W18): 3×2К. Phase 3 (W19-W22): 5×2К @ race-pace. Phase 4 (taper): не вводить новые дистанции.",
+  "_phase": 1
+}

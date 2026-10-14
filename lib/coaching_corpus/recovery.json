@@ -1,0 +1,9 @@
+{
+  "id": "recovery_hr_drop",
+  "title": "Recovery HR drop",
+  "topics": ["recovery", "autonomic"],
+  "source": "Seiler research",
+  "principle": "За 60 сек после остановки HR должен упасть ≥30 bpm. Меньший drop = перетренированность или недостаточное восстановление.",
+  "application": "Если drop < 20 в двух сессиях подряд — добавить 1 день отдыха. Если < 10 — пауза, проверка стресса/сна.",
+  "_phase": 1
+}

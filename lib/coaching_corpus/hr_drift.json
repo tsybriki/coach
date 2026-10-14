@@ -1,0 +1,9 @@
+{
+  "id": "hr_drift_baseline",
+  "title": "HR drift baseline на длинной",
+  "topics": ["hr_drift", "long_run", "thermoregulation"],
+  "source": "Daniels Running Formula ch.4 + USMS notes",
+  "principle": "На дистанционной длинной HR drift > 5 bpm при одинаковом темпе указывает на перенапряжение, терморегуляцию или дегидрацию. Темп должен быть стабильным, HR — расти ≤5 bpm.",
+  "application": "Если drift > 5: 1) снизить темп ИЛИ 2) остановиться и переодеться/попить ИЛИ 3) завершить сессию. Не 'продавливать' HR вверх.",
+  "_phase": 1
+}

@@ -1,0 +1,5 @@
+{
+  "schema_version": "0.1.0",
+  "fits": [],
+  "_note": "Phase 1: пустой. fit_ingest.py заполнит при первой загрузке FIT."
+}

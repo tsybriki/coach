@@ -1,0 +1,9 @@
+{
+  "id": "lookback_interpretation",
+  "title": "Интерпретация трендов на N недель",
+  "topics": ["lookback", "trends"],
+  "source": "internal: coach-fit-review spec",
+  "principle": "При lookback анализе трендов: HR drift растёт → снизить объём или удлинить восстановление. Cadence падает → работа над стабилизаторами. TE flat → менять stimulus.",
+  "application": "Каждое наблюдение в lookback должно ссылаться на этот принцип (cited_principle='lookback_interpretation') или на более специфичный (hr_drift_baseline, cadence_lengthening).",
+  "_phase": 1
+}

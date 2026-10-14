@@ -1,0 +1,50 @@
+{
+  "schema_version": "0.1.0",
+  "version": 1,
+  "updated_at": "2026-10-13T20:00:00+00:00",
+  "weekly_windows": {
+    "ПН": [
+      {"start": "18:45", "end": "20:15", "duration_min": 90, "location": "stadium"}
+    ],
+    "ВТ": [
+      {"start": "09:00", "end": "09:30", "duration_min": 30, "location": "asphalt_commuter"},
+      {"start": "18:30", "end": "19:45", "duration_min": 75, "location": "asphalt_commuter"}
+    ],
+    "СР": [
+      {"start": "17:00", "end": "19:00", "duration_min": 120, "location": "stadium_or_pool"}
+    ],
+    "ЧТ": [
+      {"start": "10:30", "end": "11:15", "duration_min": 45, "location": "home_stationary_bike"}
+    ],
+    "ПТ": [
+      {"start": "18:00", "end": "19:00", "duration_min": 60, "location": "pool_or_asphalt"}
+    ],
+    "СБ": [],
+    "ВС": [
+      {"start": "11:00", "end": "13:00", "duration_min": 120, "location": "long_ride_or_station"}
+    ]
+  },
+  "preferred_slots": {
+    "ofp": ["morning"],
+    "long_run": ["sunday_or_wed_long"],
+    "intervals": ["mon_stadium", "tue_evening"],
+    "tempo": ["tue_evening", "mon_stadium"],
+    "long_bike": ["sunday", "wednesday_evening"],
+    "swim": ["wed_evening", "friday_evening"],
+    "brick": ["saturday_morning"],
+    "recovery": ["any_short_window"]
+  },
+  "forbidden": {
+    "СР вечер": "интенсивные запрещены (семейный тайм)",
+    "ПТ поздний вечер": "только easy / мобилити"
+  },
+  "min_total_hours_per_week": 2,
+  "max_total_hours_per_week": 11,
+  "open_questions": [
+    "Реально ли утром в ВТ бегать в рабочий день (частота использования окна)",
+    "СР — в среднем 1.5ч или 2ч (от этого зависит объём длинного)",
+    "ЧТ — велосипед это тренировка или коммутинг (если коммутинг, нужен второй слот)",
+    "ВС велосипед — всегда на улице, или бывает станок (если улица, зимой объём падает до 7ч/нед)"
+  ],
+  "_source": "plans/spring-10k-2027-v2.md, раздел 'ДОСТУПНЫЕ ОКНА НЕДЕЛИ' v2 с учётом Сб=0. Итого ~480-530 мин ≈ 8-9 ч. Дефицит 2.5-3.5 ч к W16."
+}
