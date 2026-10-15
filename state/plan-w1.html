@@ -347,9 +347,9 @@ function buildPicker(plan) {
   const deltaClass = (deltaHours >= 0 ? 'delta-positive' : 'delta-negative');
   html += '<div class="totals-card">';
   html += '<div class="totals-grid">';
-  html += '<div class="total-cell"><div class="v">' + plannedHours + 'ч</div><div class="l">план-неделя</div></div>';
-  html += '<div class="total-cell"><div class="v">' + targetHours + 'ч</div><div class="l">долгосрочн</div></div>';
-  html += '<div class="total-cell ' + deltaClass + '"><div class="v">' + deltaSign + deltaHours + 'ч</div><div class="l">дельта</div></div>';
+  html += '<div class="total-cell"><div class="v">' + plannedHours + 'ч</div><div class="l">planned</div></div>';
+  html += '<div class="total-cell"><div class="v">' + targetHours + 'ч</div><div class="l">expected</div></div>';
+  html += '<div class="total-cell ' + deltaClass + '"><div class="v">' + deltaSign + deltaHours + 'ч</div><div class="l">delta</div></div>';
   html += '</div>';
   // HR zones
   const hrzDict = (plan.rules && plan.rules.hr_zones_dict) ||
