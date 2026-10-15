@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas.schema.md",
-  "version": 24,
+  "version": 25,
   "title": "Спортивный слой Hermes — полная архитектура",
-  "subtitle": "v24: убран addEventListener на slot-card. Только inline onclick=\"showCard(N);\". pushState убран — без него в history не дублируется. back-button в браузере через popstate всё ещё работает (если pushState когда-то вызывается).",
+  "subtitle": "v25: CSS-only навигация через :target. Все 8 карточек в DOM сразу. Без JS для навигации. Гарантированно работает в любом preview.",
   "blocks": [
     {
       "id": "tldr",
@@ -26,7 +26,8 @@
         "v21: render_html использует двухэкранную mobile-first навигацию. Picker (список compact-карточек) → тап → cardWrap (детальная карточка с back-button + структура + inventory). Inline JS (vanilla, < 5 КБ) без fetch, без framework, без backend. Hash routing (#list / #slot-N). Адаптивно: тот же HTML хорошо работает на Android Telegram preview.",
         "v22: убраны tracker-плашка и tag (run/bike/swim) из compact-карточки. На карточке осталась только иконка вида спорта (🏃🚴🏊💪🔄🎯) и идея тренировки. Навигация: anchor <a href='#slot-N'> + preventDefault + showCard inline JS. Hash routing: #list / #slot-N. DOMContentLoaded fallback для прямых ссылок.",
         "v23 (фикс навигации): picker/cardWrap переключаются через inline style.display — не classList. Inline style имеет выше CSS-специфичности. Inline onclick=\"showCard(N)\" на каждом button — срабатывает даже если Telegram preview перехватывает addEventListener.",
-        "v24 (фикс навигации #3): querySelectorAll('.slot-card').forEach удалён. Только inline onclick=\"showCard(N);\". pushState оставлен (нужен для back-button). 27/27 tests passing."
+        "v24 (фикс навигации #3): querySelectorAll('.slot-card').forEach удалён. Только inline onclick=\"showCard(N);\". pushState оставлен (нужен для back-button). 27/27 tests passing.",
+        "v25 (фикс навигации #4): inline JS навигация полностью убрана. Все 8 детальных карточек сразу в DOM в <section id='card-N'>. Picker → anchor href='#card-N' → CSS :target делает видимой нужную. Back → anchor href='#list'. body:has(.card-detail:target) скрывает picker. Без onclick, без addEventListener, без pushState, без classList, без style.display. Только нативный HTML. Работает в браузере, в Telegram preview, в file://."
       ]
     },
     {

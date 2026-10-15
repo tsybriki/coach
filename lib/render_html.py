@@ -184,6 +184,63 @@ def _structure_steps_html(structure: list, kind: str) -> str:
     return f'<ol class="structure-list">{"".join(rows)}</ol>'
 
 
+def _render_card_detail(idx: int, slot: dict[str, Any]) -> str:
+    """Рендер одной детальной карточки в HTML (для v25 — все 8 в DOM сразу)."""
+    kind = slot.get("kind", "")
+    kind_cls = _kind_class(kind)
+    tag_label = esc(kind)
+    inv = _inventory_for(slot)
+    inv_html = _inventory_html(inv)
+
+    meta_items = []
+    if slot.get("location"):
+        meta_items.append(f'<span class="card-meta-item">📍 {esc(slot["location"])}</span>')
+    if slot.get("focus"):
+        meta_items.append(f'<span class="card-meta-item">🎯 {esc(slot["focus"])}</span>')
+    if slot.get("subkind"):
+        meta_items.append(f'<span class="card-meta-item">{esc(slot["subkind"])}</span>')
+    if slot.get("workout_pending"):
+        meta_items.append(
+            '<span class="card-meta-item" style="color:var(--warn);border-color:rgba(255,155,106,.4);'
+            'background:rgba(255,155,106,.08)">Zwift pending</span>'
+        )
+    meta_html = f'<div class="card-meta">{"".join(meta_items)}</div>' if meta_items else ""
+
+    structure = slot.get("structure", [])
+    steps_html = _structure_steps_html(structure, kind) if structure else '<div class="empty">Нет структуры</div>'
+
+    return (
+        f'<section id="card-{idx}" class="card-detail">'
+        f'<div class="topbar"><a href="#list" class="back-btn"><span class="arrow">←</span> назад</a></div>'
+        f'<div class="card">'
+        f'<div class="card-header">'
+        f'<div>'
+        f'<div class="card-headline">{esc(slot.get("name", ""))}</div>'
+        f'<div class="card-subtitle">{esc(slot.get("day", ""))} {esc(slot.get("time", ""))} · '
+        f'{esc(str(slot.get("duration_min", 0)))} мин</div>'
+        f'</div>'
+        f'<div class="card-tag {kind_cls}">{tag_label}</div>'
+        f'</div>'
+        f'{meta_html}'
+        f'{inv_html}'
+        f'<h3>Структура тренировки</h3>'
+        f'{steps_html}'
+        f'</div>'
+        f'</section>'
+    )
+
+
+def _inventory_html(inv: list[dict]) -> str:
+    if not inv:
+        return ""
+    items = "".join(
+        f'<div class="inv-item"><span class="inv-icon">{esc(i.get("icon", "•"))}</span>'
+        f'<span>{esc(i.get("name", ""))}</span></div>'
+        for i in inv
+    )
+    return f'<div class="inventory"><div class="inv-title">Что взять</div>{items}</div>'
+
+
 def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
     """Рендер plan-wN.json → двухэкранный HTML с навигацией.
 
@@ -212,7 +269,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
     hr_zones = rules.get("hr_zones", {})
     zones = hr_zones.get("zones", {})
 
-    # Сериализуем платные данные для JS
+    # Сериализуем планные данные для JS (если будут нужны в dev tools)
     plan_data_json = json.dumps({
         "slots": [
             {
@@ -234,7 +291,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
         ],
     }, ensure_ascii=False)
 
-    # Picker cards
+    # Picker cards — anchor на #card-N
     picker_items = []
     for idx, s in enumerate(slots):
         kind = s.get("kind", "")
@@ -245,7 +302,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
         dur = _duration_str(s.get("duration_min", 0))
         idea = esc(_slot_idea(s))
         picker_items.append(
-            f'<button type="button" class="slot-card {kind_cls}" data-slot-idx="{idx}" onclick="showCard({idx});">'
+            f'<a href="#card-{idx}" class="slot-card {kind_cls}" data-slot-idx="{idx}">'
             f'<div class="slot-card-head">'
             f'<span class="slot-icon">{icon}</span>'
             f'<span class="slot-day">{day}</span>'
@@ -253,9 +310,16 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
             f'<span class="slot-dur">{dur}</span>'
             f'</div>'
             f'<div class="slot-card-name">{idea}</div>'
-            f'</button>'
+            f'</a>'
         )
     picker_html = "".join(picker_items) if picker_items else '<div class="empty">Нет слотов</div>'
+
+    # Card details — все 8 карточек сразу в DOM
+    # Каждая в <section id="card-N">. CSS :target скрывает/показывает.
+    card_details_items = []
+    for idx, s in enumerate(slots):
+        card_details_items.append(_render_card_detail(idx, s))
+    card_details_html = "".join(card_details_items)
 
     body = """<!doctype html>
 <html lang="ru"><head>
@@ -280,6 +344,16 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
 
 .picker{display:flex;flex-direction:column;gap:10px}
+
+/* v25: CSS-only navigation через :target */
+[id="list"] { display:block; height:0; overflow:hidden; }
+.card-detail { display:none; }
+.card-detail:target { display:block; }
+/* Скрыть picker когда открыта детальная карточка */
+body:has(.card-detail:target) #picker { display:none; }
+@media (max-width: 0) { /* нет fallback — :has поддерживается в современных браузерах */ }
+.back-btn{background:var(--panel);border:1px solid var(--border);padding:8px 14px;border-radius:8px;color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:36px}
+.back-btn:active{transform:scale(0.97)}
 /* hidden / visible — классы больше не используются, перешли на inline style.display */
 
 /* Picker cards */
@@ -406,150 +480,15 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
   <footer>self-contained · v21 · plan-w__SW__.html</footer>
 </div>
 
-<!-- Экран 2: детальная карточка -->
-<div id="cardWrap" style="display:none">
-  <div class="topbar">
-    <button id="backBtn"><span class="arrow">←</span> назад</button>
-  </div>
-  <div id="cardHost"></div>
-</div>
+<!-- Экран 2: 8 детальных карточек, все в DOM, переключение через CSS :target -->
+__CARD_DETAILS_HTML__
 
 <script>
-const PLAN = __PLAN_DATA__;
+// v25: вся навигация — через нативные anchors + CSS :target.
+// JS не управляет picker/card-detail переключением.
+// Все детали уже отрендерены Python'ом выше (см. 8 section.card-detail).
 
-function escapeHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function tagClass(kind) {
-  return {"run":"tag-run","bike":"tag-bike","swim":"tag-swim","ofp":"tag-ofp","brick":"tag-brick","control_point":"tag-cp"}.get(kind,"");
-}
-
-function renderSteps(structure, kind) {
-  if (!structure || !structure.length) return '<div class="empty">Нет структуры</div>';
-  const isOfp = kind === 'ofp' || structure.some(st => 'exercise' in st || 'set' in st);
-  if (isOfp) return renderOfpSteps(structure);
-  return renderHrSteps(structure);
-}
-
-function renderOfpSteps(structure) {
-  const rows = structure.map(st => {
-    if (st.exercise) {
-      return '<li class="step step-ofp">'
-        + '<div class="step-head"><span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
-        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
-        + '<div class="step-name">' + escapeHtml(st.exercise) + '</div>'
-        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
-        + '</li>';
-    }
-    if (st.set) {
-      let html = '<li class="step step-set">'
-        + '<div class="step-head"><span class="step-phase">main</span>'
-        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
-        + '<div class="step-name">' + escapeHtml(st.set.name) + '</div>'
-        + '<ol class="ex-list">';
-      for (const ex of st.set.exercises) {
-        html += '<li class="ex-item"><b>' + escapeHtml(ex.name) + '</b> · ' + escapeHtml(ex.reps)
-              + (ex.rest ? ' · отдых ' + escapeHtml(ex.rest) : '') + '</li>';
-      }
-      return html + '</ol></li>';
-    }
-    return '';
-  }).join('');
-  return '<ol class="structure-list">' + rows + '</ol>';
-}
-
-function renderHrSteps(structure) {
-  const rows = structure.map(st => {
-    if (st.phase === 'set' && st.set_repeats) {
-      let subHtml = st.set_repeats.map(s => {
-        let pace = s.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
-        let zone = s.zone ? '<span class="step-zone">' + escapeHtml(s.zone) + '</span>' : '';
-        return '<li class="step-sub">'
-          + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(s.phase||'') + '</span>'
-          + ' <span class="step-dur">' + escapeHtml(String(s.duration_min||'')) + 'мин</span>' + pace + '</div>'
-          + (s.notes ? '<div class="step-notes">' + escapeHtml(s.notes) + '</div>' : '')
-          + '</li>';
-      }).join('');
-      return '<li class="step step-set">'
-        + '<div class="step-head"><span class="step-phase">set</span>'
-        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>'
-        + '<span class="step-reps">× ' + escapeHtml(String(st.reps||'?')) + '</span></div>'
-        + '<ol class="step-sublist">' + subHtml + '</ol>'
-        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
-        + '</li>';
-    }
-    let pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
-    let zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
-    return '<li class="step">'
-      + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
-      + ' <span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>' + pace + '</div>'
-      + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
-      + '</li>';
-  }).join('');
-  return '<ol class="structure-list">' + rows + '</ol>';
-}
-
-function renderInventory(inv) {
-  if (!inv || !inv.length) return '';
-  const items = inv.map(i => '<div class="inv-item"><span class="inv-icon">' + escapeHtml(i.icon||'•') + '</span><span>' + escapeHtml(i.name) + '</span></div>').join('');
-  return '<div class="inventory"><div class="inv-title">Что взять</div>' + items + '</div>';
-}
-
-function renderCard(slot) {
-  const tc = tagClass(slot.kind);
-  const tagLabel = slot.kind || '';
-  const inv = slot.inventory || [];
-  const invHtml = renderInventory(inv);
-  let meta = '';
-  if (slot.location) meta += '<span class="card-meta-item">📍 ' + escapeHtml(slot.location) + '</span>';
-  if (slot.focus) meta += '<span class="card-meta-item">🎯 ' + escapeHtml(slot.focus) + '</span>';
-  if (slot.subkind) meta += '<span class="card-meta-item">' + escapeHtml(slot.subkind) + '</span>';
-  if (slot.workout_pending) meta += '<span class="card-meta-item" style="color:var(--warn);border-color:rgba(255,155,106,.4);background:rgba(255,155,106,.08)">Zwift pending</span>';
-
-  const steps = renderSteps(slot.structure, slot.kind);
-  return '<div class="card">'
-    + '<div class="card-header"><div><div class="card-headline">' + escapeHtml(slot.name) + '</div>'
-    + '<div class="card-subtitle">' + escapeHtml(slot.day) + ' ' + escapeHtml(slot.time) + ' · ' + escapeHtml(String(slot.duration_min)) + ' мин</div></div>'
-    + '<div class="card-tag ' + tc + '">' + escapeHtml(tagLabel) + '</div></div>'
-    + (meta ? '<div class="card-meta">' + meta + '</div>' : '')
-    + invHtml
-    + '<h3>Структура тренировки</h3>'
-    + steps
-    + '</div>';
-}
-
-function showCard(idx) {
-  const slot = PLAN.slots[idx];
-  if (!slot) return;
-  document.getElementById('cardHost').innerHTML = renderCard(slot);
-  document.getElementById('picker').style.display = 'none';
-  document.getElementById('cardWrap').style.display = 'block';
-  window.scrollTo(0, 0);
-  if (history && history.pushState) {
-    history.pushState({view:'card', idx}, '', '#slot-' + idx);
-  }
-}
-
-function showList() {
-  document.getElementById('picker').style.display = 'flex';
-  document.getElementById('cardWrap').style.display = 'none';
-  if (history && history.pushState) {
-    history.pushState({view:'list'}, '', '#list');
-  }
-}
-
-document.getElementById('backBtn').addEventListener('click', () => showList());
-window.addEventListener('popstate', () => {
-  const h = (location.hash || '').replace('#','');
-  if (h.startsWith('slot-')) showCard(parseInt(h.slice(5), 10));
-  else showList();
-});
-// Fallback: если hash установлен при загрузке (открыли по прямой ссылке), показываем карточку
-document.addEventListener('DOMContentLoaded', () => {
-  const h = (location.hash || '').replace('#','');
-  if (h.startsWith('slot-')) showCard(parseInt(h.slice(5), 10));
-});
+/* Заглушки для dev tools. */
 </script>
 </body></html>"""
 
@@ -584,6 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
     body_filled = body_filled.replace("__PHASE_GOAL__", phase_goal_id)
     body_filled = body_filled.replace("__SLOTS_COUNT__", esc(str(len(slots))))
     body_filled = body_filled.replace("__PICKER_ITEMS__", picker_html)
+    body_filled = body_filled.replace("__CARD_DETAILS_HTML__", card_details_html)
     body_filled = body_filled.replace("__CP_HTML__", cp_html)
     body_filled = body_filled.replace("__PLAN_DATA__", plan_data_json)
 

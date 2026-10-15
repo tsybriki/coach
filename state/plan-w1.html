@@ -21,6 +21,16 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
 
 .picker{display:flex;flex-direction:column;gap:10px}
+
+/* v25: CSS-only navigation через :target */
+[id="list"] { display:block; height:0; overflow:hidden; }
+.card-detail { display:none; }
+.card-detail:target { display:block; }
+/* Скрыть picker когда открыта детальная карточка */
+body:has(.card-detail:target) #picker { display:none; }
+@media (max-width: 0) { /* нет fallback — :has поддерживается в современных браузерах */ }
+.back-btn{background:var(--panel);border:1px solid var(--border);padding:8px 14px;border-radius:8px;color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:36px}
+.back-btn:active{transform:scale(0.97)}
 /* hidden / visible — классы больше не используются, перешли на inline style.display */
 
 /* Picker cards */
@@ -137,7 +147,7 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
   <h2 style="margin:14px 0 4px">Тренировки · 8 шт</h2>
   <div style="font-size:12px;color:var(--muted);margin-bottom:4px">тап → детали</div>
 
-  <button type="button" class="slot-card tag-run" data-slot-idx="0" onclick="showCard(0);"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ПН</span><span class="slot-time">18:45</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Easy 5К + прогрессия 3К</div></button><button type="button" class="slot-card tag-run" data-slot-idx="1" onclick="showCard(1);"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">09:00</span><span class="slot-dur">30мин</span></div><div class="slot-card-name">Easy бег 30мин Z2</div></button><button type="button" class="slot-card tag-run" data-slot-idx="2" onclick="showCard(2);"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">18:30</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Ключевая: Интервалы 60мин Z3</div></button><button type="button" class="slot-card tag-run" data-slot-idx="3" onclick="showCard(3);"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">СР</span><span class="slot-time">17:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный бег 90мин Z2_low</div></button><button type="button" class="slot-card tag-bike" data-slot-idx="4" onclick="showCard(4);"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ЧТ</span><span class="slot-time">10:30</span><span class="slot-dur">45мин</span></div><div class="slot-card-name">Вел-станок Z2 45мин (дома)</div></button><button type="button" class="slot-card tag-swim" data-slot-idx="5" onclick="showCard(5);"><div class="slot-card-head"><span class="slot-icon">🏊</span><span class="slot-day">ПТ</span><span class="slot-time">18:00</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Пул 60мин easy</div></button><button type="button" class="slot-card tag-ofp" data-slot-idx="6" onclick="showCard(6);"><div class="slot-card-head"><span class="slot-icon">💪</span><span class="slot-day">СБ</span><span class="slot-time">10:00</span><span class="slot-dur">25мин</span></div><div class="slot-card-name">ofp core 25мин</div></button><button type="button" class="slot-card tag-bike" data-slot-idx="7" onclick="showCard(7);"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ВС</span><span class="slot-time">11:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный вел Z2 90мин</div></button>
+  <a href="#card-0" class="slot-card tag-run" data-slot-idx="0"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ПН</span><span class="slot-time">18:45</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Easy 5К + прогрессия 3К</div></a><a href="#card-1" class="slot-card tag-run" data-slot-idx="1"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">09:00</span><span class="slot-dur">30мин</span></div><div class="slot-card-name">Easy бег 30мин Z2</div></a><a href="#card-2" class="slot-card tag-run" data-slot-idx="2"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">18:30</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Ключевая: Интервалы 60мин Z3</div></a><a href="#card-3" class="slot-card tag-run" data-slot-idx="3"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">СР</span><span class="slot-time">17:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный бег 90мин Z2_low</div></a><a href="#card-4" class="slot-card tag-bike" data-slot-idx="4"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ЧТ</span><span class="slot-time">10:30</span><span class="slot-dur">45мин</span></div><div class="slot-card-name">Вел-станок Z2 45мин (дома)</div></a><a href="#card-5" class="slot-card tag-swim" data-slot-idx="5"><div class="slot-card-head"><span class="slot-icon">🏊</span><span class="slot-day">ПТ</span><span class="slot-time">18:00</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Пул 60мин easy</div></a><a href="#card-6" class="slot-card tag-ofp" data-slot-idx="6"><div class="slot-card-head"><span class="slot-icon">💪</span><span class="slot-day">СБ</span><span class="slot-time">10:00</span><span class="slot-dur">25мин</span></div><div class="slot-card-name">ofp core 25мин</div></a><a href="#card-7" class="slot-card tag-bike" data-slot-idx="7"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ВС</span><span class="slot-time">11:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный вел Z2 90мин</div></a>
 
   <div class="card" style="margin-top:14px">
     <h3>Контрольные точки</h3>
@@ -147,149 +157,14 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
   <footer>self-contained · v21 · plan-w1.html</footer>
 </div>
 
-<!-- Экран 2: детальная карточка -->
-<div id="cardWrap" style="display:none">
-  <div class="topbar">
-    <button id="backBtn"><span class="arrow">←</span> назад</button>
-  </div>
-  <div id="cardHost"></div>
-</div>
+<!-- Экран 2: 8 детальных карточек, все в DOM, переключение через CSS :target -->
+<section id="card-0" class="card-detail"><div class="topbar"><a href="#list" class="back-btn"><span class="arrow">←</span> назад</a></div><div class="card"><div class="card-header"><div><div class="card-headline">Easy 5К + прогрессия 3К</div><div class="card-subtitle">ПН 18:45 · 60 мин</div></div><div class="card-tag tag-run">run</div></div><div class="card-meta"><span class="card-meta-item">📍 stadium</span><span class="card-meta-item">🎯 Z2</span><span class="card-meta-item">easy_progression</span></div><div class="inventory"><div class="inv-title">Что взять</div><div class="inv-item"><span class="inv-icon">🏟</span><span>Стадион (400м)</span></div></div><h3>Структура тренировки</h3><ol class="structure-list"><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">10мин</span></div><div class="step-notes">Разминка.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z2</span><span class="step-phase">work</span> <span class="step-dur">25мин</span></div><div class="step-notes">Easy 5К. HR ~135, темп 5:30-5:00/км.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z3</span><span class="step-phase">work</span> <span class="step-dur">3мин</span></div><div class="step-notes">Прогрессия 1К: 5:00 → 4:30/км.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">15мин</span></div></li></ol></div></section><section id="card-1" class="card-detail"><div class="topbar"><a href="#list" class="back-btn"><span class="arrow">←</span> назад</a></div><div class="card"><div class="card-header"><div><div class="card-headline">Easy бег 30мин Z2</div><div class="card-subtitle">ВТ 09:00 · 30 мин</div></div><div class="card-tag tag-run">run</div></div><div class="card-meta"><span class="card-meta-item">📍 asphalt_commuter</span><span class="card-meta-item">🎯 Z2_low</span><span class="card-meta-item">easy</span></div><h3>Структура тренировки</h3><ol class="structure-list"><li class="step"><div class="step-head"><span class="step-zone">Z2_low</span><span class="step-phase">work</span> <span class="step-dur">30мин</span></div><div class="step-notes">Лёгкий бег. Дыхание носовое.</div></li></ol></div></section><section id="card-2" class="card-detail"><div class="topbar"><a href="#list" class="back-btn"><span class="arrow">←</span> назад</a></div><div class="card"><div class="card-header"><div><div class="card-headline">Ключевая: Интервалы 60мин Z3</div><div class="card-subtitle">ВТ 18:30 · 60 мин</div></div><div class="card-tag tag-run">run</div></div><div class="card-meta"><span class="card-meta-item">📍 asphalt_commuter</span><span class="card-meta-item">🎯 Z3</span><span class="card-meta-item">key_intervals</span></div><div class="inventory"><div class="inv-title">Что взять</div><div class="inv-item"><span class="inv-icon">⌚</span><span>Garmin / часы с HR</span></div></div><h3>Структура тренировки</h3><ol class="structure-list"><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">12мин</span></div><div class="step-notes">Разминка с ускорениями 2×100м str.</div></li><li class="step step-set"><div class="step-head"><span class="step-phase">set</span><span class="step-dur">30мин</span><span class="step-reps">× 5</span></div><ol class="step-sublist"><li class="step-sub"><div class="step-head"><span class="step-zone">Z3</span><span class="step-phase">work</span> <span class="step-dur">4мин</span></div><div class="step-notes">400м @ 4:00/км (~1:36).</div></li><li class="step-sub"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">recovery</span> <span class="step-dur">2мин</span></div><div class="step-notes">Jog 200м. Восстановить дыхание.</div></li></ol><div class="step-notes">Интервалы Z3. Источник: spring-10k-2027-v2.md.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">10мин</span></div></li></ol></div></section><section id="card-3" class="card-detail"><div class="topbar"><a href="#list" class="back-btn"><span class="arrow">←</span> назад</a></div><div class="card"><div class="card-header"><div><div class="card-headline">Длинный бег 90мин Z2_low</div><div class="card-subtitle">СР 17:00 · 90 мин</div></div><div class="card-tag tag-run">run</div></div><div class="card-meta"><span class="card-meta-item">📍 stadium_or_pool</span><span class="card-meta-item">🎯 Z2_low</span><span class="card-meta-item">long_Z2</span></div><h3>Структура тренировки</h3><ol class="structure-list"><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">10мин</span></div><div class="step-notes">Разминка 10мин Z1.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z2_low</span><span class="step-phase">work</span> <span class="step-dur">65мин</span></div><div class="step-notes">Длинный бег 65мин Z2_low. Дыхание носовое, темп комфортный. Если HR &gt; 145 — снизить темп. Источник: spring-10k-2027-v2.md.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">15мин</span></div></li></ol></div></section><section id="card-4" class="card-detail"><div class="topbar"><a href="#list" class="back-btn"><span class="arrow">←</span> назад</a></div><div class="card"><div class="card-header"><div><div class="card-headline">Вел-станок Z2 45мин (дома)</div><div class="card-subtitle">ЧТ 10:30 · 45 мин</div></div><div class="card-tag tag-bike">bike</div></div><div class="card-meta"><span class="card-meta-item">📍 home_stationary_bike</span><span class="card-meta-item">🎯 Z2</span><span class="card-meta-item">stationary_z2</span><span class="card-meta-item" style="color:var(--warn);border-color:rgba(255,155,106,.4);background:rgba(255,155,106,.08)">Zwift pending</span></div><div class="inventory"><div class="inv-title">Что взять</div><div class="inv-item"><span class="inv-icon">🚴</span><span>Велостанок (Tacx)</span></div><div class="inv-item"><span class="inv-icon">🚴</span><span>Zwift-приложение</span></div></div><h3>Структура тренировки</h3><ol class="structure-list"><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">5мин</span></div><div class="step-notes">Разминка на станке. Каденс 80-85.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z2</span><span class="step-phase">work</span> <span class="step-dur">30мин</span></div><div class="step-notes">Стабильное Z2. Каденс 85-90. Можно Zwift watch-симулятор.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">10мин</span></div><div class="step-notes">Заминка.</div></li></ol></div></section><section id="card-5" class="card-detail"><div class="topbar"><a href="#list" class="back-btn"><span class="arrow">←</span> назад</a></div><div class="card"><div class="card-header"><div><div class="card-headline">Пул 60мин easy</div><div class="card-subtitle">ПТ 18:00 · 60 мин</div></div><div class="card-tag tag-swim">swim</div></div><div class="card-meta"><span class="card-meta-item">📍 pool_or_asphalt</span><span class="card-meta-item">🎯 Z1</span><span class="card-meta-item">easy</span></div><div class="inventory"><div class="inv-title">Что взять</div><div class="inv-item"><span class="inv-icon">🏊</span><span>Бассейн</span></div></div><h3>Структура тренировки</h3><ol class="structure-list"><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">5мин</span></div><div class="step-notes">Разминка.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z2_low</span><span class="step-phase">work</span> <span class="step-dur">45мин</span></div><div class="step-notes">Основная часть. Носовое дыхание.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">10мин</span></div><div class="step-notes">Заминка.</div></li></ol></div></section><section id="card-6" class="card-detail"><div class="topbar"><a href="#list" class="back-btn"><span class="arrow">←</span> назад</a></div><div class="card"><div class="card-header"><div><div class="card-headline">ofp core 25мин</div><div class="card-subtitle">СБ 10:00 · 25 мин</div></div><div class="card-tag tag-ofp">ofp</div></div><div class="card-meta"><span class="card-meta-item">📍 home</span><span class="card-meta-item">🎯 core</span><span class="card-meta-item">core</span></div><div class="inventory"><div class="inv-title">Что взять</div><div class="inv-item"><span class="inv-icon">🧘</span><span>Коврик</span></div><div class="inv-item"><span class="inv-icon">🎗</span><span>Резинка (опционально)</span></div></div><h3>Структура тренировки</h3><ol class="structure-list"><li class="step step-ofp"><div class="step-head"><span class="step-phase">warmup</span><span class="step-dur">5мин</span></div><div class="step-name">Мобилилити: hip openers, glute bridge 2×15.</div><div class="step-notes">Активация ягодиц.</div></li><li class="step step-set"><div class="step-head"><span class="step-phase">main</span><span class="step-dur">20мин</span></div><div class="step-name">Core circuit x2 rounds</div><ol class="ex-list"><li class="ex-item"><b>Планка</b> · 3×45с · отдых 30с</li><li class="ex-item"><b>Медведи на коленях</b> · 2×12/стор · отдых 30с</li><li class="ex-item"><b>Bird-dog</b> · 3×10/стор · отдых 30с</li><li class="ex-item"><b>Glute bridge</b> · 3×15 · отдых 30с</li><li class="ex-item"><b>Гиперэкстензия</b> · 2×15 · отдых 30с</li></ol></li><li class="step step-ofp"><div class="step-head"><span class="step-phase">cooldown</span><span class="step-dur">5мин</span></div><div class="step-name">Растяжка 5мин. Без агрессии на грушевидную.</div><div class="step-notes">Spring-10k-2027-v2.md core program.</div></li></ol></div></section><section id="card-7" class="card-detail"><div class="topbar"><a href="#list" class="back-btn"><span class="arrow">←</span> назад</a></div><div class="card"><div class="card-header"><div><div class="card-headline">Длинный вел Z2 90мин</div><div class="card-subtitle">ВС 11:00 · 90 мин</div></div><div class="card-tag tag-bike">bike</div></div><div class="card-meta"><span class="card-meta-item">📍 long_ride_or_station</span><span class="card-meta-item">🎯 Z2_low</span><span class="card-meta-item">long_z2</span><span class="card-meta-item" style="color:var(--warn);border-color:rgba(255,155,106,.4);background:rgba(255,155,106,.08)">Zwift pending</span></div><div class="inventory"><div class="inv-title">Что взять</div><div class="inv-item"><span class="inv-icon">🚴</span><span>Вело (улица или станок)</span></div></div><h3>Структура тренировки</h3><ol class="structure-list"><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">10мин</span></div></li><li class="step"><div class="step-head"><span class="step-zone">Z2_low</span><span class="step-phase">work</span> <span class="step-dur">70мин</span></div><div class="step-notes">Длинный вел Z2_low 70мин. Zwift watch-сессия.</div></li><li class="step"><div class="step-head"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">10мин</span></div></li></ol></div></section>
 
 <script>
-const PLAN = {"slots": [{"id": "пн-key_run", "day": "ПН", "time": "18:45", "duration_min": 60, "name": "Easy 5К + прогрессия 3К", "kind": "run", "subkind": "easy_progression", "focus": "Z2", "location": "stadium", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка."}, {"phase": "work", "duration_min": 25, "zone": "Z2", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Easy 5К. HR ~135, темп 5:30-5:00/км."}, {"phase": "work", "duration_min": 3, "zone": "Z3", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Прогрессия 1К: 5:00 → 4:30/км."}, {"phase": "cooldown", "duration_min": 15, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "🏟", "name": "Стадион (400м)"}]}, {"id": "вт-easy_runs", "day": "ВТ", "time": "09:00", "duration_min": 30, "name": "Easy бег 30мин Z2", "kind": "run", "subkind": "easy", "focus": "Z2_low", "location": "asphalt_commuter", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "work", "duration_min": 30, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Лёгкий бег. Дыхание носовое."}], "inventory": []}, {"id": "вт-key_run", "day": "ВТ", "time": "18:30", "duration_min": 60, "name": "Ключевая: Интервалы 60мин Z3", "kind": "run", "subkind": "key_intervals", "focus": "Z3", "location": "asphalt_commuter", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 12, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка с ускорениями 2×100м str."}, {"phase": "set", "duration_min": 30, "zone": null, "pace_min_per_km": null, "reps": 5, "set_repeats": [{"phase": "work", "duration_min": 4, "zone": "Z3", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "400м @ 4:00/км (~1:36)."}, {"phase": "recovery", "duration_min": 2, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Jog 200м. Восстановить дыхание."}], "notes": "Интервалы Z3. Источник: spring-10k-2027-v2.md."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "⌚", "name": "Garmin / часы с HR"}]}, {"id": "ср-long_run", "day": "СР", "time": "17:00", "duration_min": 90, "name": "Длинный бег 90мин Z2_low", "kind": "run", "subkind": "long_Z2", "focus": "Z2_low", "location": "stadium_or_pool", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка 10мин Z1."}, {"phase": "work", "duration_min": 65, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Длинный бег 65мин Z2_low. Дыхание носовое, темп комфортный. Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."}, {"phase": "cooldown", "duration_min": 15, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": []}, {"id": "чт-bike", "day": "ЧТ", "time": "10:30", "duration_min": 45, "name": "Вел-станок Z2 45мин (дома)", "kind": "bike", "subkind": "stationary_z2", "focus": "Z2", "location": "home_stationary_bike", "workout_pending": true, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка на станке. Каденс 80-85."}, {"phase": "work", "duration_min": 30, "zone": "Z2", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Стабильное Z2. Каденс 85-90. Можно Zwift watch-симулятор."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Заминка."}], "inventory": [{"icon": "🚴", "name": "Велостанок (Tacx)"}, {"icon": "🚴", "name": "Zwift-приложение"}]}, {"id": "пт-swim", "day": "ПТ", "time": "18:00", "duration_min": 60, "name": "Пул 60мин easy", "kind": "swim", "subkind": "easy", "focus": "Z1", "location": "pool_or_asphalt", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка."}, {"phase": "work", "duration_min": 45, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Основная часть. Носовое дыхание."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Заминка."}], "inventory": [{"icon": "🏊", "name": "Бассейн"}]}, {"id": "сб-ofp", "day": "СБ", "time": "10:00", "duration_min": 25, "name": "ofp core 25мин", "kind": "ofp", "subkind": "core", "focus": "core", "location": "home", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "warmup", "exercise": "Мобилилити: hip openers, glute bridge 2×15.", "duration_min": 5, "notes": "Активация ягодиц."}, {"phase": "main", "set": {"name": "Core circuit x2 rounds", "exercises": [{"name": "Планка", "reps": "3×45с", "rest": "30с"}, {"name": "Медведи на коленях", "reps": "2×12/стор", "rest": "30с"}, {"name": "Bird-dog", "reps": "3×10/стор", "rest": "30с"}, {"name": "Glute bridge", "reps": "3×15", "rest": "30с"}, {"name": "Гиперэкстензия", "reps": "2×15", "rest": "30с"}]}, "duration_min": 20, "notes": "Акцент на заднюю цепь (превентивно от защемления спины)."}, {"phase": "cooldown", "exercise": "Растяжка 5мин. Без агрессии на грушевидную.", "duration_min": 5, "notes": "Spring-10k-2027-v2.md core program."}], "inventory": [{"icon": "🧘", "name": "Коврик"}, {"icon": "🎗", "name": "Резинка (опционально)"}]}, {"id": "вс-bike", "day": "ВС", "time": "11:00", "duration_min": 90, "name": "Длинный вел Z2 90мин", "kind": "bike", "subkind": "long_z2", "focus": "Z2_low", "location": "long_ride_or_station", "workout_pending": true, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}, {"phase": "work", "duration_min": 70, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Длинный вел Z2_low 70мин. Zwift watch-сессия."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "🚴", "name": "Вело (улица или станок)"}]}]};
+// v25: вся навигация — через нативные anchors + CSS :target.
+// JS не управляет picker/card-detail переключением.
+// Все детали уже отрендерены Python'ом выше (см. 8 section.card-detail).
 
-function escapeHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function tagClass(kind) {
-  return {"run":"tag-run","bike":"tag-bike","swim":"tag-swim","ofp":"tag-ofp","brick":"tag-brick","control_point":"tag-cp"}.get(kind,"");
-}
-
-function renderSteps(structure, kind) {
-  if (!structure || !structure.length) return '<div class="empty">Нет структуры</div>';
-  const isOfp = kind === 'ofp' || structure.some(st => 'exercise' in st || 'set' in st);
-  if (isOfp) return renderOfpSteps(structure);
-  return renderHrSteps(structure);
-}
-
-function renderOfpSteps(structure) {
-  const rows = structure.map(st => {
-    if (st.exercise) {
-      return '<li class="step step-ofp">'
-        + '<div class="step-head"><span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
-        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
-        + '<div class="step-name">' + escapeHtml(st.exercise) + '</div>'
-        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
-        + '</li>';
-    }
-    if (st.set) {
-      let html = '<li class="step step-set">'
-        + '<div class="step-head"><span class="step-phase">main</span>'
-        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
-        + '<div class="step-name">' + escapeHtml(st.set.name) + '</div>'
-        + '<ol class="ex-list">';
-      for (const ex of st.set.exercises) {
-        html += '<li class="ex-item"><b>' + escapeHtml(ex.name) + '</b> · ' + escapeHtml(ex.reps)
-              + (ex.rest ? ' · отдых ' + escapeHtml(ex.rest) : '') + '</li>';
-      }
-      return html + '</ol></li>';
-    }
-    return '';
-  }).join('');
-  return '<ol class="structure-list">' + rows + '</ol>';
-}
-
-function renderHrSteps(structure) {
-  const rows = structure.map(st => {
-    if (st.phase === 'set' && st.set_repeats) {
-      let subHtml = st.set_repeats.map(s => {
-        let pace = s.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
-        let zone = s.zone ? '<span class="step-zone">' + escapeHtml(s.zone) + '</span>' : '';
-        return '<li class="step-sub">'
-          + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(s.phase||'') + '</span>'
-          + ' <span class="step-dur">' + escapeHtml(String(s.duration_min||'')) + 'мин</span>' + pace + '</div>'
-          + (s.notes ? '<div class="step-notes">' + escapeHtml(s.notes) + '</div>' : '')
-          + '</li>';
-      }).join('');
-      return '<li class="step step-set">'
-        + '<div class="step-head"><span class="step-phase">set</span>'
-        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>'
-        + '<span class="step-reps">× ' + escapeHtml(String(st.reps||'?')) + '</span></div>'
-        + '<ol class="step-sublist">' + subHtml + '</ol>'
-        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
-        + '</li>';
-    }
-    let pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
-    let zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
-    return '<li class="step">'
-      + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
-      + ' <span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>' + pace + '</div>'
-      + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
-      + '</li>';
-  }).join('');
-  return '<ol class="structure-list">' + rows + '</ol>';
-}
-
-function renderInventory(inv) {
-  if (!inv || !inv.length) return '';
-  const items = inv.map(i => '<div class="inv-item"><span class="inv-icon">' + escapeHtml(i.icon||'•') + '</span><span>' + escapeHtml(i.name) + '</span></div>').join('');
-  return '<div class="inventory"><div class="inv-title">Что взять</div>' + items + '</div>';
-}
-
-function renderCard(slot) {
-  const tc = tagClass(slot.kind);
-  const tagLabel = slot.kind || '';
-  const inv = slot.inventory || [];
-  const invHtml = renderInventory(inv);
-  let meta = '';
-  if (slot.location) meta += '<span class="card-meta-item">📍 ' + escapeHtml(slot.location) + '</span>';
-  if (slot.focus) meta += '<span class="card-meta-item">🎯 ' + escapeHtml(slot.focus) + '</span>';
-  if (slot.subkind) meta += '<span class="card-meta-item">' + escapeHtml(slot.subkind) + '</span>';
-  if (slot.workout_pending) meta += '<span class="card-meta-item" style="color:var(--warn);border-color:rgba(255,155,106,.4);background:rgba(255,155,106,.08)">Zwift pending</span>';
-
-  const steps = renderSteps(slot.structure, slot.kind);
-  return '<div class="card">'
-    + '<div class="card-header"><div><div class="card-headline">' + escapeHtml(slot.name) + '</div>'
-    + '<div class="card-subtitle">' + escapeHtml(slot.day) + ' ' + escapeHtml(slot.time) + ' · ' + escapeHtml(String(slot.duration_min)) + ' мин</div></div>'
-    + '<div class="card-tag ' + tc + '">' + escapeHtml(tagLabel) + '</div></div>'
-    + (meta ? '<div class="card-meta">' + meta + '</div>' : '')
-    + invHtml
-    + '<h3>Структура тренировки</h3>'
-    + steps
-    + '</div>';
-}
-
-function showCard(idx) {
-  const slot = PLAN.slots[idx];
-  if (!slot) return;
-  document.getElementById('cardHost').innerHTML = renderCard(slot);
-  document.getElementById('picker').style.display = 'none';
-  document.getElementById('cardWrap').style.display = 'block';
-  window.scrollTo(0, 0);
-  if (history && history.pushState) {
-    history.pushState({view:'card', idx}, '', '#slot-' + idx);
-  }
-}
-
-function showList() {
-  document.getElementById('picker').style.display = 'flex';
-  document.getElementById('cardWrap').style.display = 'none';
-  if (history && history.pushState) {
-    history.pushState({view:'list'}, '', '#list');
-  }
-}
-
-document.getElementById('backBtn').addEventListener('click', () => showList());
-window.addEventListener('popstate', () => {
-  const h = (location.hash || '').replace('#','');
-  if (h.startsWith('slot-')) showCard(parseInt(h.slice(5), 10));
-  else showList();
-});
-// Fallback: если hash установлен при загрузке (открыли по прямой ссылке), показываем карточку
-document.addEventListener('DOMContentLoaded', () => {
-  const h = (location.hash || '').replace('#','');
-  if (h.startsWith('slot-')) showCard(parseInt(h.slice(5), 10));
-});
+/* Заглушки для dev tools. */
 </script>
 </body></html>

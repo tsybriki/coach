@@ -347,65 +347,64 @@ def test_step_builder_intervals():
 
 
 def test_html_has_details_structure():
-    """v21: HTML содержит picker+cardWrap для двухэкранной навигации + details-equivalents."""
+    """v25: HTML содержит picker + 8 sections card-N (CSS-only :target)."""
     import shutil
     tmp = tempfile.mkdtemp(prefix="plan_runtime_html_")
     try:
         result = plan_runtime.generate_plan_with_html(1, out_dir=Path(tmp))
         html = Path(result["html_path"]).read_text(encoding="utf-8")
-        # Двухэкранная навигация
+        # Picker
         assert 'id="picker"' in html, "HTML missing picker (список слотов)"
-        assert 'id="cardWrap"' in html, "HTML missing cardWrap (детальная карточка)"
-        assert 'id="cardHost"' in html, "HTML missing cardHost (контейнер для деталей)"
-        assert 'id="backBtn"' in html, "HTML missing backBtn (кнопка назад)"
-        # compact cards в picker
-        assert "slot-card" in html, "HTML missing slot-card class"
-        # Inline JS для навигации
-        assert "showCard" in html, "HTML missing showCard function"
-        assert "showList" in html, "HTML missing showList function"
-        # Inventory в деталях
-        assert "renderInventory" in html, "HTML missing renderInventory function"
-        assert "inv-title" in html, "HTML missing inventory section"
-        # Step rendering
-        assert "renderSteps" in html, "HTML missing renderSteps function"
+        # 8 section[id^=card-] для деталей
+        import re
+        sections = re.findall(r'<section id="card-(\d+)"', html)
+        assert len(sections) == 8, f"expected 8 card-N sections, got {len(sections)}: {sections}"
+        # 8 anchor в picker ссылаются на #card-N
+        anchors = re.findall(r'href="#card-(\d+)"', html)
+        assert len(set(anchors)) == 8, f"expected 8 unique anchors, got {len(set(anchors))}"
+        # 8 back-button через anchor href="#list"
+        back_anchors = re.findall(r'href="#list"', html)
+        assert len(back_anchors) >= 8, f"expected ≥8 back-btn anchors, got {len(back_anchors)}"
+        # CSS-only :target (никакого JS-переключения)
+        assert ":target" in html, "HTML missing :target CSS"
+        assert "showCard" not in html, "v25: showCard should be removed (CSS-only)"
+        assert "cardWrap" not in html, "v25: cardWrap should be removed"
+        # structure-list в детальных карточках
         assert "structure-list" in html, "HTML missing structure-list"
-        # OFP rendering
-        assert "renderOfpSteps" in html, "HTML missing renderOfpSteps function"
-        assert "ex-list" in html, "HTML missing ex-list (OFP exercises)"
+        assert "inv-title" in html, "HTML missing inventory title"
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    print(f"  ✓ HTML v21: picker + cardWrap + backBtn + renderInventory + renderSteps + renderOfpSteps")
+    print(f"  ✓ HTML v25: picker + 8 section.card-detail + CSS :target + 8 back-btn")
 
 
 def test_html_slot_links_navigable():
-    """v22+: slot-card это <button> с inline onclick — надёжно в любом preview."""
+    """v25: slot-card это <a href='#card-N'> — нативная anchor navigation через :target."""
     import shutil
     tmp = tempfile.mkdtemp(prefix="plan_runtime_nav_")
     try:
         result = plan_runtime.generate_plan_with_html(1, out_dir=Path(tmp))
         html = Path(result["html_path"]).read_text(encoding="utf-8")
         import re
-        # Каждая карточка — button
-        button_count = len(re.findall(r'<button\s+type="button"\s+class="slot-card\s+[^"]+"', html))
-        assert button_count >= 8, f"expected ≥8 slot-card buttons, got {button_count}"
-        # inline onclick + data-slot-idx на каждой кнопке
+        # Каждая карточка — anchor с href='#card-N'
+        anchors = re.findall(r'<a href="#card-(\d+)"\s+class="slot-card', html)
+        assert len(anchors) == 8, f"expected 8 anchor slot-cards, got {len(anchors)}"
+        # data-slot-idx на каждом
         for n in range(8):
             assert f'data-slot-idx="{n}"' in html, f"missing data-slot-idx={n}"
-            assert f'onclick="showCard({n});"' in html, f"missing inline onclick for slot {n}"
-        assert "pushState" in html, "missing pushState"  # не критично но окей
-        # popstate listener для back-button
-        assert "popstate" in html, "missing popstate listener"
-        # inline style.display для picker (видим) и cardWrap (скрыт) — inline выше CSS специфичности
-        assert 'id="picker" class="picker" style="display:flex"' in html, "picker should be display:flex initially"
-        assert 'id="cardWrap" style="display:none"' in html, "cardWrap should be display:none initially"
-        # JS переключает через inline style.display (НЕ classList)
-        assert "style.display = 'none'" in html, "showCard should set style.display = 'none' on picker"
-        assert "style.display = 'block'" in html, "showCard should set style.display = 'block' on cardWrap"
-        # backBtn handler
-        assert "backBtn" in html and "showList" in html, "missing back button handler"
+            assert f'href="#card-{n}"' in html, f"missing href=#card-{n}"
+        # CSS-only navigation: :target + .card-detail
+        assert ".card-detail:target" in html, "missing CSS .card-detail:target"
+        assert "body:has(.card-detail:target)" in html, "missing body:has(.card-detail:target)"
+        # back-btn = anchor href='#list'
+        back_btn = re.findall(r'<a href="#list"[^>]*back-btn', html)
+        assert len(back_btn) == 8, f"expected 8 back-btn anchors, got {len(back_btn)}"
+        # No JS for navigation
+        assert "showCard" not in html, "v25: showCard should be removed"
+        assert "showList" not in html, "v25: showList should be removed"
+        assert "cardHost" not in html, "v25: cardHost should be removed"
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    print("  ✓ HTML v22: 8 button slot-cards + inline onclick + data-slot-idx + pushState/popstate")
+    print("  ✓ HTML v25: 8 anchor slot-cards + CSS :target + 8 back-btn (no JS)")
 
 
 def test_weekly_report_runs():
