@@ -222,6 +222,28 @@ def test_render_html_writes_file():
     print("  ✓ render_html.render_plan_wN")
 
 
+def test_render_html_includes_v18_features():
+    """HTML должен иметь totals, focus бейджи, workout_pending, контрольные точки."""
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        plan = plan_generate.generate(1)
+        out = render_html.render_plan_wN(plan, tmp / "plan.html")
+        content = out.read_text(encoding="utf-8")
+        # Totals
+        assert "planned" in content and "target" in content and "delta" in content
+        # Phase
+        assert "run_base" in content
+        # HR zones
+        assert "Z2" in content
+        # Workout pending badge
+        assert "Zwift pending" in content
+        # Focus badge (хотя бы Z2_low где-то)
+        assert "Z2_low" in content
+        # Slots
+        assert "Длинный бег" in content or "Easy бег" in content
+    print("  ✓ render_html v18: totals, phase, zones, focus, workout_pending")
+
+
 def test_weekly_report_runs():
     report = weekly_report.report(1)  # W1 сезона
     assert "season_week" in report
@@ -324,6 +346,7 @@ def main():
         test_auto_zwift_rule_in_constraints,
         test_plan_generate_layout_w1_run_base,
         test_plan_generate_layout_all_phases,
+        test_render_html_includes_v18_features,
     ]
     failed = 0
     for t in tests:
