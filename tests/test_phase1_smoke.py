@@ -347,20 +347,34 @@ def test_step_builder_intervals():
 
 
 def test_html_has_details_structure():
-    """v20: HTML содержит <details> + structure-list + steps + OFP rendering."""
+    """v21: HTML содержит picker+cardWrap для двухэкранной навигации + details-equivalents."""
     import shutil
     tmp = tempfile.mkdtemp(prefix="plan_runtime_html_")
     try:
         result = plan_runtime.generate_plan_with_html(1, out_dir=Path(tmp))
         html = Path(result["html_path"]).read_text(encoding="utf-8")
-        assert "<details" in html, "HTML missing <details> tag"
-        assert "structure-list" in html, "HTML missing structure-list class"
-        assert "step-zone" in html, "HTML missing step-zone (Z2/Z3/etc)"
-        assert "step-sublist" in html, "HTML missing step-sublist (для repeat-блоков)"
-        assert "ex-list" in html, "HTML missing ex-list (для OFP упражнений)"
+        # Двухэкранная навигация
+        assert 'id="picker"' in html, "HTML missing picker (список слотов)"
+        assert 'id="cardWrap"' in html, "HTML missing cardWrap (детальная карточка)"
+        assert 'id="cardHost"' in html, "HTML missing cardHost (контейнер для деталей)"
+        assert 'id="backBtn"' in html, "HTML missing backBtn (кнопка назад)"
+        # compact cards в picker
+        assert "slot-card" in html, "HTML missing slot-card class"
+        # Inline JS для навигации
+        assert "showCard" in html, "HTML missing showCard function"
+        assert "showList" in html, "HTML missing showList function"
+        # Inventory в деталях
+        assert "renderInventory" in html, "HTML missing renderInventory function"
+        assert "inv-title" in html, "HTML missing inventory section"
+        # Step rendering
+        assert "renderSteps" in html, "HTML missing renderSteps function"
+        assert "structure-list" in html, "HTML missing structure-list"
+        # OFP rendering
+        assert "renderOfpSteps" in html, "HTML missing renderOfpSteps function"
+        assert "ex-list" in html, "HTML missing ex-list (OFP exercises)"
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    print(f"  ✓ HTML v20: <details> + structure-list + step-zone + step-sublist + ex-list")
+    print(f"  ✓ HTML v21: picker + cardWrap + backBtn + renderInventory + renderSteps + renderOfpSteps")
 
 
 def test_weekly_report_runs():

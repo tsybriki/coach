@@ -1,131 +1,313 @@
 <!doctype html>
 <html lang="ru"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>W1 · 2026-10-12..2026-10-18 · Берлин</title>
 <style>
 :root{
   --bg:#0f1115;--panel:#161a22;--panel2:#1d222c;--border:#2a3140;
   --text:#e6e9ef;--muted:#9aa3b2;
   --accent:#7aa2ff;--accent2:#5cd6c0;--warn:#ff9b6a;--good:#7ee787;--cp:#d8a0ff;
+  --run:#7ec8e3;--bike:#f08a5a;--swim:#5cd6c0;--ofp:#d8a0ff;--brick:#f0c674;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
-  -webkit-text-size-adjust:100%}
-.wrap{max-width:760px;margin:0 auto;padding:18px 14px 64px}
-header{margin-bottom:18px}
-h1{font-size:20px;line-height:1.25;margin:0 0 6px}
-.meta{font-size:12px;color:var(--muted);margin-bottom:14px}
-.meta b{color:var(--text)}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;
-  padding:14px;margin-bottom:12px}
-.card h2{font-size:13px;color:var(--accent);margin:0 0 10px;text-transform:uppercase;letter-spacing:.5px}
-ul{margin:0;padding:0;list-style:none;font-size:14px;line-height:1.45}
-.slot-row{padding:10px 0;border-bottom:1px solid var(--border)}
-.slot-row:last-child{border-bottom:none}
-.slot-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
-.slot-icon{font-size:16px;width:22px;text-align:center}
-.slot-day{font-weight:600;color:var(--accent2);min-width:24px}
-.slot-time{color:var(--muted);font-size:12px;min-width:46px;font-family:ui-monospace,SFMono-Regular,monospace}
-.slot-dur{margin-left:auto;font-size:12px;color:var(--muted);background:var(--panel2);
+  -webkit-text-size-adjust:100%;line-height:1.4}
+body{padding:14px 12px 80px;max-width:780px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px}
+h2{font-size:15px;margin:0 0 8px;color:var(--accent)}
+h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
+
+.picker{display:flex;flex-direction:column;gap:10px}
+.hidden{display:none !important}
+.visible{display:flex !important;flex-direction:column;gap:10px}
+
+/* Tracker */
+.tracker{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.tracker-row{display:flex;justify-content:space-between;align-items:flex-start}
+.tracker-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);font-weight:600;margin-bottom:4px}
+.tracker-points{font-size:18px;font-weight:700}
+.tracker-points small{font-size:11px;color:var(--muted);font-weight:400;margin-left:2px}
+.tracker-week{font-size:11px;color:var(--muted);padding-top:2px}
+.tracker-bar{display:flex;gap:4px;margin-top:8px}
+.tracker-dot{flex:1;height:6px;border-radius:3px;background:var(--panel2)}
+.tracker-dot.filled{background:var(--accent2)}
+
+/* Picker cards */
+.slot-card{
+  background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;cursor:pointer;font:inherit;color:inherit;text-align:left;
+  min-height:74px;display:flex;flex-direction:column;justify-content:center;
+  transition:transform .1s;
+}
+.slot-card:active{transform:scale(0.98);background:var(--panel2)}
+.slot-card-head{display:flex;align-items:center;gap:8px}
+.slot-icon{font-size:18px;width:24px;text-align:center}
+.slot-day{font-weight:600;color:var(--accent2);min-width:24px;font-size:13px;letter-spacing:.5px}
+.slot-time{color:var(--muted);font-size:11.5px;font-family:ui-monospace,SFMono-Regular,monospace}
+.slot-dur{margin-left:auto;font-size:11.5px;color:var(--muted);background:var(--panel2);
   padding:2px 8px;border-radius:8px;border:1px solid var(--border)}
-.slot-name{font-size:14px}
-.slot-name i{color:var(--muted);font-size:12px;font-style:normal}
-.slot-badges{margin-top:4px;display:flex;flex-wrap:wrap;gap:4px}
-.badge{font-size:10.5px;padding:2px 7px;border-radius:8px;border:1px solid var(--border);
-  background:var(--panel2);color:var(--muted);font-family:ui-monospace,SFMono-Regular,monospace}
-.badge-focus{color:var(--accent2);border-color:rgba(92,214,192,.3)}
-.badge-loc{color:var(--muted)}
-.badge-pending{color:var(--warn);border-color:rgba(255,155,106,.4);background:rgba(255,155,106,.08)}
-.badge-cp{color:var(--cp);border-color:rgba(216,160,255,.4);background:rgba(216,160,255,.08)}
-.badge-workout{color:var(--good);border-color:rgba(126,231,135,.4);background:rgba(126,231,135,.08)}
-.slot-body{margin-top:6px;padding-left:32px;font-size:13.5px}
-.slot-row details summary{cursor:pointer;list-style:none}
-.slot-row details summary::-webkit-details-marker{display:none}
-.slot-row details summary::after{content:'▸';margin-left:8px;color:var(--muted);font-size:11px;transition:transform .15s;display:inline-block}
-.slot-row details[open] summary::after{transform:rotate(90deg);content:'▾'}
-.structure-list{margin:8px 0 0;padding-left:0;list-style:none;font-size:12.5px;line-height:1.5}
-.step{padding:5px 8px;margin-bottom:3px;background:var(--panel2);border-radius:6px;border-left:2px solid var(--accent2)}
+.slot-card-name{font-size:14px;font-weight:600;margin-top:5px}
+.slot-card-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:8px;margin-top:4px;
+  background:var(--panel2);color:var(--muted);text-transform:lowercase;letter-spacing:.3px}
+.tag-run{color:var(--run);border:1px solid rgba(126,200,227,.3);background:rgba(126,200,227,.08)}
+.tag-bike{color:var(--bike);border:1px solid rgba(240,138,90,.3);background:rgba(240,138,90,.08)}
+.tag-swim{color:var(--swim);border:1px solid rgba(92,214,192,.3);background:rgba(92,214,192,.08)}
+.tag-ofp{color:var(--ofp);border:1px solid rgba(216,160,255,.3);background:rgba(216,160,255,.08)}
+.tag-brick{color:var(--brick);border:1px solid rgba(240,198,116,.3);background:rgba(240,198,116,.08)}
+.tag-cp{color:var(--cp);border:1px solid rgba(255,160,122,.3);background:rgba(255,160,122,.08)}
+
+/* Detail view */
+.topbar{display:flex;align-items:center;margin-bottom:12px;gap:8px}
+.topbar button{
+  background:var(--panel);border:1px solid var(--border);padding:8px 14px;
+  border-radius:8px;cursor:pointer;font:inherit;color:inherit;min-height:36px;
+  display:flex;align-items:center;gap:6px;
+}
+.topbar button:active{transform:scale(0.97)}
+.topbar button .arrow{font-size:14px}
+
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.card-tag{font-size:10.5px;padding:3px 9px;border-radius:8px;background:var(--panel2);color:var(--muted);text-transform:lowercase;letter-spacing:.3px;font-weight:600}
+.card-tag.tag-run{color:var(--run);border:1px solid rgba(126,200,227,.3);background:rgba(126,200,227,.08)}
+.card-tag.tag-bike{color:var(--bike);border:1px solid rgba(240,138,90,.3);background:rgba(240,138,90,.08)}
+.card-tag.tag-swim{color:var(--swim);border:1px solid rgba(92,214,192,.3);background:rgba(92,214,192,.08)}
+.card-tag.tag-ofp{color:var(--ofp);border:1px solid rgba(216,160,255,.3);background:rgba(216,160,255,.08)}
+.card-tag.tag-brick{color:var(--brick);border:1px solid rgba(240,198,116,.3);background:rgba(240,198,116,.08)}
+.card-tag.tag-cp{color:var(--cp);border:1px solid rgba(255,160,122,.3);background:rgba(255,160,122,.08)}
+
+.card-headline{font-size:18px;font-weight:600;margin:0 0 4px}
+.card-subtitle{font-size:12.5px;color:var(--muted);margin:0 0 8px}
+.card-meta{display:flex;gap:6px;font-size:11.5px;color:var(--muted);margin:6px 0;flex-wrap:wrap}
+.card-meta-item{background:var(--panel2);padding:3px 8px;border-radius:6px;border:1px solid var(--border)}
+
+/* Inventory */
+.inventory{background:rgba(255,155,106,.05);border:1px dashed var(--warn);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:13px}
+.inv-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--warn);font-weight:600;margin-bottom:6px}
+.inv-item{display:flex;gap:8px;align-items:center;padding:3px 0}
+.inv-icon{font-size:14px;width:18px;text-align:center}
+
+/* Structure */
+.structure-list{margin:0;padding-left:0;list-style:none}
+.step{padding:8px 10px;margin-bottom:5px;background:var(--panel2);border-radius:6px;border-left:2px solid var(--accent2)}
 .step-set{background:rgba(122,162,255,.08);border-left-color:var(--accent)}
 .step-ofp{background:rgba(216,160,255,.08);border-left-color:var(--cp)}
-.step-phase{color:var(--accent2);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-right:6px}
-.step-dur{color:var(--text);font-weight:600;font-family:ui-monospace,SFMono-Regular,monospace}
-.step-zone{display:inline-block;background:var(--bg);padding:1px 6px;border-radius:4px;font-size:10.5px;color:var(--accent2);font-family:ui-monospace,SFMono-Regular,monospace;margin-right:6px}
+.step-head{display:flex;align-items:center;gap:6px;margin-bottom:2px;flex-wrap:wrap}
+.step-phase{color:var(--accent2);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px}
+.step-dur{color:var(--text);font-weight:600;font-size:13px;font-family:ui-monospace,SFMono-Regular,monospace}
+.step-zone{background:var(--bg);padding:1px 6px;border-radius:4px;font-size:10.5px;color:var(--accent2);font-family:ui-monospace,SFMono-Regular,monospace}
 .step-pace{color:var(--muted);font-size:11px;font-family:ui-monospace,SFMono-Regular,monospace}
-.step-reps{color:var(--accent);font-weight:600;font-size:11px;margin-left:6px}
-.step-notes{margin-top:3px;font-size:11.5px;color:var(--muted);font-style:italic}
-.step-sublist{margin:6px 0 4px 16px;padding-left:0;list-style:none;font-size:12px}
+.step-reps{color:var(--accent);font-weight:600;font-size:11px;margin-left:4px}
+.step-name{font-size:13px;margin-top:2px}
+.step-notes{margin-top:3px;font-size:11.5px;color:var(--muted);font-style:italic;line-height:1.4}
+.step-sublist{margin:6px 0 4px 12px;padding-left:0;list-style:none;font-size:12px}
 .step-sub{padding:4px 6px;margin-bottom:2px;background:var(--bg);border-radius:4px;border-left:2px solid var(--good)}
-.ex-list{margin-top:6px;padding-left:16px;font-size:12px}
-.ex-item{padding:2px 0;color:var(--text)}
-.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.total-cell{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center}
-.total-cell .v{font-size:18px;font-weight:600;color:var(--accent2)}
-.total-cell .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.ex-list{margin-top:6px;padding-left:14px;font-size:12.5px}
+.ex-item{padding:2px 0}
+.ex-item b{color:var(--accent)}
+
+/* Summary */
+.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.total-cell{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:6px;text-align:center}
+.total-cell .v{font-size:16px;font-weight:600;color:var(--accent2)}
+.total-cell .l{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
 .delta-positive .v{color:var(--good)}
 .delta-negative .v{color:var(--warn)}
-.zones{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:12px}
-.zone{background:var(--panel2);padding:6px 10px;border-radius:6px;border:1px solid var(--border)}
+.zones{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;font-size:11.5px;margin-top:6px}
+.zone{background:var(--panel2);padding:5px 8px;border-radius:6px;border:1px solid var(--border)}
 .zone b{color:var(--accent);font-family:ui-monospace,SFMono-Regular,monospace}
-.suggestion{margin-top:8px;padding:8px;background:rgba(255,155,106,.08);border-left:3px solid var(--warn);
-  border-radius:6px;font-size:12.5px}
-.suggestion:empty{display:none}
+
 footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
-</style></head><body><div class="wrap">
-<header>
-  <h1>W1 · 2026-10-12..2026-10-18 · Берлин</h1>
-  <div class="meta">
-    <b>W1</b> · iso 2026-W42 ·
-    сезон стартовал 2026-10-12
-  </div>
-</header>
+.empty{color:var(--muted);font-style:italic;padding:14px;text-align:center}
+</style></head><body>
 
-<div class="card">
-  <h2>Сводка</h2>
-  <div class="totals">
-    <div class="total-cell">
-      <div class="v">7.7ч</div>
-      <div class="l">planned</div>
+<!-- Экран 1: список слотов -->
+<div id="picker" class="picker visible">
+  <div style="margin-bottom:10px">
+    <h1 style="margin:0">W1 · 2026-10-12..2026-10-18 · Берлин</h1>
+    <div class="sub">W1 · iso 2026-W42 · сезон стартовал 2026-10-12</div>
+  </div>
+
+  <div class="card" style="background:var(--panel);padding:10px 12px;margin-bottom:10px">
+    <h3>Сводка</h3>
+    <div class="totals">
+      <div class="total-cell"><div class="v">7.7ч</div><div class="l">planned</div></div>
+      <div class="total-cell"><div class="v">5ч</div><div class="l">target</div></div>
+      <div class="total-cell delta-negative"><div class="v">-2.7ч</div><div class="l">delta</div></div>
     </div>
-    <div class="total-cell">
-      <div class="v">5ч</div>
-      <div class="l">target</div>
-    </div>
-    <div class="total-cell delta-negative">
-      <div class="v">-2.7ч</div>
-      <div class="l">delta</div>
+    <div class="zones">
+      <div class="zone"><b>Z1</b> 100-118</div><div class="zone"><b>Z2_low</b> 118-136</div><div class="zone"><b>Z2</b> 125-145</div><div class="zone"><b>Z3</b> 136-146</div><div class="zone"><b>Z4</b> 146-160</div><div class="zone"><b>Z5</b> 160-175</div><div class="zone"><b>Z6</b> 175-182</div>
     </div>
   </div>
-  <div class="zones" style="margin-top:10px">
-    <div class="zone"><b>Z1</b> 100-118</div><div class="zone"><b>Z2_low</b> 118-136</div><div class="zone"><b>Z2</b> 125-145</div><div class="zone"><b>Z3</b> 136-146</div><div class="zone"><b>Z4</b> 146-160</div><div class="zone"><b>Z5</b> 160-175</div><div class="zone"><b>Z6</b> 175-182</div>
+
+  <div class="card" style="background:var(--panel);padding:10px 12px;margin-bottom:10px">
+    <h3>Фаза · run_base</h3>
+    <p style="margin:0;font-size:12px;color:var(--muted)">2026-10-12 → 2027-01-03 · target 5ч/нед · goal g_run_spring</p>
   </div>
+
+  <div class="tracker"><div class="tracker-row"><div><div class="tracker-title">Прогресс недели</div><div class="tracker-points">8 <small>слотов</small> · 5 <small>pts ofp</small></div></div><div class="tracker-week">W1</div></div><div class="tracker-bar"><div class="tracker-dot filled"></div><div class="tracker-dot"></div><div class="tracker-dot"></div><div class="tracker-dot"></div><div class="tracker-dot"></div><div class="tracker-dot"></div><div class="tracker-dot"></div></div></div>
+
+  <h2 style="margin:14px 0 4px">Тренировки · 8 шт</h2>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:4px">тап → детали</div>
+
+  <button class="slot-card tag-run" data-slot-idx="0"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ПН</span><span class="slot-time">18:45</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Easy 5К + прогрессия 3К</div><div class="slot-card-tag tag-run">run</div></button><button class="slot-card tag-run" data-slot-idx="1"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">09:00</span><span class="slot-dur">30мин</span></div><div class="slot-card-name">Easy бег 30мин Z2</div><div class="slot-card-tag tag-run">run</div></button><button class="slot-card tag-run" data-slot-idx="2"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">18:30</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Ключевая: Интервалы 60мин Z3</div><div class="slot-card-tag tag-run">run</div></button><button class="slot-card tag-run" data-slot-idx="3"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">СР</span><span class="slot-time">17:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный бег 90мин Z2_low</div><div class="slot-card-tag tag-run">run</div></button><button class="slot-card tag-bike" data-slot-idx="4"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ЧТ</span><span class="slot-time">10:30</span><span class="slot-dur">45мин</span></div><div class="slot-card-name">Вел-станок Z2 45мин (дома)</div><div class="slot-card-tag tag-bike">bike</div></button><button class="slot-card tag-swim" data-slot-idx="5"><div class="slot-card-head"><span class="slot-icon">🏊</span><span class="slot-day">ПТ</span><span class="slot-time">18:00</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Пул 60мин easy</div><div class="slot-card-tag tag-swim">swim</div></button><button class="slot-card tag-ofp" data-slot-idx="6"><div class="slot-card-head"><span class="slot-icon">💪</span><span class="slot-day">СБ</span><span class="slot-time">10:00</span><span class="slot-dur">25мин</span></div><div class="slot-card-name">ofp core 25мин</div><div class="slot-card-tag tag-ofp">ofp</div></button><button class="slot-card tag-bike" data-slot-idx="7"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ВС</span><span class="slot-time">11:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный вел Z2 90мин</div><div class="slot-card-tag tag-bike">bike</div></button>
+
+  <div class="card" style="margin-top:14px">
+    <h3>Контрольные точки</h3>
+    <p style="margin:0;font-size:13px">Нет контрольных точек в этой неделе.</p>
+  </div>
+
+  <footer>self-contained · v21 · plan-w1.html</footer>
 </div>
 
-<div class="card">
-  <h2>Фаза · run_base</h2>
-  <p style="margin:0;font-size:13px;color:var(--muted)">
-    2026-10-12 → 2027-01-03 · target 5ч/нед · goal g_run_spring
-  </p>
-  <div class="suggestion"></div>
+<!-- Экран 2: детальная карточка -->
+<div id="cardWrap" class="hidden">
+  <div class="topbar">
+    <button id="backBtn"><span class="arrow">←</span> назад</button>
+  </div>
+  <div id="cardHost"></div>
 </div>
 
-<div class="card">
-  <h2>Слоты · 8 шт</h2>
-  <ul><li class="slot-row"><details><summary class="slot-head"><span class="slot-icon">🏃</span><span class="slot-day">ПН</span><span class="slot-time">18:45</span><span class="slot-dur">1ч</span></summary><div class="slot-body"><div class="slot-name">Easy 5К + прогрессия 3К <i>(run)</i></div><div class="slot-badges"><span class="badge badge-focus">Z2</span> <span class="badge badge-loc">stadium</span></div><ol class="structure-list"><li class="step"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">10м</span><div class="step-notes">Разминка.</div></li><li class="step"><span class="step-zone">Z2</span><span class="step-phase">work</span> <span class="step-dur">25м</span><div class="step-notes">Easy 5К. HR ~135, темп 5:30-5:00/км.</div></li><li class="step"><span class="step-zone">Z3</span><span class="step-phase">work</span> <span class="step-dur">3м</span><div class="step-notes">Прогрессия 1К: 5:00 → 4:30/км.</div></li><li class="step"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">15м</span></li></ol></div></details></li><li class="slot-row"><details><summary class="slot-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">09:00</span><span class="slot-dur">30мин</span></summary><div class="slot-body"><div class="slot-name">Easy бег 30мин Z2 <i>(run)</i></div><div class="slot-badges"><span class="badge badge-focus">Z2_low</span> <span class="badge badge-loc">asphalt_commuter</span></div><ol class="structure-list"><li class="step"><span class="step-zone">Z2_low</span><span class="step-phase">work</span> <span class="step-dur">30м</span><div class="step-notes">Лёгкий бег. Дыхание носовое.</div></li></ol></div></details></li><li class="slot-row"><details><summary class="slot-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">18:30</span><span class="slot-dur">1ч</span></summary><div class="slot-body"><div class="slot-name">Ключевая: Интервалы 60мин Z3 <i>(run)</i></div><div class="slot-badges"><span class="badge badge-focus">Z3</span> <span class="badge badge-loc">asphalt_commuter</span></div><ol class="structure-list"><li class="step"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">12м</span><div class="step-notes">Разминка с ускорениями 2×100м str.</div></li><li class="step step-set"><span class="step-phase">set</span> <span class="step-dur">30м</span> <span class="step-reps">× 5</span><ol class="step-sublist"><li class="step-sub"><span class="step-zone">Z3</span><span class="step-phase">work</span> <span class="step-dur">4м</span><div class="step-notes">400м @ 4:00/км (~1:36).</div></li><li class="step-sub"><span class="step-zone">Z1</span><span class="step-phase">recovery</span> <span class="step-dur">2м</span><div class="step-notes">Jog 200м. Восстановить дыхание.</div></li></ol><div class="step-notes">Интервалы Z3. Источник: spring-10k-2027-v2.md.</div></li><li class="step"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">10м</span></li></ol></div></details></li><li class="slot-row"><details><summary class="slot-head"><span class="slot-icon">🏃</span><span class="slot-day">СР</span><span class="slot-time">17:00</span><span class="slot-dur">1ч30м</span></summary><div class="slot-body"><div class="slot-name">Длинный бег 90мин Z2_low <i>(run)</i></div><div class="slot-badges"><span class="badge badge-focus">Z2_low</span> <span class="badge badge-loc">stadium_or_pool</span></div><ol class="structure-list"><li class="step"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">10м</span><div class="step-notes">Разминка 10мин Z1.</div></li><li class="step"><span class="step-zone">Z2_low</span><span class="step-phase">work</span> <span class="step-dur">65м</span><div class="step-notes">Длинный бег 65мин Z2_low. Дыхание носовое, темп комфортный. Если HR &gt; 145 — снизить темп. Источник: spring-10k-2027-v2.md.</div></li><li class="step"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">15м</span></li></ol></div></details></li><li class="slot-row"><details><summary class="slot-head"><span class="slot-icon">🚴</span><span class="slot-day">ЧТ</span><span class="slot-time">10:30</span><span class="slot-dur">45мин</span></summary><div class="slot-body"><div class="slot-name">Вел-станок Z2 45мин (дома) <i>(bike)</i></div><div class="slot-badges"><span class="badge badge-focus">Z2</span> <span class="badge badge-loc">home_stationary_bike</span> <span class="badge badge-pending">Zwift pending</span></div><ol class="structure-list"><li class="step"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">5м</span><div class="step-notes">Разминка на станке. Каденс 80-85.</div></li><li class="step"><span class="step-zone">Z2</span><span class="step-phase">work</span> <span class="step-dur">30м</span><div class="step-notes">Стабильное Z2. Каденс 85-90. Можно Zwift watch-симулятор.</div></li><li class="step"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">10м</span><div class="step-notes">Заминка.</div></li></ol></div></details></li><li class="slot-row"><details><summary class="slot-head"><span class="slot-icon">🏊</span><span class="slot-day">ПТ</span><span class="slot-time">18:00</span><span class="slot-dur">1ч</span></summary><div class="slot-body"><div class="slot-name">Пул 60мин easy <i>(swim)</i></div><div class="slot-badges"><span class="badge badge-focus">Z1</span> <span class="badge badge-loc">pool_or_asphalt</span></div><ol class="structure-list"><li class="step"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">5м</span><div class="step-notes">Разминка.</div></li><li class="step"><span class="step-zone">Z2_low</span><span class="step-phase">work</span> <span class="step-dur">45м</span><div class="step-notes">Основная часть. Носовое дыхание.</div></li><li class="step"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">10м</span><div class="step-notes">Заминка.</div></li></ol></div></details></li><li class="slot-row"><details><summary class="slot-head"><span class="slot-icon">💪</span><span class="slot-day">СБ</span><span class="slot-time">10:00</span><span class="slot-dur">25мин</span></summary><div class="slot-body"><div class="slot-name">ofp core 25мин <i>(ofp)</i></div><div class="slot-badges"><span class="badge badge-focus">core</span> <span class="badge badge-loc">home</span></div><ol class="structure-list"><li class="step step-ofp"><span class="step-phase">warmup</span> <span class="step-dur">5м</span> <span class="step-name">Мобилилити: hip openers, glute bridge 2×15.</span><div class="step-notes">Активация ягодиц.</div></li><li class="step step-set"><span class="step-phase">main</span> <span class="step-dur">20м</span> <span class="step-name">Core circuit x2 rounds</span><ol class="ex-list"><li class="ex-item"><b>Планка</b> · 3×45с · отдых 30с</li><li class="ex-item"><b>Медведи на коленях</b> · 2×12/стор · отдых 30с</li><li class="ex-item"><b>Bird-dog</b> · 3×10/стор · отдых 30с</li><li class="ex-item"><b>Glute bridge</b> · 3×15 · отдых 30с</li><li class="ex-item"><b>Гиперэкстензия</b> · 2×15 · отдых 30с</li></ol></li><li class="step step-ofp"><span class="step-phase">cooldown</span> <span class="step-dur">5м</span> <span class="step-name">Растяжка 5мин. Без агрессии на грушевидную.</span><div class="step-notes">Spring-10k-2027-v2.md core program.</div></li></ol></div></details></li><li class="slot-row"><details><summary class="slot-head"><span class="slot-icon">🚴</span><span class="slot-day">ВС</span><span class="slot-time">11:00</span><span class="slot-dur">1ч30м</span></summary><div class="slot-body"><div class="slot-name">Длинный вел Z2 90мин <i>(bike)</i></div><div class="slot-badges"><span class="badge badge-focus">Z2_low</span> <span class="badge badge-loc">long_ride_or_station</span> <span class="badge badge-pending">Zwift pending</span></div><ol class="structure-list"><li class="step"><span class="step-zone">Z1</span><span class="step-phase">warmup</span> <span class="step-dur">10м</span></li><li class="step"><span class="step-zone">Z2_low</span><span class="step-phase">work</span> <span class="step-dur">70м</span><div class="step-notes">Длинный вел Z2_low 70мин. Zwift watch-сессия.</div></li><li class="step"><span class="step-zone">Z1</span><span class="step-phase">cooldown</span> <span class="step-dur">10м</span></li></ol></div></details></li></ul>
-</div>
+<script>
+const PLAN = {"slots": [{"id": "пн-key_run", "day": "ПН", "time": "18:45", "duration_min": 60, "name": "Easy 5К + прогрессия 3К", "kind": "run", "subkind": "easy_progression", "focus": "Z2", "location": "stadium", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка."}, {"phase": "work", "duration_min": 25, "zone": "Z2", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Easy 5К. HR ~135, темп 5:30-5:00/км."}, {"phase": "work", "duration_min": 3, "zone": "Z3", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Прогрессия 1К: 5:00 → 4:30/км."}, {"phase": "cooldown", "duration_min": 15, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "🏟", "name": "Стадион (400м)"}]}, {"id": "вт-easy_runs", "day": "ВТ", "time": "09:00", "duration_min": 30, "name": "Easy бег 30мин Z2", "kind": "run", "subkind": "easy", "focus": "Z2_low", "location": "asphalt_commuter", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "work", "duration_min": 30, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Лёгкий бег. Дыхание носовое."}], "inventory": []}, {"id": "вт-key_run", "day": "ВТ", "time": "18:30", "duration_min": 60, "name": "Ключевая: Интервалы 60мин Z3", "kind": "run", "subkind": "key_intervals", "focus": "Z3", "location": "asphalt_commuter", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 12, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка с ускорениями 2×100м str."}, {"phase": "set", "duration_min": 30, "zone": null, "pace_min_per_km": null, "reps": 5, "set_repeats": [{"phase": "work", "duration_min": 4, "zone": "Z3", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "400м @ 4:00/км (~1:36)."}, {"phase": "recovery", "duration_min": 2, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Jog 200м. Восстановить дыхание."}], "notes": "Интервалы Z3. Источник: spring-10k-2027-v2.md."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "⌚", "name": "Garmin / часы с HR"}]}, {"id": "ср-long_run", "day": "СР", "time": "17:00", "duration_min": 90, "name": "Длинный бег 90мин Z2_low", "kind": "run", "subkind": "long_Z2", "focus": "Z2_low", "location": "stadium_or_pool", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка 10мин Z1."}, {"phase": "work", "duration_min": 65, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Длинный бег 65мин Z2_low. Дыхание носовое, темп комфортный. Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."}, {"phase": "cooldown", "duration_min": 15, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": []}, {"id": "чт-bike", "day": "ЧТ", "time": "10:30", "duration_min": 45, "name": "Вел-станок Z2 45мин (дома)", "kind": "bike", "subkind": "stationary_z2", "focus": "Z2", "location": "home_stationary_bike", "workout_pending": true, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка на станке. Каденс 80-85."}, {"phase": "work", "duration_min": 30, "zone": "Z2", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Стабильное Z2. Каденс 85-90. Можно Zwift watch-симулятор."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Заминка."}], "inventory": [{"icon": "🚴", "name": "Велостанок (Tacx)"}, {"icon": "🚴", "name": "Zwift-приложение"}]}, {"id": "пт-swim", "day": "ПТ", "time": "18:00", "duration_min": 60, "name": "Пул 60мин easy", "kind": "swim", "subkind": "easy", "focus": "Z1", "location": "pool_or_asphalt", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка."}, {"phase": "work", "duration_min": 45, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Основная часть. Носовое дыхание."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Заминка."}], "inventory": [{"icon": "🏊", "name": "Бассейн"}]}, {"id": "сб-ofp", "day": "СБ", "time": "10:00", "duration_min": 25, "name": "ofp core 25мин", "kind": "ofp", "subkind": "core", "focus": "core", "location": "home", "workout_pending": false, "workout_ref": null, "structure": [{"phase": "warmup", "exercise": "Мобилилити: hip openers, glute bridge 2×15.", "duration_min": 5, "notes": "Активация ягодиц."}, {"phase": "main", "set": {"name": "Core circuit x2 rounds", "exercises": [{"name": "Планка", "reps": "3×45с", "rest": "30с"}, {"name": "Медведи на коленях", "reps": "2×12/стор", "rest": "30с"}, {"name": "Bird-dog", "reps": "3×10/стор", "rest": "30с"}, {"name": "Glute bridge", "reps": "3×15", "rest": "30с"}, {"name": "Гиперэкстензия", "reps": "2×15", "rest": "30с"}]}, "duration_min": 20, "notes": "Акцент на заднюю цепь (превентивно от защемления спины)."}, {"phase": "cooldown", "exercise": "Растяжка 5мин. Без агрессии на грушевидную.", "duration_min": 5, "notes": "Spring-10k-2027-v2.md core program."}], "inventory": [{"icon": "🧘", "name": "Коврик"}, {"icon": "🎗", "name": "Резинка (опционально)"}]}, {"id": "вс-bike", "day": "ВС", "time": "11:00", "duration_min": 90, "name": "Длинный вел Z2 90мин", "kind": "bike", "subkind": "long_z2", "focus": "Z2_low", "location": "long_ride_or_station", "workout_pending": true, "workout_ref": null, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}, {"phase": "work", "duration_min": 70, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Длинный вел Z2_low 70мин. Zwift watch-сессия."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "🚴", "name": "Вело (улица или станок)"}]}]};
 
-<div class="card">
-  <h2>Контрольные точки</h2>
-  <p style="margin:0;font-size:13px">
-    Нет контрольных точек в этой неделе.
-  </p>
-  
-</div>
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-<div class="card"><h2>Zwift workouts pending</h2><p style="margin:0;font-size:13px">2 bike/brick слот-ов ждут workout_ref. Скажи "переподбери workout на слот <id>" или подожди Phase 3 с inline Zwift.</p></div>
+function tagClass(kind) {
+  return {"run":"tag-run","bike":"tag-bike","swim":"tag-swim","ofp":"tag-ofp","brick":"tag-brick","control_point":"tag-cp"}.get(kind,"");
+}
 
-<footer>
-  self-contained · v18 · plan-w1.html
-</footer>
-</div></body></html>
+function renderSteps(structure, kind) {
+  if (!structure || !structure.length) return '<div class="empty">Нет структуры</div>';
+  const isOfp = kind === 'ofp' || structure.some(st => 'exercise' in st || 'set' in st);
+  if (isOfp) return renderOfpSteps(structure);
+  return renderHrSteps(structure);
+}
+
+function renderOfpSteps(structure) {
+  const rows = structure.map(st => {
+    if (st.exercise) {
+      return '<li class="step step-ofp">'
+        + '<div class="step-head"><span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
+        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
+        + '<div class="step-name">' + escapeHtml(st.exercise) + '</div>'
+        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+        + '</li>';
+    }
+    if (st.set) {
+      let html = '<li class="step step-set">'
+        + '<div class="step-head"><span class="step-phase">main</span>'
+        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
+        + '<div class="step-name">' + escapeHtml(st.set.name) + '</div>'
+        + '<ol class="ex-list">';
+      for (const ex of st.set.exercises) {
+        html += '<li class="ex-item"><b>' + escapeHtml(ex.name) + '</b> · ' + escapeHtml(ex.reps)
+              + (ex.rest ? ' · отдых ' + escapeHtml(ex.rest) : '') + '</li>';
+      }
+      return html + '</ol></li>';
+    }
+    return '';
+  }).join('');
+  return '<ol class="structure-list">' + rows + '</ol>';
+}
+
+function renderHrSteps(structure) {
+  const rows = structure.map(st => {
+    if (st.phase === 'set' && st.set_repeats) {
+      let subHtml = st.set_repeats.map(s => {
+        let pace = s.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
+        let zone = s.zone ? '<span class="step-zone">' + escapeHtml(s.zone) + '</span>' : '';
+        return '<li class="step-sub">'
+          + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(s.phase||'') + '</span>'
+          + ' <span class="step-dur">' + escapeHtml(String(s.duration_min||'')) + 'мин</span>' + pace + '</div>'
+          + (s.notes ? '<div class="step-notes">' + escapeHtml(s.notes) + '</div>' : '')
+          + '</li>';
+      }).join('');
+      return '<li class="step step-set">'
+        + '<div class="step-head"><span class="step-phase">set</span>'
+        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>'
+        + '<span class="step-reps">× ' + escapeHtml(String(st.reps||'?')) + '</span></div>'
+        + '<ol class="step-sublist">' + subHtml + '</ol>'
+        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+        + '</li>';
+    }
+    let pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
+    let zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
+    return '<li class="step">'
+      + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
+      + ' <span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>' + pace + '</div>'
+      + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+      + '</li>';
+  }).join('');
+  return '<ol class="structure-list">' + rows + '</ol>';
+}
+
+function renderInventory(inv) {
+  if (!inv || !inv.length) return '';
+  const items = inv.map(i => '<div class="inv-item"><span class="inv-icon">' + escapeHtml(i.icon||'•') + '</span><span>' + escapeHtml(i.name) + '</span></div>').join('');
+  return '<div class="inventory"><div class="inv-title">Что взять</div>' + items + '</div>';
+}
+
+function renderCard(slot) {
+  const tc = tagClass(slot.kind);
+  const tagLabel = slot.kind || '';
+  const inv = slot.inventory || [];
+  const invHtml = renderInventory(inv);
+  let meta = '';
+  if (slot.location) meta += '<span class="card-meta-item">📍 ' + escapeHtml(slot.location) + '</span>';
+  if (slot.focus) meta += '<span class="card-meta-item">🎯 ' + escapeHtml(slot.focus) + '</span>';
+  if (slot.subkind) meta += '<span class="card-meta-item">' + escapeHtml(slot.subkind) + '</span>';
+  if (slot.workout_pending) meta += '<span class="card-meta-item" style="color:var(--warn);border-color:rgba(255,155,106,.4);background:rgba(255,155,106,.08)">Zwift pending</span>';
+
+  const steps = renderSteps(slot.structure, slot.kind);
+  return '<div class="card">'
+    + '<div class="card-header"><div><div class="card-headline">' + escapeHtml(slot.name) + '</div>'
+    + '<div class="card-subtitle">' + escapeHtml(slot.day) + ' ' + escapeHtml(slot.time) + ' · ' + escapeHtml(String(slot.duration_min)) + ' мин</div></div>'
+    + '<div class="card-tag ' + tc + '">' + escapeHtml(tagLabel) + '</div></div>'
+    + (meta ? '<div class="card-meta">' + meta + '</div>' : '')
+    + invHtml
+    + '<h3>Структура тренировки</h3>'
+    + steps
+    + '</div>';
+}
+
+function showCard(idx) {
+  const slot = PLAN.slots[idx];
+  if (!slot) return;
+  document.getElementById('cardHost').innerHTML = renderCard(slot);
+  document.getElementById('picker').classList.remove('visible');
+  document.getElementById('picker').classList.add('hidden');
+  document.getElementById('cardWrap').classList.remove('hidden');
+  document.getElementById('cardWrap').classList.add('visible');
+  window.scrollTo(0, 0);
+  if (history && history.pushState) {
+    history.pushState({view:'card', idx}, '', '#slot-' + idx);
+  }
+}
+
+function showList() {
+  document.getElementById('picker').classList.remove('hidden');
+  document.getElementById('picker').classList.add('visible');
+  document.getElementById('cardWrap').classList.remove('visible');
+  document.getElementById('cardWrap').classList.add('hidden');
+  if (history && history.pushState) {
+    history.pushState({view:'list'}, '', '#list');
+  }
+}
+
+document.querySelectorAll('.slot-card').forEach((btn) => {
+  btn.addEventListener('click', () => showCard(parseInt(btn.dataset.slotIdx, 10)));
+});
+document.getElementById('backBtn').addEventListener('click', () => showList());
+window.addEventListener('popstate', () => {
+  const h = (location.hash || '').replace('#','');
+  if (h.startsWith('slot-')) showCard(parseInt(h.slice(5), 10));
+  else showList();
+});
+</script>
+</body></html>
