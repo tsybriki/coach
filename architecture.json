@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas.schema.md",
-  "version": 26,
+  "version": 27,
   "title": "Спортивный слой Hermes — полная архитектура",
-  "subtitle": "v26: точная копия архитектуры w1-mobile.html (который работал у Кирилла). Picker + cardWrap + JS навигация. Тёмная гамма. Inline plan-data.",
+  "subtitle": "v27: навигация = w1-mobile.html (точная копия, picker + cardWrap + JS). Форматирование = моя v18 (totals, phase, HR-зоны, focus бейджи, иконки видов спорта в picker).",
   "blocks": [
     {
       "id": "tldr",
@@ -28,7 +28,8 @@
         "v23 (фикс навигации): picker/cardWrap переключаются через inline style.display — не classList. Inline style имеет выше CSS-специфичности. Inline onclick=\"showCard(N)\" на каждом button — срабатывает даже если Telegram preview перехватывает addEventListener.",
         "v24 (фикс навигации #3): querySelectorAll('.slot-card').forEach удалён. Только inline onclick=\"showCard(N);\". pushState оставлен (нужен для back-button). 27/27 tests passing.",
         "v25 (фикс навигации #4): inline JS навигация полностью убрана. Все 8 детальных карточек сразу в DOM в <section id='card-N'>. Picker → anchor href='#card-N' → CSS :target делает видимой нужную. Back → anchor href='#list'. body:has(.card-detail:target) скрывает picker. Без onclick, без addEventListener, без pushState, без classList, без style.display. Только нативный HTML. Работает в браузере, в Telegram preview, в file://.",
-        "v26 (фикс навигации #5): полностью переписал на архитектуру из w1-mobile.html. picker (visible по умолчанию) + cardWrap (hidden) + backBtn + cardHost. Inline <script type='application/json' id='plan-data'> + loadPlan() + buildPicker() + showSlot() + showPicker() + popstate listener. history.pushState для back-button. classList.add/remove hidden/visible для переключения экранов. renderCard() рендерит details в cardHost.innerHTML. Точная копия логики w1-mobile.html. 27/27 tests passing."
+        "v26 (фикс навигации #5): полностью переписал на архитектуру из w1-mobile.html. picker (visible по умолчанию) + cardWrap (hidden) + backBtn + cardHost. Inline <script type='application/json' id='plan-data'> + loadPlan() + buildPicker() + showSlot() + showPicker() + popstate listener. history.pushState для back-button. classList.add/remove hidden/visible для переключения экранов. renderCard() рендерит details в cardHost.innerHTML. Точная копия логики w1-mobile.html. 27/27 tests passing.",
+        "v27 (цельная конфета): навигация из w1-mobile.html + форматирование из v18. buildPicker: plan-title + totals (planned/target/delta) + HR-зоны бейджики + phase-card + control-points + 8 slot-кнопок с иконкой вида спорта + day/time/duration + focus-пилюля. renderCard: иконка вида спорта + название + day/time/duration + meta-row (location/focus/subkind/Zwift-pending) + inventory + structure. Всё работает на JS (как в w1-mobile.html), без CSS-only ухищрений. 27/27 tests passing."
       ]
     },
     {
