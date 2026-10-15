@@ -265,6 +265,43 @@ def test_auto_zwift_rule_in_constraints():
     print(f"  ✓ auto_zwift: enabled, ≤90min, kinds={az['kinds']}")
 
 
+def test_plan_generate_layout_w1_run_base():
+    """W1 (run_base) должен сгенерировать slots для всех рабочих дней."""
+    plan = plan_generate.generate(1)
+    slots = plan["slots"]
+    assert len(slots) >= 5, f"W1 должен иметь ≥5 slots, got {len(slots)}"
+    days = {s["day"] for s in slots}
+    assert "ПН" in days, "ПН обязательно"
+    assert "СР" in days, "СР обязательно (длинная)"
+    assert "ЧТ" in days, "ЧТ обязательно (вел)"
+    # Total planned hours в пределах разумного
+    total_min = sum(s["duration_min"] for s in slots)
+    assert 240 <= total_min <= 600, f"Ожидалось 4-10ч, got {total_min/60:.1f}ч"
+    # Конкретные имена должны быть информативными
+    long_run = next((s for s in slots if "Длинный" in s["name"]), None)
+    assert long_run is not None, "Нет длинной в W1"
+    assert "Z2" in long_run["name"], "Длинная должна быть в Z2"
+    # auto_zwift: bike-слот должен иметь workout_pending=true
+    bike_slots = [s for s in slots if s["kind"] == "bike"]
+    for bs in bike_slots:
+        assert bs.get("workout_pending", False), f"bike slot {bs['name']} должен иметь workout_pending"
+    print(f"  ✓ W1 run_base: {len(slots)} slots, {total_min/60:.1f}ч, {len(bike_slots)} bike with auto_zwift")
+
+
+def test_plan_generate_layout_all_phases():
+    """Все phase должны генерировать непустые slots."""
+    for sw in [1, 13, 20, 26, 27, 28, 31, 37, 44, 48]:
+        plan = plan_generate.generate(sw)
+        assert "slots" in plan
+        slots = plan["slots"]
+        if plan["phase"] and plan["phase"]["id"] in ("run_taper", "transition"):
+            # Taper и transition могут иметь меньше
+            assert len(slots) >= 1, f"W{sw} ({plan['phase']['id']}) должна иметь ≥1 slot"
+        else:
+            assert len(slots) >= 5, f"W{sw} ({plan['phase']['id']}) должна иметь ≥5 slots, got {len(slots)}"
+    print("  ✓ plan_generate работает для W1, W13, W20, W26, W27, W28, W31, W37, W44, W48")
+
+
 def main():
     print("\n=== Phase 1 smoke tests ===\n")
     tests = [
@@ -285,6 +322,8 @@ def main():
         test_zwift_parse_free_text,
         test_zwift_search_returns_at_most_4,
         test_auto_zwift_rule_in_constraints,
+        test_plan_generate_layout_w1_run_base,
+        test_plan_generate_layout_all_phases,
     ]
     failed = 0
     for t in tests:
