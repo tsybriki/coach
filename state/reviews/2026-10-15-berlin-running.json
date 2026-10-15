@@ -1,0 +1,162 @@
+{
+  "_schema": "review-v1",
+  "_lib_version": "render_html.render_review",
+  "_sources": {
+    "fit_file": "/home/tsybriki/projects/garmin_tools/raw/today/fit/24734796814.fit",
+    "fit_id": "24734796814",
+    "parse_fit_schema": "0.4.0",
+    "data_source": "raw/today (pulled Garmin 2026-10-15)"
+  },
+  "title": "Berlin Running · 2026-10-15",
+  "date": "2026-10-15",
+  "sport": "running",
+  "summary_line": "65:09 moving / 11.50 km @ 5:40/км / HR avg 138 · negative split · cad 85-86 к финишу",
+  "brief": [
+    "65:09 в движении (3:46 пауз мелких, без ОФП), 11.50 км с negative split'ом (km 1: 6:53 → km 9: 5:32). Лучшая пробежка по структуре после 14 окт.",
+    "Каденс наконец добрался до 85-86 spm в последние 3 км (Watch и Stryd согласованы, |Δ|=0.52 spm) — значит метроном/фокус могут работать. Но Z3 63% + Z4 10% = 73% выше Z2_low — как и вчера, темп все еще слишком быстрый для заявленной аэробной.",
+    "Действие: следующая лёгкая пробежка — 5:50/км целенаправленно. Если удастся держать 5:50 с HR ≤ 138 и каденс ≥ 85, значит ты нашёл реальную границу Z2_low. Если нет — уточняем target."
+  ],
+  "metrics": {
+    "moving_min": "65:09",
+    "elapsed_min": "68:55",
+    "pause_min": "3:46",
+    "distance_km": "11.50",
+    "avg_pace": "5:40/км",
+    "avg_hr": "138",
+    "max_hr": "152",
+    "cadence_watch": "82.8 spm",
+    "cadence_stryd": "82.5 spm",
+    "cadence_disagree": "0.5 spm",
+    "stryd_power_avg": "328 W",
+    "hr_drift_bpm": "+7 (second half)"
+  },
+  "sections": [
+    {
+      "id": "hr_zones",
+      "title": "HR-зоны · по moving records",
+      "kind": "hr_zones",
+      "summary": "Z3 63% + Z4 10% = 73% выше Z2_low. Та же проблема, что 14 окт: ты назвал это «лёгкая», но HR говорит «темповая».",
+      "data": {
+        "hr_max": 182,
+        "zones": [
+          {"name": "Z1",     "sec": 128,  "pct": 3.3},
+          {"name": "Z1.5",   "sec": 119,  "pct": 3.0},
+          {"name": "Z2",     "sec": 788,  "pct": 20.2},
+          {"name": "Z3",     "sec": 2478, "pct": 63.4},
+          {"name": "Z4",     "sec": 397,  "pct": 10.2},
+          {"name": "Z5",     "sec": 0,    "pct": 0.0},
+          {"name": "Z6",     "sec": 0,    "pct": 0.0}
+        ]
+      }
+    },
+    {
+      "id": "splits",
+      "title": "Per-km splits · moving partition",
+      "kind": "table",
+      "summary": "Negative split: km 1: 6:53 → km 9: 5:32. Каденс растёт по ходу (80 → 86). Лучшая структура тренировки.",
+      "data": {
+        "columns": [
+          {"key": "km",    "label": "км"},
+          {"key": "dur",   "label": "dur"},
+          {"key": "pace",  "label": "pace"},
+          {"key": "hr",    "label": "HR"},
+          {"key": "cadW",  "label": "cW"},
+          {"key": "cadS",  "label": "cS"},
+          {"key": "formW", "label": "form W"},
+          {"key": "airW",  "label": "air W"},
+          {"key": "powW",  "label": "pow W"}
+        ],
+        "rows": [
+          {"km": 1,  "dur": "6:53", "pace": "6:53", "hr": 127, "cadW": 80, "cadS": 80, "formW": 103, "airW": 3.0, "powW": 312},
+          {"km": 2,  "dur": "6:11", "pace": "6:11", "hr": 132, "cadW": 82, "cadS": 82, "formW": 102, "airW": 2.9, "powW": 327},
+          {"km": 3,  "dur": "5:46", "pace": "5:45", "hr": 137, "cadW": 82, "cadS": 82, "formW": 103, "airW": 3.1, "powW": 332, "_note": "negative split начался"},
+          {"km": 4,  "dur": "6:19", "pace": "6:19", "hr": 132, "cadW": 81, "cadS": 81, "formW": 102, "airW": 2.9, "powW": 316},
+          {"km": 5,  "dur": "6:22", "pace": "6:22", "hr": 138, "cadW": 81, "cadS": 81, "formW": 102, "airW": 3.1, "powW": 324},
+          {"km": 6,  "dur": "5:42", "pace": "5:41", "hr": 141, "cadW": 82, "cadS": 82, "formW": 103, "airW": 4.1, "powW": 343},
+          {"km": 7,  "dur": "5:41", "pace": "5:41", "hr": 141, "cadW": 83, "cadS": 83, "formW": 102, "airW": 3.8, "powW": 327},
+          {"km": 8,  "dur": "5:40", "pace": "5:39", "hr": 141, "cadW": 84, "cadS": 84, "formW": 101, "airW": 2.5, "powW": 323, "_note": "каденс 84 держит"},
+          {"km": 9,  "dur": "5:33", "pace": "5:32", "hr": 142, "cadW": 85, "cadS": 85, "formW": 100, "airW": 3.4, "powW": 334, "_note": "первый км на 85+"},
+          {"km": 10, "dur": "5:54", "pace": "5:54", "hr": 141, "cadW": 85, "cadS": 85, "formW": 100, "airW": 4.2, "powW": 340, "_warn": "HR не падает при замедлении — усталость?"},
+          {"km": 11, "dur": "5:47", "pace": "5:47", "hr": 143, "cadW": 86, "cadS": 86, "formW": 97,  "airW": 4.4, "powW": 346, "_warn": "HR растёт на финише — был reserve"}
+        ]
+      }
+    },
+    {
+      "id": "stryd",
+      "title": "Stryd Running Dynamics",
+      "kind": "kv_grid",
+      "summary": "⚠️ В этом FIT'е Garmin не записал Running Dynamics (VO/stance/step_length) от Stryd — это известная фишка ANT+ profile, не баг парсера. Доступны каденс и мощность.",
+      "data": {
+        "items": [
+          {"label": "Vertical Oscillation", "value": "—", "sub": "Garmin RD не синкнул сегодня", "tone": "warn"},
+          {"label": "Stance Time",          "value": "—", "sub": "Garmin RD не синкнул сегодня", "tone": "warn"},
+          {"label": "Step Length",          "value": "—", "sub": "Garmin RD не синкнул сегодня", "tone": "warn"},
+          {"label": "Form Power",           "value": "101 W", "sub": "avg · стабильно с 14 окт (102 W)"},
+          {"label": "Air Power",            "value": "3.4 W",  "sub": "avg · +50% к 14 окт — лёгкий ветер или terrain", "tone": "warn"},
+          {"label": "Stryd Power",          "value": "328 W",  "sub": "avg · стабильно (-1 W vs 14 окт)"},
+          {"label": "Cadence (footpod)",    "value": "82.5 spm","sub": "avg · на финише 86"},
+          {"label": "Cadence (watch)",      "value": "82.8 spm","sub": "avg · на финише 86"},
+          {"label": "|Cadence Δ|",          "value": "0.5 spm", "sub": "watch vs Stryd — оба согласованы", "tone": "good"},
+          {"label": "Temperature",          "value": "21 °C",   "sub": "vs 17 °C вчера — теплее сегодня"}
+        ]
+      }
+    },
+    {
+      "id": "pauses",
+      "title": "Паузы · 8 сегментов, 3:46 total",
+      "kind": "table",
+      "summary": "Без ОФП. Всего 3:46 мелких пауз (семафоры/шаги/проезды).",
+      "data": {
+        "columns": [
+          {"key": "at_km",  "label": "на км"},
+          {"key": "t",      "label": "t (после старта)"},
+          {"key": "dur",    "label": "длительность"},
+          {"key": "cause",  "label": "что было"}
+        ],
+        "rows": [
+          {"at_km": "0.10",  "t": "0:37",   "dur": "0:54",  "cause": "светофор / старт (подозрительно — почти сразу)"},
+          {"at_km": "1.57",  "t": "10:08",  "dur": "0:29",  "cause": "семафор"},
+          {"at_km": "3.13",  "t": "19:35",  "dur": "0:31",  "cause": "семафор"},
+          {"at_km": "4.99",  "t": "30:49",  "dur": "0:34",  "cause": "бордюр / переход"},
+          {"at_km": "9.59",  "t": "57:13",  "dur": "0:38",  "cause": "семафор"},
+          {"at_km": "10.01", "t": "60:03",  "dur": "0:16",  "cause": "семафор"},
+          {"at_km": "10.45", "t": "62:31",  "dur": "0:18",  "cause": "бордюр"},
+          {"at_km": "11.39", "t": "68:05",  "dur": "0:06",  "cause": "финиш"}
+        ]
+      }
+    },
+    {
+      "id": "recos",
+      "title": "Что делать · 5 шагов",
+      "kind": "recommendations",
+      "summary": "Сдвиг по сравнению с 14 окт: каденс на финише достиг цели, осталось держать с начала + снизить темп до настоящего Z2.",
+      "data": [
+        {
+          "priority": "now",
+          "text": "Сегодня ты добрался до 85-86 spm только на км 9+. Завтра — стартуй с метрономом 170 bpm и держи его СРАЗУ. Цель: 85 spm на каждом км лёгкой пробежки, не дожидаясь 9-го.",
+          "principle": "Каденс-дрель работает на старте, не на финише. Метроном 170 bpm на ухо в первые 5 мин тренировки."
+        },
+        {
+          "priority": "now",
+          "text": "73% работы выше Z2_low — но ты НЕ держишь темп 5:50. Беги завтра 5:50 целенаправленно, не 5:40. Если через 20 мин темп 5:50 держится, HR ≤ 140, каденс ≥ 85 — ты нашёл свою Z2_low. Если нет — target 6:00.",
+          "principle": "Z2_low — это диапазон по HR (≤ 138), не по ощущению. На 5:40 ты 73% времени выше — это «серый темп», не Z2."
+        },
+        {
+          "priority": "soon",
+          "text": "Negative split (km 1: 6:53 → km 9: 5:32) сегодня — отличный знак. Это значит ты не «выдохся к концу», а нашёл ритм. На длинной (15-21 км) такая прогрессия должна быть ОБРАТНОЙ — медленнее в начале, не к концу. Учись держать 5:50 даже когда чувствуешь запас.",
+          "principle": "Ощущение «могу быстрее» в начале пробежки = индикатор, что Z2 границу ты уже прошёл. Дисциплина удерживать целевой темп."
+        },
+        {
+          "priority": "now",
+          "text": "Air power сегодня 3.4W (было 2.3W). Это не сильный ветер, но это сдвиг. Если завтра будет больше 10-15W — увидим terrain/погоду, не технику.",
+          "principle": "Air power > 15-20W = либо встречный ветер, либо elevation с боковым участком (в Berlin этого нет), либо ширина шага не совпадает с фактической."
+        },
+        {
+          "priority": "later",
+          "text": "⚠️ Сегодня Garmin FR 965 не записал Running Dynamics от Stryd (VO/stance/step_length). На следующей пробежке проверь — если данные вернулись: продолжай трекинг. Если снова нет — это прошивка, обнови FR 965 через Garmin Express.",
+          "principle": "Garmin RD от Stryd через ANT+ записывается только если в начале записи выбран профиль с включённой Running Dynamics (FR 965 → профиль Activity → Sensors → Stryd → Running Dynamics ON)."
+        }
+      ]
+    }
+  ]
+}

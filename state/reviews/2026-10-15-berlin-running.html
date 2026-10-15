@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Berlin Running · 2026-10-15</title>
+<style>
+:root{
+  --bg:#0f1115;--panel:#161a22;--panel2:#1d222c;--border:#2a3140;
+  --text:#e6e9ef;--muted:#9aa3b2;
+  --accent:#7aa2ff;--accent2:#5cd6c0;--warn:#ff9b6a;--good:#7ee787;--cp:#d8a0ff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+  -webkit-text-size-adjust:100%;line-height:1.4}
+body{padding:14px 12px 80px;max-width:780px;margin:0 auto}
+h1{font-size:20px;margin:0}
+h2{font-size:15px;margin:0 0 8px;color:var(--accent)}
+h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.muted{color:var(--muted)}.small{font-size:11.5px}
+
+.title-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;margin-bottom:8px}
+.title-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.sport-icon{font-size:24px}
+.title-meta{font-size:11.5px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,monospace}
+.summary-line{font-size:13px;color:var(--accent2);font-weight:600;margin-top:4px}
+
+.brief-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:12px 16px;margin-bottom:8px}
+.brief-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--accent);margin-bottom:6px;font-weight:600}
+.brief-list{margin:0;padding-left:22px;font-size:13.5px;line-height:1.5;color:var(--text)}
+.brief-list li{margin-bottom:4px}
+.brief-list li:last-child{margin-bottom:0}
+
+.metrics-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:12px 14px;margin-bottom:10px}
+.metrics-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--muted);margin-bottom:6px;font-weight:600}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}
+.metric-cell{background:var(--panel2);border:1px solid var(--border);border-radius:8px;
+  padding:8px;text-align:center}
+.metric-label{font-size:9.5px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.4px;margin-bottom:3px}
+.metric-value{font-size:15px;font-weight:600;color:var(--accent2);
+  font-family:ui-monospace,SFMono-Regular,monospace}
+
+.section{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  margin-bottom:8px;overflow:hidden}
+.section-head{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;cursor:pointer;user-select:none;gap:8px}
+.section-head:active{background:var(--panel2)}
+.section-title{font-size:13px;font-weight:600;color:var(--text);flex:1}
+.section-toggle{font-size:14px;color:var(--muted);transition:transform .15s;
+  display:inline-block}
+.section-summary{padding:0 14px 10px;font-size:11.5px;font-style:italic}
+.section-body{padding:0 14px 14px;font-size:12.5px;display:none}
+.section.open .section-body{display:block}
+.section.open .section-toggle{transform:rotate(180deg)}
+
+/* HR zones */
+.hr-zones{display:flex;flex-direction:column;gap:6px}
+.hr-zone-row{display:grid;grid-template-columns:48px 1fr 50px 60px;
+  gap:8px;align-items:center;font-size:11.5px}
+.hr-zone-name{font-family:ui-monospace,SFMono-Regular,monospace;font-weight:600;
+  color:var(--c,var(--text))}
+.hr-zone-bar-wrap{background:var(--panel2);border:1px solid var(--border);
+  border-radius:4px;height:14px;overflow:hidden}
+.hr-zone-bar{height:100%;border-radius:4px;min-width:4px}
+.hr-zone-pct{font-family:ui-monospace,SFMono-Regular,monospace;
+  font-weight:600;text-align:right}
+.hr-zone-dur{font-family:ui-monospace,SFMono-Regular,monospace;text-align:right;
+  font-size:10.5px}
+
+/* Tables */
+.data-table{width:100%;border-collapse:collapse;font-size:11.5px;
+  font-family:ui-monospace,SFMono-Regular,monospace}
+.data-table th{text-align:left;padding:5px 8px;color:var(--muted);
+  font-size:10px;text-transform:uppercase;letter-spacing:.4px;font-weight:600;
+  border-bottom:1px solid var(--border)}
+.data-table td{padding:5px 8px;color:var(--text);border-bottom:1px solid rgba(255,255,255,.05)}
+.data-table tr:last-child td{border-bottom:none}
+.cell-warn{color:var(--warn)!important;font-weight:600}
+
+/* KV grid */
+.kv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px}
+.kv-cell{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px}
+.kv-label{font-size:10px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.4px;margin-bottom:3px;font-weight:600}
+.kv-value{font-size:16px;font-weight:600;color:var(--text);
+  font-family:ui-monospace,SFMono-Regular,monospace}
+.kv-value.good{color:var(--good)}
+.kv-value.warn{color:var(--warn)}
+.kv-value.cp{color:var(--cp)}
+.kv-sub{font-size:10.5px;margin-top:2px;font-style:italic}
+
+/* Recommendations */
+.rec-list{display:flex;flex-direction:column;gap:6px}
+.rec-item{display:flex;gap:10px;align-items:flex-start;padding:10px;
+  background:var(--panel2);border:1px solid var(--border);border-radius:8px}
+.rec-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;
+  color:var(--bg);font-weight:700;font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:ui-monospace,SFMono-Regular,monospace}
+.rec-body{flex:1;min-width:0}
+.rec-text{font-size:13px;line-height:1.4;color:var(--text)}
+.rec-principle{font-size:11.5px;margin-top:4px;font-style:italic}
+
+/* Text block */
+.text-block{font-size:13px;line-height:1.5;color:var(--text);white-space:pre-wrap}
+
+.empty{color:var(--muted);font-style:italic;padding:14px;text-align:center}
+
+footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
+</style></head><body>
+
+<div class="title-card">
+  <div class="title-row">
+    <span class="sport-icon">🏃</span>
+    <div>
+      <h1>Berlin Running · 2026-10-15</h1>
+      <div class="title-meta">2026-10-15 · running</div>
+    </div>
+  </div>
+  <div class="summary-line">65:09 moving / 11.50 km @ 5:40/км / HR avg 138 · negative split · cad 85-86 к финишу</div>
+</div>
+
+<div class="brief-card">
+  <div class="brief-title">💡 Бриф · 3 предложения</div>
+  <ol class="brief-list"><li class="brief-item">65:09 в движении (3:46 пауз мелких, без ОФП), 11.50 км с negative split&#x27;ом (km 1: 6:53 → km 9: 5:32). Лучшая пробежка по структуре после 14 окт.</li><li class="brief-item">Каденс наконец добрался до 85-86 spm в последние 3 км (Watch и Stryd согласованы, |Δ|=0.52 spm) — значит метроном/фокус могут работать. Но Z3 63% + Z4 10% = 73% выше Z2_low — как и вчера, темп все еще слишком быстрый для заявленной аэробной.</li><li class="brief-item">Действие: следующая лёгкая пробежка — 5:50/км целенаправленно. Если удастся держать 5:50 с HR ≤ 138 и каденс ≥ 85, значит ты нашёл реальную границу Z2_low. Если нет — уточняем target.</li></ol>
+</div>
+
+<div class="metrics-card"><div class="metrics-title">📊 Ключевые метрики</div><div class="metrics-grid"><div class="metric-cell"><div class="metric-label">moving Min</div><div class="metric-value">65:09</div></div><div class="metric-cell"><div class="metric-label">elapsed Min</div><div class="metric-value">68:55</div></div><div class="metric-cell"><div class="metric-label">pause Min</div><div class="metric-value">3:46</div></div><div class="metric-cell"><div class="metric-label">distance Km</div><div class="metric-value">11.50</div></div><div class="metric-cell"><div class="metric-label">Avg Pace</div><div class="metric-value">5:40/км</div></div><div class="metric-cell"><div class="metric-label">Avg Hr</div><div class="metric-value">138</div></div><div class="metric-cell"><div class="metric-label">Max Hr</div><div class="metric-value">152</div></div><div class="metric-cell"><div class="metric-label">cadence watch</div><div class="metric-value">82.8 spm</div></div><div class="metric-cell"><div class="metric-label">cadence stryd</div><div class="metric-value">82.5 spm</div></div><div class="metric-cell"><div class="metric-label">cadence disagree</div><div class="metric-value">0.5 spm</div></div><div class="metric-cell"><div class="metric-label">stryd power Avg</div><div class="metric-value">328 W</div></div><div class="metric-cell"><div class="metric-label">Hr drift Bpm</div><div class="metric-value">+7 (second half)</div></div></div></div>
+
+<div class="section" data-section-id="hr_zones"><div class="section-head" onclick="toggleSection(this)"><span class="section-title">HR-зоны · по moving records</span><span class="section-toggle">▾</span></div><div class="section-summary muted">Z3 63% + Z4 10% = 73% выше Z2_low. Та же проблема, что 14 окт: ты назвал это «лёгкая», но HR говорит «темповая».</div><div class="section-body"><div class="hr-zones"><div class="hr-zone-row"><span class="hr-zone-name" style="--c:#5cd6c0">Z1</span><div class="hr-zone-bar-wrap"><div class="hr-zone-bar" style="width:5.2%; background:#5cd6c0"></div></div><span class="hr-zone-pct">3.3%</span><span class="hr-zone-dur muted">2м08с</span></div><div class="hr-zone-row"><span class="hr-zone-name" style="--c:#4ec0a8">Z1.5</span><div class="hr-zone-bar-wrap"><div class="hr-zone-bar" style="width:4.7%; background:#4ec0a8"></div></div><span class="hr-zone-pct">3.0%</span><span class="hr-zone-dur muted">1м59с</span></div><div class="hr-zone-row"><span class="hr-zone-name" style="--c:#7ec8e3">Z2</span><div class="hr-zone-bar-wrap"><div class="hr-zone-bar" style="width:31.9%; background:#7ec8e3"></div></div><span class="hr-zone-pct">20.2%</span><span class="hr-zone-dur muted">13м08с</span></div><div class="hr-zone-row"><span class="hr-zone-name" style="--c:#ff9b6a">Z3</span><div class="hr-zone-bar-wrap"><div class="hr-zone-bar" style="width:100.0%; background:#ff9b6a"></div></div><span class="hr-zone-pct">63.4%</span><span class="hr-zone-dur muted">41м18с</span></div><div class="hr-zone-row"><span class="hr-zone-name" style="--c:#f08a5a">Z4</span><div class="hr-zone-bar-wrap"><div class="hr-zone-bar" style="width:16.1%; background:#f08a5a"></div></div><span class="hr-zone-pct">10.2%</span><span class="hr-zone-dur muted">6м37с</span></div><div class="hr-zone-row"><span class="hr-zone-name" style="--c:#d8a0ff">Z5</span><div class="hr-zone-bar-wrap"><div class="hr-zone-bar" style="width:0.0%; background:#d8a0ff"></div></div><span class="hr-zone-pct">0.0%</span><span class="hr-zone-dur muted">0с</span></div><div class="hr-zone-row"><span class="hr-zone-name" style="--c:#c97aff">Z6</span><div class="hr-zone-bar-wrap"><div class="hr-zone-bar" style="width:0.0%; background:#c97aff"></div></div><span class="hr-zone-pct">0.0%</span><span class="hr-zone-dur muted">0с</span></div></div><div class="muted small">HRmax = 182</div></div></div><div class="section" data-section-id="splits"><div class="section-head" onclick="toggleSection(this)"><span class="section-title">Per-km splits · moving partition</span><span class="section-toggle">▾</span></div><div class="section-summary muted">Negative split: km 1: 6:53 → km 9: 5:32. Каденс растёт по ходу (80 → 86). Лучшая структура тренировки.</div><div class="section-body"><table class="data-table"><thead><tr><th>км</th><th>dur</th><th>pace</th><th>HR</th><th>cW</th><th>cS</th><th>form W</th><th>air W</th><th>pow W</th></tr></thead><tbody><tr><td>1</td><td>6:53</td><td>6:53</td><td>127</td><td>80</td><td>80</td><td>103</td><td>3.0</td><td>312</td></tr><tr><td>2</td><td>6:11</td><td>6:11</td><td>132</td><td>82</td><td>82</td><td>102</td><td>2.9</td><td>327</td></tr><tr><td>3</td><td>5:46</td><td>5:45</td><td>137</td><td>82</td><td>82</td><td>103</td><td>3.1</td><td>332</td></tr><tr><td>4</td><td>6:19</td><td>6:19</td><td>132</td><td>81</td><td>81</td><td>102</td><td>2.9</td><td>316</td></tr><tr><td>5</td><td>6:22</td><td>6:22</td><td>138</td><td>81</td><td>81</td><td>102</td><td>3.1</td><td>324</td></tr><tr><td>6</td><td>5:42</td><td>5:41</td><td>141</td><td>82</td><td>82</td><td>103</td><td>4.1</td><td>343</td></tr><tr><td>7</td><td>5:41</td><td>5:41</td><td>141</td><td>83</td><td>83</td><td>102</td><td>3.8</td><td>327</td></tr><tr><td>8</td><td>5:40</td><td>5:39</td><td>141</td><td>84</td><td>84</td><td>101</td><td>2.5</td><td>323</td></tr><tr><td>9</td><td>5:33</td><td>5:32</td><td>142</td><td>85</td><td>85</td><td>100</td><td>3.4</td><td>334</td></tr><tr><td>10</td><td>5:54</td><td>5:54</td><td>141</td><td>85</td><td>85</td><td>100</td><td>4.2</td><td>340</td></tr><tr><td>11</td><td>5:47</td><td>5:47</td><td>143</td><td>86</td><td>86</td><td>97</td><td>4.4</td><td>346</td></tr></tbody></table></div></div><div class="section" data-section-id="stryd"><div class="section-head" onclick="toggleSection(this)"><span class="section-title">Stryd Running Dynamics</span><span class="section-toggle">▾</span></div><div class="section-summary muted">⚠️ В этом FIT&#x27;е Garmin не записал Running Dynamics (VO/stance/step_length) от Stryd — это известная фишка ANT+ profile, не баг парсера. Доступны каденс и мощность.</div><div class="section-body"><div class="kv-grid"><div class="kv-cell"><div class="kv-label">Vertical Oscillation</div><div class="kv-value warn">—</div><div class="kv-sub muted">Garmin RD не синкнул сегодня</div></div><div class="kv-cell"><div class="kv-label">Stance Time</div><div class="kv-value warn">—</div><div class="kv-sub muted">Garmin RD не синкнул сегодня</div></div><div class="kv-cell"><div class="kv-label">Step Length</div><div class="kv-value warn">—</div><div class="kv-sub muted">Garmin RD не синкнул сегодня</div></div><div class="kv-cell"><div class="kv-label">Form Power</div><div class="kv-value ">101 W</div><div class="kv-sub muted">avg · стабильно с 14 окт (102 W)</div></div><div class="kv-cell"><div class="kv-label">Air Power</div><div class="kv-value warn">3.4 W</div><div class="kv-sub muted">avg · +50% к 14 окт — лёгкий ветер или terrain</div></div><div class="kv-cell"><div class="kv-label">Stryd Power</div><div class="kv-value ">328 W</div><div class="kv-sub muted">avg · стабильно (-1 W vs 14 окт)</div></div><div class="kv-cell"><div class="kv-label">Cadence (footpod)</div><div class="kv-value ">82.5 spm</div><div class="kv-sub muted">avg · на финише 86</div></div><div class="kv-cell"><div class="kv-label">Cadence (watch)</div><div class="kv-value ">82.8 spm</div><div class="kv-sub muted">avg · на финише 86</div></div><div class="kv-cell"><div class="kv-label">|Cadence Δ|</div><div class="kv-value good">0.5 spm</div><div class="kv-sub muted">watch vs Stryd — оба согласованы</div></div><div class="kv-cell"><div class="kv-label">Temperature</div><div class="kv-value ">21 °C</div><div class="kv-sub muted">vs 17 °C вчера — теплее сегодня</div></div></div></div></div><div class="section" data-section-id="pauses"><div class="section-head" onclick="toggleSection(this)"><span class="section-title">Паузы · 8 сегментов, 3:46 total</span><span class="section-toggle">▾</span></div><div class="section-summary muted">Без ОФП. Всего 3:46 мелких пауз (семафоры/шаги/проезды).</div><div class="section-body"><table class="data-table"><thead><tr><th>на км</th><th>t (после старта)</th><th>длительность</th><th>что было</th></tr></thead><tbody><tr><td>0.10</td><td>0:37</td><td>0:54</td><td>светофор / старт (подозрительно — почти сразу)</td></tr><tr><td>1.57</td><td>10:08</td><td>0:29</td><td>семафор</td></tr><tr><td>3.13</td><td>19:35</td><td>0:31</td><td>семафор</td></tr><tr><td>4.99</td><td>30:49</td><td>0:34</td><td>бордюр / переход</td></tr><tr><td>9.59</td><td>57:13</td><td>0:38</td><td>семафор</td></tr><tr><td>10.01</td><td>60:03</td><td>0:16</td><td>семафор</td></tr><tr><td>10.45</td><td>62:31</td><td>0:18</td><td>бордюр</td></tr><tr><td>11.39</td><td>68:05</td><td>0:06</td><td>финиш</td></tr></tbody></table></div></div><div class="section" data-section-id="recos"><div class="section-head" onclick="toggleSection(this)"><span class="section-title">Что делать · 5 шагов</span><span class="section-toggle">▾</span></div><div class="section-summary muted">Сдвиг по сравнению с 14 окт: каденс на финише достиг цели, осталось держать с начала + снизить темп до настоящего Z2.</div><div class="section-body"><div class="rec-list"><div class="rec-item"><div class="rec-num" style="background:#ff9b6a">1</div><div class="rec-body"><div class="rec-text">Сегодня ты добрался до 85-86 spm только на км 9+. Завтра — стартуй с метрономом 170 bpm и держи его СРАЗУ. Цель: 85 spm на каждом км лёгкой пробежки, не дожидаясь 9-го.</div><div class="rec-principle muted">📐 Каденс-дрель работает на старте, не на финише. Метроном 170 bpm на ухо в первые 5 мин тренировки.</div></div></div><div class="rec-item"><div class="rec-num" style="background:#ff9b6a">2</div><div class="rec-body"><div class="rec-text">73% работы выше Z2_low — но ты НЕ держишь темп 5:50. Беги завтра 5:50 целенаправленно, не 5:40. Если через 20 мин темп 5:50 держится, HR ≤ 140, каденс ≥ 85 — ты нашёл свою Z2_low. Если нет — target 6:00.</div><div class="rec-principle muted">📐 Z2_low — это диапазон по HR (≤ 138), не по ощущению. На 5:40 ты 73% времени выше — это «серый темп», не Z2.</div></div></div><div class="rec-item"><div class="rec-num" style="background:#7aa2ff">3</div><div class="rec-body"><div class="rec-text">Negative split (km 1: 6:53 → km 9: 5:32) сегодня — отличный знак. Это значит ты не «выдохся к концу», а нашёл ритм. На длинной (15-21 км) такая прогрессия должна быть ОБРАТНОЙ — медленнее в начале, не к концу. Учись держать 5:50 даже когда чувствуешь запас.</div><div class="rec-principle muted">📐 Ощущение «могу быстрее» в начале пробежки = индикатор, что Z2 границу ты уже прошёл. Дисциплина удерживать целевой темп.</div></div></div><div class="rec-item"><div class="rec-num" style="background:#ff9b6a">4</div><div class="rec-body"><div class="rec-text">Air power сегодня 3.4W (было 2.3W). Это не сильный ветер, но это сдвиг. Если завтра будет больше 10-15W — увидим terrain/погоду, не технику.</div><div class="rec-principle muted">📐 Air power &gt; 15-20W = либо встречный ветер, либо elevation с боковым участком (в Berlin этого нет), либо ширина шага не совпадает с фактической.</div></div></div><div class="rec-item"><div class="rec-num" style="background:#9aa3b2">5</div><div class="rec-body"><div class="rec-text">⚠️ Сегодня Garmin FR 965 не записал Running Dynamics от Stryd (VO/stance/step_length). На следующей пробежке проверь — если данные вернулись: продолжай трекинг. Если снова нет — это прошивка, обнови FR 965 через Garmin Express.</div><div class="rec-principle muted">📐 Garmin RD от Stryd через ANT+ записывается только если в начале записи выбран профиль с включённой Running Dynamics (FR 965 → профиль Activity → Sensors → Stryd → Running Dynamics ON).</div></div></div></div></div></div>
+
+<footer>rendered via lib/render_html.render_review · schema-rev review-v1</footer>
+
+<script>
+function toggleSection(head) {
+  head.parentElement.classList.toggle('open');
+}
+// Auto-open recommendations
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.section').forEach(s => {
+    if (s.dataset.sectionId === 'recos') s.classList.add('open');
+  });
+});
+</script>
+</body></html>

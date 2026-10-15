@@ -2,14 +2,27 @@
 
 Запускает JS в реальном node, который парсит HTML, извлекает JSON-данные, симулирует
 DOM-events (toggleSection) и проверяет что рендер не падает.
+
+Работает на НОВЕЙШЕМ review-HTML в state/reviews/.
 """
 import json
 import subprocess
 import sys
 from pathlib import Path
 
-OUT = Path('/home/tsybriki/coach/state/reviews/2026-10-14-berlin-running.html')
-review = json.load(open('/home/tsybriki/coach/state/reviews/2026-10-14-berlin-running.json'))
+REVIEWS_DIR = Path('/home/tsybriki/coach/state/reviews')
+# Берём последний по mtime review HTML
+candidates = sorted(REVIEWS_DIR.glob('*.html'), key=lambda p: p.stat().st_mtime, reverse=True)
+if not candidates:
+    print('NO REVIEWS')
+    sys.exit(1)
+OUT = candidates[0]
+review_path = OUT.with_suffix('.json')
+review = json.load(open(review_path))
+
+print(f"Review: {review_path.name}")
+print(f"Sections: {len(review['sections'])}")
+print(f"HTML size: {OUT.stat().st_size} bytes")
 
 print(f"Review sections: {len(review['sections'])}")
 print(f"HTML size: {OUT.stat().st_size} bytes")
@@ -17,7 +30,7 @@ print(f"HTML size: {OUT.stat().st_size} bytes")
 # Извлекаем JS и рендерим в headless-окружении
 js_script = '''
 const fs = require('fs');
-const path = '/home/tsybriki/coach/state/reviews/2026-10-14-berlin-running.html';
+const path = '__OUT__';
 const html = fs.readFileSync(path, 'utf-8');
 
 // Минимальный DOM-мок
@@ -89,7 +102,7 @@ try {
 }
 '''
 
-result = subprocess.run(['node', '-e', js_script], capture_output=True, text=True, timeout=15)
+result = subprocess.run(['node', '-e', js_script.replace('__OUT__', str(OUT))], capture_output=True, text=True, timeout=15)
 print('stdout:', result.stdout)
 print('stderr:', result.stderr)
 if result.returncode != 0:
