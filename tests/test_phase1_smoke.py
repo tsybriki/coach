@@ -392,8 +392,7 @@ def test_html_slot_links_navigable():
         for n in range(8):
             assert f'data-slot-idx="{n}"' in html, f"missing data-slot-idx={n}"
             assert f'onclick="showCard({n});"' in html, f"missing inline onclick for slot {n}"
-        # history.pushState в showCard + history.go(-1) для back
-        assert "pushState" in html, "missing pushState"
+        assert "pushState" in html, "missing pushState"  # не критично но окей
         # popstate listener для back-button
         assert "popstate" in html, "missing popstate listener"
         # inline style.display для picker (видим) и cardWrap (скрыт) — inline выше CSS специфичности

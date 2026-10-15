@@ -280,12 +280,6 @@ function showList() {
   }
 }
 
-document.querySelectorAll('.slot-card').forEach((btn) => {
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    showCard(parseInt(btn.dataset.slotIdx, 10));
-  });
-});
 document.getElementById('backBtn').addEventListener('click', () => showList());
 window.addEventListener('popstate', () => {
   const h = (location.hash || '').replace('#','');

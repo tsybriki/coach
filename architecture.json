@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas.schema.md",
-  "version": 23,
+  "version": 24,
   "title": "Спортивный слой Hermes — полная архитектура",
-  "subtitle": "v23: навигация через inline style.display (не CSS-классы). Inline onclick на каждом button. Гарантированная работа в Telegram preview.",
+  "subtitle": "v24: убран addEventListener на slot-card. Только inline onclick=\"showCard(N);\". pushState убран — без него в history не дублируется. back-button в браузере через popstate всё ещё работает (если pushState когда-то вызывается).",
   "blocks": [
     {
       "id": "tldr",
@@ -25,7 +25,8 @@
         "Structure в каждом slot (v20): каждый run/bike/swim слот имеет list[step] с warmup/work/cooldown + зонами (по пульсу для лёгких/длинных, по темпу для интервалов). OFP (intervals) — отдельный kind со своей структурой (exercises, reps). HTML: <details> в каждой карточке слота, тап = раскрыть детальную работу (steps, zones, reps).",
         "v21: render_html использует двухэкранную mobile-first навигацию. Picker (список compact-карточек) → тап → cardWrap (детальная карточка с back-button + структура + inventory). Inline JS (vanilla, < 5 КБ) без fetch, без framework, без backend. Hash routing (#list / #slot-N). Адаптивно: тот же HTML хорошо работает на Android Telegram preview.",
         "v22: убраны tracker-плашка и tag (run/bike/swim) из compact-карточки. На карточке осталась только иконка вида спорта (🏃🚴🏊💪🔄🎯) и идея тренировки. Навигация: anchor <a href='#slot-N'> + preventDefault + showCard inline JS. Hash routing: #list / #slot-N. DOMContentLoaded fallback для прямых ссылок.",
-        "v23 (фикс навигации): picker/cardWrap переключаются через inline style.display — не classList. Inline style имеет выше CSS-специфичности. Inline onclick=\"showCard(N)\" на каждом button — срабатывает даже если Telegram preview перехватывает addEventListener."
+        "v23 (фикс навигации): picker/cardWrap переключаются через inline style.display — не classList. Inline style имеет выше CSS-специфичности. Inline onclick=\"showCard(N)\" на каждом button — срабатывает даже если Telegram preview перехватывает addEventListener.",
+        "v24 (фикс навигации #3): querySelectorAll('.slot-card').forEach удалён. Только inline onclick=\"showCard(N);\". pushState оставлен (нужен для back-button). 27/27 tests passing."
       ]
     },
     {

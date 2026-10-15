@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JS diagnostic</title>
+<style>
+body { background: #000; color: #fff; padding: 20px; font-family: sans-serif; font-size: 14px; line-height: 1.4; }
+.test { padding: 12px; margin: 8px 0; border-radius: 6px; }
+.t-static { background: #444; }
+.t-js-works { background: #0a0; }
+.t-js-fail  { background: #a00; }
+button { padding: 10px 16px; margin: 8px 0; background: #5cd6c0; color: #000; border: 0; border-radius: 6px; font-size: 16px; }
+a { color: #5cd6c0; }
+.hidden { display: none; }
+#card-A:target { display: block !important; }
+#card-B:target { display: block !important; }
+.card { border: 1px solid #5cd6c0; padding: 10px; margin: 6px 0; border-radius: 6px; }
+</style>
+</head><body>
+
+<h2>1. Статический HTML (всегда видно)</h2>
+<div class="test t-static">Тест A: статический текст. Если виден — HTML рендерится.</div>
+
+<h2>2. JS через inline script</h2>
+<script>
+document.write('<div class="test t-js-works">Тест B: inline &lt;script&gt; document.write сработал — JS ВЫПОЛНЯЕТСЯ.</div>');
+</script>
+<noscript><div class="test t-js-fail">Тест B: NO SCRIPT (JS выключен)</div></noscript>
+
+<h2>3. Inline onclick</h2>
+<button onclick="document.getElementById('c').innerHTML='<div class=&quot;test t-js-works&quot;>Тест C: inline onclick СРАБОТАЛ — нажатие обработано.</div>'; return false;">Нажми меня</button>
+<div id="c"></div>
+
+<h2>4. CSS-only навигация (без JS) — :target</h2>
+<a href="#card1">→ Карточка 1</a> | <a href="#card2">→ Карточка 2</a> | <a href="#card3">→ Карточка 3</a>
+<div id="card1" class="hidden card">Карточка 1 (показывается через :target, без JS)</div>
+<div id="card2" class="hidden card">Карточка 2 (показывается через :target, без JS)</div>
+<div id="card3" class="hidden card">Карточка 3 (показывается через :target, без JS)</div>
+<style>
+#card1:target { display: block !important; }
+#card2:target { display: block !important; }
+#card3:target { display: block !important; }
+</style>
+
+<h2>5. Ссылка "Назад" через :target</h2>
+<a href="#top">← Назад (наверх)</a>
+
+<a id="top"></a>
+
+</body></html>
