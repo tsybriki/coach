@@ -85,13 +85,86 @@
 
 Когда `is_actual_log: true`:
 - `renderCard` показывает зелёный блок «✅ Факт: 9.4К · 47:30 · темп 5:03/км · HR avg 148 · RPE 7/10» + notes
-- `buildPicker` totals переключается на `[6 сессий · 5.2ч · 45.7К]` (не planned/target/delta)
-- `buildPicker` totals-title: «факт / объём» (не «planned / target / delta»)
+- `buildPicker` totals **всегда** показывает planned/expected/delta (НЕ переключается на «сессий/факт/объём» — отменено в v33). Факт-цифры показываются только в actual-блоке карточки.
 - `buildPicker` summary-card с `plan.summary.actual: list[str]` — буллеты по каждой сессии
 - `buildPicker` slot-dur помечается `✓` если `slot.actual` есть
 - `buildPicker` slot-class получает `slot-completed` (зелёный бордер)
+- `buildPicker` plan-title помечается `actual-badge` «✅ Фактический лог»
 
 **Pitfall — FIT-файлы могут отсутствовать:** `state/fit_store/index.json` может быть пуст даже при включённом cron-синке. Перед тем как «достать пробежки и посмотреть на стресс-левел» — проверь `state/fit_store/index.json` и `~/.hermes/coach/runs/`. Если FIT за нужный период нет, **анализируй нагрузку через `slot.actual`** в plan-wN.json (RPE, distance, time, HR avg) — это твой fallback, не итерируй в попытках загрузить FIT.
+
+## Basis-aware rendering структуры (v35) — для модели-наполнителя
+
+Структура тренировки в `slot.structure[]` имеет поле `basis` которое определяет **что показывать** в рендере:
+
+- `step.basis: "time"` (default) — показываем `duration_min` + опционально `hr_target`. Пример: `Z3 work 1мин HR 165` или `Z2 work 25мин @ 5:00/км`.
+- `step.basis: "distance"` — показываем `distance_m` + `pace_min_per_km`, **НЕ выводим** `duration_min` (время обманчиво, 150м @ 3:40 может занять 0:32, а 250м трусцой 1:25-1:30 в зависимости от дня). Пример: `Z4 work 150м @ 3:40/км`.
+
+**Top-level set** рендерит total по `basis`:
+- `basis: "time"` + `duration_min: 18` + `reps: 6` → `set · 18мин × 6`
+- `basis: "distance"` + `reps: 6` + work sub-step `distance_m: 150` → `set · 900м × 6` (авто-сумма work × reps, переключение `м`/`К` на 1000)
+
+**Sub-шаги внутри set (set_repeats[])** никогда не показывают `notes` — Кирилл: «буквы дальше — бесполезны». Top-level шаги (warmup/cooldown/одиночный work) — могут иметь notes.
+
+**Поля структуры:**
+- `step.phase: "warmup" | "work" | "cooldown" | "set" | "main"` — тип шага
+- `step.basis: "time" | "distance"` (default `time`) — на чём базируется длительность
+- `step.duration_min: int` — обязательно если `basis="time"`
+- `step.distance_m: int` — обязательно если `basis="distance"`
+- `step.hr_target: int` — опционально (число, для HR-only сессий)
+- `step.pace_min_per_km: str` — опционально ("3:40" или "5:00→4:30")
+- `step.zone: str` — Z1..Z6
+- `step.notes: str` — выводится только в top-level (warmup/cooldown/одиночный work)
+- `step.reps: int` — только для `phase: "set"`
+- `step.set_repeats: list[step]` — sub-шаги внутри set
+
+**Пример time-based set (HR-сессия):**
+```json
+{
+  "phase": "set", "reps": 6, "duration_min": 18,
+  "set_repeats": [
+    {"phase": "work", "duration_min": 1, "zone": "Z3", "hr_target": 165},
+    {"phase": "recovery", "duration_min": 2, "zone": "Z2", "hr_target": 135}
+  ]
+}
+```
+
+**Пример distance-based set (стадионные интервалы):**
+```json
+{
+  "phase": "set", "basis": "distance", "reps": 6,
+  "set_repeats": [
+    {"phase": "work", "basis": "distance", "distance_m": 150, "zone": "Z4", "pace_min_per_km": "3:40"},
+    {"phase": "recovery", "basis": "distance", "distance_m": 250, "zone": "Z1", "pace_min_per_km": "5:45"}
+  ]
+}
+```
+
+## Никогда не смешивать kind в одном слоте (v32)
+
+Каждый `slot` имеет ровно ОДИН kind. Запрещено:
+- `kind: "brick"` с run+OFP в одной сессии через одну карточку
+- Один slot содержит шаги разных видов (бег + OFП упражнения)
+
+Если Кирилл говорит «в пятницу бег + OFП» — это **два отдельных слота**:
+- `kind: "run"`, `id: "пт-tempo_5k"`, `time: "18:30"` — беговая карточка
+- `kind: "ofp"`, `id: "пт-ofp_12"`, `time: "19:00"` — ОФП карточка
+
+В picker обе видны как отдельные кнопки. Карточка бега показывает только беговую structure, карточка OFП — только OFП exercises. Кирилл: «В беге должен быть бег, внутри этой карточки должно было так прям и читаться».
+
+`plan.summary.totals` для факт-лога пишет `6 сессий (6 факт + 2 план) / 5.9ч` — kind не упоминается в totals, разные kind одного дня считаются как 2 сессии.
+
+## Totals-логика (v33-v34) — фиксированная
+
+Totals **всегда** показывает 3 ячейки, считаются в `buildPicker` JS на лету (не из `plan.totals`):
+
+- **planned** = `sum(s.duration_min for s in plan.slots) / 60` — суммарная длительность всех слотов недели
+- **expected** = `plan.phase.hours_per_week_target` — target из долгосрочного плана (run_base=5ч, run_build=7ч, race_taper=4ч, etc.)
+- **delta** = `planned - expected`. Зелёный (`var(--good) #7ee787`) если `≥ 0`, красный (`var(--warn) #ff9b6a`) если `< 0`
+
+**Лейблы — английские** (planned/expected/delta). Русские слова (`план-неделя`/`долгосрочн`/`дельта`) обрезаются в плашке и Кирилл это заметил — не использовать.
+
+В actual-режиме (is_actual_log=true) **тот же** показ planned/expected/delta, а не `сессий/факт/объём`. Факт-цифры показываются в `renderCard` actual-блоке (зелёный ✅ Факт: distance/time/pace/HR/RPE), а не в totals.
 
 ## Добавление планового слота в факт-лог неделю (v30-v31)
 
