@@ -1,7 +1,7 @@
 """
 season_week.py — утилиты конвертации season_week ↔ date ↔ iso_week.
 
-Единый счётчик W1..W~49. W1 = season_start_date (2026-10-12).
+Единый счётчик W1..W~49. W1 = season_start_date (2026-10-11, Sun). Week runs Sun→Sat..
 season_week НЕ зависит от ISO недели — это ordinal с начала сезона.
 """
 from __future__ import annotations
@@ -15,7 +15,7 @@ def _parse(d: str | date) -> date:
     return datetime.strptime(d, "%Y-%m-%d").date()
 
 
-def season_week_to_dates(season_week: int, season_start: str | date = "2026-10-12") -> tuple[date, date]:
+def season_week_to_dates(season_week: int, season_start: str | date = "2026-10-11") -> tuple[date, date]:
     """W1 = [start, start+6]. W2 = [start+7, start+13]."""
     start = _parse(season_start)
     week_start = start + timedelta(days=7 * (season_week - 1))
@@ -23,7 +23,7 @@ def season_week_to_dates(season_week: int, season_start: str | date = "2026-10-1
     return week_start, week_end
 
 
-def date_to_season_week(d: str | date, season_start: str | date = "2026-10-12") -> int:
+def date_to_season_week(d: str | date, season_start: str | date = "2026-10-11") -> int:
     """Обратная конвертация. До старта → 0. После — какой W (1-based)."""
     target = _parse(d)
     start = _parse(season_start)
@@ -33,14 +33,19 @@ def date_to_season_week(d: str | date, season_start: str | date = "2026-10-12") 
     return (delta_days // 7) + 1
 
 
-def season_week_to_iso(season_week: int, season_start: str | date = "2026-10-12") -> str:
-    """W1 → '2026-W42'."""
+def season_week_to_iso(season_week: int, season_start: str | date = "2026-10-11") -> str:
+    """W1 → '2026-W42' (берёт ПОНЕДЕЛЬНИК недели, чтобы season_week не зависел от Sun-старта).
+
+    Нюанс: если season_start = Sun, week_start (Sun) принадлежит предыдущей ISO-неделе.
+    Берём week_start + 1 day (Mon), чтобы получить правильную ISO-неделю season_week.
+    """
     week_start, _ = season_week_to_dates(season_week, season_start)
-    iso_year, iso_week, _ = week_start.isocalendar()
+    monday = week_start + timedelta(days=1)
+    iso_year, iso_week, _ = monday.isocalendar()
     return f"{iso_year}-W{iso_week:02d}"
 
 
-def iso_to_season_week(iso: str, season_start: str | date = "2026-10-12") -> int:
+def iso_to_season_week(iso: str, season_start: str | date = "2026-10-11") -> int:
     """'2026-W42' → W1 (берём ПОНЕДЕЛЬНИК iso-недели)."""
     year, w = iso.split("-W")
     # Понедельник iso-недели
@@ -49,7 +54,7 @@ def iso_to_season_week(iso: str, season_start: str | date = "2026-10-12") -> int
 
 
 def phase_for_season_week(season_week: int, phases: list[dict],
-                          season_start: str | date = "2026-10-12") -> dict | None:
+                          season_start: str | date = "2026-10-11") -> dict | None:
     """Возвращает phase в которой находится season_week."""
     for ph in phases:
         s = date_to_season_week(ph["start"], season_start)
@@ -60,7 +65,7 @@ def phase_for_season_week(season_week: int, phases: list[dict],
 
 
 def control_points_for_season_week(season_week: int, control_points: list[dict],
-                                    season_start: str | date = "2026-10-12") -> list[dict]:
+                                    season_start: str | date = "2026-10-11") -> list[dict]:
     """Возвращает CP которые попадают в season_week."""
     out = []
     for cp in control_points:
@@ -69,7 +74,7 @@ def control_points_for_season_week(season_week: int, control_points: list[dict],
     return out
 
 
-def total_season_weeks(season_end: str | date, season_start: str | date = "2026-10-12") -> int:
+def total_season_weeks(season_end: str | date, season_start: str | date = "2026-10-11") -> int:
     """Общее число недель в сезоне."""
     end = _parse(season_end)
     start = _parse(season_start)

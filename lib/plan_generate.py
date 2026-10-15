@@ -308,7 +308,7 @@ def generate(season_week: int | str,
     cn = json.loads(Path(constraints_path).read_text(encoding="utf-8"))
     ov = json.loads(Path(overrides_path).read_text(encoding="utf-8")) if Path(overrides_path).exists() else {"overrides": []}
 
-    season_start = sp.get("season_start_date", "2026-10-12")
+    season_start = sp.get("season_start_date", "2026-10-11")
 
     if isinstance(season_week, str):
         if season_week.startswith("W"):

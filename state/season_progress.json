@@ -10,7 +10,7 @@
       },
       "slots_completed": 0,
       "slots_planned": 9,
-      "notes": "W42 = 12-18 окт. Старт фазы run_base.",
+      "notes": "W42 = 11-17 окт. Старт фазы run_base (вс-суб).",
       "season_week": 1,
       "iso_week": "2026-W42",
       "_keys_note": "Primary key is season_week (e.g. 'W1'). iso_week kept for cross-reference."

@@ -48,9 +48,21 @@
   },
   "weight_kg_current": 101.7,
   "weight_history": [
-    {"date": "2026-09-30", "kg": 101.7, "source": "manual"},
-    {"date": "2026-10-07", "kg": 101.4, "source": "garmin"},
-    {"date": "2026-10-12", "kg": 101.1, "source": "garmin"}
+    {
+      "date": "2026-09-30",
+      "kg": 101.7,
+      "source": "manual"
+    },
+    {
+      "date": "2026-10-07",
+      "kg": 101.4,
+      "source": "garmin"
+    },
+    {
+      "date": "2026-10-11",
+      "kg": 101.1,
+      "source": "garmin"
+    }
   ],
   "context": {
     "age": 42,

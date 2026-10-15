@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>W4 · 2026-11-01..2026-11-07 · Берлин</title>
+<style>
+:root{
+  --bg:#0f1115;--panel:#161a22;--panel2:#1d222c;--border:#2a3140;
+  --text:#e6e9ef;--muted:#9aa3b2;
+  --accent:#7aa2ff;--accent2:#5cd6c0;--warn:#ff9b6a;--good:#7ee787;--cp:#d8a0ff;
+  --run:#7ec8e3;--bike:#f08a5a;--swim:#5cd6c0;--ofp:#d8a0ff;--brick:#f0c674;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+  -webkit-text-size-adjust:100%;line-height:1.4}
+body{padding:14px 12px 80px;max-width:780px;margin:0 auto}
+h1{font-size:20px;margin:0 0 4px}
+h2{font-size:15px;margin:0 0 8px;color:var(--accent)}
+h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
+
+/* v26: ТОЧНАЯ копия архитектуры из w1-mobile.html (который работал) */
+.picker{display:flex;flex-direction:column;gap:10px}
+.hidden{display:none !important}
+.visible{display:flex !important;flex-direction:column;gap:10px}
+
+.slot{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;text-align:left;cursor:pointer;font:inherit;color:inherit;
+  min-height:74px;box-shadow:0 1px 2px rgba(0,0,0,.3);display:flex;
+  flex-direction:column;justify-content:center;transition:transform .1s}
+.slot:active{transform:scale(0.98);background:var(--panel2)}
+.slot .day{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.slot .name{font-size:14px;font-weight:600;margin-top:4px}
+.slot .desc{font-size:12px;color:var(--muted);margin-top:2px}
+.slot .slot-head{display:flex;align-items:center;gap:8px}
+.slot .slot-kind-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.slot .slot-dur{margin-left:auto;font-size:10.5px;color:var(--muted);background:var(--panel2);padding:2px 8px;border-radius:6px;border:1px solid var(--border);font-family:ui-monospace,SFMono-Regular,monospace}
+.slot .slot-focus{font-size:11px;color:var(--accent2);margin-top:3px;font-weight:500}
+
+.slots-header{font-size:14px;margin:14px 0 4px;color:var(--accent);text-transform:none;letter-spacing:0}
+.slots-sub{font-size:11.5px;color:var(--muted);margin-bottom:6px}
+
+.totals-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+.totals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.total-cell{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:6px;text-align:center}
+.total-cell .v{font-size:16px;font-weight:600;color:var(--accent2);font-family:ui-monospace,SFMono-Regular,monospace}
+.total-cell .l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.delta-positive .v{color:var(--good)}
+.delta-negative .v{color:var(--warn)}
+.zones-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;font-size:10.5px}
+.zone{background:var(--panel2);padding:4px 8px;border-radius:6px;border:1px solid var(--border);color:var(--muted)}
+.zone b{color:var(--accent);font-family:ui-monospace,SFMono-Regular,monospace;font-size:10.5px;margin-right:3px}
+
+.phase-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:8px}
+.phase-card h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 3px}
+.phase-card p{font-size:11.5px;color:var(--text);margin:0;line-height:1.4}
+
+.cp-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:8px}
+.cp-card h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 3px}
+.cp-card p{font-size:11.5px;color:var(--text);margin:0;line-height:1.4}
+
+.plan-title{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:4px}
+.plan-title h1{font-size:18px;margin:0}
+.plan-title .week{font-size:12px;color:var(--muted);margin-top:2px}
+.plan-rules{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
+
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.card-headline{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.card-kind-icon{font-size:22px;flex-shrink:0}
+.card-name{font-size:16px;font-weight:600;line-height:1.2}
+.card-subtitle{font-size:11.5px;color:var(--muted);margin:0 0 8px}
+.card-tag{font-size:10.5px;padding:3px 9px;border-radius:8px;background:var(--panel2);color:var(--muted);text-transform:lowercase;letter-spacing:.3px;font-weight:600;flex-shrink:0;margin-left:8px}
+.card-tag.kind-run{color:var(--run);background:rgba(126,200,227,.08);border:1px solid rgba(126,200,227,.3)}
+.card-tag.kind-bike{color:var(--bike);background:rgba(240,138,90,.08);border:1px solid rgba(240,138,90,.3)}
+.card-tag.kind-swim{color:var(--swim);background:rgba(92,214,192,.08);border:1px solid rgba(92,214,192,.3)}
+.card-tag.kind-ofp{color:var(--ofp);background:rgba(216,160,255,.08);border:1px solid rgba(216,160,255,.3)}
+
+.exercise{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.exercise:last-child{border-bottom:none}
+.ex-icon{width:36px;height:36px;flex-shrink:0;font-size:22px;display:flex;align-items:center;justify-content:center}
+.ex-text{flex:1}
+.ex-name{font-size:14px;font-weight:600}
+.ex-name .eq{font-size:10px;color:var(--warn);background:rgba(255,155,106,.08);padding:1px 5px;border-radius:4px;margin-left:4px}
+.ex-why{font-size:12px;color:var(--muted);margin-top:2px}
+
+.inventory{background:rgba(255,155,106,.05);border:1px dashed var(--warn);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:13px}
+.inv-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--warn);font-weight:600;margin-bottom:6px}
+
+.card-meta-row{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 12px}
+.card-meta-item{background:var(--panel2);padding:3px 8px;border-radius:6px;border:1px solid var(--border);font-size:10.5px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,monospace}
+.focus-pill{font-family:inherit;font-weight:600}
+.focus-pill.focus-Z1{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
+.focus-pill.focus-Z2{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
+.focus-pill.focus-Z2_low{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
+.focus-pill.focus-Z3{color:var(--warn);background:rgba(255,155,106,.08);border-color:rgba(255,155,106,.3)}
+.focus-pill.focus-Z4{color:var(--warn);background:rgba(255,155,106,.08);border-color:rgba(255,155,106,.3)}
+.focus-pill.focus-Z5{color:var(--cp);background:rgba(216,160,255,.08);border-color:rgba(216,160,255,.3)}
+.focus-pill.focus-Z6{color:var(--cp);background:rgba(216,160,255,.08);border-color:rgba(216,160,255,.3)}
+.zwift-pending{color:var(--warn) !important;border-color:rgba(255,155,106,.4) !important;background:rgba(255,155,106,.08) !important;font-family:inherit !important}
+.inv-item{display:flex;gap:8px;align-items:center;padding:2px 0}
+.inv-icon{color:var(--warn);font-size:14px;width:18px;text-align:center}
+
+.topbar{display:flex;align-items:center;margin-bottom:12px}
+.topbar button{background:var(--panel);border:1px solid var(--border);padding:8px 12px;border-radius:8px;cursor:pointer;font:inherit;color:inherit;min-height:36px;display:flex;align-items:center;gap:6px}
+.topbar button:active{transform:scale(0.97)}
+
+/* Structure (workout steps) */
+.structure-list{margin:0;padding-left:0;list-style:none}
+.step{padding:8px 10px;margin-bottom:5px;background:var(--panel2);border-radius:6px;border-left:2px solid var(--accent2)}
+.step-set{background:rgba(122,162,255,.08);border-left-color:var(--accent)}
+.step-ofp{background:rgba(216,160,255,.08);border-left-color:var(--cp)}
+.step-head{display:flex;align-items:center;gap:6px;margin-bottom:2px;flex-wrap:wrap}
+.step-phase{color:var(--accent2);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px}
+.step-dur{color:var(--text);font-weight:600;font-size:13px;font-family:ui-monospace,SFMono-Regular,monospace}
+.step-zone{background:var(--bg);padding:1px 6px;border-radius:4px;font-size:10.5px;color:var(--accent2);font-family:ui-monospace,SFMono-Regular,monospace}
+.step-pace{color:var(--muted);font-size:11px;font-family:ui-monospace,SFMono-Regular,monospace}
+.step-reps{color:var(--accent);font-weight:600;font-size:11px;margin-left:4px}
+.step-name{font-size:13px;margin-top:2px}
+.step-notes{margin-top:3px;font-size:11.5px;color:var(--muted);font-style:italic;line-height:1.4}
+.step-sublist{margin:6px 0 4px 12px;padding-left:0;list-style:none;font-size:12px}
+.step-sub{padding:4px 6px;margin-bottom:2px;background:var(--bg);border-radius:4px;border-left:2px solid var(--good)}
+.ex-list{margin-top:6px;padding-left:14px;font-size:12.5px}
+.ex-item{padding:2px 0}
+.ex-item b{color:var(--accent)}
+
+footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
+.empty{color:var(--muted);font-style:italic;padding:14px;text-align:center}
+</style></head><body>
+
+<script type="application/json" id="plan-data">{"title": "W4 · 2026-11-01..2026-11-07 · Берлин", "weekIso": "W4", "subtitle": "iso 2026-W45 · сезон с 2026-10-11", "totals": {"planned": 8.7, "target": 5, "delta": -3.7}, "phase": {"id": "run_base", "start": "2026-10-11", "end": "2027-01-02", "hours_per_week_target": 5, "goal_id": "g_run_spring"}, "rules": {"hr_zones": "Z1 100-118, Z2_low 118-136, Z2 125-145, Z3 136-146, Z4 146-160, Z5 160-175, Z6 175-182", "hr_zones_dict": {"Z1": "100-118", "Z2_low": "118-136", "Z2": "125-145", "Z3": "136-146", "Z4": "146-160", "Z5": "160-175", "Z6": "175-182"}}, "control_points_in_range": ["cp_3k_w4"], "slots": [{"id": "пн-key_run", "day": "ПН", "time": "18:45", "name": "Easy 5К + прогрессия 3К", "short": "Easy 5К + прогрессия 3К", "duration_min": 60, "kind": "run", "subkind": "easy_progression", "focus": "Z2", "location": "stadium", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка."}, {"phase": "work", "duration_min": 25, "zone": "Z2", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Easy 5К. HR ~135, темп 5:30-5:00/км."}, {"phase": "work", "duration_min": 3, "zone": "Z3", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Прогрессия 1К: 5:00 → 4:30/км."}, {"phase": "cooldown", "duration_min": 15, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "🏟", "name": "Стадион (400м)"}]}, {"id": "вт-easy_runs", "day": "ВТ", "time": "09:00", "name": "Easy бег 30мин Z2", "short": "Easy бег 30мин Z2", "duration_min": 30, "kind": "run", "subkind": "easy", "focus": "Z2_low", "location": "asphalt_commuter", "workout_pending": false, "structure": [{"phase": "work", "duration_min": 30, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Лёгкий бег. Дыхание носовое."}], "inventory": []}, {"id": "вт-key_run", "day": "ВТ", "time": "18:30", "name": "Ключевая: Интервалы 60мин Z3", "short": "Ключевая: Интервалы 60мин Z3", "duration_min": 60, "kind": "run", "subkind": "key_intervals", "focus": "Z3", "location": "asphalt_commuter", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 12, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка с ускорениями 2×100м str."}, {"phase": "set", "duration_min": 30, "zone": null, "pace_min_per_km": null, "reps": 5, "set_repeats": [{"phase": "work", "duration_min": 4, "zone": "Z3", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "400м @ 4:00/км (~1:36)."}, {"phase": "recovery", "duration_min": 2, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Jog 200м. Восстановить дыхание."}], "notes": "Интервалы Z3. Источник: spring-10k-2027-v2.md."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "⌚", "name": "Garmin / часы с HR"}]}, {"id": "ср-long_run", "day": "СР", "time": "17:00", "name": "Длинный бег 90мин Z2_low", "short": "Длинный бег 90мин Z2_low", "duration_min": 90, "kind": "run", "subkind": "long_Z2", "focus": "Z2_low", "location": "stadium_or_pool", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка 10мин Z1."}, {"phase": "work", "duration_min": 65, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Длинный бег 65мин Z2_low. Дыхание носовое, темп комфортный. Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."}, {"phase": "cooldown", "duration_min": 15, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": []}, {"id": "чт-bike", "day": "ЧТ", "time": "10:30", "name": "Вел-станок Z2 45мин (дома)", "short": "Вел-станок Z2 45мин (дома)", "duration_min": 45, "kind": "bike", "subkind": "stationary_z2", "focus": "Z2", "location": "home_stationary_bike", "workout_pending": true, "structure": [{"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка на станке. Каденс 80-85."}, {"phase": "work", "duration_min": 30, "zone": "Z2", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Стабильное Z2. Каденс 85-90. Можно Zwift watch-симулятор."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Заминка."}], "inventory": [{"icon": "🚴", "name": "Велостанок (Tacx)"}, {"icon": "🚴", "name": "Zwift-приложение"}]}, {"id": "cp-cp_3k_w4", "day": "ПТ", "time": "18:00", "name": "CONTROL: 3K time trial", "short": "CONTROL: 3K time trial", "duration_min": 60, "kind": "control_point", "subkind": null, "focus": null, "location": "pool_or_asphalt", "workout_pending": false, "structure": [], "inventory": [{"icon": "🛣", "name": "Асфальт (коммутер)"}]}, {"id": "пт-swim", "day": "ПТ", "time": "18:00", "name": "Пул 60мин easy", "short": "Пул 60мин easy", "duration_min": 60, "kind": "swim", "subkind": "easy", "focus": "Z1", "location": "pool_or_asphalt", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка."}, {"phase": "work", "duration_min": 45, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Основная часть. Носовое дыхание."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Заминка."}], "inventory": [{"icon": "🏊", "name": "Бассейн"}]}, {"id": "сб-ofp", "day": "СБ", "time": "10:00", "name": "ofp core 25мин", "short": "ofp core 25мин", "duration_min": 25, "kind": "ofp", "subkind": "core", "focus": "core", "location": "home", "workout_pending": false, "structure": [{"phase": "warmup", "exercise": "Мобилилити: hip openers, glute bridge 2×15.", "duration_min": 5, "notes": "Активация ягодиц."}, {"phase": "main", "set": {"name": "Core circuit x2 rounds", "exercises": [{"name": "Планка", "reps": "3×45с", "rest": "30с"}, {"name": "Медведи на коленях", "reps": "2×12/стор", "rest": "30с"}, {"name": "Bird-dog", "reps": "3×10/стор", "rest": "30с"}, {"name": "Glute bridge", "reps": "3×15", "rest": "30с"}, {"name": "Гиперэкстензия", "reps": "2×15", "rest": "30с"}]}, "duration_min": 20, "notes": "Акцент на заднюю цепь (превентивно от защемления спины)."}, {"phase": "cooldown", "exercise": "Растяжка 5мин. Без агрессии на грушевидную.", "duration_min": 5, "notes": "Spring-10k-2027-v2.md core program."}], "inventory": [{"icon": "🧘", "name": "Коврик"}, {"icon": "🎗", "name": "Резинка (опционально)"}]}, {"id": "вс-bike", "day": "ВС", "time": "11:00", "name": "Длинный вел Z2 90мин", "short": "Длинный вел Z2 90мин", "duration_min": 90, "kind": "bike", "subkind": "long_z2", "focus": "Z2_low", "location": "long_ride_or_station", "workout_pending": true, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}, {"phase": "work", "duration_min": 70, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Длинный вел Z2_low 70мин. Zwift watch-сессия."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "🚴", "name": "Вело (улица или станок)"}]}]}</script>
+
+<div id="picker" class="picker visible"></div>
+
+<div id="cardWrap" class="hidden">
+  <div class="topbar">
+    <button id="backBtn">← к выбору</button>
+  </div>
+  <div id="cardHost"></div>
+</div>
+
+<script>
+// v26: точная копия логики навигации из w1-mobile.html (которая работала у Кирилла).
+// Тёмная цветовая гамма, structure/inventory из coach-данных вместо OFP-библиотеки.
+
+const KIND_ICON = { run: '🏃', bike: '🚴', swim: '🏊', ofp: '💪', brick: '🔄', control_point: '🎯' };
+let PLAN = null;
+let ACTIVE_WEEK_KEY = null;
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function loadPlan() {
+  const el = document.getElementById('plan-data');
+  if (!el) return null;
+  try { return JSON.parse(el.textContent); }
+  catch(e) { console.error('plan-data parse error', e); return null; }
+}
+
+function renderStructure(structure, kind) {
+  if (!structure || !structure.length) return '<div class="empty">Нет структуры</div>';
+  const isOfp = kind === 'ofp' || structure.some(st => 'exercise' in st || 'set' in st);
+  if (isOfp) return renderOfpStructure(structure);
+  return renderHrStructure(structure);
+}
+
+function renderOfpStructure(structure) {
+  const rows = structure.map(st => {
+    if (st.exercise) {
+      return '<li class="step step-ofp">'
+        + '<div class="step-head"><span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
+        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
+        + '<div class="step-name">' + escapeHtml(st.exercise) + '</div>'
+        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+        + '</li>';
+    }
+    if (st.set) {
+      let html = '<li class="step step-set">'
+        + '<div class="step-head"><span class="step-phase">main</span>'
+        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
+        + '<div class="step-name">' + escapeHtml(st.set.name) + '</div>'
+        + '<ol class="ex-list">';
+      for (const ex of st.set.exercises) {
+        html += '<li class="ex-item"><b>' + escapeHtml(ex.name) + '</b> · ' + escapeHtml(ex.reps)
+              + (ex.rest ? ' · отдых ' + escapeHtml(ex.rest) : '') + '</li>';
+      }
+      return html + '</ol></li>';
+    }
+    return '';
+  }).join('');
+  return '<ol class="structure-list">' + rows + '</ol>';
+}
+
+function renderHrStructure(structure) {
+  const rows = structure.map(st => {
+    if (st.phase === 'set' && st.set_repeats) {
+      let subHtml = st.set_repeats.map(s => {
+        let pace = s.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
+        let zone = s.zone ? '<span class="step-zone">' + escapeHtml(s.zone) + '</span>' : '';
+        return '<li class="step-sub">'
+          + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(s.phase||'') + '</span>'
+          + ' <span class="step-dur">' + escapeHtml(String(s.duration_min||'')) + 'мин</span>' + pace + '</div>'
+          + (s.notes ? '<div class="step-notes">' + escapeHtml(s.notes) + '</div>' : '')
+          + '</li>';
+      }).join('');
+      return '<li class="step step-set">'
+        + '<div class="step-head"><span class="step-phase">set</span>'
+        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>'
+        + '<span class="step-reps">× ' + escapeHtml(String(st.reps||'?')) + '</span></div>'
+        + '<ol class="step-sublist">' + subHtml + '</ol>'
+        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+        + '</li>';
+    }
+    let pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
+    let zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
+    return '<li class="step">'
+      + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
+      + ' <span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>' + pace + '</div>'
+      + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+      + '</li>';
+  }).join('');
+  return '<ol class="structure-list">' + rows + '</ol>';
+}
+
+function renderInventory(inv) {
+  if (!inv || !inv.length) return '';
+  const items = inv.map(i => '<div class="inv-item"><span class="inv-icon">' + escapeHtml(i.icon||'•') + '</span><span>' + escapeHtml(i.name) + '</span></div>').join('');
+  return '<div class="inventory"><div class="inv-title">📦 Что нужно</div>' + items + '</div>';
+}
+
+function renderCard(slot) {
+  const inventory = slot.inventory || [];
+  const invHtml = renderInventory(inventory);
+  const kind = slot.kind || '';
+  const kindIcon = KIND_ICON[kind] || '🎯';
+  const tag = (slot.structure && slot.structure.length) || '?';
+
+  // Meta items (v18-style: focus бейджики, subkind, location, workout_pending)
+  let metaHtml = '';
+  if (slot.location) metaHtml += '<span class="card-meta-item">📍 ' + escapeHtml(slot.location) + '</span>';
+  if (slot.focus) metaHtml += '<span class="card-meta-item focus-pill focus-' + escapeHtml(slot.focus) + '">🎯 ' + escapeHtml(slot.focus) + '</span>';
+  if (slot.subkind) metaHtml += '<span class="card-meta-item">' + escapeHtml(slot.subkind) + '</span>';
+  if (slot.workout_pending) metaHtml += '<span class="card-meta-item zwift-pending">⏳ Zwift pending</span>';
+
+  const stepsHtml = renderStructure(slot.structure, kind);
+
+  return '<div class="card">'
+    + '<div class="card-header">'
+    + '<div class="card-headline">'
+    + '<span class="card-kind-icon">' + kindIcon + '</span>'
+    + '<span class="card-name">' + escapeHtml(slot.name) + '</span>'
+    + '</div>'
+    + '<div class="card-tag kind-' + escapeHtml(kind) + '">' + escapeHtml(tag) + ' шагов</div>'
+    + '</div>'
+    + '<div class="card-subtitle">' + escapeHtml(slot.day) + ' · ' + escapeHtml(slot.time) + ' · '
+    + escapeHtml(String(slot.duration_min)) + ' мин</div>'
+    + (metaHtml ? '<div class="card-meta-row">' + metaHtml + '</div>' : '')
+    + invHtml
+    + '<h3>Структура тренировки</h3>'
+    + stepsHtml
+    + '</div>';
+}
+
+function buildPicker(plan) {
+  ACTIVE_WEEK_KEY = plan.weekIso || plan.season_week || null;
+  let html = '<div class="plan-title">';
+  html += '<h1>' + escapeHtml(plan.title || 'Тренировки') + '</h1>';
+  if (plan.weekIso) html += '<div class="week">' + escapeHtml(plan.weekIso) + '</div>';
+  if (plan.subtitle) html += '<div class="week">' + escapeHtml(plan.subtitle) + '</div>';
+  html += '</div>';
+
+  // Totals (v18-style: planned/target/delta)
+  if (plan.totals) {
+    const t = plan.totals;
+    const deltaSign = (t.delta >= 0 ? '+' : '');
+    const deltaClass = (t.delta >= 0 ? 'delta-positive' : 'delta-negative');
+    html += '<div class="totals-card">';
+    html += '<div class="totals-grid">';
+    html += '<div class="total-cell"><div class="v">' + t.planned + 'ч</div><div class="l">planned</div></div>';
+    html += '<div class="total-cell"><div class="v">' + t.target + 'ч</div><div class="l">target</div></div>';
+    html += '<div class="total-cell ' + deltaClass + '"><div class="v">' + deltaSign + t.delta + 'ч</div><div class="l">delta</div></div>';
+    html += '</div>';
+    // HR zones
+    if (plan.rules && plan.rules.hr_zones_dict) {
+      const zones = plan.rules.hr_zones_dict;
+      html += '<div class="zones-grid">';
+      for (const k of Object.keys(zones)) {
+        html += '<div class="zone"><b>' + escapeHtml(k) + '</b> ' + escapeHtml(String(zones[k])) + '</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  // Phase
+  if (plan.phase && plan.phase.id && plan.phase.id !== '—') {
+    html += '<div class="phase-card">';
+    html += '<h3>Фаза · ' + escapeHtml(plan.phase.id) + '</h3>';
+    html += '<p>' + escapeHtml(plan.phase.start) + ' → ' + escapeHtml(plan.phase.end)
+         + ' · target ' + plan.phase.hours_per_week_target + 'ч/нед'
+         + (plan.phase.goal_id ? ' · goal ' + escapeHtml(plan.phase.goal_id) : '')
+         + '</p>';
+    html += '</div>';
+  }
+
+  // Control points
+  if (plan.control_points_in_range && plan.control_points_in_range.length) {
+    html += '<div class="cp-card">';
+    html += '<h3>Контрольные точки</h3>';
+    html += '<p>В этой неделе: ' + plan.control_points_in_range.map(escapeHtml).join(', ') + '</p>';
+    html += '</div>';
+  }
+
+  // Section title
+  html += '<h2 class="slots-header">Тренировки · ' + (plan.slots || []).length + ' шт</h2>';
+  html += '<div class="slots-sub">тап → детали</div>';
+
+  // Слоты (с иконкой вида спорта)
+  for (const s of (plan.slots || [])) {
+    const kindIcon = KIND_ICON[s.kind] || '🎯';
+    html += '<button class="slot" data-slot="' + escapeHtml(s.id) + '">';
+    html += '<div class="slot-head">';
+    html += '<span class="slot-kind-icon">' + kindIcon + '</span>';
+    html += '<span class="day">' + escapeHtml(s.day) + ' · ' + escapeHtml(s.time) + '</span>';
+    html += '<span class="slot-dur">' + s.duration_min + ' мин</span>';
+    html += '</div>';
+    html += '<div class="name">' + escapeHtml(s.name) + '</div>';
+    if (s.focus) html += '<div class="slot-focus">🎯 ' + escapeHtml(s.focus) + '</div>';
+    html += '</button>';
+  }
+
+  document.getElementById('picker').innerHTML = html;
+  // Re-bind clicks
+  document.querySelectorAll('.slot').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      showSlot(el.dataset.slot);
+    });
+  });
+}
+
+function showPicker() {
+  document.getElementById('picker').classList.remove('hidden');
+  document.getElementById('picker').classList.add('visible');
+  document.getElementById('cardWrap').classList.add('hidden');
+  document.getElementById('cardWrap').classList.remove('visible');
+  if (window.location.hash) {
+    try { history.replaceState(history.state, '', ' '); } catch(e) {}
+  }
+  window.scrollTo(0, 0);
+}
+
+function showSlot(slot) {
+  document.getElementById('picker').classList.add('hidden');
+  document.getElementById('picker').classList.remove('visible');
+  document.getElementById('cardWrap').classList.remove('hidden');
+  document.getElementById('cardWrap').classList.add('visible');
+
+  const slotDef = (PLAN.slots || []).find(s => s.id === slot);
+  if (!slotDef) {
+    document.getElementById('cardHost').innerHTML = '<div class="card">Слот не найден: ' + escapeHtml(slot) + '</div>';
+  } else {
+    document.getElementById('cardHost').innerHTML = renderCard(slotDef);
+  }
+  try {
+    if (history.state && history.state.page === 'card') {
+      history.replaceState({page: 'card', slot: slot}, '', '#' + slot);
+    } else {
+      history.pushState({page: 'card', slot: slot}, '', '#' + slot);
+    }
+  } catch(e) { history.replaceState(null, '', '#' + slot); }
+  window.scrollTo(0, 0);
+}
+
+window.addEventListener('popstate', (e) => {
+  const state = e.state;
+  if (!state || state.page !== 'card') showPicker();
+});
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (history.state && history.state.page === 'card') history.back();
+  else showPicker();
+});
+
+// Init
+function init() {
+  PLAN = loadPlan();
+  if (!PLAN) {
+    document.getElementById('picker').innerHTML = '<div class="card">Не удалось загрузить план.</div>';
+    return;
+  }
+  buildPicker(PLAN);
+  // Если есть hash — открыть ту карточку
+  const initialHash = window.location.hash.replace('#', '');
+  const validIds = new Set((PLAN.slots || []).map(s => s.id));
+  if (initialHash && validIds.has(initialHash)) {
+    history.replaceState({page: 'init'}, '', ' ');
+    showSlot(initialHash);
+  } else {
+    history.replaceState({page: 'init'}, '', ' ');
+  }
+}
+
+init();
+</script>
+</body></html>

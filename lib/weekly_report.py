@@ -27,7 +27,7 @@ def report(season_week: int | str | None = None,
         from datetime import date
         from .season_week import date_to_season_week
         sp = json.loads(Path(season_plan_path).read_text(encoding="utf-8"))
-        season_start = sp.get("season_start_date", "2026-10-12")
+        season_start = sp.get("season_start_date", "2026-10-11")
         season_week = date_to_season_week(date.today().isoformat(), season_start)
 
     athlete = json.loads(Path(athlete_path).read_text(encoding="utf-8"))
