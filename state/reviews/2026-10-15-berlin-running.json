@@ -4,17 +4,18 @@
   "_sources": {
     "fit_file": "/home/tsybriki/projects/garmin_tools/raw/today/fit/24734796814.fit",
     "fit_id": "24734796814",
-    "parse_fit_schema": "0.4.0",
-    "data_source": "raw/today (pulled Garmin 2026-10-15)"
+    "parse_fit_schema": "0.5.0",
+    "data_source": "raw/today (pulled Garmin 2026-10-15)",
+    "update_note": "После фикса парсера 0.4.0→0.5.0: Stryd RD-поля (Vertical Oscillation, Ground Time) корректно доходят. VO 6.3 см = Stryd footpod, не Garmin RD."
   },
   "title": "Berlin Running · 2026-10-15",
   "date": "2026-10-15",
   "sport": "running",
-  "summary_line": "65:09 moving / 11.50 km @ 5:40/км / HR avg 138 · negative split · cad 85-86 к финишу",
+  "summary_line": "65:09 moving / 11.50 km @ 5:40/км / HR avg 138 · negative split · cad 85-86 к финишу · VO 6.3 см (Stryd)",
   "brief": [
     "65:09 в движении (3:46 пауз мелких, без ОФП), 11.50 км с negative split'ом (km 1: 6:53 → km 9: 5:32). Лучшая пробежка по структуре после 14 окт.",
-    "Каденс наконец добрался до 85-86 spm в последние 3 км (Watch и Stryd согласованы, |Δ|=0.52 spm) — значит метроном/фокус могут работать. Но Z3 63% + Z4 10% = 73% выше Z2_low — как и вчера, темп все еще слишком быстрый для заявленной аэробной.",
-    "Действие: следующая лёгкая пробежка — 5:50/км целенаправленно. Если удастся держать 5:50 с HR ≤ 138 и каденс ≥ 85, значит ты нашёл реальную границу Z2_low. Если нет — уточняем target."
+    "Stryd footpod показал Vertical Oscillation **6.3 см** — это **отличная** цифра (норма для элиты 5-8 см). Раньше я тебе сказал «VO высоковат» по цифре 10.7 см из Garmin Connect — это Garmin RD (другая метрика, датчик на запястье), сегодня он не записался. Сравни в следующих пробежках, какому сенсору доверять.",
+    "Каденс добрался до 85-86 spm в последние 3 км (Watch и Stryd согласованы, |Δ|=0.52). Z3 63% + Z4 10% = 73% выше Z2_low — то же что 14 окт. Действие: следующая лёгкая пробежка — 5:50/км целенаправленно."
   ],
   "metrics": {
     "moving_min": "65:09",
@@ -27,6 +28,9 @@
     "cadence_watch": "82.8 spm",
     "cadence_stryd": "82.5 spm",
     "cadence_disagree": "0.5 spm",
+    "vertical_oscillation_cm": "6.3",
+    "vo_source": "Stryd footpod",
+    "ground_time_ms": "292",
     "stryd_power_avg": "328 W",
     "hr_drift_bpm": "+7 (second half)"
   },
@@ -35,7 +39,7 @@
       "id": "hr_zones",
       "title": "HR-зоны · по moving records",
       "kind": "hr_zones",
-      "summary": "Z3 63% + Z4 10% = 73% выше Z2_low. Та же проблема, что 14 окт: ты назвал это «лёгкая», но HR говорит «темповая».",
+      "summary": "Z3 63% + Z4 10% = 73% выше Z2_low. Та же проблема, что 14 окт.",
       "data": {
         "hr_max": 182,
         "zones": [
@@ -74,32 +78,40 @@
           {"km": 5,  "dur": "6:22", "pace": "6:22", "hr": 138, "cadW": 81, "cadS": 81, "formW": 102, "airW": 3.1, "powW": 324},
           {"km": 6,  "dur": "5:42", "pace": "5:41", "hr": 141, "cadW": 82, "cadS": 82, "formW": 103, "airW": 4.1, "powW": 343},
           {"km": 7,  "dur": "5:41", "pace": "5:41", "hr": 141, "cadW": 83, "cadS": 83, "formW": 102, "airW": 3.8, "powW": 327},
-          {"km": 8,  "dur": "5:40", "pace": "5:39", "hr": 141, "cadW": 84, "cadS": 84, "formW": 101, "airW": 2.5, "powW": 323, "_note": "каденс 84 держит"},
+          {"km": 8,  "dur": "5:40", "pace": "5:39", "hr": 141, "cadW": 84, "cadS": 84, "formW": 101, "airW": 2.5, "powW": 323},
           {"km": 9,  "dur": "5:33", "pace": "5:32", "hr": 142, "cadW": 85, "cadS": 85, "formW": 100, "airW": 3.4, "powW": 334, "_note": "первый км на 85+"},
-          {"km": 10, "dur": "5:54", "pace": "5:54", "hr": 141, "cadW": 85, "cadS": 85, "formW": 100, "airW": 4.2, "powW": 340, "_warn": "HR не падает при замедлении — усталость?"},
-          {"km": 11, "dur": "5:47", "pace": "5:47", "hr": 143, "cadW": 86, "cadS": 86, "formW": 97,  "airW": 4.4, "powW": 346, "_warn": "HR растёт на финише — был reserve"}
+          {"km": 10, "dur": "5:54", "pace": "5:54", "hr": 141, "cadW": 85, "cadS": 85, "formW": 100, "airW": 4.2, "powW": 340, "_warn": "HR не падает при замедлении"},
+          {"km": 11, "dur": "5:47", "pace": "5:47", "hr": 143, "cadW": 86, "cadS": 86, "formW": 97,  "airW": 4.4, "powW": 346, "_warn": "HR растёт на финише"}
         ]
       }
     },
     {
       "id": "stryd",
-      "title": "Stryd Running Dynamics",
+      "title": "Stryd Running Dynamics · ⚠️ Garmin RD source-раздельно",
       "kind": "kv_grid",
-      "summary": "⚠️ В этом FIT'е Garmin не записал Running Dynamics (VO/stance/step_length) от Stryd — это известная фишка ANT+ profile, не баг парсера. Доступны каденс и мощность.",
+      "summary": "Stryd сегодня дал RD-поля (Vertical Oscillation 6.3, Ground Time 292 мс). Garmin RD от часов — пусто (FR 965 profile его не записал). Это НОВЫЙ баг — раньше я тебе показывал Garmin VO 10.7 (он с 14 окт FIT). Теперь нужно решить какой источник truth-источник.",
       "data": {
         "items": [
-          {"label": "Vertical Oscillation", "value": "—", "sub": "Garmin RD не синкнул сегодня", "tone": "warn"},
-          {"label": "Stance Time",          "value": "—", "sub": "Garmin RD не синкнул сегодня", "tone": "warn"},
-          {"label": "Step Length",          "value": "—", "sub": "Garmin RD не синкнул сегодня", "tone": "warn"},
-          {"label": "Form Power",           "value": "101 W", "sub": "avg · стабильно с 14 окт (102 W)"},
-          {"label": "Air Power",            "value": "3.4 W",  "sub": "avg · +50% к 14 окт — лёгкий ветер или terrain", "tone": "warn"},
-          {"label": "Stryd Power",          "value": "328 W",  "sub": "avg · стабильно (-1 W vs 14 окт)"},
-          {"label": "Cadence (footpod)",    "value": "82.5 spm","sub": "avg · на финише 86"},
-          {"label": "Cadence (watch)",      "value": "82.8 spm","sub": "avg · на финише 86"},
-          {"label": "|Cadence Δ|",          "value": "0.5 spm", "sub": "watch vs Stryd — оба согласованы", "tone": "good"},
-          {"label": "Temperature",          "value": "21 °C",   "sub": "vs 17 °C вчера — теплее сегодня"}
+          {"label": "VO (Stryd footpod)",        "value": "6.3 см",  "sub": "avg · ОТЛИЧНО (элита 5-8 см)", "tone": "good"},
+          {"label": "VO (Garmin RD · 14 окт)",    "value": "10.7 см", "sub": "ref · другая метрика, нельзя сравнивать напрямую", "tone": "warn"},
+          {"label": "Ground Time (Stryd)",         "value": "292 мс",  "sub": "avg · норма любителя на 5:30 (270-300 мс)"},
+          {"label": "Stance Time (Garmin · 14 окт)", "value": "259.7 мс", "sub": "ref · другая метрика, тот же человек"},
+          {"label": "Step Length",                "value": "—",       "sub": "Stryd не даёт step_length в этом FIT"},
+          {"label": "Impact Loading Rate",        "value": "39.8",    "sub": "Stryd · норма 35-50"},
+          {"label": "Leg Spring Stiffness",       "value": "11.6",    "sub": "Stryd · стабильно с 14 окт (11.5)", "tone": "good"},
+          {"label": "Form Power",                 "value": "101 W",   "sub": "avg · стабильно с 14 окт (102 W)", "tone": "good"},
+          {"label": "Air Power",                  "value": "3.4 W",   "sub": "avg · +50% к 14 окт, лёгкий ветер"},
+          {"label": "Stryd Power",                "value": "328 W",   "sub": "avg · стабильно (-1 W vs 14 окт)"},
+          {"label": "Cadence (footpod)",          "value": "82.5 spm", "sub": "avg · на финише 86"}
         ]
       }
+    },
+    {
+      "id": "sensors",
+      "title": "Какой сенсор трекать · Garmin RD vs Stryd",
+      "kind": "text",
+      "summary": "Stryd footpod и Garmin Running Dynamics измеряют похожие вещи (вертикальное колебание, ground contact time), но **по-разному**. Цифры не сопоставимы напрямую.",
+      "data": "Garmin RD = акселерометр на запястье, грубое интегрирование.\nStryd = IMU в ботинке, точнее, но считает иначе.\n\nИсторически Garmin Connect показывает Garmin RD. Если ты хочешь трендить VO неделями — **держись Garmin RD** как source-of-truth, потому что архивные данные у тебя от него.\n\nЕсли хочешь перейти на Stryd как source — это чистый сброс тренда (только с этой недели).\n\n**Моя рекомендация**: Garmin RD. Это то, что ты видишь на вебе. Если есть сегодня Garmin RD — бери его. Stryd — fallback когда Garmin RD отсутствует."
     },
     {
       "id": "pauses",
@@ -114,7 +126,7 @@
           {"key": "cause",  "label": "что было"}
         ],
         "rows": [
-          {"at_km": "0.10",  "t": "0:37",   "dur": "0:54",  "cause": "светофор / старт (подозрительно — почти сразу)"},
+          {"at_km": "0.10",  "t": "0:37",   "dur": "0:54",  "cause": "светофор / старт"},
           {"at_km": "1.57",  "t": "10:08",  "dur": "0:29",  "cause": "семафор"},
           {"at_km": "3.13",  "t": "19:35",  "dur": "0:31",  "cause": "семафор"},
           {"at_km": "4.99",  "t": "30:49",  "dur": "0:34",  "cause": "бордюр / переход"},
@@ -129,32 +141,32 @@
       "id": "recos",
       "title": "Что делать · 5 шагов",
       "kind": "recommendations",
-      "summary": "Сдвиг по сравнению с 14 окт: каденс на финише достиг цели, осталось держать с начала + снизить темп до настоящего Z2.",
+      "summary": "Сдвиг по сравнению с 14 окт: каденс на финише достиг цели, осталось держать с начала + снизить темп + признать Garmin RD как единственный truth.",
       "data": [
         {
           "priority": "now",
-          "text": "Сегодня ты добрался до 85-86 spm только на км 9+. Завтра — стартуй с метрономом 170 bpm и держи его СРАЗУ. Цель: 85 spm на каждом км лёгкой пробежки, не дожидаясь 9-го.",
-          "principle": "Каденс-дрель работает на старте, не на финише. Метроном 170 bpm на ухо в первые 5 мин тренировки."
+          "text": "Метроном 170 bpm с первого км, цель — 85 spm каждую минуту лёгкой пробежки, не дожидаясь км 9.",
+          "principle": "Каденс-дрель работает на старте, не на финише."
         },
         {
           "priority": "now",
-          "text": "73% работы выше Z2_low — но ты НЕ держишь темп 5:50. Беги завтра 5:50 целенаправленно, не 5:40. Если через 20 мин темп 5:50 держится, HR ≤ 140, каденс ≥ 85 — ты нашёл свою Z2_low. Если нет — target 6:00.",
-          "principle": "Z2_low — это диапазон по HR (≤ 138), не по ощущению. На 5:40 ты 73% времени выше — это «серый темп», не Z2."
+          "text": "Беги завтра 5:50 целенаправленно. 73% объёма выше Z2_low на 5:40 — это не Z2_low. Нужно найти реальную границу.",
+          "principle": "Z2_low — диапазон по HR (≤ 138), не по ощущению."
         },
         {
           "priority": "soon",
-          "text": "Negative split (km 1: 6:53 → km 9: 5:32) сегодня — отличный знак. Это значит ты не «выдохся к концу», а нашёл ритм. На длинной (15-21 км) такая прогрессия должна быть ОБРАТНОЙ — медленнее в начале, не к концу. Учись держать 5:50 даже когда чувствуешь запас.",
-          "principle": "Ощущение «могу быстрее» в начале пробежки = индикатор, что Z2 границу ты уже прошёл. Дисциплина удерживать целевой темп."
+          "text": "Реши, какой сенсор — source-of-truth для RD-тренда. Garmin RD (то, что в Garmin Connect UI) или Stryd (то, что в этой пробежке). Я рекомендую Garmin RD ради исторического архива, но это твой выбор.",
+          "principle": "Тренд требует одного источника. Сравнивать цифры между ними нельзя — они измеряют по-разному."
         },
         {
-          "priority": "now",
-          "text": "Air power сегодня 3.4W (было 2.3W). Это не сильный ветер, но это сдвиг. Если завтра будет больше 10-15W — увидим terrain/погоду, не технику.",
-          "principle": "Air power > 15-20W = либо встречный ветер, либо elevation с боковым участком (в Berlin этого нет), либо ширина шага не совпадает с фактической."
+          "priority": "soon",
+          "text": "Air power сегодня 3.4W (было 2.3W). Это не сильный ветер. На следующей пробежке — если больше 10W, это будет важный сигнал.",
+          "principle": "Air power > 15-20W = либо встречный ветер, либо terrain с боковым участком."
         },
         {
           "priority": "later",
-          "text": "⚠️ Сегодня Garmin FR 965 не записал Running Dynamics от Stryd (VO/stance/step_length). На следующей пробежке проверь — если данные вернулись: продолжай трекинг. Если снова нет — это прошивка, обнови FR 965 через Garmin Express.",
-          "principle": "Garmin RD от Stryd через ANT+ записывается только если в начале записи выбран профиль с включённой Running Dynamics (FR 965 → профиль Activity → Sensors → Stryd → Running Dynamics ON)."
+          "text": "VO по Stryd (6.3 см) и Garmin RD (10.7 см) — это **разные** метрики. Я зря их уравнивал в предыдущем разборе. Считай Garmin RD за истину: тренд от 14 окт есть (10.7), в 15 окт Garmin RD не записался. Следи когда вернётся.",
+          "principle": "Garmin RD — accelerometer на wrist. Stryd Vertical Oscillation — IMU на стопе. Это разные sensor fusion'ы, цифры не интерпретируются взаимозаменяемо."
         }
       ]
     }

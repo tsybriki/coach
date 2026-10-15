@@ -158,14 +158,26 @@ def _summarize_moving(moving: list[dict]) -> dict:
     cads_stryd = [r.get("cadence_stryd") for r in moving]
     dists = [r.get("dist_m") for r in moving]
 
-    # Stryd running dynamics (optional — None if no footpod)
-    vo = [r.get("stryd_vo_cm") for r in moving]
-    stance_ms = [r.get("stryd_stance_ms") for r in moving]
-    stance_pct = [r.get("stryd_stance_pct") for r in moving]
-    step_mm = [r.get("stryd_step_mm") for r in moving]
-    form_w = [r.get("stryd_form_power_w") for r in moving]
-    air_w = [r.get("stryd_air_power_w") for r in moving]
-    power_w = [r.get("stryd_power_w") for r in moving]
+    # Running Dynamics: prefer Garmin RD (matches Garmin Connect UI values the
+    # user sees), fall back to Stryd's own RD fields. Track which source we used.
+    def _pick(*keys):
+        for k in keys:
+            xs = [r.get(k) for r in moving if r.get(k) is not None]
+            if xs:
+                return xs, k
+        return [], None
+
+    vo_garmin, vo_src = _pick("garmin_vo_cm")
+    vo_stryd_raw, _ = _pick("stryd_vo_cm")
+    stance_garmin_ms, stance_src = _pick("garmin_stance_ms")
+    ground_stryd_ms, _ = _pick("stryd_ground_time_ms")
+    step_garmin_mm, step_src = _pick("garmin_step_mm")
+    stance_pct_raw, _ = _pick("garmin_stance_pct")
+    form_w_raw, _ = _pick("stryd_form_power_w")
+    air_w_raw, _ = _pick("stryd_air_power_w")
+    power_w_raw, _ = _pick("stryd_power_w")
+    impact_lr_raw, _ = _pick("stryd_impact_loading_rate")
+    leg_spring_raw, _ = _pick("stryd_leg_spring_stiffness")
 
     # Moving time = number of "moving seconds" = sum across consecutive records of
     # the smaller-of(gap, 1). A gap > 1 means the runner was paused in between —
@@ -224,13 +236,31 @@ def _summarize_moving(moving: list[dict]) -> dict:
             return round(max(xs), 1)
         return 0
 
-    vo_avg = _safe_stat("vo", vo, "avg")
-    stance_avg = _safe_stat("stance_ms", stance_ms, "avg")
-    step_avg = _safe_stat("step_mm", step_mm, "avg")
-    form_avg = _safe_stat("form_w", form_w, "avg")
-    air_avg = _safe_stat("air_w", air_w, "avg")
-    power_avg = _safe_stat("power_w", power_w, "avg")
-    stryd_present = any(v is not None for v in vo)
+    # Resolution: Garmin RD (preferred) > Stryd (fallback). Report source so a coach
+    # can decide whether to compare against Garmin Connect UI numbers.
+    vo_vals = vo_garmin or vo_stryd_raw
+    vo_source_label = "garmin_rd" if vo_garmin else ("stryd" if vo_stryd_raw else None)
+    stance_vals_ms = stance_garmin_ms or ground_stryd_ms
+    stance_source_label = "garmin_rd" if stance_garmin_ms else ("stryd" if ground_stryd_ms else None)
+    step_vals_mm = step_garmin_mm
+    step_source_label = "garmin_rd" if step_garmin_mm else None
+    stance_pct_vals = stance_pct_raw
+    form_vals = form_w_raw
+    air_vals = air_w_raw
+    power_vals = power_w_raw
+    impact_lr_vals = impact_lr_raw
+    leg_spring_vals = leg_spring_raw
+
+    vo_avg = _safe_stat("vo", vo_vals, "avg")
+    stance_avg = _safe_stat("stance_ms", stance_vals_ms, "avg")
+    step_avg = _safe_stat("step_mm", step_vals_mm, "avg")
+    form_avg = _safe_stat("form_w", form_vals, "avg")
+    air_avg = _safe_stat("air_w", air_vals, "avg")
+    power_avg = _safe_stat("power_w", power_vals, "avg")
+    stance_pct_avg = _safe_stat("stance_pct", stance_pct_vals, "avg")
+    impact_lr_avg = _safe_stat("impact_lr", impact_lr_vals, "avg")
+    leg_spring_avg = _safe_stat("leg_spring", leg_spring_vals, "avg")
+    rd_present = bool(vo_vals or stance_vals_ms or step_vals_mm)
 
     if distance_m > 0 and moving_s > 0:
         avg_pace_min_per_km = moving_s / (distance_m / 1000.0) / 60.0
@@ -257,16 +287,23 @@ def _summarize_moving(moving: list[dict]) -> dict:
         "avg_pace_min_per_km": round(avg_pace_min_per_km, 2),
         "hr_drift_bpm": hr_drift_bpm,
     }
-    if stryd_present:
+    if rd_present:
         out["stryd"] = {
             "vertical_oscillation_cm_avg": vo_avg,
+            "vertical_oscillation_source": vo_source_label,
             "stance_time_ms_avg": stance_avg,
+            "stance_time_source": stance_source_label,
             "step_length_mm_avg": step_avg,
-            "step_length_m_avg": round(step_avg / 1000.0, 3),
+            "step_length_m_avg": round(step_avg / 1000.0, 3) if step_avg else 0,
+            "step_length_source": step_source_label,
+            "stance_time_pct_avg": stance_pct_avg,
             "form_power_w_avg": form_avg,
             "air_power_w_avg": air_avg,
             "power_w_avg": power_avg,
-            "samples": sum(1 for v in vo if v is not None),
+            "impact_loading_rate_avg": impact_lr_avg,
+            "leg_spring_stiffness_avg": leg_spring_avg,
+            "samples": sum(1 for v in vo_vals if v is not None) or
+                        sum(1 for v in stance_vals_ms if v is not None),
         }
     return out
 
@@ -477,7 +514,7 @@ def _normalize(garmin_output: dict, streams: Optional[list[dict]] = None) -> dic
         "pause_total_s": sum(int(p["dur_s"]) for p in pause_segments),
         "pause_segments": pause_segments,
         "file_hash": digest,
-        "_schema_version": "0.4.0",
+        "_schema_version": "0.5.0",
         "_parser": "garmin_tools/fit_inspect.py",
         "_source_path": garmin_output.get("file", {}).get("path", ""),
     }

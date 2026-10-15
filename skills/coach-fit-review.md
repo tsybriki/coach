@@ -55,13 +55,20 @@
 
 5. **Pause cause**: если `pause_segments[].dur_s ≥ 60`, спроси у пользователя «это OFP / вода / травма / ожидание?». Без ответа помечай `pause_cause: unknown`. **Не считай split «медленным» пока не узнан cause** — главный источник мусора в разборах: km 2 = 15:43 внутри 9:21 ОФП выглядит как «ужасный темп», а не как пауза внутри километра. Логируй в `state/pause_log.jsonl` строки `{date, fit_id, t_sec, dur_s, cause}` чтобы трекер тренда видел распределение по причинам.
 
-## Каденс — два источника (не игнорь Stryd)
+## Каденс и Running Dynamics — два независимых источника, НЕ путать
 
-`parse_fit` отдаёт `cadence_avg_watch` (FR 965 / часы), `cadence_avg_stryd` (Stryd footpod, если был), и `cadence_disagreement_abs_mean_spm`. Правила:
+Сенсоры с разной физикой — цифры напрямую не сравниваются:
 
-- **Каденс в `stryd_running_dynamics` пустой → Stryd footpod не использовался.** Не выдумывай second source из watch-акселерометра.
-- **`cadence_disagreement_abs_mean_spm > 2`** на длинной пробежке → либо watch лажает (типично на тредмиле или сильном arm swing), либо Stryd «слепнет». Подсвети это, не используй watch-кад как истину.
-- **Stryd «слепнет» в первые секунды после паузы.** Это видно по `stryd_cadence=0` при `cadence_watch>0` в `pause_segments_after` окне (~5 сек). Не считай это за истину о каденсе — нормальный кейс.
+- **Watch (FR 965 accelerometer на запястье)**: `cadence_watch` (lowercase FIT). Garmin Running Dynamics (lowercase FIT) считает Vertical Oscillation, Stance Time, Step Length и т.д. по грубому wrist-integrate.
+- **Stryd (IMU в ботинке)**: `cadence_stryd` (capitalized FIT). Stryd Vertical Oscillation, Ground Time, Form Power, Air Power, Stryd Power — это **другая** физика (footpod), другие sensor fusion'ы.
+- **Fit-parser** (parse_fit 0.5.0): разводит поля — `garmin_vo_cm` vs `stryd_vo_cm`, `garmin_stance_ms` vs `stryd_ground_time_ms`. Источник возвращается в `stryd_running_dynamics.{vo_source,stance_source}`. **Никогда не подставляй нормы/нормали одного источника к цифрам другого** (на одном и том же беге Garmin VO ≈ 10.7 см и Stryd VO ≈ 6.3 см — это **не** противоречие, это разные метрики).
+
+**Какой источник truth для тренда:**
+- Garmin RD — то, что в Garmin Connect UI, архив длиннее.
+- Stryd footpod — точнее в моменте, но архив только с W2.
+- Выбери один для тренда, держись. Не смешивай цифры в одной таблице без аннотации источника.
+
+**Когда Garmin RD недоступен:** `stryd_running_dynamics.{vertical_oscillation_source,stance_source}` = `"stryd"`. Это нормально для FR 965 (иногда профиль не пишет Garmin RD), не баг парсера. В этом случае в отчёте явно отмечай: «Garmin RD отсутствует, цифры от Stryd».
 
 ## Stryd Running Dynamics (только если footpod есть)
 
