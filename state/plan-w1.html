@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>W1 · 2026-10-12..2026-10-18 · Берлин</title>
+<style>
+:root{
+  --bg:#0f1115;--panel:#161a22;--panel2:#1d222c;--border:#2a3140;
+  --text:#e6e9ef;--muted:#9aa3b2;
+  --accent:#7aa2ff;--accent2:#5cd6c0;--warn:#ff9b6a;--good:#7ee787;--cp:#d8a0ff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+  -webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:18px 14px 64px}
+header{margin-bottom:18px}
+h1{font-size:20px;line-height:1.25;margin:0 0 6px}
+.meta{font-size:12px;color:var(--muted);margin-bottom:14px}
+.meta b{color:var(--text)}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:14px;margin-bottom:12px}
+.card h2{font-size:13px;color:var(--accent);margin:0 0 10px;text-transform:uppercase;letter-spacing:.5px}
+ul{margin:0;padding:0;list-style:none;font-size:14px;line-height:1.45}
+.slot-row{padding:10px 0;border-bottom:1px solid var(--border)}
+.slot-row:last-child{border-bottom:none}
+.slot-head{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.slot-icon{font-size:16px;width:22px;text-align:center}
+.slot-day{font-weight:600;color:var(--accent2);min-width:24px}
+.slot-time{color:var(--muted);font-size:12px;min-width:46px;font-family:ui-monospace,SFMono-Regular,monospace}
+.slot-dur{margin-left:auto;font-size:12px;color:var(--muted);background:var(--panel2);
+  padding:2px 8px;border-radius:8px;border:1px solid var(--border)}
+.slot-name{font-size:14px}
+.slot-name i{color:var(--muted);font-size:12px;font-style:normal}
+.slot-badges{margin-top:4px;display:flex;flex-wrap:wrap;gap:4px}
+.badge{font-size:10.5px;padding:2px 7px;border-radius:8px;border:1px solid var(--border);
+  background:var(--panel2);color:var(--muted);font-family:ui-monospace,SFMono-Regular,monospace}
+.badge-focus{color:var(--accent2);border-color:rgba(92,214,192,.3)}
+.badge-loc{color:var(--muted)}
+.badge-pending{color:var(--warn);border-color:rgba(255,155,106,.4);background:rgba(255,155,106,.08)}
+.badge-cp{color:var(--cp);border-color:rgba(216,160,255,.4);background:rgba(216,160,255,.08)}
+.badge-workout{color:var(--good);border-color:rgba(126,231,135,.4);background:rgba(126,231,135,.08)}
+.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.total-cell{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center}
+.total-cell .v{font-size:18px;font-weight:600;color:var(--accent2)}
+.total-cell .l{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.delta-positive .v{color:var(--good)}
+.delta-negative .v{color:var(--warn)}
+.zones{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;font-size:12px}
+.zone{background:var(--panel2);padding:6px 10px;border-radius:6px;border:1px solid var(--border)}
+.zone b{color:var(--accent);font-family:ui-monospace,SFMono-Regular,monospace}
+.suggestion{margin-top:8px;padding:8px;background:rgba(255,155,106,.08);border-left:3px solid var(--warn);
+  border-radius:6px;font-size:12.5px}
+.suggestion:empty{display:none}
+footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
+</style></head><body><div class="wrap">
+<header>
+  <h1>W1 · 2026-10-12..2026-10-18 · Берлин</h1>
+  <div class="meta">
+    <b>W1</b> · iso 2026-W42 ·
+    сезон стартовал 2026-10-12
+  </div>
+</header>
+
+<div class="card">
+  <h2>Сводка</h2>
+  <div class="totals">
+    <div class="total-cell">
+      <div class="v">7.2ч</div>
+      <div class="l">planned</div>
+    </div>
+    <div class="total-cell">
+      <div class="v">5ч</div>
+      <div class="l">target</div>
+    </div>
+    <div class="total-cell delta-negative">
+      <div class="v">-2.2ч</div>
+      <div class="l">delta</div>
+    </div>
+  </div>
+  <div class="zones" style="margin-top:10px">
+    <div class="zone"><b>Z1</b> 100-118</div><div class="zone"><b>Z2_low</b> 118-136</div><div class="zone"><b>Z2</b> 125-145</div><div class="zone"><b>Z3</b> 136-146</div><div class="zone"><b>Z4</b> 146-160</div><div class="zone"><b>Z5</b> 160-175</div><div class="zone"><b>Z6</b> 175-182</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Фаза · run_base</h2>
+  <p style="margin:0;font-size:13px;color:var(--muted)">
+    2026-10-12 → 2027-01-03 · target 5ч/нед · goal g_run_spring
+  </p>
+  <div class="suggestion"></div>
+</div>
+
+<div class="card">
+  <h2>Слоты · 7 шт</h2>
+  <ul><li class="slot-row"><div class="slot-head"><span class="slot-icon">🏃</span><span class="slot-day">ПН</span><span class="slot-time">18:45</span><span class="slot-dur">1ч</span></div><div class="slot-name">Easy 5К + прогрессия 3К <i>(run)</i></div><div class="slot-badges"><span class="badge badge-focus">Z2</span> <span class="badge badge-loc">stadium</span></div></li><li class="slot-row"><div class="slot-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">09:00</span><span class="slot-dur">30мин</span></div><div class="slot-name">Easy бег 30мин Z2 <i>(run)</i></div><div class="slot-badges"><span class="badge badge-focus">Z2_low</span> <span class="badge badge-loc">asphalt_commuter</span></div></li><li class="slot-row"><div class="slot-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">18:30</span><span class="slot-dur">1ч</span></div><div class="slot-name">Ключевая: Интервалы 60мин Z3 <i>(run)</i></div><div class="slot-badges"><span class="badge badge-focus">Z3</span> <span class="badge badge-loc">asphalt_commuter</span></div></li><li class="slot-row"><div class="slot-head"><span class="slot-icon">🏃</span><span class="slot-day">СР</span><span class="slot-time">17:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-name">Длинный бег 90мин Z2_low <i>(run)</i></div><div class="slot-badges"><span class="badge badge-focus">Z2_low</span> <span class="badge badge-loc">stadium_or_pool</span></div></li><li class="slot-row"><div class="slot-head"><span class="slot-icon">🚴</span><span class="slot-day">ЧТ</span><span class="slot-time">10:30</span><span class="slot-dur">45мин</span></div><div class="slot-name">Вел-станок Z2 45мин (дома) <i>(bike)</i></div><div class="slot-badges"><span class="badge badge-focus">Z2</span> <span class="badge badge-loc">home_stationary_bike</span> <span class="badge badge-pending">Zwift pending</span></div></li><li class="slot-row"><div class="slot-head"><span class="slot-icon">🏊</span><span class="slot-day">ПТ</span><span class="slot-time">18:00</span><span class="slot-dur">1ч</span></div><div class="slot-name">Пул 60мин easy <i>(swim)</i></div><div class="slot-badges"><span class="badge badge-focus">Z1</span> <span class="badge badge-loc">pool_or_asphalt</span></div></li><li class="slot-row"><div class="slot-head"><span class="slot-icon">🚴</span><span class="slot-day">ВС</span><span class="slot-time">11:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-name">Длинный вел Z2 90мин <i>(bike)</i></div><div class="slot-badges"><span class="badge badge-focus">Z2_low</span> <span class="badge badge-loc">long_ride_or_station</span> <span class="badge badge-pending">Zwift pending</span></div></li></ul>
+</div>
+
+<div class="card">
+  <h2>Контрольные точки</h2>
+  <p style="margin:0;font-size:13px">
+    Нет контрольных точек в этой неделе.
+  </p>
+  
+</div>
+
+<div class="card"><h2>Zwift workouts pending</h2><p style="margin:0;font-size:13px">2 bike/brick слот-ов ждут workout_ref. Скажи "переподбери workout на слот <id>" или подожди Phase 3 с inline Zwift.</p></div>
+
+<footer>
+  self-contained · v18 · plan-w1.html
+</footer>
+</div></body></html>

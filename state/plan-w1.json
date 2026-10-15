@@ -1,0 +1,168 @@
+{
+  "$schema": "./plan.schema.md",
+  "version": 2,
+  "title": "W1 · 2026-10-12..2026-10-18 · Берлин",
+  "season_week": 1,
+  "iso_week": "2026-W42",
+  "weekIso": "2026-W42",
+  "season_start_date": "2026-10-12",
+  "phase": {
+    "id": "run_base",
+    "goal_id": "g_run_spring",
+    "start": "2026-10-12",
+    "end": "2027-01-03",
+    "hours_per_week_target": 5,
+    "_season_week_start": 1,
+    "_season_week_end": 12
+  },
+  "chosen_allocation": {
+    "snapshot_date": "2026-10-13",
+    "strategy": "balanced_60_40",
+    "g_run_spring_eff_pct": 60,
+    "g_tri_autumn_eff_pct": 40,
+    "reason": "Phase 1 stub — реальное распределение через goal_allocator.candidates() в Phase 2. Сейчас зафиксировано по spring-10k-2027-v2.md: основной объём до W24 под 10К, далее transition к tri."
+  },
+  "rules": {
+    "hr_zones": {
+      "hr_max": 182,
+      "rhr": 54,
+      "hrr": 128,
+      "method": "Karvonen + %HRmax",
+      "zones": {
+        "Z1": "100-118",
+        "Z2_low": "118-136",
+        "Z2": "125-145",
+        "Z3": "136-146",
+        "Z4": "146-160",
+        "Z5": "160-175",
+        "Z6": "175-182"
+      },
+      "notes": "low-Z2 сдвинута вниз (118-136) — намеренно для длинных"
+    },
+    "metric_split": {
+      "by_hr_first": "easy, Z2, Z2-low, long, recovery, warmup, cooldown",
+      "by_pace_first": "intervals, progression, tempo, race-pace"
+    }
+  },
+  "slots": [
+    {
+      "id": "пн-key_run",
+      "day": "ПН",
+      "time": "18:45",
+      "duration_min": 60,
+      "name": "Easy 5К + прогрессия 3К",
+      "kind": "run",
+      "subkind": "easy_progression",
+      "focus": "Z2",
+      "location": "stadium",
+      "priority": 80,
+      "category": "key_run",
+      "workout_ref": null
+    },
+    {
+      "id": "вт-easy_runs",
+      "day": "ВТ",
+      "time": "09:00",
+      "duration_min": 30,
+      "name": "Easy бег 30мин Z2",
+      "kind": "run",
+      "subkind": "easy",
+      "focus": "Z2_low",
+      "location": "asphalt_commuter",
+      "priority": 50,
+      "category": "easy_runs",
+      "workout_ref": null
+    },
+    {
+      "id": "вт-key_run",
+      "day": "ВТ",
+      "time": "18:30",
+      "duration_min": 60,
+      "name": "Ключевая: Интервалы 60мин Z3",
+      "kind": "run",
+      "subkind": "key_intervals",
+      "focus": "Z3",
+      "location": "asphalt_commuter",
+      "priority": 80,
+      "category": "key_run",
+      "workout_ref": null
+    },
+    {
+      "id": "ср-long_run",
+      "day": "СР",
+      "time": "17:00",
+      "duration_min": 90,
+      "name": "Длинный бег 90мин Z2_low",
+      "kind": "run",
+      "subkind": "long_Z2",
+      "focus": "Z2_low",
+      "location": "stadium_or_pool",
+      "priority": 100,
+      "category": "long_run",
+      "workout_ref": null
+    },
+    {
+      "id": "чт-bike",
+      "day": "ЧТ",
+      "time": "10:30",
+      "duration_min": 45,
+      "name": "Вел-станок Z2 45мин (дома)",
+      "kind": "bike",
+      "subkind": "stationary_z2",
+      "focus": "Z2",
+      "location": "home_stationary_bike",
+      "priority": 70,
+      "category": "bike",
+      "workout_ref": null,
+      "workout_pending": true
+    },
+    {
+      "id": "пт-swim",
+      "day": "ПТ",
+      "time": "18:00",
+      "duration_min": 60,
+      "name": "Пул 60мин easy",
+      "kind": "swim",
+      "subkind": "easy",
+      "focus": "Z1",
+      "location": "pool_or_asphalt",
+      "priority": 60,
+      "category": "swim",
+      "workout_ref": null
+    },
+    {
+      "id": "вс-bike",
+      "day": "ВС",
+      "time": "11:00",
+      "duration_min": 90,
+      "name": "Длинный вел Z2 90мин",
+      "kind": "bike",
+      "subkind": "long_z2",
+      "focus": "Z2_low",
+      "location": "long_ride_or_station",
+      "priority": 70,
+      "category": "bike",
+      "workout_ref": null,
+      "workout_pending": true
+    }
+  ],
+  "control_points_in_range": [],
+  "control_point_slots": [],
+  "overrides_applied": [],
+  "volume_check": {
+    "ok": true,
+    "target_h": 5,
+    "available_h": 9.0,
+    "gap_h": -4.0,
+    "max_h": 11,
+    "min_h": 2,
+    "suggestion": null
+  },
+  "totals": {
+    "planned_hours": 7.2,
+    "target_hours": 5,
+    "delta_hours": -2.2,
+    "slots_count": 7
+  },
+  "_generated_by": "lib.plan_generate (Phase 2.5: real layout v18)"
+}
