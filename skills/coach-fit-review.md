@@ -2,10 +2,48 @@
 
 Разбор FIT: 4 уровня (quick, contextual, coaching, lookback).
 
-**Использует:** `lib.analyze`, `lib.metrics`, `lib.parse_fit`, `lib.ask_model`, `lib.coaching_corpus`, `lib.render_html.render_review`.
+**Использует:** `lib.analyze`, `lib.metrics`, `lib.parse_fit`, `lib.ask_model`, `lib.coaching_corpus`, `lib/render_html.render_review`.
 **Триггеры:** «разбери FIT», «проанализируй», «что скажет тренер», «разбор тренировки».
 **Вход:** fit_id, mode.
 **Выход:** JSON → self-contained HTML (3-предложения бриф + клик-разворачиваемые детали) + (coaching/lookback) обязательный cited_principle.
+
+## Процедура разбора FIT'а
+
+1. **Pull FIT с Garmin**, если его нет в `raw/running/fit/` или `raw/today/fit/`:
+   - snapshot до: `cp sync_state.json ~/.local/share/garmin_tools/snapshots/<ts>/` (по паттерну `personal-data-integrations` skill: snapshot BEFORE).
+   - `cd ~/projects/garmin_tools && .venv/bin/python latest_pull.py --sport running --count 3 --out raw/today`
+   - restore после: `cp <snap>/sync_state.json .`, tokens НЕ трогай (Garmin их сам обновляет, это legitimate).
+
+2. **Распарси FIT через `parse_fit(..., with_streams=True)`** (schema ≥ 0.5.0):
+   - `moving_min`, `splits[]` (по moving records), `hr_drift_bpm` — канон.
+   - `stryd_running_dynamics{}` с `*_source` метками (Garmin RD > Stryd fallback).
+
+3. **Перед написанием брифа — валидация данных**: если какая-то ожидаемая метрика вернулась пустой (например `stryd_running_dynamics: {}` при подключённом Stryd), пробей FIT напрямую через `fitparse`:
+   ```python
+   python3 -c "
+   from fitparse import FitFile
+   fit = FitFile('path.fit')
+   seen = set()
+   for msg in fit.messages:
+       if msg.name != 'record': continue
+       for f in msg.fields:
+           if f.value is not None: seen.add((f.name, msg.name))
+   for k,m in sorted(seen): print(m, k)
+   "
+   ```
+   Если видишь поле capitalized (`Vertical Oscillation`) — оно от Stryd и fit_inspect.py его потерял в map. Не говори «нет данных» — почини маппинг.
+
+4. **Собрать review-JSON** по шаблону:
+   - `brief[3]` по схеме (что / план / действие).
+   - `metrics{}` — 8-12 ключевых значений.
+   - `sections[]` — разворачиваемые: hr_zones, splits, stryd, pauses, recos.
+   - `state/reviews/{date}-{slug}.json` (source of truth).
+
+5. **Рендерить HTML**: `lib/render_html.render_review(review, path)` → `state/reviews/{date}-{slug}.html`.
+
+6. **Smoke-test** для verification: `python tests/test_review_render.py` (берёт последний review HTML по mtime, прогоняет JS-рендер в node.js, проверяет на отсутствие ReferenceError).
+
+7. **В чате — только 3-предложения бриф** + ссылка на HTML. Не wall-of-text.
 
 ## Формат разбора: бриф + детали
 
@@ -36,6 +74,7 @@
 - Писать промпты руками.
 - Выдавать разбор FIT'а сплошным текстом в чате — только JSON/HTML/3-предложения бриф.
 - **Считать темп/HR-зоны по `total_elapsed_s` или `total_timer_s`.** Garmin elapsed/timer включают OFP-остановки, переходы через дорогу, ожидания. Это сдвигает средний темп на 30–90 сек/км и пушит среднюю ЧСС из Z2 в Z3. Всегда используй `parse_fit(..., with_streams=True)` → `moving_min` / `splits[]` (per-km по moving records) / `hr_drift_bpm` (по moving partition).
+- **Делать вид, что данных нет, если `parse_fit` их не отдаёт.** Если поле пустое — это сигнал проверить FIT напрямую через `fitparse`, а не утверждать «баг парсера» или «Garmin не записал». Прямой probe: `python -c "from fitparse import FitFile; ...; [print(f.name, f.value) for f in msg.fields if f.value is not None]"`. Поле может быть lowercase вместо capitalized (Garmin RD vs Stryd), или фильтр в `FitAnalysis.streams` его пропустил. Цена ошибки: ты говоришь пользователю «нет данных», он открывает Garmin UI — видит — и теряет доверие к агенту.
 
 ## Правила извлечения и интерпретации
 
@@ -69,6 +108,8 @@
 - Выбери один для тренда, держись. Не смешивай цифры в одной таблице без аннотации источника.
 
 **Когда Garmin RD недоступен:** `stryd_running_dynamics.{vertical_oscillation_source,stance_source}` = `"stryd"`. Это нормально для FR 965 (иногда профиль не пишет Garmin RD), не баг парсера. В этом случае в отчёте явно отмечай: «Garmin RD отсутствует, цифры от Stryd».
+
+Детальный разбор двух сенсоров и FIT-уровень: `references/garmin-rd-vs-stryd.md`.
 
 ## Stryd Running Dynamics (только если footpod есть)
 
