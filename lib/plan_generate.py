@@ -1,11 +1,18 @@
 """
 plan_generate.py — season_plan + athlete + constraints + overrides → plan-wN.json.
 Phase 2.5: реальная раскладка phase по weekly_windows + focus + control_points + auto_zwift.
+Phase 2.6: каждый slot получает structure (детальный план работы) по subkind.
 
 INLINE ZWIFT (v16):
   - plan_generate проверяет constraints.auto_zwift для каждого размещённого bike/brick-слота.
   - Если слот удовлетворяет правилу (≤ 90 мин, home_stationary_bike, focus) — ставит
     workout_pending=True в слот. Кирилл голосует отдельной командой (Phase 3: inline-вызовы).
+
+STRUCTURE (v19):
+  - Каждый slot (run/bike/swim/brick) получает structure: list[step] с детальным планом.
+  - Для by_hr трениров (лёгкие, длинные) — задаётся зонами (Z1/Z2_low/Z3 и т.д.).
+  - Для by_pace работ (интервалы, tempo, race-pace) — задаётся темпом и reps.
+  - OFP слоты получают ofp_structure: список упражнений (core circuit, mobility).
 """
 from __future__ import annotations
 
@@ -19,6 +26,7 @@ from .season_week import (
     season_week_to_iso, season_week_to_dates,
     phase_for_season_week,
 )
+from .step_builder import build_structure, ofp_structure
 
 DAY_ORDER = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"]
 
@@ -47,35 +55,48 @@ def _phase_focus_runs(phase_id: str) -> dict:
 
     Phase 1 logic — base/build/specific/taper для run_10k.
     Phase 2 — добавим triathlon (transition, tri_base, tri_build, tri_specific, tri_taper).
+    Phase 2.6 — добавили ofp (2×/нед core 25 мин).
     """
     focus_map = {
         "run_base": {
             "long_run": [{"day": "СР", "window_idx": 0, "duration_min": 90, "kind": "run", "subkind": "long_Z2", "focus": "Z2_low"}],
-            "key_run": [{"day": "ПН", "window_idx": 0, "duration_min": 60, "kind": "run", "subkind": "easy_progression", "focus": "Z2"}, {"day": "ВТ", "window_idx": 1, "duration_min": 60, "kind": "run", "subkind": "key_intervals", "focus": "Z3"}],
+            "key_run": [{"day": "ПН", "window_idx": 0, "duration_min": 60, "kind": "run", "subkind": "easy_progression", "focus": "Z2"},
+                        {"day": "ВТ", "window_idx": 1, "duration_min": 60, "kind": "run", "subkind": "key_intervals", "focus": "Z3"}],
             "easy_runs": [{"day": "ВТ", "window_idx": 0, "duration_min": 30, "kind": "run", "subkind": "easy", "focus": "Z2_low"}],
-            "bike": [{"day": "ЧТ", "window_idx": 0, "duration_min": 45, "kind": "bike", "subkind": "stationary_z2", "focus": "Z2"}, {"day": "ВС", "window_idx": 0, "duration_min": 90, "kind": "bike", "subkind": "long_z2", "focus": "Z2_low"}],
+            "bike": [{"day": "ЧТ", "window_idx": 0, "duration_min": 45, "kind": "bike", "subkind": "stationary_z2", "focus": "Z2"},
+                     {"day": "ВС", "window_idx": 0, "duration_min": 90, "kind": "bike", "subkind": "long_z2", "focus": "Z2_low"}],
             "swim": [{"day": "ПТ", "window_idx": 0, "duration_min": 60, "kind": "swim", "subkind": "easy", "focus": "Z1"}],
+            "ofp": [{"day": "СБ", "window_idx": 0, "duration_min": 25, "kind": "ofp", "subkind": "core", "focus": "core"}],
         },
         "run_build": {
             "long_run": [{"day": "СР", "window_idx": 0, "duration_min": 100, "kind": "run", "subkind": "long_Z2", "focus": "Z2_low"}],
-            "key_run": [{"day": "ПН", "window_idx": 0, "duration_min": 70, "kind": "run", "subkind": "intervals", "focus": "intervals"}, {"day": "ВТ", "window_idx": 1, "duration_min": 70, "kind": "run", "subkind": "tempo", "focus": "Z3"}],
+            "key_run": [{"day": "ПН", "window_idx": 0, "duration_min": 70, "kind": "run", "subkind": "intervals", "focus": "intervals"},
+                        {"day": "ВТ", "window_idx": 1, "duration_min": 70, "kind": "run", "subkind": "tempo", "focus": "Z3"}],
             "easy_runs": [{"day": "ВТ", "window_idx": 0, "duration_min": 30, "kind": "run", "subkind": "easy", "focus": "Z2_low"}],
-            "bike": [{"day": "ЧТ", "window_idx": 0, "duration_min": 45, "kind": "bike", "subkind": "stationary_z2", "focus": "Z2"}, {"day": "ВС", "window_idx": 0, "duration_min": 90, "kind": "bike", "subkind": "long_z2", "focus": "Z2_low"}],
+            "bike": [{"day": "ЧТ", "window_idx": 0, "duration_min": 45, "kind": "bike", "subkind": "stationary_z2", "focus": "Z2"},
+                     {"day": "ВС", "window_idx": 0, "duration_min": 90, "kind": "bike", "subkind": "long_z2", "focus": "Z2_low"}],
             "swim": [{"day": "ПТ", "window_idx": 0, "duration_min": 60, "kind": "swim", "subkind": "easy", "focus": "Z1"}],
+            "ofp": [{"day": "СБ", "window_idx": 0, "duration_min": 25, "kind": "ofp", "subkind": "core", "focus": "core"}],
         },
         "run_specific": {
             "long_run": [{"day": "СР", "window_idx": 0, "duration_min": 110, "kind": "run", "subkind": "long_Z2", "focus": "Z2_low"}],
-            "key_run": [{"day": "ПН", "window_idx": 0, "duration_min": 75, "kind": "run", "subkind": "race_pace", "focus": "race_pace"}, {"day": "ВТ", "window_idx": 1, "duration_min": 75, "kind": "run", "subkind": "intervals", "focus": "Z4"}],
+            "key_run": [{"day": "ПН", "window_idx": 0, "duration_min": 75, "kind": "run", "subkind": "race_pace", "focus": "race_pace"},
+                        {"day": "ВТ", "window_idx": 1, "duration_min": 75, "kind": "run", "subkind": "intervals", "focus": "Z4"}],
             "easy_runs": [{"day": "ВТ", "window_idx": 0, "duration_min": 30, "kind": "run", "subkind": "easy", "focus": "Z2_low"}],
-            "bike": [{"day": "ЧТ", "window_idx": 0, "duration_min": 60, "kind": "bike", "subkind": "stationary_z3", "focus": "Z3"}, {"day": "ВС", "window_idx": 0, "duration_min": 100, "kind": "bike", "subkind": "long_z2", "focus": "Z2_low"}],
-            "swim": [{"day": "ПТ", "window_idx": 0, "duration_min": 60, "kind": "swim", "subkind": "tempo", "focus": "Z3"}],
+            "bike": [{"day": "ЧТ", "window_idx": 0, "duration_min": 60, "kind": "bike", "subkind": "stationary_z3", "focus": "Z3"},
+                     {"day": "ВС", "window_idx": 0, "duration_min": 100, "kind": "bike", "subkind": "long_z2", "focus": "Z2_low"}],
+            "swim": [{"day": "ПТ", "window_idx": 0, "duration_min": 60, "kind": "swim", "subkind": "easy", "focus": "Z1"}],
+            "ofp": [{"day": "ПН", "window_idx": 1, "duration_min": 25, "kind": "ofp", "subkind": "core", "focus": "core"},
+                     {"day": "СБ", "window_idx": 0, "duration_min": 25, "kind": "ofp", "subkind": "core", "focus": "core"}],
         },
         "run_taper": {
             "long_run": [{"day": "СР", "window_idx": 0, "duration_min": 60, "kind": "run", "subkind": "easy", "focus": "Z2_low"}],
-            "key_run": [{"day": "ПН", "window_idx": 0, "duration_min": 45, "kind": "run", "subkind": "race_pace", "focus": "race_pace"}, {"day": "ВТ", "window_idx": 1, "duration_min": 45, "kind": "run", "subkind": "tempo", "focus": "Z3"}],
+            "key_run": [{"day": "ПН", "window_idx": 0, "duration_min": 45, "kind": "run", "subkind": "race_pace", "focus": "race_pace"},
+                        {"day": "ВТ", "window_idx": 1, "duration_min": 45, "kind": "run", "subkind": "tempo", "focus": "Z3"}],
             "easy_runs": [],
             "bike": [{"day": "ЧТ", "window_idx": 0, "duration_min": 45, "kind": "bike", "subkind": "stationary_z2", "focus": "Z2"}],
             "swim": [{"day": "ПТ", "window_idx": 0, "duration_min": 45, "kind": "swim", "subkind": "easy", "focus": "Z1"}],
+            "ofp": [{"day": "СБ", "window_idx": 0, "duration_min": 25, "kind": "ofp", "subkind": "core", "focus": "core"}],
         },
         # Triathlon phases — добавлены Phase 2.5
         "tri_base": {
@@ -88,6 +109,7 @@ def _phase_focus_runs(phase_id: str) -> dict:
                 {"day": "ВС", "window_idx": 0, "duration_min": 90, "kind": "bike", "subkind": "long_z2", "focus": "Z2_low"},
             ],
             "swim": [{"day": "ПТ", "window_idx": 0, "duration_min": 60, "kind": "swim", "subkind": "easy", "focus": "Z1"}],
+            "ofp": [{"day": "СБ", "window_idx": 0, "duration_min": 25, "kind": "ofp", "subkind": "core", "focus": "core"}],
         },
         "tri_build": {
             "long_run": [{"day": "ВС", "window_idx": 0, "duration_min": 70, "kind": "run", "subkind": "easy_long", "focus": "Z2_low"}],
@@ -102,6 +124,7 @@ def _phase_focus_runs(phase_id: str) -> dict:
                 {"day": "ПТ", "window_idx": 0, "duration_min": 60, "kind": "swim", "subkind": "tempo", "focus": "Z3"},
             ],
             "brick": [{"day": "СБ", "window_idx": 0, "duration_min": 75, "kind": "brick", "subkind": "bike_run", "focus": "endurance"}],
+            "ofp": [{"day": "СБ", "window_idx": 1, "duration_min": 25, "kind": "ofp", "subkind": "core", "focus": "core"}],
         },
         "transition": {
             "long_run": [],
@@ -149,6 +172,7 @@ def _layout_slots(phase_focus: dict, constraints: dict) -> list[dict]:
         ("bike", phase_focus.get("bike", []), 70),
         ("swim", phase_focus.get("swim", []), 60),
         ("easy_runs", phase_focus.get("easy_runs", []), 50),
+        ("ofp", phase_focus.get("ofp", []), 40),
     ]
 
     for cat_name, cat_slots, priority in categories:
@@ -183,6 +207,7 @@ def _layout_slots(phase_focus: dict, constraints: dict) -> list[dict]:
                 "priority": priority,
                 "category": cat_name,
                 "workout_ref": None,
+                "structure": _build_slot_structure(spec),
             }
             if _auto_zwift_check(slot, constraints):
                 slot["workout_pending"] = True
@@ -191,6 +216,23 @@ def _layout_slots(phase_focus: dict, constraints: dict) -> list[dict]:
     # Сортировка по дню и времени
     slots.sort(key=lambda s: (DAY_ORDER.index(s["day"]), s["time"]))
     return slots
+
+
+def _build_slot_structure(spec: dict) -> list[dict]:
+    """Строит детальную структуру тренировки для слота.
+
+    Возвращает list[step] с warmup/work/cooldown/set и zones.
+    OFP использует ofp_structure (упражнения вместо HR-зон).
+    """
+    from .step_builder import build_structure, ofp_structure
+    kind = spec.get("kind", "")
+    subkind = spec.get("subkind", "")
+    duration = spec.get("duration_min", 0)
+    focus = spec.get("focus", "")
+    phase_id = spec.get("phase_id", "")
+    if kind == "ofp":
+        return ofp_structure(subkind, duration)
+    return build_structure(subkind, duration, focus, phase_id)
 
 
 def _slot_name(spec: dict) -> str:

@@ -303,6 +303,66 @@ def test_plan_runtime_for_several_weeks():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def test_slot_structure_w1():
+    """v20: каждый run/bike/swim слот имеет structure с warmup/work/cooldown."""
+    plan = plan_generate.generate(1)
+    for s in plan["slots"]:
+        assert "structure" in s, f"slot {s.get('name')} missing structure"
+        assert len(s["structure"]) > 0, f"slot {s['name']} has empty structure"
+        phases = {st["phase"] for st in s["structure"]}
+        if s["kind"] in ("run", "bike", "swim", "brick"):
+            assert "warmup" in phases or "work" in phases or "cooldown" in phases, \
+                f"slot {s['name']} missing key phases, has {phases}"
+    ofp_slots = [s for s in plan["slots"] if s["kind"] == "ofp"]
+    assert len(ofp_slots) >= 1, "W1 должна иметь ≥1 OFP слот"
+    for s in ofp_slots:
+        assert "structure" in s
+        has_exercise = any("exercise" in st or "set" in st for st in s["structure"])
+        assert has_exercise, f"OFP slot {s['name']} missing exercise/set"
+    print(f"  ✓ W1 structure: все {len(plan['slots'])} слотов имеют structure, OFP={len(ofp_slots)}")
+
+
+def test_step_builder_long_run():
+    """step_builder строит правильную структуру для длинного бега."""
+    from lib import step_builder
+    structure = step_builder.build_structure("long_Z2", 90)
+    assert len(structure) == 3
+    phases = [s["phase"] for s in structure]
+    assert phases == ["warmup", "work", "cooldown"]
+    assert structure[1]["duration_min"] == 65
+    assert structure[1]["zone"] == "Z2_low"
+    print(f"  ✓ step_builder.long_Z2 90мин: warmup/work/cooldown по {structure[0]['duration_min']}/{structure[1]['duration_min']}/{structure[2]['duration_min']} мин")
+
+
+def test_step_builder_intervals():
+    """step_builder строит структуру с repeat-блоком для интервалов."""
+    from lib import step_builder
+    structure = step_builder.build_structure("key_intervals", 60)
+    set_steps = [s for s in structure if s.get("phase") == "set"]
+    assert len(set_steps) == 1
+    s = set_steps[0]
+    assert s["reps"] >= 5
+    assert len(s["set_repeats"]) == 2
+    print(f"  ✓ step_builder.key_intervals 60мин: {s['reps']}× ({s['set_repeats'][0]['duration_min']}м + {s['set_repeats'][1]['duration_min']}м)")
+
+
+def test_html_has_details_structure():
+    """v20: HTML содержит <details> + structure-list + steps + OFP rendering."""
+    import shutil
+    tmp = tempfile.mkdtemp(prefix="plan_runtime_html_")
+    try:
+        result = plan_runtime.generate_plan_with_html(1, out_dir=Path(tmp))
+        html = Path(result["html_path"]).read_text(encoding="utf-8")
+        assert "<details" in html, "HTML missing <details> tag"
+        assert "structure-list" in html, "HTML missing structure-list class"
+        assert "step-zone" in html, "HTML missing step-zone (Z2/Z3/etc)"
+        assert "step-sublist" in html, "HTML missing step-sublist (для repeat-блоков)"
+        assert "ex-list" in html, "HTML missing ex-list (для OFP упражнений)"
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    print(f"  ✓ HTML v20: <details> + structure-list + step-zone + step-sublist + ex-list")
+
+
 def test_weekly_report_runs():
     report = weekly_report.report(1)  # W1 сезона
     assert "season_week" in report
@@ -408,6 +468,10 @@ def main():
         test_render_html_includes_v18_features,
         test_plan_runtime_generates_json_and_html,
         test_plan_runtime_for_several_weeks,
+        test_slot_structure_w1,
+        test_step_builder_long_run,
+        test_step_builder_intervals,
+        test_html_has_details_structure,
     ]
     failed = 0
     for t in tests:

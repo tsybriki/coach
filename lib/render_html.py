@@ -31,6 +31,110 @@ def _duration_str(mins: int) -> str:
     return f"{mins}мин"
 
 
+def _render_structure(structure: list[dict], kind: str) -> str:
+    """Рендерит структуру тренировки (warmup/work/cooldown + reps).
+
+    Зеркальная структура: первый уровень — список steps.
+    Если step содержит set_repeats — это repeat-блок с reps.
+    Если step содержит set — это OFP circuit.
+    """
+    if not structure:
+        return ""
+
+    is_ofp = "ofp" in kind or any("exercise" in st or "set" in st for st in structure)
+
+    if is_ofp:
+        rows = []
+        for st in structure:
+            phase = esc(st.get("phase", ""))
+            dur = esc(st.get("duration_min", ""))
+            if "exercise" in st:
+                ex = esc(st.get("exercise", ""))
+                notes = esc(st.get("notes", ""))
+                rows.append(
+                    f'<li class="step step-ofp">'
+                    f'<span class="step-phase">{phase}</span> '
+                    f'<span class="step-dur">{dur}м</span> '
+                    f'<span class="step-name">{esc(ex)}</span>'
+                    f'<div class="step-notes">{notes}</div>'
+                    f'</li>'
+                )
+            if "set" in st:
+                s = st["set"]
+                rows.append(
+                    f'<li class="step step-set">'
+                    f'<span class="step-phase">main</span> '
+                    f'<span class="step-dur">{dur}м</span> '
+                    f'<span class="step-name">{esc(s["name"])}</span>'
+                    f'<ol class="ex-list">'
+                )
+                for ex in s["exercises"]:
+                    rows.append(
+                        f'<li class="ex-item">'
+                        f'<b>{esc(ex["name"])}</b> · {esc(ex["reps"])}'
+                        f'{(" · отдых " + esc(ex["rest"])) if ex.get("rest") else ""}'
+                        f'</li>'
+                    )
+                rows.append('</ol></li>')
+        return f'<ol class="structure-list">{"".join(rows)}</ol>'
+
+    # Run / bike / swim — HR-zone based
+    rows = []
+    for st in structure:
+        phase = esc(st.get("phase", ""))
+        dur = esc(st.get("duration_min", ""))
+        zone = esc(st.get("zone") or "")
+        pace = esc(st.get("pace_min_per_km") or "")
+        notes = esc(st.get("notes", ""))
+
+        if st.get("phase") == "set" and st.get("set_repeats"):
+            reps = st.get("reps", "?")
+            sub_rows = []
+            for sub in st["set_repeats"]:
+                sub_dur = esc(sub.get("duration_min", ""))
+                sub_zone = esc(sub.get("zone") or "")
+                sub_pace = esc(sub.get("pace_min_per_km") or "")
+                sub_phase = esc(sub.get("phase", ""))
+                sub_notes = esc(sub.get("notes", ""))
+                pace_html = f' <span class="step-pace">@ {sub_pace}/км</span>' if sub_pace else ''
+                zone_html = f'<span class="step-zone">{sub_zone}</span>' if sub_zone else ''
+                sub_rows.append(
+                    f'<li class="step-sub">'
+                    f'{zone_html}'
+                    f'<span class="step-phase">{sub_phase}</span> '
+                    f'<span class="step-dur">{sub_dur}м</span>'
+                    f'{pace_html}'
+                    f'<div class="step-notes">{sub_notes}</div>'
+                    f'</li>'
+                )
+            sub_html = "".join(sub_rows)
+            notes_html = f'<div class="step-notes">{notes}</div>' if notes else ''
+            rows.append(
+                f'<li class="step step-set">'
+                f'<span class="step-phase">set</span> '
+                f'<span class="step-dur">{dur}м</span> '
+                f'<span class="step-reps">× {reps}</span>'
+                f'<ol class="step-sublist">{sub_html}</ol>'
+                f'{notes_html}'
+                f'</li>'
+            )
+        else:
+            pace_html = f' <span class="step-pace">@ {pace}/км</span>' if pace else ''
+            zone_html = f'<span class="step-zone">{zone}</span>' if zone else ''
+            notes_html = f'<div class="step-notes">{notes}</div>' if notes else ''
+            rows.append(
+                f'<li class="step">'
+                f'{zone_html}'
+                f'<span class="step-phase">{phase}</span> '
+                f'<span class="step-dur">{dur}м</span>'
+                f'{pace_html}'
+                f'{notes_html}'
+                f'</li>'
+            )
+
+    return f'<ol class="structure-list">{"".join(rows)}</ol>'
+
+
 def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
     """Рендер plan-wN.json → self-contained HTML. v18: workout_pending, totals, focus, location."""
     out_path = Path(out_path)
@@ -43,7 +147,8 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
 
     slot_rows = []
     for s in slots:
-        icon = _slot_icon(s.get("kind", ""))
+        icon = s.get("kind", "")
+        icon_char = _slot_icon(icon)
         time = s.get("time", "")
         dur = _duration_str(s.get("duration_min", 0))
         name = esc(s.get("name", ""))
@@ -65,16 +170,23 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
             wref = esc(s.get("workout_ref", {}).get("url", "")[:40])
             badges.append(f'<span class="badge badge-workout">Zwift · {wref}…</span>')
 
+        structure_html = _render_structure(s.get("structure", []), kind)
+
         slot_rows.append(
             f'<li class="slot-row">'
-            f'<div class="slot-head">'
-            f'<span class="slot-icon">{icon}</span>'
+            f'<details>'
+            f'<summary class="slot-head">'
+            f'<span class="slot-icon">{icon_char}</span>'
             f'<span class="slot-day">{esc(s.get("day", ""))}</span>'
             f'<span class="slot-time">{esc(time)}</span>'
             f'<span class="slot-dur">{dur}</span>'
-            f'</div>'
+            f'</summary>'
+            f'<div class="slot-body">'
             f'<div class="slot-name">{name} <i>({kind})</i></div>'
             f'<div class="slot-badges">{" ".join(badges)}</div>'
+            f'{structure_html}'
+            f'</div>'
+            f'</details>'
             f'</li>'
         )
     slots_html = "".join(slot_rows) if slot_rows else '<li class="slot-empty"><i>Нет слотов</i></li>'
@@ -140,6 +252,25 @@ ul{{margin:0;padding:0;list-style:none;font-size:14px;line-height:1.45}}
 .badge-pending{{color:var(--warn);border-color:rgba(255,155,106,.4);background:rgba(255,155,106,.08)}}
 .badge-cp{{color:var(--cp);border-color:rgba(216,160,255,.4);background:rgba(216,160,255,.08)}}
 .badge-workout{{color:var(--good);border-color:rgba(126,231,135,.4);background:rgba(126,231,135,.08)}}
+.slot-body{{margin-top:6px;padding-left:32px;font-size:13.5px}}
+.slot-row details summary{{cursor:pointer;list-style:none}}
+.slot-row details summary::-webkit-details-marker{{display:none}}
+.slot-row details summary::after{{content:'▸';margin-left:8px;color:var(--muted);font-size:11px;transition:transform .15s;display:inline-block}}
+.slot-row details[open] summary::after{{transform:rotate(90deg);content:'▾'}}
+.structure-list{{margin:8px 0 0;padding-left:0;list-style:none;font-size:12.5px;line-height:1.5}}
+.step{{padding:5px 8px;margin-bottom:3px;background:var(--panel2);border-radius:6px;border-left:2px solid var(--accent2)}}
+.step-set{{background:rgba(122,162,255,.08);border-left-color:var(--accent)}}
+.step-ofp{{background:rgba(216,160,255,.08);border-left-color:var(--cp)}}
+.step-phase{{color:var(--accent2);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-right:6px}}
+.step-dur{{color:var(--text);font-weight:600;font-family:ui-monospace,SFMono-Regular,monospace}}
+.step-zone{{display:inline-block;background:var(--bg);padding:1px 6px;border-radius:4px;font-size:10.5px;color:var(--accent2);font-family:ui-monospace,SFMono-Regular,monospace;margin-right:6px}}
+.step-pace{{color:var(--muted);font-size:11px;font-family:ui-monospace,SFMono-Regular,monospace}}
+.step-reps{{color:var(--accent);font-weight:600;font-size:11px;margin-left:6px}}
+.step-notes{{margin-top:3px;font-size:11.5px;color:var(--muted);font-style:italic}}
+.step-sublist{{margin:6px 0 4px 16px;padding-left:0;list-style:none;font-size:12px}}
+.step-sub{{padding:4px 6px;margin-bottom:2px;background:var(--bg);border-radius:4px;border-left:2px solid var(--good)}}
+.ex-list{{margin-top:6px;padding-left:16px;font-size:12px}}
+.ex-item{{padding:2px 0;color:var(--text)}}
 .totals{{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}}
 .total-cell{{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center}}
 .total-cell .v{{font-size:18px;font-weight:600;color:var(--accent2)}}

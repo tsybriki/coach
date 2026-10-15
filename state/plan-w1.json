@@ -57,7 +57,45 @@
       "location": "stadium",
       "priority": 80,
       "category": "key_run",
-      "workout_ref": null
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка."
+        },
+        {
+          "phase": "work",
+          "duration_min": 25,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Easy 5К. HR ~135, темп 5:30-5:00/км."
+        },
+        {
+          "phase": "work",
+          "duration_min": 3,
+          "zone": "Z3",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Прогрессия 1К: 5:00 → 4:30/км."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        }
+      ]
     },
     {
       "id": "вт-easy_runs",
@@ -71,7 +109,18 @@
       "location": "asphalt_commuter",
       "priority": 50,
       "category": "easy_runs",
-      "workout_ref": null
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "work",
+          "duration_min": 30,
+          "zone": "Z2_low",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Лёгкий бег. Дыхание носовое."
+        }
+      ]
     },
     {
       "id": "вт-key_run",
@@ -85,7 +134,55 @@
       "location": "asphalt_commuter",
       "priority": 80,
       "category": "key_run",
-      "workout_ref": null
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 12,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка с ускорениями 2×100м str."
+        },
+        {
+          "phase": "set",
+          "duration_min": 30,
+          "zone": null,
+          "pace_min_per_km": null,
+          "reps": 5,
+          "set_repeats": [
+            {
+              "phase": "work",
+              "duration_min": 4,
+              "zone": "Z3",
+              "pace_min_per_km": null,
+              "reps": null,
+              "set_repeats": null,
+              "notes": "400м @ 4:00/км (~1:36)."
+            },
+            {
+              "phase": "recovery",
+              "duration_min": 2,
+              "zone": "Z1",
+              "pace_min_per_km": null,
+              "reps": null,
+              "set_repeats": null,
+              "notes": "Jog 200м. Восстановить дыхание."
+            }
+          ],
+          "notes": "Интервалы Z3. Источник: spring-10k-2027-v2.md."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        }
+      ]
     },
     {
       "id": "ср-long_run",
@@ -99,7 +196,36 @@
       "location": "stadium_or_pool",
       "priority": 100,
       "category": "long_run",
-      "workout_ref": null
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка 10мин Z1."
+        },
+        {
+          "phase": "work",
+          "duration_min": 65,
+          "zone": "Z2_low",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Длинный бег 65мин Z2_low. Дыхание носовое, темп комфортный. Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        }
+      ]
     },
     {
       "id": "чт-bike",
@@ -114,6 +240,35 @@
       "priority": 70,
       "category": "bike",
       "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 5,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка на станке. Каденс 80-85."
+        },
+        {
+          "phase": "work",
+          "duration_min": 30,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Стабильное Z2. Каденс 85-90. Можно Zwift watch-симулятор."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Заминка."
+        }
+      ],
       "workout_pending": true
     },
     {
@@ -128,7 +283,99 @@
       "location": "pool_or_asphalt",
       "priority": 60,
       "category": "swim",
-      "workout_ref": null
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 5,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка."
+        },
+        {
+          "phase": "work",
+          "duration_min": 45,
+          "zone": "Z2_low",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Основная часть. Носовое дыхание."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Заминка."
+        }
+      ]
+    },
+    {
+      "id": "сб-ofp",
+      "day": "СБ",
+      "time": "10:00",
+      "duration_min": 25,
+      "name": "ofp core 25мин",
+      "kind": "ofp",
+      "subkind": "core",
+      "focus": "core",
+      "location": "home",
+      "priority": 40,
+      "category": "ofp",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "exercise": "Мобилилити: hip openers, glute bridge 2×15.",
+          "duration_min": 5,
+          "notes": "Активация ягодиц."
+        },
+        {
+          "phase": "main",
+          "set": {
+            "name": "Core circuit x2 rounds",
+            "exercises": [
+              {
+                "name": "Планка",
+                "reps": "3×45с",
+                "rest": "30с"
+              },
+              {
+                "name": "Медведи на коленях",
+                "reps": "2×12/стор",
+                "rest": "30с"
+              },
+              {
+                "name": "Bird-dog",
+                "reps": "3×10/стор",
+                "rest": "30с"
+              },
+              {
+                "name": "Glute bridge",
+                "reps": "3×15",
+                "rest": "30с"
+              },
+              {
+                "name": "Гиперэкстензия",
+                "reps": "2×15",
+                "rest": "30с"
+              }
+            ]
+          },
+          "duration_min": 20,
+          "notes": "Акцент на заднюю цепь (превентивно от защемления спины)."
+        },
+        {
+          "phase": "cooldown",
+          "exercise": "Растяжка 5мин. Без агрессии на грушевидную.",
+          "duration_min": 5,
+          "notes": "Spring-10k-2027-v2.md core program."
+        }
+      ]
     },
     {
       "id": "вс-bike",
@@ -143,6 +390,35 @@
       "priority": 70,
       "category": "bike",
       "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        },
+        {
+          "phase": "work",
+          "duration_min": 70,
+          "zone": "Z2_low",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Длинный вел Z2_low 70мин. Zwift watch-сессия."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        }
+      ],
       "workout_pending": true
     }
   ],
@@ -152,17 +428,17 @@
   "volume_check": {
     "ok": true,
     "target_h": 5,
-    "available_h": 9.0,
-    "gap_h": -4.0,
+    "available_h": 10.0,
+    "gap_h": -5.0,
     "max_h": 11,
     "min_h": 2,
     "suggestion": null
   },
   "totals": {
-    "planned_hours": 7.2,
+    "planned_hours": 7.7,
     "target_hours": 5,
-    "delta_hours": -2.2,
-    "slots_count": 7
+    "delta_hours": -2.7,
+    "slots_count": 8
   },
   "_generated_by": "lib.plan_generate (Phase 2.5: real layout v18)"
 }

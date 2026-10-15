@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas.schema.md",
-  "version": 19,
+  "version": 20,
   "title": "Спортивный слой Hermes — полная архитектура",
-  "subtitle": "Фундамент + 5 точек расширения: метрики, replan сезона, W_N с overrides (inline Zwift), анализ (4 уровня), поиск Zwift. **HTML — обязательная часть ЛЮБОГО изменения plan-wN (v19).** Один взгляд — всё сразу.",
+  "subtitle": "Фундамент + 4 точки расширения + state-файлы + МНОЖЕСТВЕННЫЕ ЦЕЛИ + ВЕС + ПОМОЩНИК + HTML (ОБЯЗАТЕЛЬНО) + STRUCTURE (детальный план каждой тренировки в slot, разворачивается по клику в <details>). Один взгляд — всё сразу.",
   "blocks": [
     {
       "id": "tldr",
@@ -21,7 +21,8 @@
         "Вес: weight_history[] в athlete.json + авто-синк из Garmin через cron + одна строка в weekly_report + ручная правка через coach-plan-adjust. Без целевого веса, без BMI/калорий, без алертов. Минимум.",
         "Zwift search: coach-plan-zwift — по критериям (дисциплина, длительность, зоны, тип) ищет workouts на WhatsOnZwift, предлагает 2-4 варианта, Кирилл выбирает, zwift_sync.py конвертит → отправляется в Garmin Connect. Становится частью plan-wN.",
         "Inline Zwift: plan_generate ВНУТРИ одной операции дёргает coach-plan-zwift, если размещённый bike/brick-слот удовлетворяет правилу из constraints.auto_zwift (например duration_min ≤ 90 + location='home_stationary_bike'). Кирилл НЕ ходит отдельно — он видит уже снабжённый workout_ref план. Если правило не сработало (например, outdoor вело) — слот остаётся с duration_min, без workout_ref. Два этапа слиты в один.",
-        "HTML = обязательная часть выхода (v19): coach-plan-week / coach-plan-season / coach-plan-adjust ВСЕГДА порождают пару state/plan-wN.json + state/plan-wN.html через lib.plan_runtime. generate_plan_with_html(). Один entry point. Нет JSON без HTML, нет HTML без JSON."
+        "HTML = обязательная часть выхода (v19): coach-plan-week / coach-plan-season / coach-plan-adjust ВСЕГДА порождают пару state/plan-wN.json + state/plan-wN.html через lib.plan_runtime. generate_plan_with_html(). Один entry point. Нет JSON без HTML, нет HTML без JSON.",
+        "Structure в каждом slot (v20): каждый run/bike/swim слот имеет list[step] с warmup/work/cooldown + зонами (по пульсу для лёгких/длинных, по темпу для интервалов). OFP (intervals) — отдельный kind со своей структурой (exercises, reps). HTML: <details> в каждой карточке слота, тап = раскрыть детальную работу (steps, zones, reps)."
       ]
     },
     {
@@ -463,6 +464,10 @@
         {
           "name": "plan_runtime.py",
           "purpose": "runtime entry point. generate_plan_with_html(season_week) → plan-wN.json + plan-wN.html. Каждая coach-plan-* skill вызывает его. v19: HTML — обязательная часть выхода."
+        },
+        {
+          "name": "step_builder.py",
+          "purpose": "строит list[step] для каждого subkind. build_structure() для run/bike/swim/brick (warmup/work/cooldown, intervals с reps), ofp_structure() для OFP (упражнения в circuit)."
         }
       ],
       "rule": "Модель только через ask_model.py. fit_retention — единственная, кто удаляет FIT. plan_generate читает constraints, не правит. goal_allocator — только candidates, никогда default. coach-plan-zwift вызывает zwift_search.py (read-only) и zwift_sync.py (write через garmin_tools). coach-plan-* skills вызывают plan_runtime.generate_plan_with_html() — единственная точка где генерится и JSON и HTML. Нет обходного пути."

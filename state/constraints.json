@@ -49,7 +49,14 @@
         "location": "pool_or_asphalt"
       }
     ],
-    "СБ": [],
+    "СБ": [
+      {
+        "start": "10:00",
+        "end": "11:00",
+        "duration_min": 60,
+        "location": "home"
+      }
+    ],
     "ВС": [
       {
         "start": "11:00",
