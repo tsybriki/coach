@@ -184,142 +184,55 @@ def _structure_steps_html(structure: list, kind: str) -> str:
     return f'<ol class="structure-list">{"".join(rows)}</ol>'
 
 
-def _render_card_detail(idx: int, slot: dict[str, Any]) -> str:
-    """Рендер одной детальной карточки в HTML (для v25 — все 8 в DOM сразу)."""
-    kind = slot.get("kind", "")
-    kind_cls = _kind_class(kind)
-    tag_label = esc(kind)
-    inv = _inventory_for(slot)
-    inv_html = _inventory_html(inv)
-
-    meta_items = []
-    if slot.get("location"):
-        meta_items.append(f'<span class="card-meta-item">📍 {esc(slot["location"])}</span>')
-    if slot.get("focus"):
-        meta_items.append(f'<span class="card-meta-item">🎯 {esc(slot["focus"])}</span>')
-    if slot.get("subkind"):
-        meta_items.append(f'<span class="card-meta-item">{esc(slot["subkind"])}</span>')
-    if slot.get("workout_pending"):
-        meta_items.append(
-            '<span class="card-meta-item" style="color:var(--warn);border-color:rgba(255,155,106,.4);'
-            'background:rgba(255,155,106,.08)">Zwift pending</span>'
-        )
-    meta_html = f'<div class="card-meta">{"".join(meta_items)}</div>' if meta_items else ""
-
-    structure = slot.get("structure", [])
-    steps_html = _structure_steps_html(structure, kind) if structure else '<div class="empty">Нет структуры</div>'
-
-    return (
-        f'<section id="card-{idx}" class="card-detail">'
-        f'<div class="topbar"><a href="#list" class="back-btn"><span class="arrow">←</span> назад</a></div>'
-        f'<div class="card">'
-        f'<div class="card-header">'
-        f'<div>'
-        f'<div class="card-headline">{esc(slot.get("name", ""))}</div>'
-        f'<div class="card-subtitle">{esc(slot.get("day", ""))} {esc(slot.get("time", ""))} · '
-        f'{esc(str(slot.get("duration_min", 0)))} мин</div>'
-        f'</div>'
-        f'<div class="card-tag {kind_cls}">{tag_label}</div>'
-        f'</div>'
-        f'{meta_html}'
-        f'{inv_html}'
-        f'<h3>Структура тренировки</h3>'
-        f'{steps_html}'
-        f'</div>'
-        f'</section>'
-    )
-
-
-def _inventory_html(inv: list[dict]) -> str:
-    if not inv:
-        return ""
-    items = "".join(
-        f'<div class="inv-item"><span class="inv-icon">{esc(i.get("icon", "•"))}</span>'
-        f'<span>{esc(i.get("name", ""))}</span></div>'
-        for i in inv
-    )
-    return f'<div class="inventory"><div class="inv-title">Что взять</div>{items}</div>'
-
-
 def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
-    """Рендер plan-wN.json → двухэкранный HTML с навигацией.
+    """Рендер plan-wN.json → HTML с двумя экранами (picker + cardWrap) и JS-навигацией.
 
-    Экран 1 (picker): список слотов как compact-карточки.
-    Клик → переход на экран 2 (cardWrap): детальная карточка с back-button.
+    v26: точная копия архитектуры из w1-mobile.html (который работал у Кирилла).
+    Тёмная цветовая гамма, structure/inventory из coach-данных.
     """
     out_path = Path(out_path)
     slots = plan.get("slots", [])
-    totals = plan.get("totals", {})
-    phase = plan.get("phase") or {}
-    cp_in_range = plan.get("control_points_in_range", [])
-
-    phase_name = esc(phase.get("id", "—"))
-    phase_target = phase.get("hours_per_week_target", 0)
-    phase_start = esc(phase.get("start", ""))
-    phase_end = esc(phase.get("end", ""))
-    phase_goal_id = esc(phase.get("goal_id", ""))
-
-    planned = totals.get("planned_hours", 0)
-    target = totals.get("target_hours", 0)
-    delta = totals.get("delta_hours", 0)
-    delta_sign = "+" if delta >= 0 else ""
-    delta_class = "delta-positive" if delta >= 0 else "delta-negative"
-
     rules = plan.get("rules", {})
-    hr_zones = rules.get("hr_zones", {})
-    zones = hr_zones.get("zones", {})
 
-    # Сериализуем планные данные для JS (если будут нужны в dev tools)
-    plan_data_json = json.dumps({
+    # Сериализуем планные данные в формате который ожидает JS в renderCard():
+    # {id, day, time, name, short, kind, subkind, focus, location, duration_min,
+    #  structure: [...], inventory: [...]}
+    # Дополнительно для picker: title, weekIso, subtitle, rules.hr_zones
+    hrz = rules.get("hr_zones")
+    if isinstance(hrz, dict):
+        hrz_str = ", ".join(f"{k}={v.get('bpm', v)}" if isinstance(v, dict) else f"{k}={v}" for k, v in hrz.get("zones", {}).items())
+    elif isinstance(hrz, str):
+        hrz_str = hrz
+    else:
+        hrz_str = ""
+
+    plan_data = {
+        "title": plan.get("title", "Тренировки"),
+        "weekIso": f"W{plan.get('season_week', '?')}",
+        "subtitle": f"iso {plan.get('iso_week', '—')} · сезон с {plan.get('season_start_date', '?')}",
+        "rules": {
+            "hr_zones": hrz_str,
+        },
         "slots": [
             {
                 "id": s.get("id"),
                 "day": s.get("day"),
                 "time": s.get("time"),
-                "duration_min": s.get("duration_min"),
                 "name": s.get("name"),
+                "short": s.get("name", ""),  # в w1-mobile.html `short` — это краткое описание (например "Easy 5К low-Z2")
+                "duration_min": s.get("duration_min"),
                 "kind": s.get("kind"),
                 "subkind": s.get("subkind"),
                 "focus": s.get("focus"),
                 "location": s.get("location"),
                 "workout_pending": s.get("workout_pending", False),
-                "workout_ref": s.get("workout_ref"),
                 "structure": s.get("structure", []),
                 "inventory": _inventory_for(s),
             }
             for s in slots
         ],
-    }, ensure_ascii=False)
-
-    # Picker cards — anchor на #card-N
-    picker_items = []
-    for idx, s in enumerate(slots):
-        kind = s.get("kind", "")
-        kind_cls = _kind_class(kind)
-        icon = _slot_icons(kind)
-        day = esc(s.get("day", ""))
-        time = esc(s.get("time", ""))
-        dur = _duration_str(s.get("duration_min", 0))
-        idea = esc(_slot_idea(s))
-        picker_items.append(
-            f'<a href="#card-{idx}" class="slot-card {kind_cls}" data-slot-idx="{idx}">'
-            f'<div class="slot-card-head">'
-            f'<span class="slot-icon">{icon}</span>'
-            f'<span class="slot-day">{day}</span>'
-            f'<span class="slot-time">{time}</span>'
-            f'<span class="slot-dur">{dur}</span>'
-            f'</div>'
-            f'<div class="slot-card-name">{idea}</div>'
-            f'</a>'
-        )
-    picker_html = "".join(picker_items) if picker_items else '<div class="empty">Нет слотов</div>'
-
-    # Card details — все 8 карточек сразу в DOM
-    # Каждая в <section id="card-N">. CSS :target скрывает/показывает.
-    card_details_items = []
-    for idx, s in enumerate(slots):
-        card_details_items.append(_render_card_detail(idx, s))
-    card_details_html = "".join(card_details_items)
+    }
+    plan_data_json = json.dumps(plan_data, ensure_ascii=False)
 
     body = """<!doctype html>
 <html lang="ru"><head>
@@ -343,73 +256,52 @@ h2{font-size:15px;margin:0 0 8px;color:var(--accent)}
 h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
 .sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
 
+/* v26: ТОЧНАЯ копия архитектуры из w1-mobile.html (который работал) */
 .picker{display:flex;flex-direction:column;gap:10px}
+.hidden{display:none !important}
+.visible{display:flex !important;flex-direction:column;gap:10px}
 
-/* v25: CSS-only navigation через :target */
-[id="list"] { display:block; height:0; overflow:hidden; }
-.card-detail { display:none; }
-.card-detail:target { display:block; }
-/* Скрыть picker когда открыта детальная карточка */
-body:has(.card-detail:target) #picker { display:none; }
-@media (max-width: 0) { /* нет fallback — :has поддерживается в современных браузерах */ }
-.back-btn{background:var(--panel);border:1px solid var(--border);padding:8px 14px;border-radius:8px;color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:6px;min-height:36px}
-.back-btn:active{transform:scale(0.97)}
-/* hidden / visible — классы больше не используются, перешли на inline style.display */
+.slot{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;text-align:left;cursor:pointer;font:inherit;color:inherit;
+  min-height:74px;box-shadow:0 1px 2px rgba(0,0,0,.3);display:flex;
+  flex-direction:column;justify-content:center;transition:transform .1s}
+.slot:active{transform:scale(0.98);background:var(--panel2)}
+.slot .day{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.slot .name{font-size:14px;font-weight:600;margin-top:4px}
+.slot .desc{font-size:12px;color:var(--muted);margin-top:2px}
 
-/* Picker cards */
-.slot-card{
-  background:var(--panel);border:1px solid var(--border);border-radius:12px;
-  padding:14px 16px;cursor:pointer;font:inherit;color:inherit;text-align:left;
-  min-height:74px;display:flex;flex-direction:column;justify-content:center;
-  transition:transform .1s;
-}
-.slot-card:active{transform:scale(0.98);background:var(--panel2)}
-.slot-card-head{display:flex;align-items:center;gap:8px}
-.slot-icon{font-size:18px;width:24px;text-align:center}
-.slot-day{font-weight:600;color:var(--accent2);min-width:24px;font-size:13px;letter-spacing:.5px}
-.slot-time{color:var(--muted);font-size:11.5px;font-family:ui-monospace,SFMono-Regular,monospace}
-.slot-dur{margin-left:auto;font-size:11.5px;color:var(--muted);background:var(--panel2);
-  padding:2px 8px;border-radius:8px;border:1px solid var(--border)}
-.slot-card-name{font-size:14px;font-weight:600;margin-top:5px}
-.tag-run{color:var(--run);border:1px solid rgba(126,200,227,.3);background:rgba(126,200,227,.08)}
-.tag-bike{color:var(--bike);border:1px solid rgba(240,138,90,.3);background:rgba(240,138,90,.08)}
-.tag-swim{color:var(--swim);border:1px solid rgba(92,214,192,.3);background:rgba(92,214,192,.08)}
-.tag-ofp{color:var(--ofp);border:1px solid rgba(216,160,255,.3);background:rgba(216,160,255,.08)}
-.tag-brick{color:var(--brick);border:1px solid rgba(240,198,116,.3);background:rgba(240,198,116,.08)}
-.tag-cp{color:var(--cp);border:1px solid rgba(255,160,122,.3);background:rgba(255,160,122,.08)}
+.plan-title{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:4px}
+.plan-title h1{font-size:18px;margin:0}
+.plan-title .week{font-size:12px;color:var(--muted);margin-top:2px}
+.plan-rules{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
 
-/* Detail view */
-.topbar{display:flex;align-items:center;margin-bottom:12px;gap:8px}
-.topbar button{
-  background:var(--panel);border:1px solid var(--border);padding:8px 14px;
-  border-radius:8px;cursor:pointer;font:inherit;color:inherit;min-height:36px;
-  display:flex;align-items:center;gap:6px;
-}
-.topbar button:active{transform:scale(0.97)}
-.topbar button .arrow{font-size:14px}
-
-.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.card-subtitle{font-size:11px;color:var(--muted);margin-top:2px}
 .card-tag{font-size:10.5px;padding:3px 9px;border-radius:8px;background:var(--panel2);color:var(--muted);text-transform:lowercase;letter-spacing:.3px;font-weight:600}
-.card-tag.tag-run{color:var(--run);border:1px solid rgba(126,200,227,.3);background:rgba(126,200,227,.08)}
-.card-tag.tag-bike{color:var(--bike);border:1px solid rgba(240,138,90,.3);background:rgba(240,138,90,.08)}
-.card-tag.tag-swim{color:var(--swim);border:1px solid rgba(92,214,192,.3);background:rgba(92,214,192,.08)}
-.card-tag.tag-ofp{color:var(--ofp);border:1px solid rgba(216,160,255,.3);background:rgba(216,160,255,.08)}
-.card-tag.tag-brick{color:var(--brick);border:1px solid rgba(240,198,116,.3);background:rgba(240,198,116,.08)}
-.card-tag.tag-cp{color:var(--cp);border:1px solid rgba(255,160,122,.3);background:rgba(255,160,122,.08)}
+.card-tag.kind-run{color:var(--run);background:rgba(126,200,227,.08);border:1px solid rgba(126,200,227,.3)}
+.card-tag.kind-bike{color:var(--bike);background:rgba(240,138,90,.08);border:1px solid rgba(240,138,90,.3)}
+.card-tag.kind-swim{color:var(--swim);background:rgba(92,214,192,.08);border:1px solid rgba(92,214,192,.3)}
+.card-tag.kind-ofp{color:var(--ofp);background:rgba(216,160,255,.08);border:1px solid rgba(216,160,255,.3)}
 
-.card-headline{font-size:18px;font-weight:600;margin:0 0 4px}
-.card-subtitle{font-size:12.5px;color:var(--muted);margin:0 0 8px}
-.card-meta{display:flex;gap:6px;font-size:11.5px;color:var(--muted);margin:6px 0;flex-wrap:wrap}
-.card-meta-item{background:var(--panel2);padding:3px 8px;border-radius:6px;border:1px solid var(--border)}
+.exercise{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.exercise:last-child{border-bottom:none}
+.ex-icon{width:36px;height:36px;flex-shrink:0;font-size:22px;display:flex;align-items:center;justify-content:center}
+.ex-text{flex:1}
+.ex-name{font-size:14px;font-weight:600}
+.ex-name .eq{font-size:10px;color:var(--warn);background:rgba(255,155,106,.08);padding:1px 5px;border-radius:4px;margin-left:4px}
+.ex-why{font-size:12px;color:var(--muted);margin-top:2px}
 
-/* Inventory */
 .inventory{background:rgba(255,155,106,.05);border:1px dashed var(--warn);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:13px}
 .inv-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--warn);font-weight:600;margin-bottom:6px}
-.inv-item{display:flex;gap:8px;align-items:center;padding:3px 0}
-.inv-icon{font-size:14px;width:18px;text-align:center}
+.inv-item{display:flex;gap:8px;align-items:center;padding:2px 0}
+.inv-icon{color:var(--warn);font-size:14px;width:18px;text-align:center}
 
-/* Structure */
+.topbar{display:flex;align-items:center;margin-bottom:12px}
+.topbar button{background:var(--panel);border:1px solid var(--border);padding:8px 12px;border-radius:8px;cursor:pointer;font:inherit;color:inherit;min-height:36px;display:flex;align-items:center;gap:6px}
+.topbar button:active{transform:scale(0.97)}
+
+/* Structure (workout steps) */
 .structure-list{margin:0;padding-left:0;list-style:none}
 .step{padding:8px 10px;margin-bottom:5px;background:var(--panel2);border-radius:6px;border-left:2px solid var(--accent2)}
 .step-set{background:rgba(122,162,255,.08);border-left-color:var(--accent)}
@@ -428,103 +320,243 @@ body:has(.card-detail:target) #picker { display:none; }
 .ex-item{padding:2px 0}
 .ex-item b{color:var(--accent)}
 
-/* Summary */
-.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
-.total-cell{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:6px;text-align:center}
-.total-cell .v{font-size:16px;font-weight:600;color:var(--accent2)}
-.total-cell .l{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
-.delta-positive .v{color:var(--good)}
-.delta-negative .v{color:var(--warn)}
-.zones{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;font-size:11.5px;margin-top:6px}
-.zone{background:var(--panel2);padding:5px 8px;border-radius:6px;border:1px solid var(--border)}
-.zone b{color:var(--accent);font-family:ui-monospace,SFMono-Regular,monospace}
-
 footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
 .empty{color:var(--muted);font-style:italic;padding:14px;text-align:center}
 </style></head><body>
 
-<!-- Экран 1: список слотов -->
-<div id="picker" class="picker" style="display:flex">
-  <div style="margin-bottom:10px">
-    <h1 style="margin:0">__PICKER_TITLE__</h1>
-    <div class="sub">W__SW__ · iso __ISO__ · сезон стартовал __SEASON_START__</div>
+<script type="application/json" id="plan-data">__PLAN_DATA__</script>
+
+<div id="picker" class="picker visible"></div>
+
+<div id="cardWrap" class="hidden">
+  <div class="topbar">
+    <button id="backBtn">← к выбору</button>
   </div>
-
-  <div class="card" style="background:var(--panel);padding:10px 12px;margin-bottom:10px">
-    <h3>Сводка</h3>
-    <div class="totals">
-      <div class="total-cell"><div class="v">__PLANNED__ч</div><div class="l">planned</div></div>
-      <div class="total-cell"><div class="v">__TARGET__ч</div><div class="l">target</div></div>
-      <div class="total-cell __DELTA_CLASS__"><div class="v">__DELTA_SIGN____DELTA__ч</div><div class="l">delta</div></div>
-    </div>
-    <div class="zones">
-      __ZONES_HTML__
-    </div>
-  </div>
-
-  <div class="card" style="background:var(--panel);padding:10px 12px;margin-bottom:10px">
-    <h3>Фаза · __PHASE_NAME__</h3>
-    <p style="margin:0;font-size:12px;color:var(--muted)">__PHASE_START__ → __PHASE_END__ · target __PHASE_TARGET__ч/нед · goal __PHASE_GOAL__</p>
-  </div>
-
-  <h2 style="margin:14px 0 4px">Тренировки · __SLOTS_COUNT__ шт</h2>
-  <div style="font-size:12px;color:var(--muted);margin-bottom:4px">тап → детали</div>
-
-  __PICKER_ITEMS__
-
-  <div class="card" style="margin-top:14px">
-    <h3>Контрольные точки</h3>
-    __CP_HTML__
-  </div>
-
-  <footer>self-contained · v21 · plan-w__SW__.html</footer>
+  <div id="cardHost"></div>
 </div>
 
-<!-- Экран 2: 8 детальных карточек, все в DOM, переключение через CSS :target -->
-__CARD_DETAILS_HTML__
-
 <script>
-// v25: вся навигация — через нативные anchors + CSS :target.
-// JS не управляет picker/card-detail переключением.
-// Все детали уже отрендерены Python'ом выше (см. 8 section.card-detail).
+// v26: точная копия логики навигации из w1-mobile.html (которая работала у Кирилла).
+// Тёмная цветовая гамма, structure/inventory из coach-данных вместо OFP-библиотеки.
 
-/* Заглушки для dev tools. */
+const KIND_ICON = { run: '🏃', bike: '🚴', swim: '🏊', ofp: '💪', brick: '🔄', control_point: '🎯' };
+let PLAN = null;
+let ACTIVE_WEEK_KEY = null;
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function loadPlan() {
+  const el = document.getElementById('plan-data');
+  if (!el) return null;
+  try { return JSON.parse(el.textContent); }
+  catch(e) { console.error('plan-data parse error', e); return null; }
+}
+
+function renderStructure(structure, kind) {
+  if (!structure || !structure.length) return '<div class="empty">Нет структуры</div>';
+  const isOfp = kind === 'ofp' || structure.some(st => 'exercise' in st || 'set' in st);
+  if (isOfp) return renderOfpStructure(structure);
+  return renderHrStructure(structure);
+}
+
+function renderOfpStructure(structure) {
+  const rows = structure.map(st => {
+    if (st.exercise) {
+      return '<li class="step step-ofp">'
+        + '<div class="step-head"><span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
+        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
+        + '<div class="step-name">' + escapeHtml(st.exercise) + '</div>'
+        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+        + '</li>';
+    }
+    if (st.set) {
+      let html = '<li class="step step-set">'
+        + '<div class="step-head"><span class="step-phase">main</span>'
+        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
+        + '<div class="step-name">' + escapeHtml(st.set.name) + '</div>'
+        + '<ol class="ex-list">';
+      for (const ex of st.set.exercises) {
+        html += '<li class="ex-item"><b>' + escapeHtml(ex.name) + '</b> · ' + escapeHtml(ex.reps)
+              + (ex.rest ? ' · отдых ' + escapeHtml(ex.rest) : '') + '</li>';
+      }
+      return html + '</ol></li>';
+    }
+    return '';
+  }).join('');
+  return '<ol class="structure-list">' + rows + '</ol>';
+}
+
+function renderHrStructure(structure) {
+  const rows = structure.map(st => {
+    if (st.phase === 'set' && st.set_repeats) {
+      let subHtml = st.set_repeats.map(s => {
+        let pace = s.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
+        let zone = s.zone ? '<span class="step-zone">' + escapeHtml(s.zone) + '</span>' : '';
+        return '<li class="step-sub">'
+          + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(s.phase||'') + '</span>'
+          + ' <span class="step-dur">' + escapeHtml(String(s.duration_min||'')) + 'мин</span>' + pace + '</div>'
+          + (s.notes ? '<div class="step-notes">' + escapeHtml(s.notes) + '</div>' : '')
+          + '</li>';
+      }).join('');
+      return '<li class="step step-set">'
+        + '<div class="step-head"><span class="step-phase">set</span>'
+        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>'
+        + '<span class="step-reps">× ' + escapeHtml(String(st.reps||'?')) + '</span></div>'
+        + '<ol class="step-sublist">' + subHtml + '</ol>'
+        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+        + '</li>';
+    }
+    let pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
+    let zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
+    return '<li class="step">'
+      + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
+      + ' <span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>' + pace + '</div>'
+      + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+      + '</li>';
+  }).join('');
+  return '<ol class="structure-list">' + rows + '</ol>';
+}
+
+function renderInventory(inv) {
+  if (!inv || !inv.length) return '';
+  const items = inv.map(i => '<div class="inv-item"><span class="inv-icon">' + escapeHtml(i.icon||'•') + '</span><span>' + escapeHtml(i.name) + '</span></div>').join('');
+  return '<div class="inventory"><div class="inv-title">📦 Что нужно</div>' + items + '</div>';
+}
+
+function renderCard(slot) {
+  const inventory = slot.inventory || [];
+  const invHtml = renderInventory(inventory);
+  const kind = slot.kind || '';
+  const kindIcon = KIND_ICON[kind] || '🎯';
+  const tag = (slot.structure && slot.structure.length) || '?';
+
+  // Meta items
+  let metaHtml = '';
+  if (slot.location) metaHtml += '<span class="card-meta-item">📍 ' + escapeHtml(slot.location) + '</span>  ';
+  if (slot.focus) metaHtml += '<span class="card-meta-item">🎯 ' + escapeHtml(slot.focus) + '</span>  ';
+  if (slot.subkind) metaHtml += '<span class="card-meta-item">' + escapeHtml(slot.subkind) + '</span>  ';
+  if (slot.workout_pending) metaHtml += '<span class="card-meta-item" style="color:var(--warn);border-color:rgba(255,155,106,.4);background:rgba(255,155,106,.08)">Zwift pending</span>';
+
+  const stepsHtml = renderStructure(slot.structure, kind);
+
+  return '<div class="card">'
+    + '<div class="card-header">'
+    + '<div>'
+    + '<div style="font-size:20px;margin-right:8px;display:inline-block;vertical-align:middle">' + kindIcon + '</div>'
+    + '<h2 style="display:inline-block;vertical-align:middle;margin:0">' + escapeHtml(slot.name) + '</h2>'
+    + '<div class="card-subtitle">' + escapeHtml(slot.day) + ' · ' + escapeHtml(slot.time) + ' · '
+    + escapeHtml(String(slot.duration_min)) + ' мин</div>'
+    + '</div>'
+    + '<div class="card-tag kind-' + escapeHtml(kind) + '">' + escapeHtml(tag) + ' шагов</div>'
+    + '</div>'
+    + (metaHtml ? '<div style="font-size:11.5px;color:var(--muted);margin:6px 0;display:flex;gap:6px;flex-wrap:wrap">' + metaHtml + '</div>' : '')
+    + invHtml
+    + '<h3>Структура тренировки</h3>'
+    + stepsHtml
+    + '</div>';
+}
+
+function buildPicker(plan) {
+  ACTIVE_WEEK_KEY = plan.weekIso || plan.season_week || null;
+  let html = '<div class="plan-title">';
+  html += '<h1>' + escapeHtml(plan.title || 'Тренировки') + '</h1>';
+  if (plan.weekIso) html += '<div class="week">' + escapeHtml(plan.weekIso) + '</div>';
+  if (plan.subtitle) html += '<div class="week">' + escapeHtml(plan.subtitle) + '</div>';
+  if (plan.rules && plan.rules.hr_zones) {
+    const hrz = (typeof plan.rules.hr_zones === 'string') ? plan.rules.hr_zones : JSON.stringify(plan.rules.hr_zones);
+    html += '<div class="plan-rules">HR: ' + escapeHtml(hrz) + '</div>';
+  }
+  html += '</div>';
+
+  // Слоты
+  for (const s of (plan.slots || [])) {
+    html += '<button class="slot" data-slot="' + escapeHtml(s.id) + '">';
+    html += '<div class="day">' + escapeHtml(s.day) + ' · ' + escapeHtml(s.time) + '</div>';
+    html += '<div class="name">' + escapeHtml(s.name) + '</div>';
+    if (s.short) html += '<div class="desc">' + escapeHtml(s.short) + '</div>';
+    html += '</button>';
+  }
+
+  document.getElementById('picker').innerHTML = html;
+  // Re-bind clicks
+  document.querySelectorAll('.slot').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      showSlot(el.dataset.slot);
+    });
+  });
+}
+
+function showPicker() {
+  document.getElementById('picker').classList.remove('hidden');
+  document.getElementById('picker').classList.add('visible');
+  document.getElementById('cardWrap').classList.add('hidden');
+  document.getElementById('cardWrap').classList.remove('visible');
+  if (window.location.hash) {
+    try { history.replaceState(history.state, '', ' '); } catch(e) {}
+  }
+  window.scrollTo(0, 0);
+}
+
+function showSlot(slot) {
+  document.getElementById('picker').classList.add('hidden');
+  document.getElementById('picker').classList.remove('visible');
+  document.getElementById('cardWrap').classList.remove('hidden');
+  document.getElementById('cardWrap').classList.add('visible');
+
+  const slotDef = (PLAN.slots || []).find(s => s.id === slot);
+  if (!slotDef) {
+    document.getElementById('cardHost').innerHTML = '<div class="card">Слот не найден: ' + escapeHtml(slot) + '</div>';
+  } else {
+    document.getElementById('cardHost').innerHTML = renderCard(slotDef);
+  }
+  try {
+    if (history.state && history.state.page === 'card') {
+      history.replaceState({page: 'card', slot: slot}, '', '#' + slot);
+    } else {
+      history.pushState({page: 'card', slot: slot}, '', '#' + slot);
+    }
+  } catch(e) { history.replaceState(null, '', '#' + slot); }
+  window.scrollTo(0, 0);
+}
+
+window.addEventListener('popstate', (e) => {
+  const state = e.state;
+  if (!state || state.page !== 'card') showPicker();
+});
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (history.state && history.state.page === 'card') history.back();
+  else showPicker();
+});
+
+// Init
+function init() {
+  PLAN = loadPlan();
+  if (!PLAN) {
+    document.getElementById('picker').innerHTML = '<div class="card">Не удалось загрузить план.</div>';
+    return;
+  }
+  buildPicker(PLAN);
+  // Если есть hash — открыть ту карточку
+  const initialHash = window.location.hash.replace('#', '');
+  const validIds = new Set((PLAN.slots || []).map(s => s.id));
+  if (initialHash && validIds.has(initialHash)) {
+    history.replaceState({page: 'init'}, '', ' ');
+    showSlot(initialHash);
+  } else {
+    history.replaceState({page: 'init'}, '', ' ');
+  }
+}
+
+init();
 </script>
 </body></html>"""
 
-    # Build zones HTML
-    zones_html = "".join(
-        f'<div class="zone"><b>{k}</b> {esc(v)}</div>' for k, v in zones.items()
-    )
-
-    # CP HTML
-    if cp_in_range:
-        cp_html = f'<p style="margin:0;font-size:13px">В этой неделе: {", ".join(esc(cp) for cp in cp_in_range)}</p>'
-    else:
-        cp_html = '<p style="margin:0;font-size:13px">Нет контрольных точек в этой неделе.</p>'
-
     # Заполнение плейсхолдеров
-    body_filled = body
-    body_filled = body_filled.replace("__TITLE__", esc(plan.get("title", "plan")))
-    body_filled = body_filled.replace("__PICKER_TITLE__", esc(plan.get("title", "")))
-    body_filled = body_filled.replace("__SW__", esc(str(plan.get("season_week", "?"))))
-    body_filled = body_filled.replace("__ISO__", esc(plan.get("iso_week", "—")))
-    body_filled = body_filled.replace("__SEASON_START__", esc(plan.get("season_start_date", "")))
-    body_filled = body_filled.replace("__PLANNED__", esc(str(planned)))
-    body_filled = body_filled.replace("__TARGET__", esc(str(target)))
-    body_filled = body_filled.replace("__DELTA_SIGN__", delta_sign)
-    body_filled = body_filled.replace("__DELTA__", esc(str(delta)))
-    body_filled = body_filled.replace("__DELTA_CLASS__", delta_class)
-    body_filled = body_filled.replace("__ZONES_HTML__", zones_html)
-    body_filled = body_filled.replace("__PHASE_NAME__", phase_name)
-    body_filled = body_filled.replace("__PHASE_START__", phase_start)
-    body_filled = body_filled.replace("__PHASE_END__", phase_end)
-    body_filled = body_filled.replace("__PHASE_TARGET__", esc(str(phase_target)))
-    body_filled = body_filled.replace("__PHASE_GOAL__", phase_goal_id)
-    body_filled = body_filled.replace("__SLOTS_COUNT__", esc(str(len(slots))))
-    body_filled = body_filled.replace("__PICKER_ITEMS__", picker_html)
-    body_filled = body_filled.replace("__CARD_DETAILS_HTML__", card_details_html)
-    body_filled = body_filled.replace("__CP_HTML__", cp_html)
+    body_filled = body.replace("__TITLE__", esc(plan.get("title", "plan")))
     body_filled = body_filled.replace("__PLAN_DATA__", plan_data_json)
 
     out_path.write_text(body_filled, encoding="utf-8")

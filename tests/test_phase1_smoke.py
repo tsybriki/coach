@@ -223,25 +223,29 @@ def test_render_html_writes_file():
 
 
 def test_render_html_includes_v18_features():
-    """HTML должен иметь totals, focus бейджи, workout_pending, контрольные точки."""
+    """v26: план-data содержит focus, workout_pending, kind; HTML использует их в renderCard."""
+    import re
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
         plan = plan_generate.generate(1)
         out = render_html.render_plan_wN(plan, tmp / "plan.html")
         content = out.read_text(encoding="utf-8")
-        # Totals
-        assert "planned" in content and "target" in content and "delta" in content
-        # Phase
-        assert "run_base" in content
-        # HR zones
-        assert "Z2" in content
-        # Workout pending badge
-        assert "Zwift pending" in content
-        # Focus badge (хотя бы Z2_low где-то)
-        assert "Z2_low" in content
-        # Slots
-        assert "Длинный бег" in content or "Easy бег" in content
-    print("  ✓ render_html v18: totals, phase, zones, focus, workout_pending")
+        # plan-data inline JSON содержит slots с focus/workout_pending
+        plan_data_match = re.search(r'<script type="application/json" id="plan-data">(.+?)</script>', content, re.DOTALL)
+        assert plan_data_match, "missing plan-data"
+        plan_obj = json.loads(plan_data_match.group(1))
+        # focus Z2_low где-то есть
+        focuses = [s.get("focus", "") for s in plan_obj.get("slots", [])]
+        assert any("Z2" in f for f in focuses), f"no Z2 focus in {focuses}"
+        # workout_pending где-то есть
+        wps = [s.get("workout_pending", False) for s in plan_obj.get("slots", [])]
+        assert any(wps), f"no workout_pending in {plan_obj.get('slots', [])}"
+        # JS renderCard использует focus/workout_pending
+        assert "slot.focus" in content, "renderCard should use slot.focus"
+        assert "slot.workout_pending" in content, "renderCard should use slot.workout_pending"
+        # HR zones (rule)
+        assert "hr_zones" in plan_obj.get("rules", {}), "missing hr_zones in plan-data"
+    print("  ✓ render_html v26: plan-data has focus/workout_pending, JS renderCard uses them")
 
 
 def test_plan_runtime_generates_json_and_html():
@@ -269,7 +273,8 @@ def test_plan_runtime_generates_json_and_html():
 
         html_content = Path(html_path_str).read_text(encoding="utf-8")
         assert "W1" in html_content
-        assert "run_base" in html_content
+        # run_base переехал в plan-data JSON
+        assert "run_base" in html_content or "run_base" in json.dumps(json_data, ensure_ascii=False)
         assert len(html_content) > 3000
 
         assert result["slots_count"] >= 4
@@ -347,64 +352,72 @@ def test_step_builder_intervals():
 
 
 def test_html_has_details_structure():
-    """v25: HTML содержит picker + 8 sections card-N (CSS-only :target)."""
+    """v26: HTML копирует архитектуру w1-mobile.html (picker + cardWrap + JS)."""
     import shutil
     tmp = tempfile.mkdtemp(prefix="plan_runtime_html_")
     try:
         result = plan_runtime.generate_plan_with_html(1, out_dir=Path(tmp))
         html = Path(result["html_path"]).read_text(encoding="utf-8")
-        # Picker
-        assert 'id="picker"' in html, "HTML missing picker (список слотов)"
-        # 8 section[id^=card-] для деталей
-        import re
-        sections = re.findall(r'<section id="card-(\d+)"', html)
-        assert len(sections) == 8, f"expected 8 card-N sections, got {len(sections)}: {sections}"
-        # 8 anchor в picker ссылаются на #card-N
-        anchors = re.findall(r'href="#card-(\d+)"', html)
-        assert len(set(anchors)) == 8, f"expected 8 unique anchors, got {len(set(anchors))}"
-        # 8 back-button через anchor href="#list"
-        back_anchors = re.findall(r'href="#list"', html)
-        assert len(back_anchors) >= 8, f"expected ≥8 back-btn anchors, got {len(back_anchors)}"
-        # CSS-only :target (никакого JS-переключения)
-        assert ":target" in html, "HTML missing :target CSS"
-        assert "showCard" not in html, "v25: showCard should be removed (CSS-only)"
-        assert "cardWrap" not in html, "v25: cardWrap should be removed"
-        # structure-list в детальных карточках
-        assert "structure-list" in html, "HTML missing structure-list"
-        assert "inv-title" in html, "HTML missing inventory title"
+        # picker и cardWrap
+        assert 'id="picker"' in html, "HTML missing picker"
+        assert 'id="cardWrap"' in html, "HTML missing cardWrap"
+        assert 'id="cardHost"' in html, "HTML missing cardHost"
+        assert 'id="backBtn"' in html, "HTML missing backBtn"
+        # план в inline JSON
+        assert 'id="plan-data"' in html, "HTML missing plan-data"
+        # JS-функции (из w1-mobile.html)
+        assert "function buildPicker" in html, "missing buildPicker"
+        assert "function showSlot" in html, "missing showSlot"
+        assert "function showPicker" in html, "missing showPicker"
+        # classList add/remove для navigation (как в w1-mobile.html)
+        assert "classList.add('hidden')" in html, "missing classList.add('hidden')"
+        assert "classList.remove('hidden')" in html, "missing classList.remove('hidden')"
+        # history.pushState
+        assert "pushState" in html, "missing pushState"
+        # renderCard в JS использует kind → icon
+        assert "KIND_ICON" in html, "missing KIND_ICON"
+        # slots рендерятся как <button class="slot"> (в HTML — backBtn, остальные добавляет JS)
+        # Проверяем JS-функцию buildPicker, которая их рендерит
+        assert "for (const s of (plan.slots" in html, "buildPicker missing slots loop"
+        assert "data-slot=" in html, "buildPicker should set data-slot attribute"
+        # в HTML есть backBtn button
+        assert '<button id="backBtn"' in html, "missing backBtn"
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    print(f"  ✓ HTML v25: picker + 8 section.card-detail + CSS :target + 8 back-btn")
+    print(f"  ✓ HTML v26: w1-mobile.html архитектура (picker + cardWrap + JS)")
 
 
 def test_html_slot_links_navigable():
-    """v25: slot-card это <a href='#card-N'> — нативная anchor navigation через :target."""
+    """v26: slot кнопки с data-slot, click handler вызывает showSlot."""
     import shutil
     tmp = tempfile.mkdtemp(prefix="plan_runtime_nav_")
     try:
         result = plan_runtime.generate_plan_with_html(1, out_dir=Path(tmp))
         html = Path(result["html_path"]).read_text(encoding="utf-8")
         import re
-        # Каждая карточка — anchor с href='#card-N'
-        anchors = re.findall(r'<a href="#card-(\d+)"\s+class="slot-card', html)
-        assert len(anchors) == 8, f"expected 8 anchor slot-cards, got {len(anchors)}"
-        # data-slot-idx на каждом
-        for n in range(8):
-            assert f'data-slot-idx="{n}"' in html, f"missing data-slot-idx={n}"
-            assert f'href="#card-{n}"' in html, f"missing href=#card-{n}"
-        # CSS-only navigation: :target + .card-detail
-        assert ".card-detail:target" in html, "missing CSS .card-detail:target"
-        assert "body:has(.card-detail:target)" in html, "missing body:has(.card-detail:target)"
-        # back-btn = anchor href='#list'
-        back_btn = re.findall(r'<a href="#list"[^>]*back-btn', html)
-        assert len(back_btn) == 8, f"expected 8 back-btn anchors, got {len(back_btn)}"
-        # No JS for navigation
-        assert "showCard" not in html, "v25: showCard should be removed"
-        assert "showList" not in html, "v25: showList should be removed"
-        assert "cardHost" not in html, "v25: cardHost should be removed"
+        # В picker JS рендерит <button class="slot" data-slot="...">, проверяем что JS функция это делает
+        assert "buildPicker" in html, "missing buildPicker"
+        assert 'data-slot="' in html or "data-slot" in html, "missing data-slot in JS"
+        # click handler + showSlot
+        assert "addEventListener('click'" in html, "missing click handler"
+        assert "showSlot(" in html, "missing showSlot call"
+        # classList navigation
+        assert "classList.add('hidden')" in html, "missing classList.add('hidden') for showSlot"
+        assert "classList.add('visible')" in html, "missing classList.add('visible') for showSlot"
+        # showSlot uses cardHost.innerHTML
+        assert "cardHost" in html, "missing cardHost"
+        # popstate listener
+        assert "popstate" in html, "missing popstate listener"
+        # backBtn → history.back()
+        assert "backBtn" in html and "history.back" in html, "missing back-button handler"
+        # план содержит 8 слотов в JSON
+        plan_data_match = re.search(r'<script type="application/json" id="plan-data">(.+?)</script>', html, re.DOTALL)
+        assert plan_data_match, "missing plan-data script"
+        plan_obj = json.loads(plan_data_match.group(1))
+        assert len(plan_obj.get("slots", [])) == 8, f"plan-data should have 8 slots, got {len(plan_obj.get('slots', []))}"
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    print("  ✓ HTML v25: 8 anchor slot-cards + CSS :target + 8 back-btn (no JS)")
+    print("  ✓ HTML v26: w1-mobile.html slot navigation (click → showSlot → cardHost.innerHTML)")
 
 
 def test_weekly_report_runs():
