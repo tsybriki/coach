@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas.schema.md",
-  "version": 29,
+  "version": 30,
   "title": "Спортивный слой Hermes — полная архитектура",
-  "subtitle": "v29: W1 переписан как фактический лог (plan-w1.json). renderCard показывает actual-блок зелёным, picker помечает выполненные слоты ✓, summary-карточка с буллетами.",
+  "subtitle": "v30: добавлен ПТ-слот в W1 (recovery swim 45мин Z1). Анализ W1 нагрузки через 5 дней: 45.7К бег + 3К пул, 2 пиковые тренировки (10К test + 5К+3К Z3). ПТ = лёгкий пул как active recovery.",
   "blocks": [
     {
       "id": "tldr",
@@ -31,7 +31,8 @@
         "v26 (фикс навигации #5): полностью переписал на архитектуру из w1-mobile.html. picker (visible по умолчанию) + cardWrap (hidden) + backBtn + cardHost. Inline <script type='application/json' id='plan-data'> + loadPlan() + buildPicker() + showSlot() + showPicker() + popstate listener. history.pushState для back-button. classList.add/remove hidden/visible для переключения экранов. renderCard() рендерит details в cardHost.innerHTML. Точная копия логики w1-mobile.html. 27/27 tests passing.",
         "v27 (цельная конфета): навигация из w1-mobile.html + форматирование из v18. buildPicker: plan-title + totals (planned/target/delta) + HR-зоны бейджики + phase-card + control-points + 8 slot-кнопок с иконкой вида спорта + day/time/duration + focus-пилюля. renderCard: иконка вида спорта + название + day/time/duration + meta-row (location/focus/subkind/Zwift-pending) + inventory + structure. Всё работает на JS (как в w1-mobile.html), без CSS-only ухищрений. 27/27 tests passing.",
         "v28: training week = Sun-Sat (было Mon-Sun). W1 = 2026-10-11..17 окт. season_start_date = 2026-10-11 (Sun). season_week_count = 49 (было 48). race_run 18 апр = W28 (было W27, потому что race_date всегда воскресенье, и сдвиг = +1 W). race_tri 12 сен = W49 (было W48). iso_week берётся по понедельнику (Mon=W42 для W1), чтобы season_week не зависел от Sun-старта. Все фазы сдвинуты на -1 день.",
-        "v29 (факт-лог W1): Кирилл записал реальные тренировки 11-17 окт. plan-w1.json перезаписан: 6 сессий / 5.2ч / 45.7К. ВС 10:00 10К test = 44:06 (baseline spring-10k-2027). ПН 18:30 pool 3К. ВТ 09:00 easy 1.5К + 18:30 5К Z2 + 3К прогрессия. СР 17:00 long Z2 1ч. ЧТ 10:30 cross Z2 11.2К. ПТ+СБ — отдых. renderCard: actual-блок зелёным (✅ Факт: distance / time / pace / HR / RPE). buildPicker: actual-badge в заголовке, totals показывает сессий/факт/объём, summary-карточка с буллетами, slot-completed бордер зелёным, ✓ в длительности. 27/27 tests passing."
+        "v29 (факт-лог W1): Кирилл записал реальные тренировки 11-17 окт. plan-w1.json перезаписан: 6 сессий / 5.2ч / 45.7К. ВС 10:00 10К test = 44:06 (baseline spring-10k-2027). ПН 18:30 pool 3К. ВТ 09:00 easy 1.5К + 18:30 5К Z2 + 3К прогрессия. СР 17:00 long Z2 1ч. ЧТ 10:30 cross Z2 11.2К. ПТ+СБ — отдых. renderCard: actual-блок зелёным (✅ Факт: distance / time / pace / HR / RPE). buildPicker: actual-badge в заголовке, totals показывает сессий/факт/объём, summary-карточка с буллетами, slot-completed бордер зелёным, ✓ в длительности. 27/27 tests passing.",
+        "v30 (ПТ recovery swim): добавлен плановый слот ПТ 18:00 — пул 45мин Z1. FIT-файлов за W1 нет (state/fit_store/ пустой, cron не подтянул). Анализ по факт-логу: 5 дней бега, 45.7К, 2 пиковые (10К test 44:06 + 5К Z2 + 3К Z3). Мышцы ног устали, HR-cost повышен. Пул = active recovery без ударной нагрузки. В карточке ПТ нет actual-блока (это план, не факт) — только structure + rationale. 27/27 tests passing."
       ]
     },
     {
