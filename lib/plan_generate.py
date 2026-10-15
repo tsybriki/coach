@@ -1,6 +1,15 @@
 """
 plan_generate.py — season_plan + athlete + constraints + overrides → plan-wN.json.
-Phase 1: скелет с правильной структурой.
+Phase 2: скелет + inline Zwift-поиск для bike/brick-слотов.
+
+INLINE ZWIFT (v16):
+  - plan_generate проверяет constraints.auto_zwift для каждого размещённого bike/brick-слота.
+  - Если слот удовлетворяет правилу (≤ 90 мин, home_stationary_bike, focus) — вызывает
+    coach-plan-zwift.inline_search(criteria) → candidates[] (2-4).
+  - Кирилл голосует по каждому slot одним списком (или 'skip' = оставить без workout_ref).
+  - Для выбранных: zwift_sync.sync_to_garmin(url) → workout_ref в slot.
+  - Это ОДИН этап, не два (ранее был двухшаговый: plan_generate → отдельно zwift_search).
+  - Phase 3: проходит. Inline логика для автономного выполнения, без интерактива.
 """
 from __future__ import annotations
 

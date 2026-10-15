@@ -241,6 +241,18 @@ def test_zwift_search_returns_at_most_4():
     print(f"  ✓ zwift_search.search returned {len(cands)} (≤ 4)")
 
 
+def test_auto_zwift_rule_in_constraints():
+    """auto_zwift правило присутствует и включено в state/constraints.json (v16)."""
+    cn = json.loads(Path(ROOT / "state/constraints.json").read_text(encoding="utf-8"))
+    assert "auto_zwift" in cn, "constraints.json missing auto_zwift rule"
+    az = cn["auto_zwift"]
+    assert az["enabled"] is True
+    assert az["duration_min_max"] == 90
+    assert "home_stationary_bike" in az["locations"]
+    assert "bike" in az["kinds"]
+    print(f"  ✓ auto_zwift: enabled, ≤90min, kinds={az['kinds']}")
+
+
 def main():
     print("\n=== Phase 1 smoke tests ===\n")
     tests = [
@@ -260,6 +272,7 @@ def main():
         test_weekly_report_runs,
         test_zwift_parse_free_text,
         test_zwift_search_returns_at_most_4,
+        test_auto_zwift_rule_in_constraints,
     ]
     failed = 0
     for t in tests:

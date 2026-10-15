@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas.schema.md",
-  "version": 15,
+  "version": 16,
   "title": "Спортивный слой Hermes — полная архитектура",
-  "subtitle": "Фундамент + 5 точек расширения: метрики, replan сезона, W_N с overrides, анализ тренировки (4 уровня), ПОИСК ZWIFT-ТРЕНИРОВОК ПО КРИТЕРИЯМ. control_points живут в season_plan. constraints и volume_progression — параметры планирования. FIT retention = 14 дней. Один взгляд — всё сразу.",
+  "subtitle": "Фундамент + 5 точек расширения: метрики, replan сезона, W_N с overrides (с inline Zwift-поиском для bike/brick ≤1.5ч), анализ тренировки (4 уровня), поиск Zwift-тренировок. Один взгляд — всё сразу.",
   "blocks": [
     {
       "id": "tldr",
@@ -19,7 +19,8 @@
         "Все спортивные skill'ы названы по схеме 'coach-<area>-<verb>'.",
         "Каждое решение моделью логируется в decisions/. Retention-проход логирует, что удалено.",
         "Вес: weight_history[] в athlete.json + авто-синк из Garmin через cron + одна строка в weekly_report + ручная правка через coach-plan-adjust. Без целевого веса, без BMI/калорий, без алертов. Минимум.",
-        "Zwift search: coach-plan-zwift — по критериям (дисциплина, длительность, зоны, тип) ищет workouts на WhatsOnZwift, предлагает 2-4 варианта, Кирилл выбирает, zwift_sync.py конвертит → отправляется в Garmin Connect. Становится частью plan-wN."
+        "Zwift search: coach-plan-zwift — по критериям (дисциплина, длительность, зоны, тип) ищет workouts на WhatsOnZwift, предлагает 2-4 варианта, Кирилл выбирает, zwift_sync.py конвертит → отправляется в Garmin Connect. Становится частью plan-wN.",
+        "Inline Zwift: plan_generate ВНУТРИ одной операции дёргает coach-plan-zwift, если размещённый bike/brick-слот удовлетворяет правилу из constraints.auto_zwift (например duration_min ≤ 90 + location='home_stationary_bike'). Кирилл НЕ ходит отдельно — он видит уже снабжённый workout_ref план. Если правило не сработало (например, outdoor вело) — слот остаётся с duration_min, без workout_ref. Два этапа слиты в один."
       ]
     },
     {
@@ -327,9 +328,13 @@
         {
           "name": "max_total_hours_per_week",
           "purpose": "верхняя граница."
+        },
+        {
+          "name": "auto_zwift",
+          "purpose": "правила для inline Zwift-поиска внутри plan_generate: {enabled:true, duration_min_max:90, locations:['home_stationary_bike'], kinds:['bike','brick'], focus_must_have_any:['Z2','Z3','intervals','endurance'], candidates_max:3}. Когда slot удовлетворяет — plan_generate дёргает coach-plan-zwift inline, без отдельной команды Кирилла."
         }
       ],
-      "rule": "constraints редактируются Кириллом или через coach-plan-adjust с подтверждением. plan_generate только ЧИТАЕТ."
+      "rule": "constraints редактируются Кириллом или через coach-plan-adjust с подтверждением. plan_generate только ЧИТАЕТ. auto_zwift управляет тем, что идёт в Zwift-поиск автоматически. По умолчанию enabled=true, ≤ 90 мин, location=home, kind in [bike, brick]. Зима: всё вело дома → почти все bike-слоты получат workout_ref. Лето/путешествия: Кирилл выключает auto_zwift.enabled, slot-ы остаются duration-only."
     },
     {
       "id": "volume",
@@ -686,45 +691,60 @@
     {
       "id": "weekgen",
       "kind": "flow",
-      "title": "Точка расширения 3 · W_N: season_plan + constraints + overrides",
+      "title": "Точка расширения 3 · W_N: season_plan + constraints + overrides + inline Zwift",
       "steps": [
         {
           "n": 1,
           "name": "Вход сезона",
-          "what": "season_plan.json → phase (goal_id), hours_target."
+          "what": "season_plan.json → phase (goal_id), hours_target, CP_in_range, focus (например 'long Z2' / 'threshold intervals' / 'bike endurance')."
         },
         {
           "n": 2,
           "name": "Вход формы",
-          "what": "athlete.json + weekly_report → fatigue_score."
+          "what": "athlete.json + weekly_report (как прошла ПРЕДЫДУЩАЯ неделя) → fatigue_score, recovery_hr_drop."
         },
         {
           "n": 3,
           "name": "Вход constraints",
-          "what": "weekly_windows, preferred_slots, forbidden."
+          "what": "constraints.json → weekly_windows, preferred_slots, forbidden, auto_zwift (правила для inline Zwift)."
         },
         {
           "n": 4,
-          "name": "Volume check",
-          "what": "volume_check.py: phase_target vs available."
+          "name": "Размещение slot-ов",
+          "what": "plan_generate раскладывает focus-недели по weekly_windows + preferred_slots. Каждый slot имеет: kind, duration_min, day, time, location, focus_tags."
         },
         {
           "n": 5,
-          "name": "Скелет + CP-слоты",
-          "what": "plan-wN.json со слотами + обязательный CP-слот в нужную дату."
+          "name": "Inline Zwift check",
+          "what": "Для каждого bike/brick-слота plan_generate проверяет constraints.auto_zwift: {duration_min_max:90, location:'home_stationary_bike', kind:['bike','brick'], focus_must_have:['Z2','Z3','intervals']}. Если совпало → авто-дёргает coach-plan-zwift inline. Иначе → slot без workout_ref."
         },
         {
           "n": 6,
-          "name": "Применение overrides",
-          "what": "merge overrides + проверка конфликтов."
+          "name": "Inline Zwift candidates",
+          "what": "coach-plan-zwift.search(criteria из slot.focus_tags + duration_min) → candidates[] (2-4). plan_generate пакетно собирает все bike-слоты требующие Zwift, рендерит ОДИН HTML с cards всех slot-ов."
         },
         {
           "n": 7,
+          "name": "Решение Кирилла",
+          "what": "Кирилл голосует по каждому slot (или 'skip — оставить пустым'). Решения в decisions/<date>-<slot>-zwift.json. Если 'skip' — slot остаётся без workout_ref, Кирилл сам выберет workout позже (или сделает на улице)."
+        },
+        {
+          "n": 8,
+          "name": "workout_ref в slot",
+          "what": "Для каждого выбранного candidate: zwift_sync → Garmin Connect → workout_ref = {url, garmin_workout_id, scheduled_date} записывается в plan-wN.json в соответствующий slot."
+        },
+        {
+          "n": 9,
+          "name": "Overrides merge",
+          "what": "merge overrides + проверка конфликтов с focus, CP-датами и forbidden. Slot с workout_ref защищён от override (Кирилл должен явно 'отвязать workout')."
+        },
+        {
+          "n": 10,
           "name": "Выход",
-          "what": "plan-wN.json + diff → render_html.py → wN-mobile.html."
+          "what": "plan-wN.json со всеми slots (часть с workout_ref, часть без) + decisions/audit + render_html.py → wN-mobile.html. Один артефакт, всё сразу."
         }
       ],
-      "key": "Сезон = «закон». Overrides = «поправки». Constraints = «рамка». План не строится в обход рамки."
+      "key": "ОДИН этап планирования. plan_generate раскладывает focus по окнам + INLINE дёргает coach-plan-zwift для bike/brick-слот-ов удовлетворяющих constraints.auto_zwift. Кирилл получает готовый план с workout_ref-ами, без отдельного шага 'искать Zwift'. Если Кирилл хочет перевыбрать workout — команда 'переподбери slot X', plan_generate передаёт в coach-plan-zwift заново. Это НЕ разорванный двухшаговый процесс."
     },
     {
       "id": "zwift_search",
@@ -898,13 +918,13 @@
         },
         {
           "n": 6,
-          "name": "Retention?",
-          "what": "cron (еженедельно) → fit_retention.py → удалить FIT > 14 дней."
+          "name": "Inline Zwift для bike-слотов",
+          "what": "plan_generate проверяет constraints.auto_zwift. Для каждого bike/brick-слота удовлетворяющего правилу (≤90 min, home_stationary_bike, focus) — дёргает coach-plan-zwift inline, собирает candidates, Кирилл голосует голосом, zwift_sync пишет workout_ref в plan-wN.json. Один шаг, не два."
         },
         {
-          "n": 6,
-          "name": "Zwift search?",
-          "what": "если slot требует workout (bike/brick) — coach-plan-zwift → candidates[] → выбор → zwift_sync → Garmin. slot обновляется workout_ref."
+          "n": 7,
+          "name": "Retention?",
+          "what": "cron (еженедельно) → fit_retention.py → удалить FIT > 14 дней."
         },
         {
           "n": 8,
@@ -977,7 +997,7 @@
           "path": "→ coach-plan-week",
           "purpose": "Сгенерировать или поправить план на текущую/следующую неделю.",
           "format_example": "Скажи:",
-          "current_snapshot": "• «собери план на следующую неделю» — plan_generate с goals+constraints.\n• «добавь в эту среду бассейн» — override.\n• «сдвинь длинный с воскресенья на субботу» — override с проверкой конфликтов.\n• «покажи план на эту неделю» — рендер plan-wN.json.\n\nЕсли volume_check сработал (цель фазы не влезает в окна): «покажи кандидатов» → goal_allocator вернёт 2-3 варианта распределения часов между целями с явным trade-off. Выбери → chosen_allocation зафиксируется.\n\nАлиасы: «собери неделю», «сгенерируй W_N», «что в плане», «поправь план».",
+          "current_snapshot": "• «собери план на следующую неделю» — plan_generate с goals+constraints.\n• Inline Zwift: если в constraints.auto_zwift включено и недельный план содержит bike/brick-слот ≤ 90 мин на home_stationary_bike, plan_generate САМ дёргает coach-plan-zwift inline. Ты получаешь план со ссылками на workouts, голосуешь по каждому slot одним из списком (или 'skip'). Один этап.\n• «добавь в эту среду бассейн» — override.\n• «сдвинь длинный с воскресенья на субботу» — override.\n• «покажи план на эту неделю» — рендер plan-wN.json.\n• «переподбери workout на слот X» — coach-plan-zwift заново для конкретного слота.\n\nЕсли volume_check сработал: «покажи кандидатов» → goal_allocator → выбор.\n\nАлиасы: «собери неделю», «сгенерируй W_N», «что в плане», «поправь план», «найди Zwift на среду».",
           "how_to_fill": [
             "Overrides требуют reason. Без причины — нет override.",
             "Если constraints не совпадают с реальностью — скажи «обнови constraints: ...» — coach-plan-adjust спросит подтверждение.",
