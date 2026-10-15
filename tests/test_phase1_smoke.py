@@ -81,11 +81,22 @@ def test_analyze_modes():
 
 
 def test_plan_generate_stub():
-    plan = plan_generate.generate("2026-W42")
-    assert "weekIso" in plan
-    assert "slots" in plan
+    plan = plan_generate.generate(1)  # W1 сезона
+    assert "season_week" in plan
+    assert plan["season_week"] == 1
+    assert "iso_week" in plan
+    assert plan["iso_week"] == "2026-W42"
     assert "phase" in plan
-    print(f"  ✓ plan_generate stub returns plan-w42 (slots={len(plan['slots'])})")
+    assert plan["phase"]["id"] == "run_base"
+    assert "slots" in plan
+    print(f"  ✓ plan_generate W1 returns plan with phase={plan['phase']['id']}, iso={plan['iso_week']}")
+
+    plan_iso = plan_generate.generate("2026-W42")
+    assert plan_iso["season_week"] == 1, "iso→season_week conversion broken"
+
+    plan_w4 = plan_generate.generate(4)
+    assert "cp_3k_w4" in plan_w4["control_points_in_range"], "CP should be in W4 range"
+    print(f"  ✓ plan_generate accepts int/iso/W-string, CP-mapping works")
 
 
 def test_season_replan_archive():
@@ -212,11 +223,12 @@ def test_render_html_writes_file():
 
 
 def test_weekly_report_runs():
-    report = weekly_report.report(week_iso="2026-W42")
-    assert "week_iso" in report
+    report = weekly_report.report(1)  # W1 сезона
+    assert "season_week" in report
+    assert "week_key" in report
     assert "preamble" in report
     assert "weight_line" in report
-    print(f"  ✓ weekly_report runs (weight_line={report['weight_line']!r})")
+    print(f"  ✓ weekly_report W1 (weight_line={report['weight_line']!r})")
 
 
 def test_zwift_parse_free_text():

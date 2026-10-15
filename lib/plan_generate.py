@@ -21,30 +21,48 @@ from typing import Any
 from .volume_check import check_volume
 
 
-def generate(week_iso: str,
+def generate(season_week: int | str,
              season_plan_path: str | Path = "state/season_plan.json",
              athlete_path: str | Path = "state/athlete.json",
              constraints_path: str | Path = "state/constraints.json",
              overrides_path: str | Path = "state/overrides.json") -> dict[str, Any]:
     """
+    season_week: int (1..48) ИЛИ iso_week string ("2026-W42") ИЛИ "W1".
     Phase 1: возвращает структуру plan-wN, заполненную дефолтами.
     Phase 2: реальная генерация — phase, hours_target, control_point_slots, override merge.
     """
+    from .season_week import (season_week_to_iso, season_week_to_dates,
+                              phase_for_season_week, control_points_for_season_week)
+
     sp = json.loads(Path(season_plan_path).read_text(encoding="utf-8"))
     at = json.loads(Path(athlete_path).read_text(encoding="utf-8"))
     cn = json.loads(Path(constraints_path).read_text(encoding="utf-8"))
     ov = json.loads(Path(overrides_path).read_text(encoding="utf-8")) if Path(overrides_path).exists() else {"overrides": []}
 
-    today = datetime.now(timezone.utc).date().isoformat()
-    current_phase = None
-    for ph in sp.get("phases", []):
-        if ph["start"] <= today <= ph.get("end", ph["start"]):
-            current_phase = ph
-            break
+    season_start = sp.get("season_start_date", "2026-10-12")
 
+    # Нормализуем в int season_week
+    if isinstance(season_week, str):
+        if season_week.startswith("W"):
+            sw = int(season_week[1:])
+        elif "W" in season_week:  # iso
+            from .season_week import iso_to_season_week
+            sw = iso_to_season_week(season_week, season_start)
+        else:
+            sw = int(season_week)
+    else:
+        sw = season_week
+
+    week_start, week_end = season_week_to_dates(sw, season_start)
+    iso = season_week_to_iso(sw, season_start)
+
+    # Phase для этой недели
+    current_phase = phase_for_season_week(sw, sp.get("phases", []), season_start)
+
+    # CP в диапазоне
     cp_in_range = [
         cp for cp in sp.get("control_points", [])
-        if cp.get("date", "")[:7] == week_iso[:7]  # упрощённо — по месяцу
+        if cp.get("season_week") == sw
     ]
 
     vc = check_volume(current_phase, cn) if current_phase else {"ok": True}
@@ -52,8 +70,11 @@ def generate(week_iso: str,
     return {
         "$schema": "./plan.schema.md",
         "version": 1,
-        "title": f"{week_iso} · Берлин",
-        "weekIso": week_iso,
+        "title": f"W{sw} · {week_start.isoformat()}..{week_end.isoformat()} · Берлин",
+        "season_week": sw,
+        "iso_week": iso,
+        "weekIso": iso,
+        "season_start_date": season_start,
         "phase": current_phase,
         "chosen_allocation": sp.get("chosen_allocation"),
         "rules": {
@@ -67,5 +88,5 @@ def generate(week_iso: str,
         "control_points_in_range": [cp["id"] for cp in cp_in_range],
         "overrides_applied": [],
         "volume_check": vc,
-        "_generated_by": "lib.plan_generate (Phase 1 stub)",
+        "_generated_by": "lib.plan_generate (Phase 1 stub, season_week v17)",
     }

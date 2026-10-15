@@ -1,7 +1,7 @@
 {
   "schema_version": "0.1.0",
   "weeks": {
-    "2026-W42": {
+    "W1": {
       "planned_hours": 6.5,
       "actual_hours": null,
       "goal_breakdown": {
@@ -10,10 +10,16 @@
       },
       "slots_completed": 0,
       "slots_planned": 9,
-      "notes": "W42 = 12-18 окт. Старт фазы run_base."
+      "notes": "W42 = 12-18 окт. Старт фазы run_base.",
+      "season_week": 1,
+      "iso_week": "2026-W42",
+      "_keys_note": "Primary key is season_week (e.g. 'W1'). iso_week kept for cross-reference."
     }
   },
   "control_points": {},
   "deviations": [],
-  "_source": "history/2026-10-04_Вс.json (Вс 4 окт: 13.6К за 70мин, HR avg 153, TE TEMPO) + plans/plan-w1.json (W42 planned 6.5ч)."
+  "_source": "history/2026-10-04_Вс.json (Вс 4 окт: 13.6К за 70мин, HR avg 153, TE TEMPO) + plans/plan-w1.json (W42 planned 6.5ч).",
+  "_iso_to_season_week": {
+    "2026-W42": "W1"
+  }
 }

@@ -45,7 +45,7 @@ ul{{margin:0;padding-left:18px;font-size:14px;line-height:1.5}}
 .meta{{font-size:12px;color:var(--muted);margin-bottom:14px}}
 </style></head><body><div class="wrap">
 <header><h1>{esc(plan.get('title', ''))}</h1>
-<div class="meta">weekIso: {esc(plan.get('weekIso', '—'))} · CP в диапазоне: {cp_html}</div></header>
+<div class="meta">W{esc(plan.get('season_week', '?'))} · {esc(plan.get('weekIso', '—'))} · CP в диапазоне: {cp_html}</div></header>
 <div class="card"><h2>Слоты</h2>
 <ul>{slots_html or '<li><i>(Phase 1 stub: слоты пока пустые)</i></li>'}</ul></div>
 <div class="card"><h2>Фаза</h2>
@@ -67,7 +67,7 @@ def render_weekly_report(report: dict[str, Any], out_path: str | Path) -> Path:
 <html lang="ru"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Weekly report {esc(report.get('week_iso',''))}</title>
+<title>Weekly report W{esc(report.get('season_week', report.get('week_iso','')))}</title>
 <style>
 :root{{--bg:#0f1115;--panel:#161a22;--accent:#7aa2ff;--text:#e6e9ef;--muted:#9aa3b2}}
 body{{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Roboto,sans-serif;padding:18px 14px}}
@@ -77,7 +77,7 @@ pre{{background:var(--panel);padding:12px;border-radius:8px;overflow-x:auto;font
 .card{{background:var(--panel);border-radius:12px;padding:14px;margin-bottom:12px}}
 .muted{{color:var(--muted);font-size:12px}}
 </style></head><body><div class="wrap">
-<h1>Weekly report · {esc(report.get('week_iso',''))}</h1>
+<h1>Weekly report · W{esc(report.get('season_week', report.get('week_iso','')))}</h1>
 <div class="muted">Phase 1 stub — реальные метрики появятся с FIT'ами</div>
 <div class="card"><h2 style="color:var(--accent);margin:0 0 8px">Pre-amble</h2>
 <pre>{esc(pre_html)}</pre></div>
