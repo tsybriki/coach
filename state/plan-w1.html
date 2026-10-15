@@ -24,17 +24,6 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .hidden{display:none !important}
 .visible{display:flex !important;flex-direction:column;gap:10px}
 
-/* Tracker */
-.tracker{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-.tracker-row{display:flex;justify-content:space-between;align-items:flex-start}
-.tracker-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);font-weight:600;margin-bottom:4px}
-.tracker-points{font-size:18px;font-weight:700}
-.tracker-points small{font-size:11px;color:var(--muted);font-weight:400;margin-left:2px}
-.tracker-week{font-size:11px;color:var(--muted);padding-top:2px}
-.tracker-bar{display:flex;gap:4px;margin-top:8px}
-.tracker-dot{flex:1;height:6px;border-radius:3px;background:var(--panel2)}
-.tracker-dot.filled{background:var(--accent2)}
-
 /* Picker cards */
 .slot-card{
   background:var(--panel);border:1px solid var(--border);border-radius:12px;
@@ -50,8 +39,6 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .slot-dur{margin-left:auto;font-size:11.5px;color:var(--muted);background:var(--panel2);
   padding:2px 8px;border-radius:8px;border:1px solid var(--border)}
 .slot-card-name{font-size:14px;font-weight:600;margin-top:5px}
-.slot-card-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:8px;margin-top:4px;
-  background:var(--panel2);color:var(--muted);text-transform:lowercase;letter-spacing:.3px}
 .tag-run{color:var(--run);border:1px solid rgba(126,200,227,.3);background:rgba(126,200,227,.08)}
 .tag-bike{color:var(--bike);border:1px solid rgba(240,138,90,.3);background:rgba(240,138,90,.08)}
 .tag-swim{color:var(--swim);border:1px solid rgba(92,214,192,.3);background:rgba(92,214,192,.08)}
@@ -148,12 +135,10 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
     <p style="margin:0;font-size:12px;color:var(--muted)">2026-10-12 → 2027-01-03 · target 5ч/нед · goal g_run_spring</p>
   </div>
 
-  <div class="tracker"><div class="tracker-row"><div><div class="tracker-title">Прогресс недели</div><div class="tracker-points">8 <small>слотов</small> · 5 <small>pts ofp</small></div></div><div class="tracker-week">W1</div></div><div class="tracker-bar"><div class="tracker-dot filled"></div><div class="tracker-dot"></div><div class="tracker-dot"></div><div class="tracker-dot"></div><div class="tracker-dot"></div><div class="tracker-dot"></div><div class="tracker-dot"></div></div></div>
-
   <h2 style="margin:14px 0 4px">Тренировки · 8 шт</h2>
   <div style="font-size:12px;color:var(--muted);margin-bottom:4px">тап → детали</div>
 
-  <button class="slot-card tag-run" data-slot-idx="0"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ПН</span><span class="slot-time">18:45</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Easy 5К + прогрессия 3К</div><div class="slot-card-tag tag-run">run</div></button><button class="slot-card tag-run" data-slot-idx="1"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">09:00</span><span class="slot-dur">30мин</span></div><div class="slot-card-name">Easy бег 30мин Z2</div><div class="slot-card-tag tag-run">run</div></button><button class="slot-card tag-run" data-slot-idx="2"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">18:30</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Ключевая: Интервалы 60мин Z3</div><div class="slot-card-tag tag-run">run</div></button><button class="slot-card tag-run" data-slot-idx="3"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">СР</span><span class="slot-time">17:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный бег 90мин Z2_low</div><div class="slot-card-tag tag-run">run</div></button><button class="slot-card tag-bike" data-slot-idx="4"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ЧТ</span><span class="slot-time">10:30</span><span class="slot-dur">45мин</span></div><div class="slot-card-name">Вел-станок Z2 45мин (дома)</div><div class="slot-card-tag tag-bike">bike</div></button><button class="slot-card tag-swim" data-slot-idx="5"><div class="slot-card-head"><span class="slot-icon">🏊</span><span class="slot-day">ПТ</span><span class="slot-time">18:00</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Пул 60мин easy</div><div class="slot-card-tag tag-swim">swim</div></button><button class="slot-card tag-ofp" data-slot-idx="6"><div class="slot-card-head"><span class="slot-icon">💪</span><span class="slot-day">СБ</span><span class="slot-time">10:00</span><span class="slot-dur">25мин</span></div><div class="slot-card-name">ofp core 25мин</div><div class="slot-card-tag tag-ofp">ofp</div></button><button class="slot-card tag-bike" data-slot-idx="7"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ВС</span><span class="slot-time">11:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный вел Z2 90мин</div><div class="slot-card-tag tag-bike">bike</div></button>
+  <a href="#slot-0" class="slot-card tag-run" data-slot-idx="0"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ПН</span><span class="slot-time">18:45</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Easy 5К + прогрессия 3К</div></a><a href="#slot-1" class="slot-card tag-run" data-slot-idx="1"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">09:00</span><span class="slot-dur">30мин</span></div><div class="slot-card-name">Easy бег 30мин Z2</div></a><a href="#slot-2" class="slot-card tag-run" data-slot-idx="2"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">18:30</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Ключевая: Интервалы 60мин Z3</div></a><a href="#slot-3" class="slot-card tag-run" data-slot-idx="3"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">СР</span><span class="slot-time">17:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный бег 90мин Z2_low</div></a><a href="#slot-4" class="slot-card tag-bike" data-slot-idx="4"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ЧТ</span><span class="slot-time">10:30</span><span class="slot-dur">45мин</span></div><div class="slot-card-name">Вел-станок Z2 45мин (дома)</div></a><a href="#slot-5" class="slot-card tag-swim" data-slot-idx="5"><div class="slot-card-head"><span class="slot-icon">🏊</span><span class="slot-day">ПТ</span><span class="slot-time">18:00</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Пул 60мин easy</div></a><a href="#slot-6" class="slot-card tag-ofp" data-slot-idx="6"><div class="slot-card-head"><span class="slot-icon">💪</span><span class="slot-day">СБ</span><span class="slot-time">10:00</span><span class="slot-dur">25мин</span></div><div class="slot-card-name">ofp core 25мин</div></a><a href="#slot-7" class="slot-card tag-bike" data-slot-idx="7"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ВС</span><span class="slot-time">11:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный вел Z2 90мин</div></a>
 
   <div class="card" style="margin-top:14px">
     <h3>Контрольные точки</h3>

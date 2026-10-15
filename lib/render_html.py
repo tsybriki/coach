@@ -212,9 +212,6 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
     hr_zones = rules.get("hr_zones", {})
     zones = hr_zones.get("zones", {})
 
-    ofp_slots = [s for s in slots if s.get("kind") == "ofp"]
-    ofp_points = sum(s.get("duration_min", 0) // 5 for s in ofp_slots)
-
     # Сериализуем платные данные для JS
     plan_data_json = json.dumps({
         "slots": [
@@ -247,9 +244,8 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
         time = esc(s.get("time", ""))
         dur = _duration_str(s.get("duration_min", 0))
         idea = esc(_slot_idea(s))
-        kind_label = esc(kind if kind else "—")
         picker_items.append(
-            f'<button class="slot-card {kind_cls}" data-slot-idx="{idx}">'
+            f'<a href="#slot-{idx}" class="slot-card {kind_cls}" data-slot-idx="{idx}">'
             f'<div class="slot-card-head">'
             f'<span class="slot-icon">{icon}</span>'
             f'<span class="slot-day">{day}</span>'
@@ -257,29 +253,9 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
             f'<span class="slot-dur">{dur}</span>'
             f'</div>'
             f'<div class="slot-card-name">{idea}</div>'
-            f'<div class="slot-card-tag {kind_cls}">{kind_label}</div>'
-            f'</button>'
+            f'</a>'
         )
     picker_html = "".join(picker_items) if picker_items else '<div class="empty">Нет слотов</div>'
-
-    # Tracker bar (только если есть OFP)
-    if ofp_slots:
-        tracker_html = (
-            '<div class="tracker">'
-            '<div class="tracker-row">'
-            f'<div><div class="tracker-title">Прогресс недели</div>'
-            f'<div class="tracker-points">{len(slots)} <small>слотов</small> · {ofp_points} <small>pts ofp</small></div></div>'
-            f'<div class="tracker-week">W{esc(str(plan.get("season_week", "?")))}</div>'
-            '</div>'
-            '<div class="tracker-bar">'
-            + "".join(
-                f'<div class="tracker-dot{" filled" if i < len(ofp_slots) else ""}"></div>'
-                for i in range(7)
-            )
-            + '</div></div>'
-        )
-    else:
-        tracker_html = ""
 
     body = """<!doctype html>
 <html lang="ru"><head>
@@ -307,17 +283,6 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .hidden{display:none !important}
 .visible{display:flex !important;flex-direction:column;gap:10px}
 
-/* Tracker */
-.tracker{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-.tracker-row{display:flex;justify-content:space-between;align-items:flex-start}
-.tracker-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);font-weight:600;margin-bottom:4px}
-.tracker-points{font-size:18px;font-weight:700}
-.tracker-points small{font-size:11px;color:var(--muted);font-weight:400;margin-left:2px}
-.tracker-week{font-size:11px;color:var(--muted);padding-top:2px}
-.tracker-bar{display:flex;gap:4px;margin-top:8px}
-.tracker-dot{flex:1;height:6px;border-radius:3px;background:var(--panel2)}
-.tracker-dot.filled{background:var(--accent2)}
-
 /* Picker cards */
 .slot-card{
   background:var(--panel);border:1px solid var(--border);border-radius:12px;
@@ -333,8 +298,6 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .slot-dur{margin-left:auto;font-size:11.5px;color:var(--muted);background:var(--panel2);
   padding:2px 8px;border-radius:8px;border:1px solid var(--border)}
 .slot-card-name{font-size:14px;font-weight:600;margin-top:5px}
-.slot-card-tag{display:inline-block;font-size:10px;padding:2px 8px;border-radius:8px;margin-top:4px;
-  background:var(--panel2);color:var(--muted);text-transform:lowercase;letter-spacing:.3px}
 .tag-run{color:var(--run);border:1px solid rgba(126,200,227,.3);background:rgba(126,200,227,.08)}
 .tag-bike{color:var(--bike);border:1px solid rgba(240,138,90,.3);background:rgba(240,138,90,.08)}
 .tag-swim{color:var(--swim);border:1px solid rgba(92,214,192,.3);background:rgba(92,214,192,.08)}
@@ -430,8 +393,6 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
     <h3>Фаза · __PHASE_NAME__</h3>
     <p style="margin:0;font-size:12px;color:var(--muted)">__PHASE_START__ → __PHASE_END__ · target __PHASE_TARGET__ч/нед · goal __PHASE_GOAL__</p>
   </div>
-
-  __TRACKER_HTML__
 
   <h2 style="margin:14px 0 4px">Тренировки · __SLOTS_COUNT__ шт</h2>
   <div style="font-size:12px;color:var(--muted);margin-bottom:4px">тап → детали</div>
@@ -584,13 +545,21 @@ function showList() {
 }
 
 document.querySelectorAll('.slot-card').forEach((btn) => {
-  btn.addEventListener('click', () => showCard(parseInt(btn.dataset.slotIdx, 10)));
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showCard(parseInt(btn.dataset.slotIdx, 10));
+  });
 });
 document.getElementById('backBtn').addEventListener('click', () => showList());
 window.addEventListener('popstate', () => {
   const h = (location.hash || '').replace('#','');
   if (h.startsWith('slot-')) showCard(parseInt(h.slice(5), 10));
   else showList();
+});
+// Fallback: если hash установлен при загрузке (открыли по прямой ссылке), показываем карточку
+document.addEventListener('DOMContentLoaded', () => {
+  const h = (location.hash || '').replace('#','');
+  if (h.startsWith('slot-')) showCard(parseInt(h.slice(5), 10));
 });
 </script>
 </body></html>"""
@@ -624,7 +593,6 @@ window.addEventListener('popstate', () => {
     body_filled = body_filled.replace("__PHASE_END__", phase_end)
     body_filled = body_filled.replace("__PHASE_TARGET__", esc(str(phase_target)))
     body_filled = body_filled.replace("__PHASE_GOAL__", phase_goal_id)
-    body_filled = body_filled.replace("__TRACKER_HTML__", tracker_html)
     body_filled = body_filled.replace("__SLOTS_COUNT__", esc(str(len(slots))))
     body_filled = body_filled.replace("__PICKER_ITEMS__", picker_html)
     body_filled = body_filled.replace("__CP_HTML__", cp_html)

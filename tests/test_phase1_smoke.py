@@ -377,6 +377,31 @@ def test_html_has_details_structure():
     print(f"  ✓ HTML v21: picker + cardWrap + backBtn + renderInventory + renderSteps + renderOfpSteps")
 
 
+def test_html_slot_links_navigable():
+    """v21+: slot-card это <a href='#slot-N'> — нативная anchor навигация, работает везде."""
+    import shutil
+    tmp = tempfile.mkdtemp(prefix="plan_runtime_nav_")
+    try:
+        result = plan_runtime.generate_plan_with_html(1, out_dir=Path(tmp))
+        html = Path(result["html_path"]).read_text(encoding="utf-8")
+        # Каждая карточка — anchor с href, не button
+        import re
+        anchor_count = len(re.findall(r'class="slot-card\s+[^"]+"', html))
+        assert anchor_count >= 8, f"expected ≥8 anchor slot-cards, got {anchor_count}"
+        # href указывает на #slot-N
+        for n in range(8):
+            assert f'href="#slot-{n}"' in html, f"missing href=#slot-{n}"
+        # click handler вызывает preventDefault + showCard
+        assert "e.preventDefault()" in html, "missing preventDefault in click handler"
+        assert "showCard(parseInt" in html, "missing showCard handler"
+        # hash routing: popstate + DOMContentLoaded fallback
+        assert "popstate" in html, "missing popstate listener"
+        assert "DOMContentLoaded" in html, "missing DOMContentLoaded fallback"
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    print("  ✓ HTML v21: 8 anchor slot-cards + click handler + hash routing")
+
+
 def test_weekly_report_runs():
     report = weekly_report.report(1)  # W1 сезона
     assert "season_week" in report
@@ -486,6 +511,7 @@ def main():
         test_step_builder_long_run,
         test_step_builder_intervals,
         test_html_has_details_structure,
+        test_html_slot_links_navigable,
     ]
     failed = 0
     for t in tests:
