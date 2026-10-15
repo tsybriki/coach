@@ -53,3 +53,36 @@
 ## Где смотреть для подтверждения
 
 Если FIT появятся (`~/.hermes/coach/runs/*.fit` или `state/fit_store/index.json` не пуст) — `lib/parse_fit.py` через `garmin_tools/fit_inspect.py json <path>`. Метрики: HR drift, pace variability, fatigue score. Поля мапятся в `slot.actual` для архивных сессий.
+
+## Паттерн recovery после race_test (W1 в season)
+
+Когда W1 содержит race test (10К @ race pace, RPE 8/10, avg_pace 4:24) — **следующий день** это не бег, а **recovery swim Z1** (45мин, носовое дыхание, без форсирования). Стандартный паттерн:
+
+- ВС 10:00 — 10К test (race, RPE 8, baseline)
+- ПН 18:30 — пул Z1 (recovery, RPE 5, без distance_km)
+- ВТ 09:00 — easy 1.5К Z2_low (RPE 3)
+- ВТ 18:30 — 5К Z2 + 3К Z3 (key session, RPE 7)
+- СР 17:00 — long Z2_low 1ч (RPE 5)
+- ЧТ 10:30 — cross Z2 11К (RPE 5)
+- ПТ 18:30 — recovery_swim Z1 (45мин, носовое дыхание)
+
+Это **дефолт** Кирилла для первой недели сезона. Если говорит «пятница пустая, сгенери» после race-test недели — recovery swim, не бег. Если говорит «другая тренировка на пятницу» — спрашивай: easy бег, кросс, или OFП circuit (12 упр)?
+
+## Шаблон race-then-recovery-swim
+
+```python
+# Добавить recovery swim в plan-wN.json (actual-лог)
+new_slot = {
+    "id": "пт-recovery_swim",
+    "day": "ПТ", "date": "2026-10-16", "time": "18:00",
+    "name": "Пул 45мин Z1 (восстановление)",
+    "kind": "swim", "subkind": "easy_recovery", "focus": "Z1",
+    "location": "pool", "duration_min": 45,
+    "structure": [
+        {"phase": "warmup", "duration_min": 5,  "zone": "Z1", "notes": "200м разминка."},
+        {"phase": "work",   "duration_min": 30, "zone": "Z1", "notes": "1.5-2К кроль, каждое 4-ое 50м на спине. Носовое дыхание 6-8 гребков."},
+        {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "notes": "200м заминка + растяжка плеч."}
+    ],
+    "rationale": "Active recovery после 4 дней бега с пиковой нагрузкой (10К test + 5К Z2 + 3К Z3 + 10.6К Z2_low + 11.2К Z2)."
+}
+```

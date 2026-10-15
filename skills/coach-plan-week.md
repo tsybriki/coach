@@ -93,18 +93,16 @@
 
 **Pitfall — FIT-файлы могут отсутствовать:** `state/fit_store/index.json` может быть пуст даже при включённом cron-синке. Перед тем как «достать пробежки и посмотреть на стресс-левел» — проверь `state/fit_store/index.json` и `~/.hermes/coach/runs/`. Если FIT за нужный период нет, **анализируй нагрузку через `slot.actual`** в plan-wN.json (RPE, distance, time, HR avg) — это твой fallback, не итерируй в попытках загрузить FIT.
 
-## Basis-aware rendering структуры (v35) — для модели-наполнителя
+## Basis-aware rendering структуры (v35-v36) — для модели-наполнителя
 
 Структура тренировки в `slot.structure[]` имеет поле `basis` которое определяет **что показывать** в рендере:
 
 - `step.basis: "time"` (default) — показываем `duration_min` + опционально `hr_target`. Пример: `Z3 work 1мин HR 165` или `Z2 work 25мин @ 5:00/км`.
 - `step.basis: "distance"` — показываем `distance_m` + `pace_min_per_km`, **НЕ выводим** `duration_min` (время обманчиво, 150м @ 3:40 может занять 0:32, а 250м трусцой 1:25-1:30 в зависимости от дня). Пример: `Z4 work 150м @ 3:40/км`.
 
-**Top-level set** рендерит total по `basis`:
-- `basis: "time"` + `duration_min: 18` + `reps: 6` → `set · 18мин × 6`
-- `basis: "distance"` + `reps: 6` + work sub-step `distance_m: 150` → `set · 900м × 6` (авто-сумма work × reps, переключение `м`/`К` на 1000)
+**Top-level set** рендерит header **ТОЛЬКО** `label × N` — **без автоматического умножения work.distance_m × reps в total объём** (v36: Кирилл «зачем умножил 6 на 150? не пиши объём, просто интервалы»). Если модель хочет показать объём — кладёт его в `step.label` (например `"6×150+250 = 2.4К"`) или в отдельное поле.
 
-**Sub-шаги внутри set (set_repeats[])** никогда не показывают `notes` — Кирилл: «буквы дальше — бесполезны». Top-level шаги (warmup/cooldown/одиночный work) — могут иметь notes.
+**Sub-шаги внутри set (set_repeats[])** и **top-level шаги** (warmup/cooldown/work) — **никогда** не показывают `notes` (v36: Кирилл «подпись внизу уродская, убери, чтобы больше никуда не попадала»). Модель может класть notes, они тихо игнорируются. Это **полная** отмена notes — не только в sub-шагах, как было в v35.
 
 **Поля структуры:**
 - `step.phase: "warmup" | "work" | "cooldown" | "set" | "main"` — тип шага
@@ -114,14 +112,15 @@
 - `step.hr_target: int` — опционально (число, для HR-only сессий)
 - `step.pace_min_per_km: str` — опционально ("3:40" или "5:00→4:30")
 - `step.zone: str` — Z1..Z6
-- `step.notes: str` — выводится только в top-level (warmup/cooldown/одиночный work)
+- `step.notes: str` — НЕ рендерится (v36, полная отмена)
 - `step.reps: int` — только для `phase: "set"`
 - `step.set_repeats: list[step]` — sub-шаги внутри set
+- `step.label: str` — заголовок set'а (default "set"). Модель кладёт: `"интервалы"`, `"ОФП circuit"`, `"длинная"`, и т.д. Появляется в `<span class="step-phase">`
 
 **Пример time-based set (HR-сессия):**
 ```json
 {
-  "phase": "set", "reps": 6, "duration_min": 18,
+  "phase": "set", "label": "set", "reps": 6, "duration_min": 18,
   "set_repeats": [
     {"phase": "work", "duration_min": 1, "zone": "Z3", "hr_target": 165},
     {"phase": "recovery", "duration_min": 2, "zone": "Z2", "hr_target": 135}
@@ -132,13 +131,15 @@
 **Пример distance-based set (стадионные интервалы):**
 ```json
 {
-  "phase": "set", "basis": "distance", "reps": 6,
+  "phase": "set", "label": "интервалы", "basis": "distance", "reps": 6,
   "set_repeats": [
     {"phase": "work", "basis": "distance", "distance_m": 150, "zone": "Z4", "pace_min_per_km": "3:40"},
     {"phase": "recovery", "basis": "distance", "distance_m": 250, "zone": "Z1", "pace_min_per_km": "5:45"}
   ]
 }
 ```
+
+Header рендерится: `интервалы × 6` (без `900м` или любого auto-multiplied total).
 
 ## Никогда не смешивать kind в одном слоте (v32)
 
@@ -271,6 +272,44 @@ Telegram: "План W1 готов · 7 слотов · 2 Zwift pending · state/
 ## Pitfall — три неудачные итерации одной и той же ошибки
 
 Если ты уже дважды пробовал починить одну и ту же проблему (особенно навигацию/reactive UI/state management) и обе попытки не сработали — **остановись и перечитай `state/w1-mobile-reference.html` построчно**. Не делай третью попытку «по мотивам». Референс — это не «вдохновение», это **готовый рабочий пример**: `<div id="picker" class="picker visible">`, `<div id="cardWrap" class="hidden">`, `<button id="backBtn">`, `<div id="cardHost">`, `<script type="application/json" id="plan-data">` + JS `loadPlan/buildPicker/showSlot/showPicker/renderCard/init` с `classList.add/remove('hidden'/'visible')` и `history.pushState`. Копируй **механизм**, а не поверхностный паттерн.
+
+## Pitfall — ReferenceError из-за путаницы `s` vs `st` в renderHrStructure (v37)
+
+При правках `renderHrStructure` в `lib/render_html.py` легко использовать `s` в top-level блоке, где переменная называется `st` (а `s` осталась от sub-шагов через `.map((s) => ...)`). JS не падает на этапе парсинга — `s` становится undefined и runtime выкидывает `ReferenceError: s is not defined` на первом же top-level шаге с `pace_min_per_km`. Кирилл увидит это как «пустая страница с кнопкой назад» при клике на run-карточку (OFP идёт через `renderOfpStructure` и не задевает эту ветку).
+
+**Защита:** рендери `plan-w1.html` через `render_html.render_plan_wN(plan, out)`, извлекай JS-исходник из `<script>`, eval'и его в **настоящем node.js** с мок-DOM, вызывай `renderCard(slot)` для каждого слота в `plan.slots`. Падает на любом `ReferenceError` / `TypeError` / пустой результат (<50 chars).
+
+Тест `test_render_html_every_slot_renders` (v37) делает это для всех 8 слотов W1. Если node.js недоступен — тест пропускается. Если `render_html.py` падает — тест падает. Это **единственный** тест, который запускает реальный JS, потому что HTML-размер + строковые проверки в source не ловят runtime-ошибки (v36 прошёл все v33/v34 строковые проверки но дал `s is not defined` в рантайме).
+
+```python
+# Шаблон для диагностики (если Кирилл снова скажет «карточка пустая»):
+import subprocess, json
+from pathlib import Path
+from lib import render_html
+plan = json.load(open('state/plan-wN.json'))
+out = Path('/tmp/test.html')
+render_html.render_plan_wN(plan, out)
+js_script = '''
+const fs = require('fs');
+const html = fs.readFileSync('OUT', 'utf-8');
+const dataMatch = html.match(/<script type="application\\/json" id="plan-data">([\\s\\S]*?)<\\/script>/);
+const planData = JSON.parse(dataMatch[1]);
+const scripts = html.match(/<script>([\\s\\S]*?)<\\/script>/g) || [];
+const lastScript = scripts[scripts.length - 1].replace(/^<script>/, '').replace(/<\\/script>$/, '').replace(/init\\(\\);[\\s]*$/, '');
+const elements = {};
+global.document = { getElementById: (id) => elements[id] = elements[id] || { innerHTML: '', classList: { add: () => {}, remove: () => {} }, addEventListener: () => {} } };
+global.history = { state: null, pushState: () => {}, replaceState: () => {} };
+global.window = { scrollTo: () => {}, addEventListener: () => {} };
+global.location = { hash: '' };
+try { eval(lastScript); for (const slot of planData.slots) { const c = renderCard(slot); if (c.length < 50) { console.log('SHORT:'+slot.id); process.exit(1); } } console.log('OK'); }
+catch (e) { console.log('ERROR:'+e.message); process.exit(1); }
+'''.replace('OUT', str(out))
+result = subprocess.run(['node', '-e', js_script], capture_output=True, text=True, timeout=15)
+print('stdout:', result.stdout)
+print('stderr:', result.stderr)
+```
+
+Если видишь `ERROR: <message>` — это твой баг в render_html.py. Если `OK` — рендеринг в HTML корректный, проблема в окружении (Telegram preview, файл не открывается и т.д.).
 
 ## Aliases (для совместимости со старыми названиями)
 
