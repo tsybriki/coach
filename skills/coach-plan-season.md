@@ -8,6 +8,10 @@
 **Выход:** новый `season_plan.json` + `decisions/<date>-replan.json` + архив старого + **regenerated plans для затронутых W_N** (каждая с JSON+HTML).
 **Правило v19:** После replan нужно регенерировать планы на затронутые сезонные недели — каждая регенерация порождает пару `plan-wN.json + plan-wN.html`.
 
+## UX-представление (v21, см. coach-plan-week)
+
+После replan все регенерированные `state/plan-wN.html` должны следовать **двухэкранной мобильной навигации** (picker → cardWrap), иметь **structure в каждом slot** (warmup/work/cooldown с зонами или reps), и **design tokens** сохранены в `:root`. Подробности — в `references/plan-html-render.md`.
+
 ## Запрещено
 
 - Менять goals[] без явной команды Кирилла.
