@@ -37,7 +37,10 @@ STABLE_SCHEMA_KEYS = [
     "fit_id", "date", "type", "source",
     # Movement-corrected (canonical):
     "distance_km", "duration_min", "avg_pace_min_per_km", "avg_hr", "max_hr", "min_hr",
-    "cadence_avg", "stride_cm", "steps",
+    "cadence_avg", "cadence_avg_watch", "cadence_avg_stryd",
+    "cadence_disagreement_abs_mean_spm",
+    "stryd_running_dynamics",
+    "stride_cm", "steps",
     "elevation_gain_m", "elevation_loss_m", "temperature_avg_c", "calories",
     "training_effect", "splits", "recovery_hr_drop", "hr_drift_bpm",
     # Raw time helpers (for audit / drift analysis):
@@ -136,12 +139,33 @@ def _hr_avg(values: list[Optional[int]]) -> float:
 
 
 def _summarize_moving(moving: list[dict]) -> dict:
-    """Compute pace, HR, cadence, distance, hr_drift from a moving-only subset."""
+    """Compute pace, HR, cadence, distance, hr_drift from a moving-only subset.
+
+    Cadence: returns BOTH `cadence_avg` (from watch, primary) and `cadence_stryd_avg`
+    when a Stryd footpod is present. Stryd is generally the cleaner source on
+    outdoor runs because the watch's wrist accelerometer over-counts during arm
+    swing. Cross-source mean absolute difference is reported as
+    `cadence_disagreement_abs_mean_spm` — values > 2 spm on a long stretch mean
+    one source is wrong (usually watch on treadmill or in heavy-arm-motion hike).
+
+    Stryd Running Dynamics (when present): vertical oscillation, stance time,
+    step length, form/air power. Power is in watts, length in cm/mm.
+    """
     if not moving:
         return {}
     hrs = [r.get("hr") for r in moving]
-    cads = [r.get("cadence") for r in moving]
+    cads_watch = [r.get("cadence_watch") for r in moving]
+    cads_stryd = [r.get("cadence_stryd") for r in moving]
     dists = [r.get("dist_m") for r in moving]
+
+    # Stryd running dynamics (optional — None if no footpod)
+    vo = [r.get("stryd_vo_cm") for r in moving]
+    stance_ms = [r.get("stryd_stance_ms") for r in moving]
+    stance_pct = [r.get("stryd_stance_pct") for r in moving]
+    step_mm = [r.get("stryd_step_mm") for r in moving]
+    form_w = [r.get("stryd_form_power_w") for r in moving]
+    air_w = [r.get("stryd_air_power_w") for r in moving]
+    power_w = [r.get("stryd_power_w") for r in moving]
 
     # Moving time = number of "moving seconds" = sum across consecutive records of
     # the smaller-of(gap, 1). A gap > 1 means the runner was paused in between —
@@ -175,7 +199,38 @@ def _summarize_moving(moving: list[dict]) -> dict:
     avg_hr = _hr_avg(hrs)
     max_hr = _hr_max(hrs)
     min_hr = _hr_min(hrs)
-    cad_avg = _hr_avg(cads)
+
+    # Cadence from watch (always present on Garmin running activities)
+    cad_watch_avg = _hr_avg(cads_watch)
+    cad_stryd_avg = _hr_avg(cads_stryd) if any(c is not None for c in cads_stryd) else 0.0
+    cadence_disagreement = 0.0
+    if cad_stryd_avg > 0:
+        pairs = [(w, s) for w, s in zip(cads_watch, cads_stryd) if w is not None and s is not None]
+        if pairs:
+            cadence_disagreement = round(
+                sum(abs(s - w) for w, s in pairs) / len(pairs), 2
+            )
+
+    # Stryd running dynamics (None when footpod absent)
+    def _safe_stat(key, vals, agg):
+        xs = [v for v in vals if v is not None]
+        if not xs:
+            return 0.0 if agg != "count" else 0
+        if agg == "avg":
+            return round(sum(xs) / len(xs), 1)
+        if agg == "min":
+            return round(min(xs), 1)
+        if agg == "max":
+            return round(max(xs), 1)
+        return 0
+
+    vo_avg = _safe_stat("vo", vo, "avg")
+    stance_avg = _safe_stat("stance_ms", stance_ms, "avg")
+    step_avg = _safe_stat("step_mm", step_mm, "avg")
+    form_avg = _safe_stat("form_w", form_w, "avg")
+    air_avg = _safe_stat("air_w", air_w, "avg")
+    power_avg = _safe_stat("power_w", power_w, "avg")
+    stryd_present = any(v is not None for v in vo)
 
     if distance_m > 0 and moving_s > 0:
         avg_pace_min_per_km = moving_s / (distance_m / 1000.0) / 60.0
@@ -190,16 +245,30 @@ def _summarize_moving(moving: list[dict]) -> dict:
         if first and second:
             hr_drift_bpm = round(_hr_avg(second) - _hr_avg(first), 2)
 
-    return {
+    out = {
         "moving_s": moving_s,
         "distance_m": distance_m,
         "avg_hr": round(avg_hr, 1),
         "max_hr": int(max_hr),
         "min_hr": int(min_hr),
-        "cadence_avg": round(cad_avg, 1),
+        "cadence_avg": round(cad_watch_avg, 1),
+        "cadence_stryd_avg": round(cad_stryd_avg, 1),
+        "cadence_disagreement_abs_mean_spm": cadence_disagreement,
         "avg_pace_min_per_km": round(avg_pace_min_per_km, 2),
         "hr_drift_bpm": hr_drift_bpm,
     }
+    if stryd_present:
+        out["stryd"] = {
+            "vertical_oscillation_cm_avg": vo_avg,
+            "stance_time_ms_avg": stance_avg,
+            "step_length_mm_avg": step_avg,
+            "step_length_m_avg": round(step_avg / 1000.0, 3),
+            "form_power_w_avg": form_avg,
+            "air_power_w_avg": air_avg,
+            "power_w_avg": power_avg,
+            "samples": sum(1 for v in vo if v is not None),
+        }
+    return out
 
 
 def _splits_per_km(moving: list[dict]) -> list[dict]:
@@ -385,7 +454,13 @@ def _normalize(garmin_output: dict, streams: Optional[list[dict]] = None) -> dic
         "avg_hr": avg_hr,
         "max_hr": max_hr_v,
         "min_hr": min_hr_v,
-        "cadence_avg": cadence_v,
+        # Cadence: watch-derived primary, Stryd-derived secondary when footpod is present
+        "cadence_avg": cadence_v,                                       # watch (back-compat)
+        "cadence_avg_watch": round(moving_summary.get("cadence_avg", cadence_v), 1),
+        "cadence_avg_stryd": round(moving_summary.get("cadence_stryd_avg", 0.0), 1),
+        "cadence_disagreement_abs_mean_spm": moving_summary.get("cadence_disagreement_abs_mean_spm", 0.0),
+        # Stryd Running Dynamics (when footpod present):
+        "stryd_running_dynamics": moving_summary.get("stryd") or {},
         "stride_cm": 0.0,
         "steps": 0,
         "elevation_gain_m": round(session.get("total_ascent") or 0, 1),
@@ -402,7 +477,7 @@ def _normalize(garmin_output: dict, streams: Optional[list[dict]] = None) -> dic
         "pause_total_s": sum(int(p["dur_s"]) for p in pause_segments),
         "pause_segments": pause_segments,
         "file_hash": digest,
-        "_schema_version": "0.3.0",
+        "_schema_version": "0.4.0",
         "_parser": "garmin_tools/fit_inspect.py",
         "_source_path": garmin_output.get("file", {}).get("path", ""),
     }
