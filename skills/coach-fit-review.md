@@ -98,16 +98,15 @@
 
 Сенсоры с разной физикой — цифры напрямую не сравниваются:
 
-- **Watch (FR 965 accelerometer на запястье)**: `cadence_watch` (lowercase FIT). Garmin Running Dynamics (lowercase FIT) считает Vertical Oscillation, Stance Time, Step Length и т.д. по грубому wrist-integrate.
-- **Stryd (IMU в ботинке)**: `cadence_stryd` (capitalized FIT). Stryd Vertical Oscillation, Ground Time, Form Power, Air Power, Stryd Power — это **другая** физика (footpod), другие sensor fusion'ы.
-- **Fit-parser** (parse_fit 0.5.0): разводит поля — `garmin_vo_cm` vs `stryd_vo_cm`, `garmin_stance_ms` vs `stryd_ground_time_ms`. Источник возвращается в `stryd_running_dynamics.{vo_source,stance_source}`. **Никогда не подставляй нормы/нормали одного источника к цифрам другого** (на одном и том же беге Garmin VO ≈ 10.7 см и Stryd VO ≈ 6.3 см — это **не** противоречие, это разные метрики).
+- **Watch (FR 965 accelerometer на запястье)**: `cadence_watch` (lowercase FIT). Garmin Running Dynamics (lowercase FIT) — wrist-integrate. Требует нагрудного ремня для полного RD-профиля.
+- **Stryd (IMU в ботинке)**: `cadence_stryd` (capitalized FIT). Stryd Vertical Oscillation, Ground Time, Form/Air/Stryd Power — footpod fusion.
 
-**Какой источник truth для тренда:**
-- Garmin RD — то, что в Garmin Connect UI, архив длиннее.
-- Stryd footpod — точнее в моменте, но архив только с W2.
-- Выбери один для тренда, держись. Не смешивай цифры в одной таблице без аннотации источника.
+**Source-of-truth: STRYD** (per Кирилл, 2026-10-15: «Берём stryd. Garmin rd требует нагрудного ремня. Я не всегда его беру»). Схема `parse_fit 0.5.0`:
+- `_pick("stryd_*", "garmin_*")` — Stryd preferred, Garmin RD fallback.
+- `stryd_running_dynamics.{vertical_oscillation_source,stance_source}` = `"stryd"` сейчас.
+- `_garmin_*` поля всё равно возвращаются для cross-source sanity (НЕ смешивать цифры в одной таблице без аннотации источника).
 
-**Когда Garmin RD недоступен:** `stryd_running_dynamics.{vertical_oscillation_source,stance_source}` = `"stryd"`. Это нормально для FR 965 (иногда профиль не пишет Garmin RD), не баг парсера. В этом случае в отчёте явно отмечай: «Garmin RD отсутствует, цифры от Stryd».
+**Главный trap**: `_pick` и `vo_source_label`/`stance_source_label` — две независимые переменные. Если переключаешь приоритет — обновляй ОБЕ строчки синхронно. Баг в 0.5.0-rc1: переключил `_pick`, но забыл про resolution-блок ниже, в итоге 14 окт FIT отдавал Garmin RD хотя Stryd 6.5 см уже был. Исправлено: `vo_vals = vo_stryd_raw or vo_garmin`, не наоборот.
 
 Детальный разбор двух сенсоров и FIT-уровень: `references/garmin-rd-vs-stryd.md`.
 

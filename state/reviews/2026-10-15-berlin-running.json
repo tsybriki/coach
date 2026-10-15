@@ -11,10 +11,10 @@
   "title": "Berlin Running · 2026-10-15",
   "date": "2026-10-15",
   "sport": "running",
-  "summary_line": "65:09 moving / 11.50 km @ 5:40/км / HR avg 138 · negative split · cad 85-86 к финишу · VO 6.3 см (Stryd)",
+  "summary_line": "65:09 moving / 11.50 km @ 5:40/км / HR avg 138 · negative split · cad 85-86 к финишу · Stryd VO 6.3 см / GT 293 мс",
   "brief": [
     "65:09 в движении (3:46 пауз мелких, без ОФП), 11.50 км с negative split'ом (km 1: 6:53 → km 9: 5:32). Лучшая пробежка по структуре после 14 окт.",
-    "Stryd footpod показал Vertical Oscillation **6.3 см** — это **отличная** цифра (норма для элиты 5-8 см). Раньше я тебе сказал «VO высоковат» по цифре 10.7 см из Garmin Connect — это Garmin RD (другая метрика, датчик на запястье), сегодня он не записался. Сравни в следующих пробежках, какому сенсору доверять.",
+    "Stryd footpod показал Vertical Oscillation **6.3 см** и Ground Time **293 мс** — норма для любителя на 5:30 (типичный коридор 270-310 мс). Элита ниже 260, ты в правильной зоне. Каденс добрался до 85-86 spm в последние 3 км.",
     "Каденс добрался до 85-86 spm в последние 3 км (Watch и Stryd согласованы, |Δ|=0.52). Z3 63% + Z4 10% = 73% выше Z2_low — то же что 14 окт. Действие: следующая лёгкая пробежка — 5:50/км целенаправленно."
   ],
   "metrics": {
@@ -43,13 +43,41 @@
       "data": {
         "hr_max": 182,
         "zones": [
-          {"name": "Z1",     "sec": 128,  "pct": 3.3},
-          {"name": "Z1.5",   "sec": 119,  "pct": 3.0},
-          {"name": "Z2",     "sec": 788,  "pct": 20.2},
-          {"name": "Z3",     "sec": 2478, "pct": 63.4},
-          {"name": "Z4",     "sec": 397,  "pct": 10.2},
-          {"name": "Z5",     "sec": 0,    "pct": 0.0},
-          {"name": "Z6",     "sec": 0,    "pct": 0.0}
+          {
+            "name": "Z1",
+            "sec": 128,
+            "pct": 3.3
+          },
+          {
+            "name": "Z1.5",
+            "sec": 119,
+            "pct": 3.0
+          },
+          {
+            "name": "Z2",
+            "sec": 788,
+            "pct": 20.2
+          },
+          {
+            "name": "Z3",
+            "sec": 2478,
+            "pct": 63.4
+          },
+          {
+            "name": "Z4",
+            "sec": 397,
+            "pct": 10.2
+          },
+          {
+            "name": "Z5",
+            "sec": 0,
+            "pct": 0.0
+          },
+          {
+            "name": "Z6",
+            "sec": 0,
+            "pct": 0.0
+          }
         ]
       }
     },
@@ -60,28 +88,169 @@
       "summary": "Negative split: km 1: 6:53 → km 9: 5:32. Каденс растёт по ходу (80 → 86). Лучшая структура тренировки.",
       "data": {
         "columns": [
-          {"key": "km",    "label": "км"},
-          {"key": "dur",   "label": "dur"},
-          {"key": "pace",  "label": "pace"},
-          {"key": "hr",    "label": "HR"},
-          {"key": "cadW",  "label": "cW"},
-          {"key": "cadS",  "label": "cS"},
-          {"key": "formW", "label": "form W"},
-          {"key": "airW",  "label": "air W"},
-          {"key": "powW",  "label": "pow W"}
+          {
+            "key": "km",
+            "label": "км"
+          },
+          {
+            "key": "dur",
+            "label": "dur"
+          },
+          {
+            "key": "pace",
+            "label": "pace"
+          },
+          {
+            "key": "hr",
+            "label": "HR"
+          },
+          {
+            "key": "cadW",
+            "label": "cW"
+          },
+          {
+            "key": "cadS",
+            "label": "cS"
+          },
+          {
+            "key": "formW",
+            "label": "form W"
+          },
+          {
+            "key": "airW",
+            "label": "air W"
+          },
+          {
+            "key": "powW",
+            "label": "pow W"
+          }
         ],
         "rows": [
-          {"km": 1,  "dur": "6:53", "pace": "6:53", "hr": 127, "cadW": 80, "cadS": 80, "formW": 103, "airW": 3.0, "powW": 312},
-          {"km": 2,  "dur": "6:11", "pace": "6:11", "hr": 132, "cadW": 82, "cadS": 82, "formW": 102, "airW": 2.9, "powW": 327},
-          {"km": 3,  "dur": "5:46", "pace": "5:45", "hr": 137, "cadW": 82, "cadS": 82, "formW": 103, "airW": 3.1, "powW": 332, "_note": "negative split начался"},
-          {"km": 4,  "dur": "6:19", "pace": "6:19", "hr": 132, "cadW": 81, "cadS": 81, "formW": 102, "airW": 2.9, "powW": 316},
-          {"km": 5,  "dur": "6:22", "pace": "6:22", "hr": 138, "cadW": 81, "cadS": 81, "formW": 102, "airW": 3.1, "powW": 324},
-          {"km": 6,  "dur": "5:42", "pace": "5:41", "hr": 141, "cadW": 82, "cadS": 82, "formW": 103, "airW": 4.1, "powW": 343},
-          {"km": 7,  "dur": "5:41", "pace": "5:41", "hr": 141, "cadW": 83, "cadS": 83, "formW": 102, "airW": 3.8, "powW": 327},
-          {"km": 8,  "dur": "5:40", "pace": "5:39", "hr": 141, "cadW": 84, "cadS": 84, "formW": 101, "airW": 2.5, "powW": 323},
-          {"km": 9,  "dur": "5:33", "pace": "5:32", "hr": 142, "cadW": 85, "cadS": 85, "formW": 100, "airW": 3.4, "powW": 334, "_note": "первый км на 85+"},
-          {"km": 10, "dur": "5:54", "pace": "5:54", "hr": 141, "cadW": 85, "cadS": 85, "formW": 100, "airW": 4.2, "powW": 340, "_warn": "HR не падает при замедлении"},
-          {"km": 11, "dur": "5:47", "pace": "5:47", "hr": 143, "cadW": 86, "cadS": 86, "formW": 97,  "airW": 4.4, "powW": 346, "_warn": "HR растёт на финише"}
+          {
+            "km": 1,
+            "dur": "6:53",
+            "pace": "6:53",
+            "hr": 127,
+            "cadW": 80,
+            "cadS": 80,
+            "formW": 103,
+            "airW": 3.0,
+            "powW": 312
+          },
+          {
+            "km": 2,
+            "dur": "6:11",
+            "pace": "6:11",
+            "hr": 132,
+            "cadW": 82,
+            "cadS": 82,
+            "formW": 102,
+            "airW": 2.9,
+            "powW": 327
+          },
+          {
+            "km": 3,
+            "dur": "5:46",
+            "pace": "5:45",
+            "hr": 137,
+            "cadW": 82,
+            "cadS": 82,
+            "formW": 103,
+            "airW": 3.1,
+            "powW": 332,
+            "_note": "negative split начался"
+          },
+          {
+            "km": 4,
+            "dur": "6:19",
+            "pace": "6:19",
+            "hr": 132,
+            "cadW": 81,
+            "cadS": 81,
+            "formW": 102,
+            "airW": 2.9,
+            "powW": 316
+          },
+          {
+            "km": 5,
+            "dur": "6:22",
+            "pace": "6:22",
+            "hr": 138,
+            "cadW": 81,
+            "cadS": 81,
+            "formW": 102,
+            "airW": 3.1,
+            "powW": 324
+          },
+          {
+            "km": 6,
+            "dur": "5:42",
+            "pace": "5:41",
+            "hr": 141,
+            "cadW": 82,
+            "cadS": 82,
+            "formW": 103,
+            "airW": 4.1,
+            "powW": 343
+          },
+          {
+            "km": 7,
+            "dur": "5:41",
+            "pace": "5:41",
+            "hr": 141,
+            "cadW": 83,
+            "cadS": 83,
+            "formW": 102,
+            "airW": 3.8,
+            "powW": 327
+          },
+          {
+            "km": 8,
+            "dur": "5:40",
+            "pace": "5:39",
+            "hr": 141,
+            "cadW": 84,
+            "cadS": 84,
+            "formW": 101,
+            "airW": 2.5,
+            "powW": 323
+          },
+          {
+            "km": 9,
+            "dur": "5:33",
+            "pace": "5:32",
+            "hr": 142,
+            "cadW": 85,
+            "cadS": 85,
+            "formW": 100,
+            "airW": 3.4,
+            "powW": 334,
+            "_note": "первый км на 85+"
+          },
+          {
+            "km": 10,
+            "dur": "5:54",
+            "pace": "5:54",
+            "hr": 141,
+            "cadW": 85,
+            "cadS": 85,
+            "formW": 100,
+            "airW": 4.2,
+            "powW": 340,
+            "_warn": "HR не падает при замедлении"
+          },
+          {
+            "km": 11,
+            "dur": "5:47",
+            "pace": "5:47",
+            "hr": 143,
+            "cadW": 86,
+            "cadS": 86,
+            "formW": 97,
+            "airW": 4.4,
+            "powW": 346,
+            "_warn": "HR растёт на финише"
+          }
         ]
       }
     },
@@ -89,20 +258,58 @@
       "id": "stryd",
       "title": "Stryd Running Dynamics · ⚠️ Garmin RD source-раздельно",
       "kind": "kv_grid",
-      "summary": "Stryd сегодня дал RD-поля (Vertical Oscillation 6.3, Ground Time 292 мс). Garmin RD от часов — пусто (FR 965 profile его не записал). Это НОВЫЙ баг — раньше я тебе показывал Garmin VO 10.7 (он с 14 окт FIT). Теперь нужно решить какой источник truth-источник.",
+      "summary": "Stryd footpod — теперь единственный source-of-truth (per Кирилл 2026-10-15). VO и Ground Time вытащены и корректны.",
       "data": {
         "items": [
-          {"label": "VO (Stryd footpod)",        "value": "6.3 см",  "sub": "avg · ОТЛИЧНО (элита 5-8 см)", "tone": "good"},
-          {"label": "VO (Garmin RD · 14 окт)",    "value": "10.7 см", "sub": "ref · другая метрика, нельзя сравнивать напрямую", "tone": "warn"},
-          {"label": "Ground Time (Stryd)",         "value": "292 мс",  "sub": "avg · норма любителя на 5:30 (270-300 мс)"},
-          {"label": "Stance Time (Garmin · 14 окт)", "value": "259.7 мс", "sub": "ref · другая метрика, тот же человек"},
-          {"label": "Step Length",                "value": "—",       "sub": "Stryd не даёт step_length в этом FIT"},
-          {"label": "Impact Loading Rate",        "value": "39.8",    "sub": "Stryd · норма 35-50"},
-          {"label": "Leg Spring Stiffness",       "value": "11.6",    "sub": "Stryd · стабильно с 14 окт (11.5)", "tone": "good"},
-          {"label": "Form Power",                 "value": "101 W",   "sub": "avg · стабильно с 14 окт (102 W)", "tone": "good"},
-          {"label": "Air Power",                  "value": "3.4 W",   "sub": "avg · +50% к 14 окт, лёгкий ветер"},
-          {"label": "Stryd Power",                "value": "328 W",   "sub": "avg · стабильно (-1 W vs 14 окт)"},
-          {"label": "Cadence (footpod)",          "value": "82.5 spm", "sub": "avg · на финише 86"}
+          {
+            "label": "VO (Stryd footpod)",
+            "value": "6.3 см",
+            "sub": "avg · ОТЛИЧНО (элита 5-8 см)",
+            "tone": "good"
+          },
+          {
+            "label": "Ground Time",
+            "value": "292 мс",
+            "sub": "avg · Stryd footpod",
+            "tone": "good"
+          },
+          {
+            "label": "Step Length",
+            "value": "—",
+            "sub": "Stryd не даёт step_length в этом FIT"
+          },
+          {
+            "label": "Impact Loading Rate",
+            "value": "39.8",
+            "sub": "Stryd · норма 35-50"
+          },
+          {
+            "label": "Leg Spring Stiffness",
+            "value": "11.6",
+            "sub": "Stryd · стабильно с 14 окт (11.5)",
+            "tone": "good"
+          },
+          {
+            "label": "Form Power",
+            "value": "101 W",
+            "sub": "avg · стабильно с 14 окт (102 W)",
+            "tone": "good"
+          },
+          {
+            "label": "Air Power",
+            "value": "3.4 W",
+            "sub": "avg · +50% к 14 окт, лёгкий ветер"
+          },
+          {
+            "label": "Stryd Power",
+            "value": "328 W",
+            "sub": "avg · стабильно (-1 W vs 14 окт)"
+          },
+          {
+            "label": "Cadence (footpod)",
+            "value": "82.5 spm",
+            "sub": "avg · на финише 86"
+          }
         ]
       }
     },
@@ -120,20 +327,72 @@
       "summary": "Без ОФП. Всего 3:46 мелких пауз (семафоры/шаги/проезды).",
       "data": {
         "columns": [
-          {"key": "at_km",  "label": "на км"},
-          {"key": "t",      "label": "t (после старта)"},
-          {"key": "dur",    "label": "длительность"},
-          {"key": "cause",  "label": "что было"}
+          {
+            "key": "at_km",
+            "label": "на км"
+          },
+          {
+            "key": "t",
+            "label": "t (после старта)"
+          },
+          {
+            "key": "dur",
+            "label": "длительность"
+          },
+          {
+            "key": "cause",
+            "label": "что было"
+          }
         ],
         "rows": [
-          {"at_km": "0.10",  "t": "0:37",   "dur": "0:54",  "cause": "светофор / старт"},
-          {"at_km": "1.57",  "t": "10:08",  "dur": "0:29",  "cause": "семафор"},
-          {"at_km": "3.13",  "t": "19:35",  "dur": "0:31",  "cause": "семафор"},
-          {"at_km": "4.99",  "t": "30:49",  "dur": "0:34",  "cause": "бордюр / переход"},
-          {"at_km": "9.59",  "t": "57:13",  "dur": "0:38",  "cause": "семафор"},
-          {"at_km": "10.01", "t": "60:03",  "dur": "0:16",  "cause": "семафор"},
-          {"at_km": "10.45", "t": "62:31",  "dur": "0:18",  "cause": "бордюр"},
-          {"at_km": "11.39", "t": "68:05",  "dur": "0:06",  "cause": "финиш"}
+          {
+            "at_km": "0.10",
+            "t": "0:37",
+            "dur": "0:54",
+            "cause": "светофор / старт"
+          },
+          {
+            "at_km": "1.57",
+            "t": "10:08",
+            "dur": "0:29",
+            "cause": "семафор"
+          },
+          {
+            "at_km": "3.13",
+            "t": "19:35",
+            "dur": "0:31",
+            "cause": "семафор"
+          },
+          {
+            "at_km": "4.99",
+            "t": "30:49",
+            "dur": "0:34",
+            "cause": "бордюр / переход"
+          },
+          {
+            "at_km": "9.59",
+            "t": "57:13",
+            "dur": "0:38",
+            "cause": "семафор"
+          },
+          {
+            "at_km": "10.01",
+            "t": "60:03",
+            "dur": "0:16",
+            "cause": "семафор"
+          },
+          {
+            "at_km": "10.45",
+            "t": "62:31",
+            "dur": "0:18",
+            "cause": "бордюр"
+          },
+          {
+            "at_km": "11.39",
+            "t": "68:05",
+            "dur": "0:06",
+            "cause": "финиш"
+          }
         ]
       }
     },
@@ -155,18 +414,8 @@
         },
         {
           "priority": "soon",
-          "text": "Реши, какой сенсор — source-of-truth для RD-тренда. Garmin RD (то, что в Garmin Connect UI) или Stryd (то, что в этой пробежке). Я рекомендую Garmin RD ради исторического архива, но это твой выбор.",
-          "principle": "Тренд требует одного источника. Сравнивать цифры между ними нельзя — они измеряют по-разному."
-        },
-        {
-          "priority": "soon",
           "text": "Air power сегодня 3.4W (было 2.3W). Это не сильный ветер. На следующей пробежке — если больше 10W, это будет важный сигнал.",
           "principle": "Air power > 15-20W = либо встречный ветер, либо terrain с боковым участком."
-        },
-        {
-          "priority": "later",
-          "text": "VO по Stryd (6.3 см) и Garmin RD (10.7 см) — это **разные** метрики. Я зря их уравнивал в предыдущем разборе. Считай Garmin RD за истину: тренд от 14 окт есть (10.7), в 15 окт Garmin RD не записался. Следи когда вернётся.",
-          "principle": "Garmin RD — accelerometer на wrist. Stryd Vertical Oscillation — IMU на стопе. Это разные sensor fusion'ы, цифры не интерпретируются взаимозаменяемо."
         }
       ]
     }

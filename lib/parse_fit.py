@@ -158,8 +158,15 @@ def _summarize_moving(moving: list[dict]) -> dict:
     cads_stryd = [r.get("cadence_stryd") for r in moving]
     dists = [r.get("dist_m") for r in moving]
 
-    # Running Dynamics: prefer Garmin RD (matches Garmin Connect UI values the
-    # user sees), fall back to Stryd's own RD fields. Track which source we used.
+    # Running Dynamics default source-of-truth: Stryd footpod.
+    # Rationale (per Кирилл, 2026-10-15): "Берём stryd. Garmin rd требует
+    # нагрудного ремня. Я не всегда его беру." → Stryd-цифры есть в каждой
+    # пробежке с footpod'ом; Garmin RD опциональна и часто отсутствует.
+    # Stryd VO/Ground Time НЕ интерпретируются через Garmin-нормы — это IMU
+    # в ботинке (см. skill coach-fit-review § Каденс и Running Dynamics).
+    #
+    # Garmin RD остаётся в схеме как fallback `_garmin_*` для случаев когда
+    # Stryd отсутствует (pool swims / indoor cycling / забытый footpod).
     def _pick(*keys):
         for k in keys:
             xs = [r.get(k) for r in moving if r.get(k) is not None]
@@ -167,17 +174,19 @@ def _summarize_moving(moving: list[dict]) -> dict:
                 return xs, k
         return [], None
 
-    vo_garmin, vo_src = _pick("garmin_vo_cm")
-    vo_stryd_raw, _ = _pick("stryd_vo_cm")
-    stance_garmin_ms, stance_src = _pick("garmin_stance_ms")
-    ground_stryd_ms, _ = _pick("stryd_ground_time_ms")
-    step_garmin_mm, step_src = _pick("garmin_step_mm")
+    # Stryd preferred, Garmin RD fallback
+    vo_stryd_raw, vo_src = _pick("stryd_vo_cm", "garmin_vo_cm")
+    ground_stryd_ms, stance_src = _pick("stryd_ground_time_ms", "garmin_stance_ms")
+    step_garmin_mm, step_src = _pick("garmin_step_mm", "stryd_step_mm")  # Stryd не пишет step_length в этом FIT
     stance_pct_raw, _ = _pick("garmin_stance_pct")
     form_w_raw, _ = _pick("stryd_form_power_w")
     air_w_raw, _ = _pick("stryd_air_power_w")
     power_w_raw, _ = _pick("stryd_power_w")
     impact_lr_raw, _ = _pick("stryd_impact_loading_rate")
     leg_spring_raw, _ = _pick("stryd_leg_spring_stiffness")
+    # Garmin RD values are exposed separately for cross-source comparison
+    vo_garmin, _ = _pick("garmin_vo_cm")
+    stance_garmin_ms, _ = _pick("garmin_stance_ms")
 
     # Moving time = number of "moving seconds" = sum across consecutive records of
     # the smaller-of(gap, 1). A gap > 1 means the runner was paused in between —
@@ -236,12 +245,12 @@ def _summarize_moving(moving: list[dict]) -> dict:
             return round(max(xs), 1)
         return 0
 
-    # Resolution: Garmin RD (preferred) > Stryd (fallback). Report source so a coach
-    # can decide whether to compare against Garmin Connect UI numbers.
-    vo_vals = vo_garmin or vo_stryd_raw
-    vo_source_label = "garmin_rd" if vo_garmin else ("stryd" if vo_stryd_raw else None)
-    stance_vals_ms = stance_garmin_ms or ground_stryd_ms
-    stance_source_label = "garmin_rd" if stance_garmin_ms else ("stryd" if ground_stryd_ms else None)
+    # Resolution: Stryd (preferred, per Кирилл decision 2026-10-15) > Garmin RD (fallback
+    # when Stryd отсутствует — pool swims / indoor / забытый footpod).
+    vo_vals = vo_stryd_raw or vo_garmin
+    vo_source_label = "stryd" if vo_stryd_raw else ("garmin_rd" if vo_garmin else None)
+    stance_vals_ms = ground_stryd_ms or stance_garmin_ms
+    stance_source_label = "stryd" if ground_stryd_ms else ("garmin_rd" if stance_garmin_ms else None)
     step_vals_mm = step_garmin_mm
     step_source_label = "garmin_rd" if step_garmin_mm else None
     stance_pct_vals = stance_pct_raw
@@ -295,7 +304,7 @@ def _summarize_moving(moving: list[dict]) -> dict:
             "stance_time_source": stance_source_label,
             "step_length_mm_avg": step_avg,
             "step_length_m_avg": round(step_avg / 1000.0, 3) if step_avg else 0,
-            "step_length_source": step_source_label,
+            "step_length_source": step_src if step_src else None,
             "stance_time_pct_avg": stance_pct_avg,
             "form_power_w_avg": form_avg,
             "air_power_w_avg": air_avg,
@@ -304,6 +313,10 @@ def _summarize_moving(moving: list[dict]) -> dict:
             "leg_spring_stiffness_avg": leg_spring_avg,
             "samples": sum(1 for v in vo_vals if v is not None) or
                         sum(1 for v in stance_vals_ms if v is not None),
+            # Garmin RD values exposed separately — different sensor physics, do not
+            # compare against Stryd values directly. Useful for cross-source sanity.
+            "_garmin_vertical_oscillation_cm_avg": _safe_stat("vo_g", vo_garmin, "avg"),
+            "_garmin_stance_time_ms_avg": _safe_stat("stance_g", stance_garmin_ms, "avg"),
         }
     return out
 
