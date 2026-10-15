@@ -486,6 +486,64 @@ def test_render_html_basis_aware():
     print("  ✓ HTML v36: renderHrStructure no volume-math, setLabel, no notes anywhere")
 
 
+def test_render_html_every_slot_renders():
+    """v37: реальный JS-рендеринг каждого слота в plan-w1 не падает.
+
+    Защита от регрессов вроде 's is not defined' — ловит ReferenceError в renderHrStructure.
+    """
+    import shutil
+    tmp = tempfile.mkdtemp(prefix="js_render_test_")
+    try:
+        from lib import render_html
+        # Рендерим plan-w1.html
+        plan = json.load(open(ROOT / "state/plan-w1.json"))
+        out = Path(tmp) / "plan.html"
+        render_html.render_plan_wN(plan, out)
+        html = out.read_text(encoding="utf-8")
+
+        # Проверяем что node доступен
+        node_bin = __import__("shutil").which("node")
+        if not node_bin:
+            print("  ~ HTML v37: node не найден, тест пропущен")
+            return
+
+        # Сохраняем JS-скрипт
+        js_script = '''const fs = require('fs');
+const html = fs.readFileSync('{}', 'utf-8');
+const dataMatch = html.match(/<script type="application\\/json" id="plan-data">([\\s\\S]*?)<\\/script>/);
+const planData = JSON.parse(dataMatch[1]);
+const scripts = html.match(/<script>([\\s\\S]*?)<\\/script>/g) || [];
+const lastScript = scripts[scripts.length - 1].replace(/^<script>/, '').replace(/<\\/script>$/, '').replace(/init\\(\\);[\\s]*$/, '');
+const elements = {{}};
+global.document = {{ getElementById: (id) => elements[id] = elements[id] || {{ innerHTML: '', classList: {{ add: () => {{}}, remove: () => {{}} }}, addEventListener: () => {{}} }} }};
+global.history = {{ state: null, pushState: () => {{}}, replaceState: () => {{}} }};
+global.window = {{ scrollTo: () => {{}}, addEventListener: () => {{}} }};
+global.location = {{ hash: '' }};
+try {{
+  eval(lastScript);
+  for (const slot of planData.slots) {{
+    const card = renderCard(slot);
+    if (card.length < 50) {{ console.log('SHORT:' + slot.id + ':' + card.length); process.exit(1); }}
+  }}
+  console.log('OK');
+}} catch (e) {{
+  console.log('ERROR:' + e.message);
+  process.exit(1);
+}}
+'''.format(str(out).replace("'", "'\\''"))
+        js_file = Path(tmp) / "test.js"
+        js_file.write_text(js_script, encoding="utf-8")
+        result = __import__("subprocess").run([node_bin, str(js_file)], capture_output=True, text=True, timeout=15)
+        assert result.returncode == 0, f"JS render failed: {result.stdout} {result.stderr}"
+        assert "OK" in result.stdout, f"Unexpected output: {result.stdout}"
+        # Все 8 слотов должны рендериться
+        slots_count = len(plan.get("slots", []))
+        assert slots_count == 8, f"W1 should have 8 slots, got {slots_count}"
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    print(f"  ✓ HTML v37: реальный JS-рендеринг всех 8 слотов W1 без ошибок")
+
+
 def test_weekly_report_runs():
     report = weekly_report.report(1)  # W1 сезона
     assert "season_week" in report
@@ -597,6 +655,7 @@ def main():
         test_html_has_details_structure,
         test_html_slot_links_navigable,
         test_render_html_basis_aware,
+        test_render_html_every_slot_renders,
     ]
     failed = 0
     for t in tests:

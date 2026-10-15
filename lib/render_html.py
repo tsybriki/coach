@@ -531,7 +531,7 @@ function renderHrStructure(structure) {
     }
     const zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
     const hr = st.hr_target ? ' <span class="step-pace">HR ' + escapeHtml(String(st.hr_target)) + '</span>' : '';
-    const pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
+    const pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
     return '<li class="step">'
       + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
       + ' ' + topValue + hr + pace + '</div>'
