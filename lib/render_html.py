@@ -245,7 +245,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
         dur = _duration_str(s.get("duration_min", 0))
         idea = esc(_slot_idea(s))
         picker_items.append(
-            f'<a href="#slot-{idx}" class="slot-card {kind_cls}" data-slot-idx="{idx}">'
+            f'<button type="button" class="slot-card {kind_cls}" data-slot-idx="{idx}" onclick="showCard({idx});">'
             f'<div class="slot-card-head">'
             f'<span class="slot-icon">{icon}</span>'
             f'<span class="slot-day">{day}</span>'
@@ -253,7 +253,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
             f'<span class="slot-dur">{dur}</span>'
             f'</div>'
             f'<div class="slot-card-name">{idea}</div>'
-            f'</a>'
+            f'</button>'
         )
     picker_html = "".join(picker_items) if picker_items else '<div class="empty">Нет слотов</div>'
 
@@ -280,8 +280,7 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
 
 .picker{display:flex;flex-direction:column;gap:10px}
-.hidden{display:none !important}
-.visible{display:flex !important;flex-direction:column;gap:10px}
+/* hidden / visible — классы больше не используются, перешли на inline style.display */
 
 /* Picker cards */
 .slot-card{
@@ -371,7 +370,7 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
 </style></head><body>
 
 <!-- Экран 1: список слотов -->
-<div id="picker" class="picker visible">
+<div id="picker" class="picker" style="display:flex">
   <div style="margin-bottom:10px">
     <h1 style="margin:0">__PICKER_TITLE__</h1>
     <div class="sub">W__SW__ · iso __ISO__ · сезон стартовал __SEASON_START__</div>
@@ -408,7 +407,7 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
 </div>
 
 <!-- Экран 2: детальная карточка -->
-<div id="cardWrap" class="hidden">
+<div id="cardWrap" style="display:none">
   <div class="topbar">
     <button id="backBtn"><span class="arrow">←</span> назад</button>
   </div>
@@ -524,10 +523,8 @@ function showCard(idx) {
   const slot = PLAN.slots[idx];
   if (!slot) return;
   document.getElementById('cardHost').innerHTML = renderCard(slot);
-  document.getElementById('picker').classList.remove('visible');
-  document.getElementById('picker').classList.add('hidden');
-  document.getElementById('cardWrap').classList.remove('hidden');
-  document.getElementById('cardWrap').classList.add('visible');
+  document.getElementById('picker').style.display = 'none';
+  document.getElementById('cardWrap').style.display = 'block';
   window.scrollTo(0, 0);
   if (history && history.pushState) {
     history.pushState({view:'card', idx}, '', '#slot-' + idx);
@@ -535,10 +532,8 @@ function showCard(idx) {
 }
 
 function showList() {
-  document.getElementById('picker').classList.remove('hidden');
-  document.getElementById('picker').classList.add('visible');
-  document.getElementById('cardWrap').classList.remove('visible');
-  document.getElementById('cardWrap').classList.add('hidden');
+  document.getElementById('picker').style.display = 'flex';
+  document.getElementById('cardWrap').style.display = 'none';
   if (history && history.pushState) {
     history.pushState({view:'list'}, '', '#list');
   }

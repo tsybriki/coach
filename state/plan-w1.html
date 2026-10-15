@@ -21,8 +21,7 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
 
 .picker{display:flex;flex-direction:column;gap:10px}
-.hidden{display:none !important}
-.visible{display:flex !important;flex-direction:column;gap:10px}
+/* hidden / visible — классы больше не используются, перешли на inline style.display */
 
 /* Picker cards */
 .slot-card{
@@ -112,7 +111,7 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
 </style></head><body>
 
 <!-- Экран 1: список слотов -->
-<div id="picker" class="picker visible">
+<div id="picker" class="picker" style="display:flex">
   <div style="margin-bottom:10px">
     <h1 style="margin:0">W1 · 2026-10-12..2026-10-18 · Берлин</h1>
     <div class="sub">W1 · iso 2026-W42 · сезон стартовал 2026-10-12</div>
@@ -138,7 +137,7 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
   <h2 style="margin:14px 0 4px">Тренировки · 8 шт</h2>
   <div style="font-size:12px;color:var(--muted);margin-bottom:4px">тап → детали</div>
 
-  <a href="#slot-0" class="slot-card tag-run" data-slot-idx="0"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ПН</span><span class="slot-time">18:45</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Easy 5К + прогрессия 3К</div></a><a href="#slot-1" class="slot-card tag-run" data-slot-idx="1"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">09:00</span><span class="slot-dur">30мин</span></div><div class="slot-card-name">Easy бег 30мин Z2</div></a><a href="#slot-2" class="slot-card tag-run" data-slot-idx="2"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">18:30</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Ключевая: Интервалы 60мин Z3</div></a><a href="#slot-3" class="slot-card tag-run" data-slot-idx="3"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">СР</span><span class="slot-time">17:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный бег 90мин Z2_low</div></a><a href="#slot-4" class="slot-card tag-bike" data-slot-idx="4"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ЧТ</span><span class="slot-time">10:30</span><span class="slot-dur">45мин</span></div><div class="slot-card-name">Вел-станок Z2 45мин (дома)</div></a><a href="#slot-5" class="slot-card tag-swim" data-slot-idx="5"><div class="slot-card-head"><span class="slot-icon">🏊</span><span class="slot-day">ПТ</span><span class="slot-time">18:00</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Пул 60мин easy</div></a><a href="#slot-6" class="slot-card tag-ofp" data-slot-idx="6"><div class="slot-card-head"><span class="slot-icon">💪</span><span class="slot-day">СБ</span><span class="slot-time">10:00</span><span class="slot-dur">25мин</span></div><div class="slot-card-name">ofp core 25мин</div></a><a href="#slot-7" class="slot-card tag-bike" data-slot-idx="7"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ВС</span><span class="slot-time">11:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный вел Z2 90мин</div></a>
+  <button type="button" class="slot-card tag-run" data-slot-idx="0" onclick="showCard(0);"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ПН</span><span class="slot-time">18:45</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Easy 5К + прогрессия 3К</div></button><button type="button" class="slot-card tag-run" data-slot-idx="1" onclick="showCard(1);"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">09:00</span><span class="slot-dur">30мин</span></div><div class="slot-card-name">Easy бег 30мин Z2</div></button><button type="button" class="slot-card tag-run" data-slot-idx="2" onclick="showCard(2);"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">ВТ</span><span class="slot-time">18:30</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Ключевая: Интервалы 60мин Z3</div></button><button type="button" class="slot-card tag-run" data-slot-idx="3" onclick="showCard(3);"><div class="slot-card-head"><span class="slot-icon">🏃</span><span class="slot-day">СР</span><span class="slot-time">17:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный бег 90мин Z2_low</div></button><button type="button" class="slot-card tag-bike" data-slot-idx="4" onclick="showCard(4);"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ЧТ</span><span class="slot-time">10:30</span><span class="slot-dur">45мин</span></div><div class="slot-card-name">Вел-станок Z2 45мин (дома)</div></button><button type="button" class="slot-card tag-swim" data-slot-idx="5" onclick="showCard(5);"><div class="slot-card-head"><span class="slot-icon">🏊</span><span class="slot-day">ПТ</span><span class="slot-time">18:00</span><span class="slot-dur">1ч</span></div><div class="slot-card-name">Пул 60мин easy</div></button><button type="button" class="slot-card tag-ofp" data-slot-idx="6" onclick="showCard(6);"><div class="slot-card-head"><span class="slot-icon">💪</span><span class="slot-day">СБ</span><span class="slot-time">10:00</span><span class="slot-dur">25мин</span></div><div class="slot-card-name">ofp core 25мин</div></button><button type="button" class="slot-card tag-bike" data-slot-idx="7" onclick="showCard(7);"><div class="slot-card-head"><span class="slot-icon">🚴</span><span class="slot-day">ВС</span><span class="slot-time">11:00</span><span class="slot-dur">1ч30м</span></div><div class="slot-card-name">Длинный вел Z2 90мин</div></button>
 
   <div class="card" style="margin-top:14px">
     <h3>Контрольные точки</h3>
@@ -149,7 +148,7 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
 </div>
 
 <!-- Экран 2: детальная карточка -->
-<div id="cardWrap" class="hidden">
+<div id="cardWrap" style="display:none">
   <div class="topbar">
     <button id="backBtn"><span class="arrow">←</span> назад</button>
   </div>
@@ -265,10 +264,8 @@ function showCard(idx) {
   const slot = PLAN.slots[idx];
   if (!slot) return;
   document.getElementById('cardHost').innerHTML = renderCard(slot);
-  document.getElementById('picker').classList.remove('visible');
-  document.getElementById('picker').classList.add('hidden');
-  document.getElementById('cardWrap').classList.remove('hidden');
-  document.getElementById('cardWrap').classList.add('visible');
+  document.getElementById('picker').style.display = 'none';
+  document.getElementById('cardWrap').style.display = 'block';
   window.scrollTo(0, 0);
   if (history && history.pushState) {
     history.pushState({view:'card', idx}, '', '#slot-' + idx);
@@ -276,23 +273,29 @@ function showCard(idx) {
 }
 
 function showList() {
-  document.getElementById('picker').classList.remove('hidden');
-  document.getElementById('picker').classList.add('visible');
-  document.getElementById('cardWrap').classList.remove('visible');
-  document.getElementById('cardWrap').classList.add('hidden');
+  document.getElementById('picker').style.display = 'flex';
+  document.getElementById('cardWrap').style.display = 'none';
   if (history && history.pushState) {
     history.pushState({view:'list'}, '', '#list');
   }
 }
 
 document.querySelectorAll('.slot-card').forEach((btn) => {
-  btn.addEventListener('click', () => showCard(parseInt(btn.dataset.slotIdx, 10)));
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    showCard(parseInt(btn.dataset.slotIdx, 10));
+  });
 });
 document.getElementById('backBtn').addEventListener('click', () => showList());
 window.addEventListener('popstate', () => {
   const h = (location.hash || '').replace('#','');
   if (h.startsWith('slot-')) showCard(parseInt(h.slice(5), 10));
   else showList();
+});
+// Fallback: если hash установлен при загрузке (открыли по прямой ссылке), показываем карточку
+document.addEventListener('DOMContentLoaded', () => {
+  const h = (location.hash || '').replace('#','');
+  if (h.startsWith('slot-')) showCard(parseInt(h.slice(5), 10));
 });
 </script>
 </body></html>

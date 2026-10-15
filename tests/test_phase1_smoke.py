@@ -378,28 +378,35 @@ def test_html_has_details_structure():
 
 
 def test_html_slot_links_navigable():
-    """v21+: slot-card это <a href='#slot-N'> — нативная anchor навигация, работает везде."""
+    """v22+: slot-card это <button> с inline onclick — надёжно в любом preview."""
     import shutil
     tmp = tempfile.mkdtemp(prefix="plan_runtime_nav_")
     try:
         result = plan_runtime.generate_plan_with_html(1, out_dir=Path(tmp))
         html = Path(result["html_path"]).read_text(encoding="utf-8")
-        # Каждая карточка — anchor с href, не button
         import re
-        anchor_count = len(re.findall(r'class="slot-card\s+[^"]+"', html))
-        assert anchor_count >= 8, f"expected ≥8 anchor slot-cards, got {anchor_count}"
-        # href указывает на #slot-N
+        # Каждая карточка — button
+        button_count = len(re.findall(r'<button\s+type="button"\s+class="slot-card\s+[^"]+"', html))
+        assert button_count >= 8, f"expected ≥8 slot-card buttons, got {button_count}"
+        # inline onclick + data-slot-idx на каждой кнопке
         for n in range(8):
-            assert f'href="#slot-{n}"' in html, f"missing href=#slot-{n}"
-        # click handler вызывает preventDefault + showCard
-        assert "e.preventDefault()" in html, "missing preventDefault in click handler"
-        assert "showCard(parseInt" in html, "missing showCard handler"
-        # hash routing: popstate + DOMContentLoaded fallback
+            assert f'data-slot-idx="{n}"' in html, f"missing data-slot-idx={n}"
+            assert f'onclick="showCard({n});"' in html, f"missing inline onclick for slot {n}"
+        # history.pushState в showCard + history.go(-1) для back
+        assert "pushState" in html, "missing pushState"
+        # popstate listener для back-button
         assert "popstate" in html, "missing popstate listener"
-        assert "DOMContentLoaded" in html, "missing DOMContentLoaded fallback"
+        # inline style.display для picker (видим) и cardWrap (скрыт) — inline выше CSS специфичности
+        assert 'id="picker" class="picker" style="display:flex"' in html, "picker should be display:flex initially"
+        assert 'id="cardWrap" style="display:none"' in html, "cardWrap should be display:none initially"
+        # JS переключает через inline style.display (НЕ classList)
+        assert "style.display = 'none'" in html, "showCard should set style.display = 'none' on picker"
+        assert "style.display = 'block'" in html, "showCard should set style.display = 'block' on cardWrap"
+        # backBtn handler
+        assert "backBtn" in html and "showList" in html, "missing back button handler"
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    print("  ✓ HTML v21: 8 anchor slot-cards + click handler + hash routing")
+    print("  ✓ HTML v22: 8 button slot-cards + inline onclick + data-slot-idx + pushState/popstate")
 
 
 def test_weekly_report_runs():
