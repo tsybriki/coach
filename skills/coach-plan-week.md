@@ -44,6 +44,78 @@
 
 **Правило v27:** каждый slot в `state/plan-wN.json` ОБЯЗАН иметь поле `structure: list[step]`. Без него карточка бесполезна. `plan_generate` вызывает `lib.step_builder.build_structure()` для run/bike/swim/brick и `lib.step_builder.ofp_structure()` для ofp. **Не пропускай это**.
 
+## Тренировочная неделя = воскресенье → суббота (v28)
+
+`season_start_date = "2026-10-11"` (Sun). W1 = 11-17 окт, W48 = 5-11 сен 2027, W49 = 12-18 сен 2027 (заканчивается race_tri). `horizon.end = "2027-09-18"`, `season_week_count = 49`.
+
+**Race events всегда в воскресенье**, поэтому race_run 18 апр = W28 (а не W27), race_tri 12 сен = W49. Это нормально — race-неделя стартует с воскресенья-event'а, и ворота «event» находятся в начале недели.
+
+`lib/season_week.py:season_week_to_iso(week)` берёт **ПОНЕДЕЛЬНИК** недели (`week_start + timedelta(days=1)`), не воскресенье. Иначе W1 дал бы iso 2026-W41 (Sun 11 окт) вместо 2026-W42 (Mon 12 окт) — понедельник сезон-недели всегда «правильная» iso-неделя. Не «чини» это обратно.
+
+Все phase `start/end` сдвинуты на -1 день относительно старого W-Mon-старта. `athlete.weight_history[*].date` тоже сдвигается если она совпадает со старым season_start. `season_progress.json` notes для W1: «W42 = 11-17 окт. Старт фазы run_base (вс-суб).»
+
+**Pitfall:** не пытайся сохранить «W27 = race_run» при Sun-старте — это невозможно, race-дата всегда Sun, а финальный тапер (run_taper) заканчивается в субботу. Если пользователь говорит «race не та неделя», значит season_start нужно сдвинуть ещё на 1 неделю назад (отдельный разговор, не делай сам).
+
+## Plan как факт-лог (v29)
+
+Кирилл иногда говорит «перепиши расписание W1 как факт того что я делал» — то есть `state/plan-wN.json` становится **snapshot завершённой недели** с реальными цифрами, а не плановый.
+
+Схема `slot.actual` (опционально, не у всех слотов):
+
+```json
+{
+  "actual": {
+    "distance_km": 9.4,
+    "time_sec": 2850,
+    "avg_pace": "5:03",
+    "avg_hr": 148,
+    "rpe": 7,
+    "notes": "Прогрессия по плану. Источник: spring-10k-2027-v2.md W1 key session."
+  }
+}
+```
+
+И `plan.is_actual_log: true` (флаг для renderCard/buildPicker). Поля:
+- `actual.distance_km` (float) — если есть, кило́метраж
+- `actual.time_sec` (int) — если есть, рендерится как `M:SS`
+- `actual.avg_pace` (str, "5:03") — темп/км
+- `actual.avg_hr` (int) — пульс средний
+- `actual.rpe` (int 1-10) — субъективная нагрузка
+- `actual.notes` (str) — комментарий Кирилла
+
+Когда `is_actual_log: true`:
+- `renderCard` показывает зелёный блок «✅ Факт: 9.4К · 47:30 · темп 5:03/км · HR avg 148 · RPE 7/10» + notes
+- `buildPicker` totals переключается на `[6 сессий · 5.2ч · 45.7К]` (не planned/target/delta)
+- `buildPicker` totals-title: «факт / объём» (не «planned / target / delta»)
+- `buildPicker` summary-card с `plan.summary.actual: list[str]` — буллеты по каждой сессии
+- `buildPicker` slot-dur помечается `✓` если `slot.actual` есть
+- `buildPicker` slot-class получает `slot-completed` (зелёный бордер)
+
+**Pitfall — FIT-файлы могут отсутствовать:** `state/fit_store/index.json` может быть пуст даже при включённом cron-синке. Перед тем как «достать пробежки и посмотреть на стресс-левел» — проверь `state/fit_store/index.json` и `~/.hermes/coach/runs/`. Если FIT за нужный период нет, **анализируй нагрузку через `slot.actual`** в plan-wN.json (RPE, distance, time, HR avg) — это твой fallback, не итерируй в попытках загрузить FIT.
+
+## Добавление планового слота в факт-лог неделю (v30-v31)
+
+Если Кирилл говорит «в пятницу у меня нет тренировки, сгенери» — это **не новая генерация плана** (которая перезапишет actual-лог). Это:
+
+1. Загрузить `state/plan-wN.json`
+2. Добавить `slot` с `id="пт-..."`, без `actual` (план, не факт)
+3. Заполнить `slot.structure` по `step_builder.build_structure(...)` для run/bike/swim/brick, или вручную для OFP/brick (если run+OFП в одной сессии — `kind="brick"`, structure = [warmup, set, cooldown, main, cooldown] где main содержит `set.exercises` для OFP)
+4. Записать в `slot.rationale` объяснение почему именно эта тренировка (Кирилл любит видеть логику)
+5. **Рендерить HTML напрямую**, не через `plan_runtime`:
+
+```python
+import json
+from lib import render_html
+plan = json.load(open('state/plan-wN.json'))
+render_html.render_plan_wN(plan, 'state/plan-wN.html')
+```
+
+`plan_runtime.generate_plan_with_html(N)` сгенерирует свежий план по сезону/фазам и **перезапишет** actual-лог. Не используй его для инкрементальных правок факт-логов.
+
+**OFP circuit (12 упр, резинка + коврик, кор+ягодицы, без инвентаря):** clamshell L/R, glute bridge, bird-dog, banded side walk, dead bug, single-leg glute bridge, banded hip abduction, plank, banded kickback, side plank L/R. ~1 round без пауз. Рендерится в `slot.structure[].set.exercises: [{name, reps, rest, band, focus, notes}]`. CSS-классы: `.step.step-ofp` для каждого упр.
+
+**Анализ нагрузки без FIT:** когда пользователь просит «посмотри на стресс-левел и придумай следующую тренировку» — опирайся на `slot.actual` (distance/time/RPE/HR), а не на FIT. Процедура — в `references/load-from-actual.md`.
+
 ## Inline Zwift (v16)
 
 plan_generate проверяет `constraints.auto_zwift`:

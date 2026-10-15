@@ -388,9 +388,17 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .step-notes{margin-top:3px;font-size:11.5px;color:var(--muted);font-style:italic;line-height:1.4}
 .step-sublist{margin:6px 0 4px 12px;padding-left:0;list-style:none;font-size:12px}
 .step-sub{padding:4px 6px;margin-bottom:2px;background:var(--bg);border-radius:4px;border-left:2px solid var(--good)}
-.ex-list{margin-top:6px;padding-left:14px;font-size:12.5px}
-.ex-item{padding:2px 0}
-.ex-item b{color:var(--accent)}
+.ex-list{margin:8px 0 0;padding-left:0;list-style:none;font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+.ex-item{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:0}
+.ex-num{flex-shrink:0;width:22px;height:22px;background:var(--accent);color:var(--bg);font-weight:700;font-size:12px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,SFMono-Regular,monospace}
+.ex-content{flex:1;min-width:0}
+.ex-name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px}
+.ex-name{color:var(--accent);font-size:13px;font-weight:600}
+.ex-side{color:var(--accent2);font-size:11px;font-weight:600;background:rgba(92,214,192,.08);padding:1px 6px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,monospace}
+.ex-band{font-size:13px}
+.ex-focus-pill{font-size:10px;color:var(--muted);background:var(--panel2);padding:1px 6px;border-radius:4px;font-weight:500;letter-spacing:.2px}
+.ex-reps{font-size:11.5px;color:var(--text);font-family:ui-monospace,SFMono-Regular,monospace;margin-bottom:2px;font-weight:600}
+.ex-why{font-size:11.5px;color:var(--muted);line-height:1.4;font-style:italic}
 
 footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
 .empty{color:var(--muted);font-style:italic;padding:14px;text-align:center}
@@ -444,14 +452,30 @@ function renderOfpStructure(structure) {
         + '</li>';
     }
     if (st.set) {
+      // Set header (название сета + формат)
       let html = '<li class="step step-set">'
         + '<div class="step-head"><span class="step-phase">main</span>'
         + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
         + '<div class="step-name">' + escapeHtml(st.set.name) + '</div>'
+        + (st.set.format ? '<div class="step-notes">' + escapeHtml(st.set.format) + '</div>' : '')
         + '<ol class="ex-list">';
-      for (const ex of st.set.exercises) {
-        html += '<li class="ex-item"><b>' + escapeHtml(ex.name) + '</b> · ' + escapeHtml(ex.reps)
-              + (ex.rest ? ' · отдых ' + escapeHtml(ex.rest) : '') + '</li>';
+      // Каждое упражнение — структурированная карточка
+      for (let i = 0; i < (st.set.exercises || []).length; i++) {
+        const ex = st.set.exercises[i];
+        const num = i + 1;
+        const sideTag = ex.side ? ' <span class="ex-side">· ' + escapeHtml(ex.side) + '</span>' : '';
+        const bandTag = ex.band ? ' <span class="ex-band">🎗</span>' : '';
+        const focusTag = ex.focus ? ' <span class="ex-focus-pill">' + escapeHtml(ex.focus) + '</span>' : '';
+        html += '<li class="ex-item">'
+          + '<div class="ex-num">' + num + '</div>'
+          + '<div class="ex-content">'
+          + '<div class="ex-name-row">'
+          + '<b class="ex-name">' + escapeHtml(ex.name) + '</b>' + sideTag + bandTag + focusTag
+          + '</div>'
+          + '<div class="ex-reps">× ' + escapeHtml(ex.reps) + '</div>'
+          + (ex.notes ? '<div class="ex-why">' + escapeHtml(ex.notes) + '</div>' : '')
+          + '</div>'
+          + '</li>';
       }
       return html + '</ol></li>';
     }

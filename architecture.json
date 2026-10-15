@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas.schema.md",
-  "version": 31,
+  "version": 32,
   "title": "Спортивный слой Hermes — полная архитектура",
-  "subtitle": "v31: ПТ-слот переделан. 5мин Z1 + 6×150м @ 3:40/км (Z4) через 250м трусцы (Z1) + 5мин cooldown. После бега — ОФП circuit из 12 упражнений (только резинка + коврик, ягодицы + кор).",
+  "subtitle": "v32: разделение brick на отдельные слоты. Никогда не смешивать разные kind в одной карточке. Каждая карточка содержит только свой тип. renderOfpStructure переписан — каждое упражнение теперь структурированная карточка с номером, name, side, band-иконкой, focus-бейджем, reps, notes.",
   "blocks": [
     {
       "id": "tldr",
@@ -33,7 +33,8 @@
         "v28: training week = Sun-Sat (было Mon-Sun). W1 = 2026-10-11..17 окт. season_start_date = 2026-10-11 (Sun). season_week_count = 49 (было 48). race_run 18 апр = W28 (было W27, потому что race_date всегда воскресенье, и сдвиг = +1 W). race_tri 12 сен = W49 (было W48). iso_week берётся по понедельнику (Mon=W42 для W1), чтобы season_week не зависел от Sun-старта. Все фазы сдвинуты на -1 день.",
         "v29 (факт-лог W1): Кирилл записал реальные тренировки 11-17 окт. plan-w1.json перезаписан: 6 сессий / 5.2ч / 45.7К. ВС 10:00 10К test = 44:06 (baseline spring-10k-2027). ПН 18:30 pool 3К. ВТ 09:00 easy 1.5К + 18:30 5К Z2 + 3К прогрессия. СР 17:00 long Z2 1ч. ЧТ 10:30 cross Z2 11.2К. ПТ+СБ — отдых. renderCard: actual-блок зелёным (✅ Факт: distance / time / pace / HR / RPE). buildPicker: actual-badge в заголовке, totals показывает сессий/факт/объём, summary-карточка с буллетами, slot-completed бордер зелёным, ✓ в длительности. 27/27 tests passing.",
         "v30 (ПТ recovery swim): добавлен плановый слот ПТ 18:00 — пул 45мин Z1. FIT-файлов за W1 нет (state/fit_store/ пустой, cron не подтянул). Анализ по факт-логу: 5 дней бега, 45.7К, 2 пиковые (10К test 44:06 + 5К Z2 + 3К Z3). Мышцы ног устали, HR-cost повышен. Пул = active recovery без ударной нагрузки. В карточке ПТ нет actual-блока (это план, не факт) — только structure + rationale. 27/27 tests passing.",
-        "v31 (ПТ tempo + ОФП): 5мин Z1 warmup → 6×(150м @ 3:40/км Z4 + 250м трусцы Z1) → 5мин Z1 cooldown. Затем ОФП circuit: 12 упражнений подряд (резинка + коврик). Бег: ягодицы+кор circuit — banded clamshell L/R, glute bridge, bird-dog, banded side walk, dead bug, single-leg glute bridge, banded hip abduction, plank, banded kickback, side plank L/R. Итого: 6.1ч / 7 слотов (6 факт + 1 план). 27/27 tests passing."
+        "v31 (ПТ tempo + ОФП): 5мин Z1 warmup → 6×(150м @ 3:40/км Z4 + 250м трусцы Z1) → 5мин Z1 cooldown. Затем ОФП circuit: 12 упражнений подряд (резинка + коврик). Бег: ягодицы+кор circuit — banded clamshell L/R, glute bridge, bird-dog, banded side walk, dead bug, single-leg glute bridge, banded hip abduction, plank, banded kickback, side plank L/R. Итого: 6.1ч / 7 слотов (6 факт + 1 план). 27/27 tests passing.",
+        "v32 (разделение типов): brick слот (run+OFП вместе) запрещён. Каждый день может иметь N слотов разных kind, но в picker они отдельные карточки. ПТ: 2 слота — 18:30 run (5К + 6×150/250) + 19:00 ofp (12 упр circuit). renderOfpStructure: каждое упражнение — карточка с .ex-num (номер в кружке), .ex-name (имя, accent), .ex-side (L/R бейдж), .ex-band (🎗 иконка), .ex-focus-pill (фокус), .ex-reps (× reps моноширинно), .ex-why (notes italic). 27/27 tests passing."
       ]
     },
     {
