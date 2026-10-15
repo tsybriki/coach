@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas.schema.md",
-  "version": 13,
+  "version": 15,
   "title": "Спортивный слой Hermes — полная архитектура",
-  "subtitle": "v13 — ФИНАЛ ПЕРЕД РЕАЛИЗАЦИЕЙ. Скелет lib/ + state/ + ui/ + skills/ уже создан в GitHub проекте coach/. Все решения пишутся в decisions/. Один взгляд — всё сразу.",
+  "subtitle": "Фундамент + 5 точек расширения: метрики, replan сезона, W_N с overrides, анализ тренировки (4 уровня), ПОИСК ZWIFT-ТРЕНИРОВОК ПО КРИТЕРИЯМ. control_points живут в season_plan. constraints и volume_progression — параметры планирования. FIT retention = 14 дней. Один взгляд — всё сразу.",
   "blocks": [
     {
       "id": "tldr",
@@ -18,7 +18,8 @@
         "FIT retention = 14 дней → удалить.",
         "Все спортивные skill'ы названы по схеме 'coach-<area>-<verb>'.",
         "Каждое решение моделью логируется в decisions/. Retention-проход логирует, что удалено.",
-        "Вес: weight_history[] в athlete.json + авто-синк из Garmin через cron + одна строка в weekly_report + ручная правка через coach-plan-adjust. Без целевого веса, без BMI/калорий, без алертов. Минимум."
+        "Вес: weight_history[] в athlete.json + авто-синк из Garmin через cron + одна строка в weekly_report + ручная правка через coach-plan-adjust. Без целевого веса, без BMI/калорий, без алертов. Минимум.",
+        "Zwift search: coach-plan-zwift — по критериям (дисциплина, длительность, зоны, тип) ищет workouts на WhatsOnZwift, предлагает 2-4 варианта, Кирилл выбирает, zwift_sync.py конвертит → отправляется в Garmin Connect. Становится частью plan-wN."
       ]
     },
     {
@@ -444,9 +445,17 @@
         {
           "name": "coaching_corpus/",
           "purpose": "принципы с source. Добавляются olympic-specific (transition, brick, race_pace_under_fatigue)."
+        },
+        {
+          "name": "zwift_search.py",
+          "purpose": "парсит WhatsOnZwift по критериям → candidates[]. Read-only, не хранит state."
+        },
+        {
+          "name": "zwift_sync.py",
+          "purpose": "тонкая обёртка над garmin_tools/zwift_sync.py. URL → workout JSON → Garmin Connect."
         }
       ],
-      "rule": "Модель только через ask_model.py. fit_retention — единственная, кто удаляет FIT. plan_generate читает constraints, не правит. goal_allocator — только candidates, никогда default."
+      "rule": "Модель только через ask_model.py. fit_retention — единственная, кто удаляет FIT. plan_generate читает constraints, не правит. goal_allocator — только candidates, никогда default. coach-plan-zwift вызывает zwift_search.py (read-only) и zwift_sync.py (write через garmin_tools)."
     },
     {
       "id": "metrics",
@@ -718,6 +727,54 @@
       "key": "Сезон = «закон». Overrides = «поправки». Constraints = «рамка». План не строится в обход рамки."
     },
     {
+      "id": "zwift_search",
+      "kind": "flow",
+      "title": "Точка расширения 5 · поиск Zwift-тренировок по критериям",
+      "steps": [
+        {
+          "n": 1,
+          "name": "Запрос",
+          "what": "Кирилл говорит «нужна 45-мин Z2-вело на завтра». Или из plan_generate: 'нужен 60мин Z2-bike слот' с критериями. Skill coach-plan-zwift."
+        },
+        {
+          "n": 2,
+          "name": "Парсинг критериев",
+          "what": "criteria = {discipline, duration_min, zones[], workout_type, tags[]}. Один или комбинация."
+        },
+        {
+          "n": 3,
+          "name": "Скрапинг",
+          "what": "lib/zwift_search.py парсит WhatsOnZwift. Возвращает candidates[] 2-4 варианта (НЕ 'так и штук')."
+        },
+        {
+          "n": 4,
+          "name": "Презентация",
+          "what": "Рендер HTML с cards (заголовок, длительность, описание, ссылка). Кирилл видит, голосует."
+        },
+        {
+          "n": 5,
+          "name": "Выбор",
+          "what": "«беру вариант 2» (голосовое). Решение в decisions/<date>-<slot>-zwift.json."
+        },
+        {
+          "n": 6,
+          "name": "Конверсия",
+          "what": "lib/zwift_sync.py (bridge к garmin_tools/zwift_sync.py) → workout JSON → Garmin Connect. workout_ref в plan-wN.json."
+        },
+        {
+          "n": 7,
+          "name": "Расписание",
+          "what": "plan_generate обновляет slot: kind='bike'|'brick', workout_ref={url, garmin_workout_id, scheduled_date}."
+        },
+        {
+          "n": 8,
+          "name": "Выполнение",
+          "what": "Tacx / Garmin workout на велостанке → FIT → fit_ingest → season_progress."
+        }
+      ],
+      "key": "Zwift search — часть coach-plan-week. plan_generate не выдумывает структуру workout, а через coach-plan-zwift ищет готовую. Кирилл голосует. Никакого ручного копирования."
+    },
+    {
       "id": "skills",
       "kind": "layer",
       "title": "Слой 2 · Skills",
@@ -795,9 +852,18 @@
           "aliases": [
             "coach-onboarding"
           ]
+        },
+        {
+          "name": "coach-plan-zwift",
+          "uses": [
+            "lib.zwift_search",
+            "lib.zwift_sync",
+            "lib.render_html"
+          ],
+          "aliases": []
         }
       ],
-      "rule": "area ∈ {plan, fit}, verb ∈ {week, season, adjust, ingest, review, trend, onboarding}. coach-plan-adjust — единственный, кто правит constraints (с подтверждением). coach-plan-season — единственный, кто вызывает goal_allocator.",
+      "rule": "area ∈ {plan, fit}, verb ∈ {week, season, adjust, ingest, review, trend, onboarding}. coach-plan-adjust — единственный, кто правит constraints (с подтверждением). coach-plan-season — единственный, кто вызывает goal_allocator. coach-plan-zwift — единственный, кто обращается к WhatsOnZwift.",
       "preamble": "Pre-amble наследуется всеми: «Ты строго в рамках athlete.json + season_plan.json + constraints.json + вывод указанной функции. Любой факт вне — откажись. В coach-fit-review/coach-fit-trend каждое утверждение требует cited_principle.»"
     },
     {
@@ -836,17 +902,22 @@
           "what": "cron (еженедельно) → fit_retention.py → удалить FIT > 14 дней."
         },
         {
-          "n": 7,
+          "n": 6,
+          "name": "Zwift search?",
+          "what": "если slot требует workout (bike/brick) — coach-plan-zwift → candidates[] → выбор → zwift_sync → Garmin. slot обновляется workout_ref."
+        },
+        {
+          "n": 8,
           "name": "Replan?",
           "what": "«перепланируй сезон» → season_replan.py → новый season_plan.json + constraints check + allocation check + archive старого."
         },
         {
-          "n": 8,
+          "n": 9,
           "name": "Модель",
           "what": "ask_model.py с JSON-schema. coach-fit-review/coach-fit-trend → обязателен cited_principle."
         },
         {
-          "n": 9,
+          "n": 10,
           "name": "Audit + выход",
           "what": "decisions/<date>-<slot>-{analyze,w,replan,retention,allocation}.json. Render: JSON + self-contained HTML."
         }
@@ -877,7 +948,10 @@
         "Переименовать skill'ы по схеме coach-<area>-<verb> + aliases",
         "Hook load_athlete_context.py",
         "Cron: weekly → fit_retention.py",
-        "Прогнать 7 типовых: (а) «загрузи FIT за CP-дату», (б) «разбор FIT (quick)», (в) «разбор (coaching)», (г) «тренд по g_run_spring за 12 нед», (д) «goal_allocator: кандидаты для 10К+tri», (е) «сгенерируй W_N», (ж) «replan: add_goal=triathlon»"
+        "Прогнать 7 типовых: (а) «загрузи FIT за CP-дату», (б) «разбор FIT (quick)», (в) «разбор (coaching)», (г) «тренд по g_run_spring за 12 нед», (д) «goal_allocator: кандидаты для 10К+tri», (е) «сгенерируй W_N», (ж) «replan: add_goal=triathlon»",
+        "lib/zwift_search.py (scraping whatsonzwift.com по критериям)",
+        "lib/zwift_sync.py (bridge к garmin_tools/zwift_sync.py)",
+        "skills/coach-plan-zwift.md"
       ]
     },
     {

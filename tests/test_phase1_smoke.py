@@ -19,6 +19,7 @@ sys.path.insert(0, str(ROOT))
 from lib import parse_fit, fit_ingest, fit_retention, garmin_weight  # noqa: E402
 from lib import weekly_report, analyze, plan_adjust, plan_generate  # noqa: E402
 from lib import goal_allocator, season_replan, volume_check, render_html, ask_model  # noqa: E402
+from lib import zwift_search, zwift_sync  # noqa: E402
 from lib.metrics import registry  # noqa: E402
 
 
@@ -218,6 +219,28 @@ def test_weekly_report_runs():
     print(f"  ✓ weekly_report runs (weight_line={report['weight_line']!r})")
 
 
+def test_zwift_parse_free_text():
+    """Парсинг голосовых команд в criteria."""
+    cases = [
+        ("45 мин Z2 велосипед endurance", {"duration_min": 45, "zones": ["Z2"], "discipline": "cycling"}),
+        ("60 min threshold intervals",   {"duration_min": 60, "workout_type": "intervals"}),
+        ("30 мин recovery бег",          {"duration_min": 30, "workout_type": "recovery", "discipline": "running"}),
+    ]
+    for text, must_have in cases:
+        parsed = zwift_search.parse_free_text(text)
+        for k, v in must_have.items():
+            assert parsed.get(k) == v, f"parse_free_text('{text}')[{k}]={parsed.get(k)} != {v}"
+    print(f"  ✓ zwift_search.parse_free_text ({len(cases)} cases)")
+
+
+def test_zwift_search_returns_at_most_4():
+    """search возвращает ≤ 4 candidates, не 'так и штук'."""
+    criteria = {"discipline": "cycling", "duration_min": 45, "duration_tolerance": 10}
+    cands = zwift_search.search(criteria)
+    assert len(cands) <= 4, f"got {len(cands)} candidates, expected ≤ 4"
+    print(f"  ✓ zwift_search.search returned {len(cands)} (≤ 4)")
+
+
 def main():
     print("\n=== Phase 1 smoke tests ===\n")
     tests = [
@@ -235,6 +258,8 @@ def main():
         test_ask_model_validates_cited_principle,
         test_render_html_writes_file,
         test_weekly_report_runs,
+        test_zwift_parse_free_text,
+        test_zwift_search_returns_at_most_4,
     ]
     failed = 0
     for t in tests:

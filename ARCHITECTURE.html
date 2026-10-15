@@ -89,11 +89,11 @@ footer{margin-top:24px;text-align:center;color:var(--muted);font-size:11px}
 </style>
 </head><body><div class="wrap">
 <header><h1>Спортивный слой Hermes — полная архитектура</h1>
-<p class="subtitle">v13 — ФИНАЛ ПЕРЕД РЕАЛИЗАЦИЕЙ. Скелет lib/ + state/ + ui/ + skills/ уже создан в GitHub проекте coach/. Все решения пишутся в decisions/. Один взгляд — всё сразу.</p></header>
+<p class="subtitle">Фундамент + 5 точек расширения: метрики, replan сезона, W_N с overrides, анализ тренировки (4 уровня), ПОИСК ZWIFT-ТРЕНИРОВОК ПО КРИТЕРИЯМ. control_points живут в season_plan. constraints и volume_progression — параметры планирования. FIT retention = 14 дней. Один взгляд — всё сразу.</p></header>
 
 <section class="block" id="tldr">
   <h2>TL;DR — что это и зачем</h2>
-  <ol class="problems"><li>Один JSON-файл правды на каждый срез (athlete / season_plan с goals[] и phases_for_goals / constraints / progress / overrides / fit_store).</li><li>Вся арифметика идёт в Python (lib/). Модель вызывается через одну обёртку ask_model.py с JSON-schema. Skill'ы не пишут промпты руками.</li><li>4 точки расширения: metrics/, season_replan, plan_generate (с constraints + volume_progression + goal_allocator), analyze (4 режима).</li><li>Несколько целей в одном сезоне: goals[] (например spring 10K + autumn Olympic triathlon). plan_generate распределяет объём через goal_allocator.py — оптимум с учётом adaptation_rates, trade-off'ы показывает явно, решение за Кириллом.</li><li>control_points живут в season_plan с привязкой goal_id; общие (discipline-agnostic) — без goal_id.</li><li>constraints — рамка. plan_generate читает, coach-plan-adjust правит (с подтверждением).</li><li>FIT retention = 14 дней → удалить.</li><li>Все спортивные skill'ы названы по схеме 'coach-&lt;area&gt;-&lt;verb&gt;'.</li><li>Каждое решение моделью логируется в decisions/. Retention-проход логирует, что удалено.</li><li>Вес: weight_history[] в athlete.json + авто-синк из Garmin через cron + одна строка в weekly_report + ручная правка через coach-plan-adjust. Без целевого веса, без BMI/калорий, без алертов. Минимум.</li></ol>
+  <ol class="problems"><li>Один JSON-файл правды на каждый срез (athlete / season_plan с goals[] и phases_for_goals / constraints / progress / overrides / fit_store).</li><li>Вся арифметика идёт в Python (lib/). Модель вызывается через одну обёртку ask_model.py с JSON-schema. Skill'ы не пишут промпты руками.</li><li>4 точки расширения: metrics/, season_replan, plan_generate (с constraints + volume_progression + goal_allocator), analyze (4 режима).</li><li>Несколько целей в одном сезоне: goals[] (например spring 10K + autumn Olympic triathlon). plan_generate распределяет объём через goal_allocator.py — оптимум с учётом adaptation_rates, trade-off'ы показывает явно, решение за Кириллом.</li><li>control_points живут в season_plan с привязкой goal_id; общие (discipline-agnostic) — без goal_id.</li><li>constraints — рамка. plan_generate читает, coach-plan-adjust правит (с подтверждением).</li><li>FIT retention = 14 дней → удалить.</li><li>Все спортивные skill'ы названы по схеме 'coach-&lt;area&gt;-&lt;verb&gt;'.</li><li>Каждое решение моделью логируется в decisions/. Retention-проход логирует, что удалено.</li><li>Вес: weight_history[] в athlete.json + авто-синк из Garmin через cron + одна строка в weekly_report + ручная правка через coach-plan-adjust. Без целевого веса, без BMI/калорий, без алертов. Минимум.</li><li>Zwift search: coach-plan-zwift — по критериям (дисциплина, длительность, зоны, тип) ищет workouts на WhatsOnZwift, предлагает 2-4 варианта, Кирилл выбирает, zwift_sync.py конвертит → отправляется в Garmin Connect. Становится частью plan-wN.</li></ol>
 </section>
 
 <section class="block" id="goals">
@@ -419,7 +419,7 @@ fit_store/index.json: { 'fits': [ { 'id', 'path', 'date', 'type':'running'|'cycl
 
 <section class="block" id="lib">
   <h2>Слой 1 · Python toolkit</h2>
-  <p class="summary">Сюда ходят skill'ы. Модель только отсюда.</p><p class="path"><code>~/.hermes/coach/lib/</code></p><div class='modules'><div class='module'><div class='module-name'><code>parse_fit.py</code></div><div class='module-purpose'>FIT → dict.</div></div><div class='module'><div class='module-name'><code>fit_ingest.py</code></div><div class='module-purpose'>FIT → fit_store/ + (если CP-дата) actual_metrics.</div></div><div class='module'><div class='module-name'><code>fit_retention.py</code></div><div class='module-purpose'>еженедельно: FIT &gt; 14 дней → удалить.</div></div><div class='module'><div class='module-name'><code>garmin_weight.py</code></div><div class='module-purpose'>раз в день (cron eae7b0d88b4a): читает последний вес из Garmin. Если новее последней записи в athlete.weight_history — append (source='garmin').</div></div><div class='module'><div class='module-name'><code>weekly_report.py</code></div><div class='module-purpose'>athlete + 3 FIT + метрики → сводка недели (с goal_breakdown если целей &gt; 1, +1 строка про вес).</div></div><div class='module'><div class='module-name'><code>analyze.py</code></div><div class='module-purpose'>analyze(fit_id, mode, context). mode ∈ {quick, contextual, coaching, lookback}. Lookback берёт CP из season_progress с фильтром по goal_id.</div></div><div class='module'><div class='module-name'><code>plan_adjust.py</code></div><div class='module-purpose'>«сегодня перегруз» → diff JSON.</div></div><div class='module'><div class='module-name'><code>plan_generate.py</code></div><div class='module-purpose'>season_plan (goals + phases_for_goals + chosen_allocation) + athlete + constraints + overrides → plan-wN.json с CP-слотами.</div></div><div class='module'><div class='module-name'><code>goal_allocator.py</code></div><div class='module-purpose'>goals[] + phases[] + adaptation_rates + constraints → candidates[] с явным trade-off. Не выбирает за Кирилла.</div></div><div class='module'><div class='module-name'><code>season_replan.py</code></div><div class='module-purpose'>новый season_plan.json (с поддержкой goals[]) + diff + archive.</div></div><div class='module'><div class='module-name'><code>volume_check.py</code></div><div class='module-purpose'>phase_target vs constraints → STOP/OK + suggestion.</div></div><div class='module'><div class='module-name'><code>render_html.py</code></div><div class='module-purpose'>plan/diff/report → self-contained HTML.</div></div><div class='module'><div class='module-name'><code>ask_model.py</code></div><div class='module-purpose'>единственная обёртка над LLM + JSON-schema + cited_principle.</div></div><div class='module'><div class='module-name'><code>metrics/</code></div><div class='module-purpose'>одна метрика = один файл. registry.py + @register.</div></div><div class='module'><div class='module-name'><code>coaching_corpus/</code></div><div class='module-purpose'>принципы с source. Добавляются olympic-specific (transition, brick, race_pace_under_fatigue).</div></div></div><p class="rule"><strong>Правило:</strong> Модель только через ask_model.py. fit_retention — единственная, кто удаляет FIT. plan_generate читает constraints, не правит. goal_allocator — только candidates, никогда default.</p>
+  <p class="summary">Сюда ходят skill'ы. Модель только отсюда.</p><p class="path"><code>~/.hermes/coach/lib/</code></p><div class='modules'><div class='module'><div class='module-name'><code>parse_fit.py</code></div><div class='module-purpose'>FIT → dict.</div></div><div class='module'><div class='module-name'><code>fit_ingest.py</code></div><div class='module-purpose'>FIT → fit_store/ + (если CP-дата) actual_metrics.</div></div><div class='module'><div class='module-name'><code>fit_retention.py</code></div><div class='module-purpose'>еженедельно: FIT &gt; 14 дней → удалить.</div></div><div class='module'><div class='module-name'><code>garmin_weight.py</code></div><div class='module-purpose'>раз в день (cron eae7b0d88b4a): читает последний вес из Garmin. Если новее последней записи в athlete.weight_history — append (source='garmin').</div></div><div class='module'><div class='module-name'><code>weekly_report.py</code></div><div class='module-purpose'>athlete + 3 FIT + метрики → сводка недели (с goal_breakdown если целей &gt; 1, +1 строка про вес).</div></div><div class='module'><div class='module-name'><code>analyze.py</code></div><div class='module-purpose'>analyze(fit_id, mode, context). mode ∈ {quick, contextual, coaching, lookback}. Lookback берёт CP из season_progress с фильтром по goal_id.</div></div><div class='module'><div class='module-name'><code>plan_adjust.py</code></div><div class='module-purpose'>«сегодня перегруз» → diff JSON.</div></div><div class='module'><div class='module-name'><code>plan_generate.py</code></div><div class='module-purpose'>season_plan (goals + phases_for_goals + chosen_allocation) + athlete + constraints + overrides → plan-wN.json с CP-слотами.</div></div><div class='module'><div class='module-name'><code>goal_allocator.py</code></div><div class='module-purpose'>goals[] + phases[] + adaptation_rates + constraints → candidates[] с явным trade-off. Не выбирает за Кирилла.</div></div><div class='module'><div class='module-name'><code>season_replan.py</code></div><div class='module-purpose'>новый season_plan.json (с поддержкой goals[]) + diff + archive.</div></div><div class='module'><div class='module-name'><code>volume_check.py</code></div><div class='module-purpose'>phase_target vs constraints → STOP/OK + suggestion.</div></div><div class='module'><div class='module-name'><code>render_html.py</code></div><div class='module-purpose'>plan/diff/report → self-contained HTML.</div></div><div class='module'><div class='module-name'><code>ask_model.py</code></div><div class='module-purpose'>единственная обёртка над LLM + JSON-schema + cited_principle.</div></div><div class='module'><div class='module-name'><code>metrics/</code></div><div class='module-purpose'>одна метрика = один файл. registry.py + @register.</div></div><div class='module'><div class='module-name'><code>coaching_corpus/</code></div><div class='module-purpose'>принципы с source. Добавляются olympic-specific (transition, brick, race_pace_under_fatigue).</div></div><div class='module'><div class='module-name'><code>zwift_search.py</code></div><div class='module-purpose'>парсит WhatsOnZwift по критериям → candidates[]. Read-only, не хранит state.</div></div><div class='module'><div class='module-name'><code>zwift_sync.py</code></div><div class='module-purpose'>тонкая обёртка над garmin_tools/zwift_sync.py. URL → workout JSON → Garmin Connect.</div></div></div><p class="rule"><strong>Правило:</strong> Модель только через ask_model.py. fit_retention — единственная, кто удаляет FIT. plan_generate читает constraints, не правит. goal_allocator — только candidates, никогда default. coach-plan-zwift вызывает zwift_search.py (read-only) и zwift_sync.py (write через garmin_tools).</p>
 </section>
 
 <section class="block" id="metrics">
@@ -584,9 +584,79 @@ fit_store/index.json: { 'fits': [ { 'id', 'path', 'date', 'type':'running'|'cycl
   <p class="key"><strong>Ключ к предсказуемости:</strong> Сезон = «закон». Overrides = «поправки». Constraints = «рамка». План не строится в обход рамки.</p>
 </section>
 
+<section class="block" id="zwift_search">
+  <h2>Точка расширения 5 · поиск Zwift-тренировок по критериям</h2>
+  <ol class="flow">
+        <li class="step">
+          <div class="step-n">1</div>
+          <div class="step-body">
+            <div class="step-name">Запрос</div>
+            <div class="step-what">Кирилл говорит «нужна 45-мин Z2-вело на завтра». Или из plan_generate: 'нужен 60мин Z2-bike слот' с критериями. Skill coach-plan-zwift.</div>
+          </div>
+        </li>
+        
+        <li class="step">
+          <div class="step-n">2</div>
+          <div class="step-body">
+            <div class="step-name">Парсинг критериев</div>
+            <div class="step-what">criteria = {discipline, duration_min, zones[], workout_type, tags[]}. Один или комбинация.</div>
+          </div>
+        </li>
+        
+        <li class="step">
+          <div class="step-n">3</div>
+          <div class="step-body">
+            <div class="step-name">Скрапинг</div>
+            <div class="step-what">lib/zwift_search.py парсит WhatsOnZwift. Возвращает candidates[] 2-4 варианта (НЕ 'так и штук').</div>
+          </div>
+        </li>
+        
+        <li class="step">
+          <div class="step-n">4</div>
+          <div class="step-body">
+            <div class="step-name">Презентация</div>
+            <div class="step-what">Рендер HTML с cards (заголовок, длительность, описание, ссылка). Кирилл видит, голосует.</div>
+          </div>
+        </li>
+        
+        <li class="step">
+          <div class="step-n">5</div>
+          <div class="step-body">
+            <div class="step-name">Выбор</div>
+            <div class="step-what">«беру вариант 2» (голосовое). Решение в decisions/&lt;date&gt;-&lt;slot&gt;-zwift.json.</div>
+          </div>
+        </li>
+        
+        <li class="step">
+          <div class="step-n">6</div>
+          <div class="step-body">
+            <div class="step-name">Конверсия</div>
+            <div class="step-what">lib/zwift_sync.py (bridge к garmin_tools/zwift_sync.py) → workout JSON → Garmin Connect. workout_ref в plan-wN.json.</div>
+          </div>
+        </li>
+        
+        <li class="step">
+          <div class="step-n">7</div>
+          <div class="step-body">
+            <div class="step-name">Расписание</div>
+            <div class="step-what">plan_generate обновляет slot: kind='bike'|'brick', workout_ref={url, garmin_workout_id, scheduled_date}.</div>
+          </div>
+        </li>
+        
+        <li class="step">
+          <div class="step-n">8</div>
+          <div class="step-body">
+            <div class="step-name">Выполнение</div>
+            <div class="step-what">Tacx / Garmin workout на велостанке → FIT → fit_ingest → season_progress.</div>
+          </div>
+        </li>
+        </ol>
+  <p class="key"><strong>Ключ к предсказуемости:</strong> Zwift search — часть coach-plan-week. plan_generate не выдумывает структуру workout, а через coach-plan-zwift ищет готовую. Кирилл голосует. Никакого ручного копирования.</p>
+</section>
+
 <section class="block" id="skills">
   <h2>Слой 2 · Skills</h2>
-  <p class="summary">Схема coach-&lt;area&gt;-&lt;verb&gt;. Старые имена — aliases.</p><div class='skills'><div class='skill-row'><div class='skill-name'>coach-plan-week</div><div class='skill-arrow'>→</div><div class='skill-uses'>plan_generate, render_html</div><div class='skill-aliases'>aliases: weekly-helper, weekly-card-builder</div></div><div class='skill-row'><div class='skill-name'>coach-plan-season</div><div class='skill-arrow'>→</div><div class='skill-uses'>season_replan, goal_allocator, render_html</div><div class='skill-aliases'>aliases: plan-present</div></div><div class='skill-row'><div class='skill-name'>coach-plan-adjust</div><div class='skill-arrow'>→</div><div class='skill-uses'>weekly_report, plan_adjust, constraints read/write</div><div class='skill-aliases'>aliases: coaching-running</div></div><div class='skill-row'><div class='skill-name'>coach-fit-ingest</div><div class='skill-arrow'>→</div><div class='skill-uses'>fit_ingest</div><div class='skill-aliases'>aliases: garmin-fit-inspect</div></div><div class='skill-row'><div class='skill-name'>coach-fit-review</div><div class='skill-arrow'>→</div><div class='skill-uses'>analyze(mode), ask_model</div><div class='skill-aliases'>aliases: garmin-fit-inspect</div></div><div class='skill-row'><div class='skill-name'>coach-fit-trend</div><div class='skill-arrow'>→</div><div class='skill-uses'>analyze(mode='lookback'), render</div><div class='skill-aliases'>aliases: garmin-running-analysis, coach-trend-lookback</div></div><div class='skill-row'><div class='skill-name'>coach-onboarding</div><div class='skill-arrow'>→</div><div class='skill-uses'>импорт архивов → athlete.json + constraints.json + adaptation_rates</div><div class='skill-aliases'>aliases: coach-onboarding</div></div></div><p class="preamble"><strong>Pre-amble:</strong> Pre-amble наследуется всеми: «Ты строго в рамках athlete.json + season_plan.json + constraints.json + вывод указанной функции. Любой факт вне — откажись. В coach-fit-review/coach-fit-trend каждое утверждение требует cited_principle.»</p><p class="rule"><strong>Правило:</strong> area ∈ {plan, fit}, verb ∈ {week, season, adjust, ingest, review, trend, onboarding}. coach-plan-adjust — единственный, кто правит constraints (с подтверждением). coach-plan-season — единственный, кто вызывает goal_allocator.</p>
+  <p class="summary">Схема coach-&lt;area&gt;-&lt;verb&gt;. Старые имена — aliases.</p><div class='skills'><div class='skill-row'><div class='skill-name'>coach-plan-week</div><div class='skill-arrow'>→</div><div class='skill-uses'>plan_generate, render_html</div><div class='skill-aliases'>aliases: weekly-helper, weekly-card-builder</div></div><div class='skill-row'><div class='skill-name'>coach-plan-season</div><div class='skill-arrow'>→</div><div class='skill-uses'>season_replan, goal_allocator, render_html</div><div class='skill-aliases'>aliases: plan-present</div></div><div class='skill-row'><div class='skill-name'>coach-plan-adjust</div><div class='skill-arrow'>→</div><div class='skill-uses'>weekly_report, plan_adjust, constraints read/write</div><div class='skill-aliases'>aliases: coaching-running</div></div><div class='skill-row'><div class='skill-name'>coach-fit-ingest</div><div class='skill-arrow'>→</div><div class='skill-uses'>fit_ingest</div><div class='skill-aliases'>aliases: garmin-fit-inspect</div></div><div class='skill-row'><div class='skill-name'>coach-fit-review</div><div class='skill-arrow'>→</div><div class='skill-uses'>analyze(mode), ask_model</div><div class='skill-aliases'>aliases: garmin-fit-inspect</div></div><div class='skill-row'><div class='skill-name'>coach-fit-trend</div><div class='skill-arrow'>→</div><div class='skill-uses'>analyze(mode='lookback'), render</div><div class='skill-aliases'>aliases: garmin-running-analysis, coach-trend-lookback</div></div><div class='skill-row'><div class='skill-name'>coach-onboarding</div><div class='skill-arrow'>→</div><div class='skill-uses'>импорт архивов → athlete.json + constraints.json + adaptation_rates</div><div class='skill-aliases'>aliases: coach-onboarding</div></div><div class='skill-row'><div class='skill-name'>coach-plan-zwift</div><div class='skill-arrow'>→</div><div class='skill-uses'>lib.zwift_search, lib.zwift_sync, lib.render_html</div></div></div><p class="preamble"><strong>Pre-amble:</strong> Pre-amble наследуется всеми: «Ты строго в рамках athlete.json + season_plan.json + constraints.json + вывод указанной функции. Любой факт вне — откажись. В coach-fit-review/coach-fit-trend каждое утверждение требует cited_principle.»</p><p class="rule"><strong>Правило:</strong> area ∈ {plan, fit}, verb ∈ {week, season, adjust, ingest, review, trend, onboarding}. coach-plan-adjust — единственный, кто правит constraints (с подтверждением). coach-plan-season — единственный, кто вызывает goal_allocator. coach-plan-zwift — единственный, кто обращается к WhatsOnZwift.</p>
 </section>
 
 <section class="block" id="flow">
@@ -641,7 +711,15 @@ fit_store/index.json: { 'fits': [ { 'id', 'path', 'date', 'type':'running'|'cycl
         </li>
         
         <li class="step">
-          <div class="step-n">7</div>
+          <div class="step-n">6</div>
+          <div class="step-body">
+            <div class="step-name">Zwift search?</div>
+            <div class="step-what">если slot требует workout (bike/brick) — coach-plan-zwift → candidates[] → выбор → zwift_sync → Garmin. slot обновляется workout_ref.</div>
+          </div>
+        </li>
+        
+        <li class="step">
+          <div class="step-n">8</div>
           <div class="step-body">
             <div class="step-name">Replan?</div>
             <div class="step-what">«перепланируй сезон» → season_replan.py → новый season_plan.json + constraints check + allocation check + archive старого.</div>
@@ -649,7 +727,7 @@ fit_store/index.json: { 'fits': [ { 'id', 'path', 'date', 'type':'running'|'cycl
         </li>
         
         <li class="step">
-          <div class="step-n">8</div>
+          <div class="step-n">9</div>
           <div class="step-body">
             <div class="step-name">Модель</div>
             <div class="step-what">ask_model.py с JSON-schema. coach-fit-review/coach-fit-trend → обязателен cited_principle.</div>
@@ -657,7 +735,7 @@ fit_store/index.json: { 'fits': [ { 'id', 'path', 'date', 'type':'running'|'cycl
         </li>
         
         <li class="step">
-          <div class="step-n">9</div>
+          <div class="step-n">10</div>
           <div class="step-body">
             <div class="step-name">Audit + выход</div>
             <div class="step-what">decisions/&lt;date&gt;-&lt;slot&gt;-{analyze,w,replan,retention,allocation}.json. Render: JSON + self-contained HTML.</div>
@@ -669,7 +747,7 @@ fit_store/index.json: { 'fits': [ { 'id', 'path', 'date', 'type':'running'|'cycl
 
 <section class="block" id="first_step">
   <h2>Минимальный шаг (1–2 дня работы)</h2>
-  <ul class="checklist"><li>state/athlete.json (включая adaptation_rates)</li><li>state/season_plan.json: goals[] (g_run_spring, g_tri_autumn) + 11 phases с goal_id + 5 control_points (4 к goal, 1 общий) + races[] + chosen_allocation</li><li>state/constraints.json (weekly_windows + preferred_slots с swim/long_bike/brick)</li><li>state/season_progress.json (со структурой под control_points[] с goal_id и weeks[].goal_breakdown)</li><li>state/overrides.json</li><li>state/fit_store/ + index.json + retention.json (fit_ttl_days: 14)</li><li>lib/fit_ingest.py + lib/fit_retention.py</li><li>lib/garmin_weight.py (1-строчный no-op если новых измерений нет)</li><li>lib/goal_allocator.py (candidates[] с trade-off)</li><li>lib/volume_check.py</li><li>lib/plan_generate.py с поддержкой goals[]</li><li>lib/season_replan.py с reason='add_goal' / 'change_allocation' / etc.</li><li>lib/{parse_fit, plan_adjust, render_html, ask_model}.py</li><li>lib/metrics/{registry, _template, hr_drift, cadence_30s, fatigue_score, transition_efficiency, race_pace_under_fatigue}.py</li><li>lib/coaching_corpus/ с brick_workout.json, transition.json, race_pace_under_fatigue.json, adaptation_rates.json + lookback.json</li><li>lib/analyze.py с 4 mode (с goal_id-фильтром в lookback)</li><li>Переименовать skill'ы по схеме coach-&lt;area&gt;-&lt;verb&gt; + aliases</li><li>Hook load_athlete_context.py</li><li>Cron: weekly → fit_retention.py</li><li>Прогнать 7 типовых: (а) «загрузи FIT за CP-дату», (б) «разбор FIT (quick)», (в) «разбор (coaching)», (г) «тренд по g_run_spring за 12 нед», (д) «goal_allocator: кандидаты для 10К+tri», (е) «сгенерируй W_N», (ж) «replan: add_goal=triathlon»</li></ul>
+  <ul class="checklist"><li>state/athlete.json (включая adaptation_rates)</li><li>state/season_plan.json: goals[] (g_run_spring, g_tri_autumn) + 11 phases с goal_id + 5 control_points (4 к goal, 1 общий) + races[] + chosen_allocation</li><li>state/constraints.json (weekly_windows + preferred_slots с swim/long_bike/brick)</li><li>state/season_progress.json (со структурой под control_points[] с goal_id и weeks[].goal_breakdown)</li><li>state/overrides.json</li><li>state/fit_store/ + index.json + retention.json (fit_ttl_days: 14)</li><li>lib/fit_ingest.py + lib/fit_retention.py</li><li>lib/garmin_weight.py (1-строчный no-op если новых измерений нет)</li><li>lib/goal_allocator.py (candidates[] с trade-off)</li><li>lib/volume_check.py</li><li>lib/plan_generate.py с поддержкой goals[]</li><li>lib/season_replan.py с reason='add_goal' / 'change_allocation' / etc.</li><li>lib/{parse_fit, plan_adjust, render_html, ask_model}.py</li><li>lib/metrics/{registry, _template, hr_drift, cadence_30s, fatigue_score, transition_efficiency, race_pace_under_fatigue}.py</li><li>lib/coaching_corpus/ с brick_workout.json, transition.json, race_pace_under_fatigue.json, adaptation_rates.json + lookback.json</li><li>lib/analyze.py с 4 mode (с goal_id-фильтром в lookback)</li><li>Переименовать skill'ы по схеме coach-&lt;area&gt;-&lt;verb&gt; + aliases</li><li>Hook load_athlete_context.py</li><li>Cron: weekly → fit_retention.py</li><li>Прогнать 7 типовых: (а) «загрузи FIT за CP-дату», (б) «разбор FIT (quick)», (в) «разбор (coaching)», (г) «тренд по g_run_spring за 12 нед», (д) «goal_allocator: кандидаты для 10К+tri», (е) «сгенерируй W_N», (ж) «replan: add_goal=triathlon»</li><li>lib/zwift_search.py (scraping whatsonzwift.com по критериям)</li><li>lib/zwift_sync.py (bridge к garmin_tools/zwift_sync.py)</li><li>skills/coach-plan-zwift.md</li></ul>
 </section>
 
 <section class="block" id="helper">
