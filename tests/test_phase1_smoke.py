@@ -19,7 +19,7 @@ sys.path.insert(0, str(ROOT))
 from lib import parse_fit, fit_ingest, fit_retention, garmin_weight  # noqa: E402
 from lib import weekly_report, analyze, plan_adjust, plan_generate  # noqa: E402
 from lib import goal_allocator, season_replan, volume_check, render_html, ask_model  # noqa: E402
-from lib import zwift_search, zwift_sync  # noqa: E402
+from lib import zwift_search, zwift_sync, plan_runtime  # noqa: E402
 from lib.metrics import registry  # noqa: E402
 
 
@@ -244,6 +244,65 @@ def test_render_html_includes_v18_features():
     print("  ✓ render_html v18: totals, phase, zones, focus, workout_pending")
 
 
+def test_plan_runtime_generates_json_and_html():
+    """v19: plan_runtime.generate_plan_with_html всегда создаёт и JSON, и HTML."""
+    import shutil
+    tmp = tempfile.mkdtemp(prefix="plan_runtime_")
+    try:
+        out_dir = Path(tmp)
+        result = plan_runtime.generate_plan_with_html(
+            1, out_dir=out_dir,
+            season_plan_path=ROOT / "state/season_plan.json",
+            athlete_path=ROOT / "state/athlete.json",
+            constraints_path=ROOT / "state/constraints.json",
+            overrides_path=ROOT / "state/overrides.json",
+        )
+
+        json_path_str = result["json_path"]
+        html_path_str = result["html_path"]
+
+        assert Path(json_path_str).exists(), f"JSON не создан: {json_path_str}"
+        assert Path(html_path_str).exists(), f"HTML не создан: {html_path_str}"
+
+        json_data = json.loads(Path(json_path_str).read_text(encoding="utf-8"))
+        assert json_data["season_week"] == 1
+
+        html_content = Path(html_path_str).read_text(encoding="utf-8")
+        assert "W1" in html_content
+        assert "run_base" in html_content
+        assert len(html_content) > 3000
+
+        assert result["slots_count"] >= 4
+        assert result["season_week"] == 1
+
+        print(f"  ✓ plan_runtime W1: json={Path(json_path_str).name} ({Path(json_path_str).stat().st_size}B), "
+              f"html={Path(html_path_str).name} ({Path(html_path_str).stat().st_size}B), "
+              f"slots={result['slots_count']}, bike_pending={result['bike_pending']}")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def test_plan_runtime_for_several_weeks():
+    """v19: regen нескольких W_N — каждая порождает JSON + HTML."""
+    import shutil
+    tmp = tempfile.mkdtemp(prefix="plan_runtime_several_")
+    try:
+        out_dir = Path(tmp)
+        for sw in [1, 4, 13, 27]:
+            result = plan_runtime.generate_plan_with_html(
+                sw, out_dir=out_dir,
+                season_plan_path=ROOT / "state/season_plan.json",
+                athlete_path=ROOT / "state/athlete.json",
+                constraints_path=ROOT / "state/constraints.json",
+                overrides_path=ROOT / "state/overrides.json",
+            )
+            assert Path(result["json_path"]).exists()
+            assert Path(result["html_path"]).exists()
+        print(f"  ✓ plan_runtime для W1, W4, W13, W27: все (json, html) созданы")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def test_weekly_report_runs():
     report = weekly_report.report(1)  # W1 сезона
     assert "season_week" in report
@@ -347,6 +406,8 @@ def main():
         test_plan_generate_layout_w1_run_base,
         test_plan_generate_layout_all_phases,
         test_render_html_includes_v18_features,
+        test_plan_runtime_generates_json_and_html,
+        test_plan_runtime_for_several_weeks,
     ]
     failed = 0
     for t in tests:
