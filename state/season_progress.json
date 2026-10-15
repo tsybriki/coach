@@ -2,17 +2,20 @@
   "schema_version": "0.1.0",
   "weeks": {
     "W1": {
-      "planned_hours": 6.5,
-      "actual_hours": null,
+      "planned_hours": 5.2,
+      "actual_hours": 5.2,
+      "actual_km": 45.7,
+      "actual_sessions": 6,
       "goal_breakdown": {
-        "g_run_spring": 6.5,
+        "g_run_spring": 5.2,
         "g_tri_autumn": 0
       },
-      "slots_completed": 0,
-      "slots_planned": 9,
-      "notes": "W42 = 11-17 окт. Старт фазы run_base (вс-суб).",
+      "slots_completed": 6,
+      "slots_planned": 6,
+      "notes": "W42 = 11-17 окт (Sun-Sat). Факт: 6 сессий (10К test + pool + 2×run + long + cross). ПТ+СБ — отдых. Итог: 45.7К за 5.2ч. Baseline 10К = 44:06.",
       "season_week": 1,
       "iso_week": "2026-W42",
+      "is_actual_log": true,
       "_keys_note": "Primary key is season_week (e.g. 'W1'). iso_week kept for cross-reference."
     }
   },

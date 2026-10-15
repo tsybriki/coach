@@ -311,6 +311,16 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .cp-card h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 3px}
 .cp-card p{font-size:11.5px;color:var(--text);margin:0;line-height:1.4}
 
+.actual-badge{display:inline-block;background:rgba(126,231,135,.1);border:1px solid rgba(126,231,135,.3);color:var(--good);padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600;margin-top:6px;letter-spacing:.3px}
+.slot-done-mark{color:var(--good);font-weight:700;margin-left:4px}
+.slot-completed{border-color:rgba(126,231,135,.3) !important;background:rgba(126,231,135,.04) !important}
+
+.summary-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:10px}
+.summary-card h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 6px}
+.summary-list{margin:0;padding-left:18px;font-size:11.5px;line-height:1.5;color:var(--text)}
+.summary-list li{margin-bottom:2px}
+.summary-totals{margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:var(--accent2);font-weight:600;text-align:center;font-family:ui-monospace,SFMono-Regular,monospace}
+
 .plan-title{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:4px}
 .plan-title h1{font-size:18px;margin:0}
 .plan-title .week{font-size:12px;color:var(--muted);margin-top:2px}
@@ -350,6 +360,12 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .focus-pill.focus-Z5{color:var(--cp);background:rgba(216,160,255,.08);border-color:rgba(216,160,255,.3)}
 .focus-pill.focus-Z6{color:var(--cp);background:rgba(216,160,255,.08);border-color:rgba(216,160,255,.3)}
 .zwift-pending{color:var(--warn) !important;border-color:rgba(255,155,106,.4) !important;background:rgba(255,155,106,.08) !important;font-family:inherit !important}
+
+.actual-block{background:rgba(126,231,135,.06);border:1px solid rgba(126,231,135,.3);border-radius:8px;padding:10px 12px;margin:0 0 12px;font-size:13px}
+.actual-title{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--good);font-weight:600;margin-bottom:5px}
+.actual-line{color:var(--text);font-size:13px;line-height:1.4}
+.actual-line b{color:var(--good);font-weight:600}
+.actual-notes{margin-top:5px;font-size:12px;color:var(--muted);font-style:italic;line-height:1.4}
 .inv-item{display:flex;gap:8px;align-items:center;padding:2px 0}
 .inv-icon{color:var(--warn);font-size:14px;width:18px;text-align:center}
 
@@ -497,6 +513,27 @@ function renderCard(slot) {
 
   const stepsHtml = renderStructure(slot.structure, kind);
 
+  // v29: actual-блок (если есть в slot.actual) — показывается зелёным
+  let actualHtml = '';
+  if (slot.actual && (slot.actual.distance_km || slot.actual.time_sec || slot.actual.notes)) {
+    const a = slot.actual;
+    const actualItems = [];
+    if (a.distance_km) actualItems.push('<b>' + a.distance_km + 'К</b>');
+    if (a.time_sec) {
+      const mins = Math.floor(a.time_sec / 60);
+      const secs = a.time_sec % 60;
+      actualItems.push('<b>' + mins + ':' + String(secs).padStart(2, '0') + '</b>');
+    }
+    if (a.avg_pace) actualItems.push('темп <b>' + escapeHtml(a.avg_pace) + '</b>/км');
+    if (a.avg_hr) actualItems.push('HR avg <b>' + a.avg_hr + '</b>');
+    if (a.rpe) actualItems.push('RPE <b>' + a.rpe + '/10</b>');
+    actualHtml = '<div class="actual-block">'
+      + '<div class="actual-title">✅ Факт</div>'
+      + '<div class="actual-line">' + actualItems.join(' · ') + '</div>'
+      + (a.notes ? '<div class="actual-notes">' + escapeHtml(a.notes) + '</div>' : '')
+      + '</div>';
+  }
+
   return '<div class="card">'
     + '<div class="card-header">'
     + '<div class="card-headline">'
@@ -508,6 +545,7 @@ function renderCard(slot) {
     + '<div class="card-subtitle">' + escapeHtml(slot.day) + ' · ' + escapeHtml(slot.time) + ' · '
     + escapeHtml(String(slot.duration_min)) + ' мин</div>'
     + (metaHtml ? '<div class="card-meta-row">' + metaHtml + '</div>' : '')
+    + actualHtml
     + invHtml
     + '<h3>Структура тренировки</h3>'
     + stepsHtml
@@ -516,29 +554,42 @@ function renderCard(slot) {
 
 function buildPicker(plan) {
   ACTIVE_WEEK_KEY = plan.weekIso || plan.season_week || null;
+  const isActual = !!plan.is_actual_log;
   let html = '<div class="plan-title">';
   html += '<h1>' + escapeHtml(plan.title || 'Тренировки') + '</h1>';
   if (plan.weekIso) html += '<div class="week">' + escapeHtml(plan.weekIso) + '</div>';
   if (plan.subtitle) html += '<div class="week">' + escapeHtml(plan.subtitle) + '</div>';
+  if (isActual) html += '<div class="actual-badge">✅ Фактический лог</div>';
   html += '</div>';
 
-  // Totals (v18-style: planned/target/delta)
+  // Totals
   if (plan.totals) {
     const t = plan.totals;
-    const deltaSign = (t.delta >= 0 ? '+' : '');
-    const deltaClass = (t.delta >= 0 ? 'delta-positive' : 'delta-negative');
-    html += '<div class="totals-card">';
-    html += '<div class="totals-grid">';
-    html += '<div class="total-cell"><div class="v">' + t.planned + 'ч</div><div class="l">planned</div></div>';
-    html += '<div class="total-cell"><div class="v">' + t.target + 'ч</div><div class="l">target</div></div>';
-    html += '<div class="total-cell ' + deltaClass + '"><div class="v">' + deltaSign + t.delta + 'ч</div><div class="l">delta</div></div>';
-    html += '</div>';
+    // v29: actual-режим: показываем actual_sessions / actual_hours / actual_km
+    if (isActual && t.actual_sessions) {
+      html += '<div class="totals-card">';
+      html += '<div class="totals-grid">';
+      html += '<div class="total-cell"><div class="v">' + t.actual_sessions + '</div><div class="l">сессий</div></div>';
+      html += '<div class="total-cell"><div class="v">' + t.actual_hours + 'ч</div><div class="l">факт</div></div>';
+      html += '<div class="total-cell"><div class="v">' + (t.actual_km || 0) + 'К</div><div class="l">объём</div></div>';
+      html += '</div>';
+    } else {
+      const deltaSign = (t.delta_hours >= 0 ? '+' : '');
+      const deltaClass = (t.delta_hours >= 0 ? 'delta-positive' : 'delta-negative');
+      html += '<div class="totals-card">';
+      html += '<div class="totals-grid">';
+      html += '<div class="total-cell"><div class="v">' + t.planned_hours + 'ч</div><div class="l">planned</div></div>';
+      html += '<div class="total-cell"><div class="v">' + t.target_hours + 'ч</div><div class="l">target</div></div>';
+      html += '<div class="total-cell ' + deltaClass + '"><div class="v">' + deltaSign + t.delta_hours + 'ч</div><div class="l">delta</div></div>';
+      html += '</div>';
+    }
     // HR zones
-    if (plan.rules && plan.rules.hr_zones_dict) {
-      const zones = plan.rules.hr_zones_dict;
+    const hrzDict = (plan.rules && plan.rules.hr_zones_dict) ||
+                    (plan.rules && plan.rules.hr_zones && plan.rules.hr_zones.zones) || null;
+    if (hrzDict) {
       html += '<div class="zones-grid">';
-      for (const k of Object.keys(zones)) {
-        html += '<div class="zone"><b>' + escapeHtml(k) + '</b> ' + escapeHtml(String(zones[k])) + '</div>';
+      for (const k of Object.keys(hrzDict)) {
+        html += '<div class="zone"><b>' + escapeHtml(k) + '</b> ' + escapeHtml(String(hrzDict[k])) + '</div>';
       }
       html += '</div>';
     }
@@ -556,11 +607,18 @@ function buildPicker(plan) {
     html += '</div>';
   }
 
-  // Control points
-  if (plan.control_points_in_range && plan.control_points_in_range.length) {
-    html += '<div class="cp-card">';
-    html += '<h3>Контрольные точки</h3>';
-    html += '<p>В этой неделе: ' + plan.control_points_in_range.map(escapeHtml).join(', ') + '</p>';
+  // Summary (v29: actual log summary)
+  if (isActual && plan.summary && plan.summary.actual) {
+    html += '<div class="summary-card">';
+    html += '<h3>Сводка недели</h3>';
+    html += '<ul class="summary-list">';
+    for (const line of plan.summary.actual) {
+      html += '<li>' + escapeHtml(line) + '</li>';
+    }
+    html += '</ul>';
+    if (plan.summary.totals) {
+      html += '<div class="summary-totals">' + escapeHtml(plan.summary.totals) + '</div>';
+    }
     html += '</div>';
   }
 
@@ -571,11 +629,12 @@ function buildPicker(plan) {
   // Слоты (с иконкой вида спорта)
   for (const s of (plan.slots || [])) {
     const kindIcon = KIND_ICON[s.kind] || '🎯';
-    html += '<button class="slot" data-slot="' + escapeHtml(s.id) + '">';
+    const doneMark = (s.actual && (s.actual.distance_km || s.actual.time_sec)) ? ' <span class="slot-done-mark">✓</span>' : '';
+    html += '<button class="slot ' + (s.actual ? 'slot-completed' : '') + '" data-slot="' + escapeHtml(s.id) + '">';
     html += '<div class="slot-head">';
     html += '<span class="slot-kind-icon">' + kindIcon + '</span>';
     html += '<span class="day">' + escapeHtml(s.day) + ' · ' + escapeHtml(s.time) + '</span>';
-    html += '<span class="slot-dur">' + s.duration_min + ' мин</span>';
+    html += '<span class="slot-dur">' + s.duration_min + ' мин' + doneMark + '</span>';
     html += '</div>';
     html += '<div class="name">' + escapeHtml(s.name) + '</div>';
     if (s.focus) html += '<div class="slot-focus">🎯 ' + escapeHtml(s.focus) + '</div>';
