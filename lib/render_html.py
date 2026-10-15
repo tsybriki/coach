@@ -485,11 +485,12 @@ function renderOfpStructure(structure) {
 }
 
 function renderHrStructure(structure) {
-  // v35: basis-aware rendering.
+  // v36: basis-aware rendering.
   //   - basis="time" (default): показываем duration_min + hr_target если есть.
   //   - basis="distance": показываем distance_m, НЕ показываем duration_min, pace_min_per_km как «X:XX/км».
-  //   - notes в sub-шагах никогда не показываются (Кирилл: 'буквы дальше - бесполезны').
-  //   - top-level set: показываем reps + total time (time) или total distance (distance).
+  //   - notes в sub-шагах НИКОГДА не показываются.
+  //   - top-level set header: просто "set · × 6" (без объёма, без total time/distance).
+  //     Модель может класть st.set_label (например "интервалы") — тогда выводится оно.
   const rows = structure.map(st => {
     if (st.phase === 'set' && st.set_repeats) {
       // Sub-шаги внутри set
@@ -503,9 +504,7 @@ function renderHrStructure(structure) {
           valueHtml = '<span class="step-dur">' + escapeHtml(String(s.duration_min)) + 'мин</span>';
         }
         const zone = s.zone ? '<span class="step-zone">' + escapeHtml(s.zone) + '</span>' : '';
-        // HR target (для time-based, обычно)
         const hr = s.hr_target ? ' <span class="step-pace">HR ' + escapeHtml(String(s.hr_target)) + '</span>' : '';
-        // Pace (для distance-based)
         const pace = s.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
         return '<li class="step-sub">'
           + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(s.phase||'') + '</span>'
@@ -513,27 +512,13 @@ function renderHrStructure(structure) {
           // notes в sub-шагах не показываем
           + '</li>';
       }).join('');
-      // Top-level set header
-      const setBasis = st.basis || 'time';
-      let setValue = '';
-      if (setBasis === 'distance' && st.reps && st.set_repeats) {
-        // Сумма distance_m work sub-steps × reps
-        const workDist = (st.set_repeats.find(x => x.phase === 'work') || {}).distance_m;
-        if (workDist) {
-          const totalM = workDist * st.reps;
-          setValue = (totalM >= 1000)
-            ? '<span class="step-reps">' + (totalM / 1000).toFixed(1) + 'К</span>'
-            : '<span class="step-reps">' + totalM + 'м</span>';
-        }
-      } else if (st.duration_min) {
-        setValue = '<span class="step-dur">' + escapeHtml(String(st.duration_min)) + 'мин</span>';
-      }
+      // Top-level set header — ТОЛЬКО label + reps (без объёма)
+      const setLabel = st.label || 'set';
       return '<li class="step step-set">'
-        + '<div class="step-head"><span class="step-phase">set</span>'
-        + ' ' + setValue
+        + '<div class="step-head"><span class="step-phase">' + escapeHtml(setLabel) + '</span>'
         + '<span class="step-reps">× ' + escapeHtml(String(st.reps||'?')) + '</span></div>'
         + '<ol class="step-sublist">' + subHtml + '</ol>'
-        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+        // top-level notes тоже не показываем в v36
         + '</li>';
     }
     // Top-level одиночный шаг (warmup, cooldown, work, main, etc.)
@@ -546,11 +531,11 @@ function renderHrStructure(structure) {
     }
     const zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
     const hr = st.hr_target ? ' <span class="step-pace">HR ' + escapeHtml(String(st.hr_target)) + '</span>' : '';
-    const pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
+    const pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
     return '<li class="step">'
       + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
       + ' ' + topValue + hr + pace + '</div>'
-      + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+      // v36: top-level notes тоже не показываем (Кирилл: 'подпись внизу уродская')
       + '</li>';
   }).join('');
   return '<ol class="structure-list">' + rows + '</ol>';

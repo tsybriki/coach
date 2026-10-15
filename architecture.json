@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas.schema.md",
-  "version": 35,
+  "version": 36,
   "title": "Спортивный слой Hermes — полная архитектура",
-  "subtitle": "v35: basis-aware rendering. step.basis='time' (default) показывает duration_min, 'distance' показывает distance_m. sub-шаги никогда не показывают notes. Top-level set: reps + total time (time) или total distance (distance). Новое поле step.hr_target для HR-only сессий.",
+  "subtitle": "v36: убрано умножение work × reps в set header. Убраны notes из sub-шагов И из top-level. Добавлено step.label (например 'интервалы').",
   "blocks": [
     {
       "id": "tldr",
@@ -37,7 +37,8 @@
         "v32 (разделение типов): brick слот (run+OFП вместе) запрещён. Каждый день может иметь N слотов разных kind, но в picker они отдельные карточки. ПТ: 2 слота — 18:30 run (5К + 6×150/250) + 19:00 ofp (12 упр circuit). renderOfpStructure: каждое упражнение — карточка с .ex-num (номер в кружке), .ex-name (имя, accent), .ex-side (L/R бейдж), .ex-band (🎗 иконка), .ex-focus-pill (фокус), .ex-reps (× reps моноширинно), .ex-why (notes italic). 27/27 tests passing.",
         "v33 (починка Totals): Кирилл попросил унифицировать totals — всегда показывать план/target/дельта. Раньше actual-режим показывал 'сессий/факт/объём' (по факт-логу), non-actual — 'planned/target/delta'. v32 разломал это (план-неделя не показывал target). v33: ВСЕГДА считаем planned = sum(duration_min всех слотов) / target = phase.hours_per_week_target / delta = planned - target. Лейблы: 'план-неделя' (это сумма запланированных тренировок на этой неделе) / 'долгосрочн' (это target из долгосрочного плана) / 'дельта'. Зелёный если план ≥ долгосрочн, красный если < 0. 27/27 tests passing.",
         "v34 (лейблы totals): Кирилл попросил убрать русские лейблы, которые обрезались ('план-неделя', 'долгосрочн', 'дельта'). Заменены на 'planned' / 'expected' / 'delta' (короткие английские слова — не обрезаются). 27/27 tests passing.",
-        "v35 (basis-aware rendering): Кирилл попросил убрать time/distance путаницу в set-блоках. step.basis='time' (default) → показываем duration_min + hr_target. step.basis='distance' → показываем distance_m + pace_min_per_km, duration_min НЕ выводится. Sub-шаги (set_repeats[]) никогда не показывают notes (Кирилл: 'буквы дальше - бесполезны'). Top-level set: reps + total time (time) или total distance (distance). ПТ tempo: basis=distance, sub-шаги 150м Z4 + 250м Z1 (no notes), top-level 900м × 6. ВТ key_progression: basis=time (default), sub-шаги 4мин Z3 + 2мин Z1, top-level 30мин × 5. HR-сессии: step.hr_target (например 165), показывается как 'HR 165'. Модель может наполнять любым basis, рендер работает одинаково. 28/28 tests passing."
+        "v35 (basis-aware rendering): Кирилл попросил убрать time/distance путаницу в set-блоках. step.basis='time' (default) → показываем duration_min + hr_target. step.basis='distance' → показываем distance_m + pace_min_per_km, duration_min НЕ выводится. Sub-шаги (set_repeats[]) никогда не показывают notes (Кирилл: 'буквы дальше - бесполезны'). Top-level set: reps + total time (time) или total distance (distance). ПТ tempo: basis=distance, sub-шаги 150м Z4 + 250м Z1 (no notes), top-level 900м × 6. ВТ key_progression: basis=time (default), sub-шаги 4мин Z3 + 2мин Z1, top-level 30мин × 5. HR-сессии: step.hr_target (например 165), показывается как 'HR 165'. Модель может наполнять любым basis, рендер работает одинаково. 28/28 tests passing.",
+        "v36 (починка v35): Кирилл: 'зачем умножил 6 на 150? Не пиши объём, просто интервалы. Подпись внизу убери, она уродская.' Убрал totalM логику. Теперь top-level set header = просто label (step.label или 'set') + × N. Убрал notes полностью (sub-шаги + top-level). step.label='интервалы' для ПТ tempo, 'ОФП circuit' для ПТ OFP. В header'е теперь: 'интервалы × 6', без объёма. Sub-шаги без notes. Top-level без notes. 28/28 tests passing."
       ]
     },
     {

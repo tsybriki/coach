@@ -473,11 +473,17 @@ def test_render_html_basis_aware():
         # Логика для sub-шагов: НЕ показываем notes
         # (это сложно проверить без exec JS, проверю через sub_basis в коде)
         assert "subBasis" in html or "st.basis" in html, "missing basis assignment"
-        # distance-based set: totalM = 150 * 6 = 900м
-        assert "totalM" in html, "missing totalM calculation for distance set"
+        # distance-based set: НЕ умножаем work × reps (Кирилл: 'не пиши объём, просто интервалы')
+        # Проверяем что totalM логика удалена
+        assert "totalM" not in html, "v36: totalM should be removed (no auto-multiplied volume)"
+        # label берётся из step.label или fallback 'set'
+        assert "setLabel" in html, "missing setLabel in renderHrStructure"
+        # notes НЕ показываются нигде в sub-шагах И в top-level
+        # (проверяем через отсутствие step-notes в rendered template)
+        # v36: убрали все step-notes, кроме OFP set.format (который у нас в renderOfpStructure)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    print("  ✓ HTML v35: renderHrStructure basis-aware (time/distance, no sub-notes)")
+    print("  ✓ HTML v36: renderHrStructure no volume-math, setLabel, no notes anywhere")
 
 
 def test_weekly_report_runs():
