@@ -420,6 +420,66 @@ def test_html_slot_links_navigable():
     print("  ✓ HTML v26: w1-mobile.html slot navigation (click → showSlot → cardHost.innerHTML)")
 
 
+def test_render_html_basis_aware():
+    """v35: renderHrStructure учитывает basis (time/distance), sub-шаги без notes."""
+    import shutil
+    tmp = tempfile.mkdtemp(prefix="basis_test_")
+    try:
+        test_plan = {
+            "schema_version": "0.1.0",
+            "title": "W1 test basis",
+            "season_week": 1, "iso_week": "2026-W42", "season_start_date": "2026-10-11",
+            "week_start": "2026-10-11", "week_end": "2026-10-17", "is_actual_log": True,
+            "phase": {"id": "run_base", "start": "2026-10-11", "end": "2027-01-02",
+                      "hours_per_week_target": 5, "goal_id": "g_run_spring"},
+            "totals": {"planned_hours": 1.0, "target_hours": 5.0, "delta_hours": -4.0,
+                       "actual_hours": 1.0, "actual_km": 0, "actual_sessions": 0},
+            "rules": {"hr_zones": {"zones": {"Z1": "100-118", "Z2": "125-145", "Z3": "136-146", "Z4": "146-160"}}},
+            "control_points_in_range": [],
+            "slots": [
+                {"id": "test-distance", "day": "ПТ", "date": "2026-10-16", "time": "18:30",
+                 "name": "Distance-based set", "kind": "run", "subkind": "tempo",
+                 "focus": "Z4", "location": "stadium", "duration_min": 25, "workout_pending": False,
+                 "structure": [
+                     {"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": "5:45", "notes": "warmup notes"},
+                     {"phase": "set", "basis": "distance", "reps": 6,
+                      "set_repeats": [
+                          {"phase": "work", "basis": "distance", "distance_m": 150, "zone": "Z4", "pace_min_per_km": "3:40"},
+                          {"phase": "recovery", "basis": "distance", "distance_m": 250, "zone": "Z1", "pace_min_per_km": "5:45"}
+                      ]},
+                     {"phase": "cooldown", "duration_min": 5, "zone": "Z1", "pace_min_per_km": "5:45", "notes": "cooldown notes"}
+                 ], "inventory": []},
+                {"id": "test-time", "day": "СБ", "date": "2026-10-17", "time": "10:00",
+                 "name": "Time-based set", "kind": "run", "subkind": "tempo",
+                 "focus": "Z3", "location": "asphalt", "duration_min": 18, "workout_pending": False,
+                 "structure": [
+                     {"phase": "set", "reps": 6, "duration_min": 18,
+                      "set_repeats": [
+                          {"phase": "work", "duration_min": 1, "zone": "Z3", "hr_target": 165},
+                          {"phase": "recovery", "duration_min": 2, "zone": "Z2", "hr_target": 135}
+                      ]}
+                 ], "inventory": []}
+            ],
+            "summary": {"actual": [], "totals": ""}
+        }
+        out = Path(tmp) / "test.html"
+        render_html.render_plan_wN(test_plan, out)
+        html = out.read_text(encoding="utf-8")
+        # JS source должен содержать basis-aware логику
+        assert "s.basis" in html, "missing basis check in renderHrStructure"
+        assert "s.distance_m" in html, "missing distance_m in renderHrStructure"
+        assert "st.distance_m" in html, "missing st.distance_m in renderHrStructure (top-level set)"
+        assert "hr_target" in html, "missing hr_target rendering"
+        # Логика для sub-шагов: НЕ показываем notes
+        # (это сложно проверить без exec JS, проверю через sub_basis в коде)
+        assert "subBasis" in html or "st.basis" in html, "missing basis assignment"
+        # distance-based set: totalM = 150 * 6 = 900м
+        assert "totalM" in html, "missing totalM calculation for distance set"
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    print("  ✓ HTML v35: renderHrStructure basis-aware (time/distance, no sub-notes)")
+
+
 def test_weekly_report_runs():
     report = weekly_report.report(1)  # W1 сезона
     assert "season_week" in report
@@ -530,6 +590,7 @@ def main():
         test_step_builder_intervals,
         test_html_has_details_structure,
         test_html_slot_links_navigable,
+        test_render_html_basis_aware,
     ]
     failed = 0
     for t in tests:

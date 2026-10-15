@@ -1,8 +1,8 @@
 {
   "$schema": "./schemas.schema.md",
-  "version": 34,
+  "version": 35,
   "title": "Спортивный слой Hermes — полная архитектура",
-  "subtitle": "v34: замена лейблов totals. 'planned' / 'expected' / 'delta' (англ) — раньше русские слова обрезались в плашках.",
+  "subtitle": "v35: basis-aware rendering. step.basis='time' (default) показывает duration_min, 'distance' показывает distance_m. sub-шаги никогда не показывают notes. Top-level set: reps + total time (time) или total distance (distance). Новое поле step.hr_target для HR-only сессий.",
   "blocks": [
     {
       "id": "tldr",
@@ -36,7 +36,8 @@
         "v31 (ПТ tempo + ОФП): 5мин Z1 warmup → 6×(150м @ 3:40/км Z4 + 250м трусцы Z1) → 5мин Z1 cooldown. Затем ОФП circuit: 12 упражнений подряд (резинка + коврик). Бег: ягодицы+кор circuit — banded clamshell L/R, glute bridge, bird-dog, banded side walk, dead bug, single-leg glute bridge, banded hip abduction, plank, banded kickback, side plank L/R. Итого: 6.1ч / 7 слотов (6 факт + 1 план). 27/27 tests passing.",
         "v32 (разделение типов): brick слот (run+OFП вместе) запрещён. Каждый день может иметь N слотов разных kind, но в picker они отдельные карточки. ПТ: 2 слота — 18:30 run (5К + 6×150/250) + 19:00 ofp (12 упр circuit). renderOfpStructure: каждое упражнение — карточка с .ex-num (номер в кружке), .ex-name (имя, accent), .ex-side (L/R бейдж), .ex-band (🎗 иконка), .ex-focus-pill (фокус), .ex-reps (× reps моноширинно), .ex-why (notes italic). 27/27 tests passing.",
         "v33 (починка Totals): Кирилл попросил унифицировать totals — всегда показывать план/target/дельта. Раньше actual-режим показывал 'сессий/факт/объём' (по факт-логу), non-actual — 'planned/target/delta'. v32 разломал это (план-неделя не показывал target). v33: ВСЕГДА считаем planned = sum(duration_min всех слотов) / target = phase.hours_per_week_target / delta = planned - target. Лейблы: 'план-неделя' (это сумма запланированных тренировок на этой неделе) / 'долгосрочн' (это target из долгосрочного плана) / 'дельта'. Зелёный если план ≥ долгосрочн, красный если < 0. 27/27 tests passing.",
-        "v34 (лейблы totals): Кирилл попросил убрать русские лейблы, которые обрезались ('план-неделя', 'долгосрочн', 'дельта'). Заменены на 'planned' / 'expected' / 'delta' (короткие английские слова — не обрезаются). 27/27 tests passing."
+        "v34 (лейблы totals): Кирилл попросил убрать русские лейблы, которые обрезались ('план-неделя', 'долгосрочн', 'дельта'). Заменены на 'planned' / 'expected' / 'delta' (короткие английские слова — не обрезаются). 27/27 tests passing.",
+        "v35 (basis-aware rendering): Кирилл попросил убрать time/distance путаницу в set-блоках. step.basis='time' (default) → показываем duration_min + hr_target. step.basis='distance' → показываем distance_m + pace_min_per_km, duration_min НЕ выводится. Sub-шаги (set_repeats[]) никогда не показывают notes (Кирилл: 'буквы дальше - бесполезны'). Top-level set: reps + total time (time) или total distance (distance). ПТ tempo: basis=distance, sub-шаги 150м Z4 + 250м Z1 (no notes), top-level 900м × 6. ВТ key_progression: basis=time (default), sub-шаги 4мин Z3 + 2мин Z1, top-level 30мин × 5. HR-сессии: step.hr_target (например 165), показывается как 'HR 165'. Модель может наполнять любым basis, рендер работает одинаково. 28/28 tests passing."
       ]
     },
     {

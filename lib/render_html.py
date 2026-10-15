@@ -485,30 +485,71 @@ function renderOfpStructure(structure) {
 }
 
 function renderHrStructure(structure) {
+  // v35: basis-aware rendering.
+  //   - basis="time" (default): показываем duration_min + hr_target если есть.
+  //   - basis="distance": показываем distance_m, НЕ показываем duration_min, pace_min_per_km как «X:XX/км».
+  //   - notes в sub-шагах никогда не показываются (Кирилл: 'буквы дальше - бесполезны').
+  //   - top-level set: показываем reps + total time (time) или total distance (distance).
   const rows = structure.map(st => {
     if (st.phase === 'set' && st.set_repeats) {
-      let subHtml = st.set_repeats.map(s => {
-        let pace = s.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
-        let zone = s.zone ? '<span class="step-zone">' + escapeHtml(s.zone) + '</span>' : '';
+      // Sub-шаги внутри set
+      const subHtml = st.set_repeats.map(s => {
+        const subBasis = s.basis || 'time';
+        // distance-value: либо distance_m, либо duration_min
+        let valueHtml = '';
+        if (subBasis === 'distance' && s.distance_m) {
+          valueHtml = '<span class="step-dur">' + escapeHtml(String(s.distance_m)) + 'м</span>';
+        } else if (s.duration_min) {
+          valueHtml = '<span class="step-dur">' + escapeHtml(String(s.duration_min)) + 'мин</span>';
+        }
+        const zone = s.zone ? '<span class="step-zone">' + escapeHtml(s.zone) + '</span>' : '';
+        // HR target (для time-based, обычно)
+        const hr = s.hr_target ? ' <span class="step-pace">HR ' + escapeHtml(String(s.hr_target)) + '</span>' : '';
+        // Pace (для distance-based)
+        const pace = s.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
         return '<li class="step-sub">'
           + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(s.phase||'') + '</span>'
-          + ' <span class="step-dur">' + escapeHtml(String(s.duration_min||'')) + 'мин</span>' + pace + '</div>'
-          + (s.notes ? '<div class="step-notes">' + escapeHtml(s.notes) + '</div>' : '')
+          + ' ' + valueHtml + hr + pace + '</div>'
+          // notes в sub-шагах не показываем
           + '</li>';
       }).join('');
+      // Top-level set header
+      const setBasis = st.basis || 'time';
+      let setValue = '';
+      if (setBasis === 'distance' && st.reps && st.set_repeats) {
+        // Сумма distance_m work sub-steps × reps
+        const workDist = (st.set_repeats.find(x => x.phase === 'work') || {}).distance_m;
+        if (workDist) {
+          const totalM = workDist * st.reps;
+          setValue = (totalM >= 1000)
+            ? '<span class="step-reps">' + (totalM / 1000).toFixed(1) + 'К</span>'
+            : '<span class="step-reps">' + totalM + 'м</span>';
+        }
+      } else if (st.duration_min) {
+        setValue = '<span class="step-dur">' + escapeHtml(String(st.duration_min)) + 'мин</span>';
+      }
       return '<li class="step step-set">'
         + '<div class="step-head"><span class="step-phase">set</span>'
-        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>'
+        + ' ' + setValue
         + '<span class="step-reps">× ' + escapeHtml(String(st.reps||'?')) + '</span></div>'
         + '<ol class="step-sublist">' + subHtml + '</ol>'
         + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
         + '</li>';
     }
-    let pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
-    let zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
+    // Top-level одиночный шаг (warmup, cooldown, work, main, etc.)
+    const topBasis = st.basis || 'time';
+    let topValue = '';
+    if (topBasis === 'distance' && st.distance_m) {
+      topValue = '<span class="step-dur">' + escapeHtml(String(st.distance_m)) + 'м</span>';
+    } else if (st.duration_min) {
+      topValue = '<span class="step-dur">' + escapeHtml(String(st.duration_min)) + 'мин</span>';
+    }
+    const zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
+    const hr = st.hr_target ? ' <span class="step-pace">HR ' + escapeHtml(String(st.hr_target)) + '</span>' : '';
+    const pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
     return '<li class="step">'
       + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
-      + ' <span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>' + pace + '</div>'
+      + ' ' + topValue + hr + pace + '</div>'
       + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
       + '</li>';
   }).join('');
