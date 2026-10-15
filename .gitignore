@@ -7,5 +7,8 @@ __pycache__/
 .pytest_cache/
 # Реальные FIT-данные (только структура в репо)
 state/fit_store/*.fit
+state/fit_store/*/*.fit
 # Личные конфиги
 .env
+# Никогда не коммитить garmin_tools secrets (находятся в ~/projects/garmin_tools/secrets/)
+secrets/

@@ -1,0 +1,15 @@
+# coach requirements
+
+# Внешняя зависимость. ~/projects/garmin_tools/ содержит реальные интеграции:
+# - garminconnect (Garmin Connect API)
+# - Renpho sync (умные весы)
+# - Zwift workout converter
+# - FIT inspector / analyser
+#
+# ~/coach/ НЕ дублирует этот код — делает тонкие обёртки в lib/.
+# Editable install: правки в ~/projects/garmin_tools/ сразу видны в ~/coach/.
+-e /home/tsybriki/projects/garmin_tools
+
+# Phase 2: библиотеки только если используются напрямую из ~/coach/lib/
+# (пока не нужны — garmin_tools приносит свои)
+# jsonschema>=4.0  # для ask_model.py JSON-schema валидации (Phase 2)
