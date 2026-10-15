@@ -797,3 +797,383 @@ pre{{background:var(--panel);padding:12px;border-radius:8px;overflow-x:auto;font
 </div></body></html>"""
     out_path.write_text(body, encoding="utf-8")
     return out_path
+
+
+# ---------------------------------------------------------------------------
+# Fit-review renderer (brief + details)
+# ---------------------------------------------------------------------------
+#
+# Render review JSON → self-contained HTML. Always-visible section = brief
+# (3 sentences) + key-metrics grid. Detail sections = collapsible with click.
+#
+# review dict shape:
+# {
+#   "title":       "2026-10-14 — Berlin Running (long_Z2)",
+#   "date":        "2026-10-14",
+#   "sport":       "running",
+#   "summary_line": "85:18 moving / 15.16 km / 5:37/км / HR 138",
+#   "brief":       ["...", "...", "..."],   # 3 sentences, ALWAYS visible
+#   "metrics":     { "moving_min": "85:18", "distance_km": "15.16", ... },  # grid
+#   "sections": [
+#       {"id": "hr_zones", "title": "HR-зоны", "kind": "hr_zones", "data": {...}},
+#       {"id": "splits",   "title": "Per-km splits", "kind": "table", "data": [...]},
+#       {"id": "stryd",    "title": "Stryd Running Dynamics", "kind": "kv_grid", "data": {...}},
+#       {"id": "pauses",   "title": "Паузы", "kind": "table", "data": [...]},
+#       {"id": "recos",    "title": "Что делать", "kind": "recommendations", "data": [...]}
+#   ]
+# }
+#
+# Section kinds:
+#   hr_zones:           data = {"zones": [{"name":"Z1","sec":134,"pct":2.6}, ...],
+#                              "hr_max": 182}
+#   table:              data = {"columns": [{"key":"km","label":"km"}, ...],
+#                              "rows": [{"km":1, "pace":..., ...}, ...]}
+#   kv_grid:            data = {"items": [{"label":"VO","value":"10.8 см","sub":"avg"},
+#                                          {"label":"...","value":"..."}, ...]}
+#   recommendations:    data = [{"text":"...", "principle":"..."}, ...]
+#   text:               data = "free-form markdown-ish text"
+# ---------------------------------------------------------------------------
+
+HR_ZONE_COLORS = {
+    "Z1":  "#5cd6c0",
+    "Z1.5": "#4ec0a8",
+    "Z2":  "#7ec8e3",
+    "Z3":  "#ff9b6a",
+    "Z4":  "#f08a5a",
+    "Z5":  "#d8a0ff",
+    "Z6":  "#c97aff",
+}
+
+
+def _render_metrics_grid(metrics: dict[str, Any]) -> str:
+    """2-3 column grid of label/value pairs. Robust to str|int|float."""
+    if not metrics:
+        return ""
+    cells = []
+    for k, v in metrics.items():
+        label = str(k).replace("_", " ").strip()
+        # Title-case short labels (>=3 слов), sentence-case for longer descriptions
+        words = label.split()
+        label_pretty = " ".join(w if w.isupper() or len(w) > 4 else w.capitalize()
+                                for w in words) if len(words) <= 4 else label.capitalize()
+        cells.append(
+            f'<div class="metric-cell">'
+            f'<div class="metric-label">{esc(label_pretty)}</div>'
+            f'<div class="metric-value">{esc(str(v))}</div>'
+            f'</div>'
+        )
+    return f'<div class="metrics-grid">{"".join(cells)}</div>'
+
+
+def _render_hr_zones_section(data: dict[str, Any]) -> str:
+    zones = data.get("zones", [])
+    hr_max = data.get("hr_max")
+    if not zones:
+        return '<div class="empty">Нет данных</div>'
+    # Sort zones by name then render bars
+    rows = []
+    max_pct = max((z.get("pct", 0) for z in zones), default=1) or 1
+    for z in zones:
+        name = z.get("name", "")
+        sec = z.get("sec", 0)
+        pct = z.get("pct", 0)
+        m, s = divmod(int(sec), 60)
+        dur_str = f'{m}м{s:02d}с' if m else f'{s}с'
+        bar_width = (pct / max(max_pct, 30)) * 100  # at least 30% scaling so small zones are visible
+        color = HR_ZONE_COLORS.get(name, "#9aa3b2")
+        rows.append(
+            f'<div class="hr-zone-row">'
+            f'<span class="hr-zone-name" style="--c:{color}">{esc(name)}</span>'
+            f'<div class="hr-zone-bar-wrap">'
+            f'<div class="hr-zone-bar" style="width:{bar_width:.1f}%; background:{color}"></div>'
+            f'</div>'
+            f'<span class="hr-zone-pct">{pct:.1f}%</span>'
+            f'<span class="hr-zone-dur muted">{esc(dur_str)}</span>'
+            f'</div>'
+        )
+    sub = f'<div class="muted small">HRmax = {hr_max}</div>' if hr_max else ''
+    return f'<div class="hr-zones">{"".join(rows)}</div>{sub}'
+
+
+def _render_table_section(data: dict[str, Any]) -> str:
+    columns = data.get("columns", [])
+    rows = data.get("rows", [])
+    if not columns or not rows:
+        return '<div class="empty">Нет данных</div>'
+    head = "".join(f'<th>{esc(c.get("label", c.get("key","")))}</th>' for c in columns)
+    body_rows = []
+    for r in rows:
+        cells = []
+        for c in columns:
+            key = c.get("key", "")
+            v = r.get(key, "")
+            fmt = c.get("fmt")
+            if fmt and v not in (None, ""):
+                try:
+                    v = fmt.format(v)
+                except (ValueError, KeyError):
+                    pass
+            # Highlight cells that match the column's tone (good/warn/cp)
+            tone = ""
+            if c.get("tone") == "warn" and isinstance(v, (int, float)) and v > 0:
+                tone = ' class="cell-warn"'
+            cells.append(f'<td{tone}>{esc(str(v))}</td>')
+        body_rows.append(f'<tr>{"".join(cells)}</tr>')
+    return (
+        f'<table class="data-table"><thead><tr>{head}</tr></thead>'
+        f'<tbody>{"".join(body_rows)}</tbody></table>'
+    )
+
+
+def _render_kv_grid_section(data: dict[str, Any]) -> str:
+    items = data.get("items", [])
+    if not items:
+        return '<div class="empty">Нет данных</div>'
+    cells = []
+    for it in items:
+        label = it.get("label", "")
+        value = it.get("value", "")
+        sub = it.get("sub", "")
+        tone = it.get("tone", "")  # good | warn | cp
+        cells.append(
+            f'<div class="kv-cell">'
+            f'<div class="kv-label">{esc(label)}</div>'
+            f'<div class="kv-value {tone}">{esc(str(value))}</div>'
+            + (f'<div class="kv-sub muted">{esc(sub)}</div>' if sub else '')
+            + f'</div>'
+        )
+    return f'<div class="kv-grid">{"".join(cells)}</div>'
+
+
+def _render_recommendations_section(data: list | dict) -> str:
+    items = data if isinstance(data, list) else data.get("items", [])
+    if not items:
+        return '<div class="empty">Нет рекомендаций</div>'
+    rows = []
+    for i, r in enumerate(items, 1):
+        text = r.get("text", "") if isinstance(r, dict) else str(r)
+        principle = r.get("principle", "") if isinstance(r, dict) else ""
+        priority = r.get("priority", "soon") if isinstance(r, dict) else "soon"
+        prio_color = {"now": "#ff9b6a", "soon": "#7aa2ff", "later": "#9aa3b2"}.get(priority, "#7aa2ff")
+        rows.append(
+            f'<div class="rec-item">'
+            f'<div class="rec-num" style="background:{prio_color}">{i}</div>'
+            f'<div class="rec-body">'
+            f'<div class="rec-text">{esc(text)}</div>'
+            + (f'<div class="rec-principle muted">📐 {esc(principle)}</div>' if principle else '')
+            + '</div></div>'
+        )
+    return f'<div class="rec-list">{"".join(rows)}</div>'
+
+
+def _render_section(section: dict[str, Any]) -> str:
+    sid = section.get("id", "")
+    title = section.get("title", "")
+    kind = section.get("kind", "text")
+    data = section.get("data", "")
+    summary = section.get("summary", "")
+
+    if kind == "hr_zones":
+        body = _render_hr_zones_section(data if isinstance(data, dict) else {})
+    elif kind == "table":
+        body = _render_table_section(data if isinstance(data, dict) else {})
+    elif kind == "kv_grid":
+        body = _render_kv_grid_section(data if isinstance(data, dict) else {})
+    elif kind == "recommendations":
+        body = _render_recommendations_section(data)
+    elif kind == "text":
+        body = f'<div class="text-block">{esc(data) if isinstance(data, str) else data}</div>'
+    else:
+        body = f'<div class="empty">unsupported kind: {esc(kind)}</div>'
+
+    summary_html = f'<div class="section-summary muted">{esc(summary)}</div>' if summary else ''
+    return (
+        f'<div class="section" data-section-id="{esc(sid)}">'
+        f'<div class="section-head" onclick="toggleSection(this)">'
+        f'<span class="section-title">{esc(title)}</span>'
+        f'<span class="section-toggle">▾</span>'
+        f'</div>'
+        f'{summary_html}'
+        f'<div class="section-body">{body}</div>'
+        f'</div>'
+    )
+
+
+def render_review(review: dict[str, Any], out_path: str | Path) -> Path:
+    """Render a fit-review JSON → self-contained HTML.
+
+    JSON shape: see docstring above. Always-visible: title + summary_line +
+    brief (3 sentences) + metrics grid. Detail sections default to collapsed;
+    tap opens them.
+    """
+    out_path = Path(out_path)
+
+    title = review.get("title", "Fit review")
+    summary_line = review.get("summary_line", "")
+    brief = review.get("brief", [])
+    metrics = review.get("metrics", {})
+    sections = review.get("sections", [])
+    sport = review.get("sport", "")
+    date = review.get("date", "")
+
+    brief_html = "".join(f'<li class="brief-item">{esc(s)}</li>' for s in brief if s)
+    metrics_html = _render_metrics_grid(metrics)
+
+    sections_html = "".join(_render_section(s) for s in sections)
+
+    sport_icon = {"running": "🏃", "cycling": "🚴", "swimming": "🏊"}.get(sport, "📊")
+
+    body = f"""<!doctype html>
+<html lang="ru"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>{esc(title)}</title>
+<style>
+:root{{
+  --bg:#0f1115;--panel:#161a22;--panel2:#1d222c;--border:#2a3140;
+  --text:#e6e9ef;--muted:#9aa3b2;
+  --accent:#7aa2ff;--accent2:#5cd6c0;--warn:#ff9b6a;--good:#7ee787;--cp:#d8a0ff;
+}}
+*{{box-sizing:border-box}}
+html,body{{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;
+  -webkit-text-size-adjust:100%;line-height:1.4}}
+body{{padding:14px 12px 80px;max-width:780px;margin:0 auto}}
+h1{{font-size:20px;margin:0}}
+h2{{font-size:15px;margin:0 0 8px;color:var(--accent)}}
+h3{{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}}
+.muted{{color:var(--muted)}}.small{{font-size:11.5px}}
+
+.title-card{{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;margin-bottom:8px}}
+.title-row{{display:flex;align-items:center;gap:10px;margin-bottom:6px}}
+.sport-icon{{font-size:24px}}
+.title-meta{{font-size:11.5px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,monospace}}
+.summary-line{{font-size:13px;color:var(--accent2);font-weight:600;margin-top:4px}}
+
+.brief-card{{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:12px 16px;margin-bottom:8px}}
+.brief-title{{font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--accent);margin-bottom:6px;font-weight:600}}
+.brief-list{{margin:0;padding-left:22px;font-size:13.5px;line-height:1.5;color:var(--text)}}
+.brief-list li{{margin-bottom:4px}}
+.brief-list li:last-child{{margin-bottom:0}}
+
+.metrics-card{{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:12px 14px;margin-bottom:10px}}
+.metrics-title{{font-size:11px;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--muted);margin-bottom:6px;font-weight:600}}
+.metrics-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}}
+.metric-cell{{background:var(--panel2);border:1px solid var(--border);border-radius:8px;
+  padding:8px;text-align:center}}
+.metric-label{{font-size:9.5px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.4px;margin-bottom:3px}}
+.metric-value{{font-size:15px;font-weight:600;color:var(--accent2);
+  font-family:ui-monospace,SFMono-Regular,monospace}}
+
+.section{{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  margin-bottom:8px;overflow:hidden}}
+.section-head{{display:flex;align-items:center;justify-content:space-between;
+  padding:12px 14px;cursor:pointer;user-select:none;gap:8px}}
+.section-head:active{{background:var(--panel2)}}
+.section-title{{font-size:13px;font-weight:600;color:var(--text);flex:1}}
+.section-toggle{{font-size:14px;color:var(--muted);transition:transform .15s;
+  display:inline-block}}
+.section-summary{{padding:0 14px 10px;font-size:11.5px;font-style:italic}}
+.section-body{{padding:0 14px 14px;font-size:12.5px;display:none}}
+.section.open .section-body{{display:block}}
+.section.open .section-toggle{{transform:rotate(180deg)}}
+
+/* HR zones */
+.hr-zones{{display:flex;flex-direction:column;gap:6px}}
+.hr-zone-row{{display:grid;grid-template-columns:48px 1fr 50px 60px;
+  gap:8px;align-items:center;font-size:11.5px}}
+.hr-zone-name{{font-family:ui-monospace,SFMono-Regular,monospace;font-weight:600;
+  color:var(--c,var(--text))}}
+.hr-zone-bar-wrap{{background:var(--panel2);border:1px solid var(--border);
+  border-radius:4px;height:14px;overflow:hidden}}
+.hr-zone-bar{{height:100%;border-radius:4px;min-width:4px}}
+.hr-zone-pct{{font-family:ui-monospace,SFMono-Regular,monospace;
+  font-weight:600;text-align:right}}
+.hr-zone-dur{{font-family:ui-monospace,SFMono-Regular,monospace;text-align:right;
+  font-size:10.5px}}
+
+/* Tables */
+.data-table{{width:100%;border-collapse:collapse;font-size:11.5px;
+  font-family:ui-monospace,SFMono-Regular,monospace}}
+.data-table th{{text-align:left;padding:5px 8px;color:var(--muted);
+  font-size:10px;text-transform:uppercase;letter-spacing:.4px;font-weight:600;
+  border-bottom:1px solid var(--border)}}
+.data-table td{{padding:5px 8px;color:var(--text);border-bottom:1px solid rgba(255,255,255,.05)}}
+.data-table tr:last-child td{{border-bottom:none}}
+.cell-warn{{color:var(--warn)!important;font-weight:600}}
+
+/* KV grid */
+.kv-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px}}
+.kv-cell{{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px}}
+.kv-label{{font-size:10px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.4px;margin-bottom:3px;font-weight:600}}
+.kv-value{{font-size:16px;font-weight:600;color:var(--text);
+  font-family:ui-monospace,SFMono-Regular,monospace}}
+.kv-value.good{{color:var(--good)}}
+.kv-value.warn{{color:var(--warn)}}
+.kv-value.cp{{color:var(--cp)}}
+.kv-sub{{font-size:10.5px;margin-top:2px;font-style:italic}}
+
+/* Recommendations */
+.rec-list{{display:flex;flex-direction:column;gap:6px}}
+.rec-item{{display:flex;gap:10px;align-items:flex-start;padding:10px;
+  background:var(--panel2);border:1px solid var(--border);border-radius:8px}}
+.rec-num{{flex-shrink:0;width:24px;height:24px;border-radius:50%;
+  color:var(--bg);font-weight:700;font-size:13px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:ui-monospace,SFMono-Regular,monospace}}
+.rec-body{{flex:1;min-width:0}}
+.rec-text{{font-size:13px;line-height:1.4;color:var(--text)}}
+.rec-principle{{font-size:11.5px;margin-top:4px;font-style:italic}}
+
+/* Text block */
+.text-block{{font-size:13px;line-height:1.5;color:var(--text);white-space:pre-wrap}}
+
+.empty{{color:var(--muted);font-style:italic;padding:14px;text-align:center}}
+
+footer{{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}}
+</style></head><body>
+
+<div class="title-card">
+  <div class="title-row">
+    <span class="sport-icon">{esc(sport_icon)}</span>
+    <div>
+      <h1>{esc(title)}</h1>
+      <div class="title-meta">{esc(date)}{' · ' + esc(sport) if sport else ''}</div>
+    </div>
+  </div>
+  {f'<div class="summary-line">{esc(summary_line)}</div>' if summary_line else ''}
+</div>
+
+{f'''<div class="brief-card">
+  <div class="brief-title">💡 Бриф · 3 предложения</div>
+  <ol class="brief-list">{brief_html}</ol>
+</div>''' if brief_html else ''}
+
+{f'<div class="metrics-card"><div class="metrics-title">📊 Ключевые метрики</div>{metrics_html}</div>' if metrics_html else ''}
+
+{sections_html}
+
+<footer>rendered via lib/render_html.render_review · schema-rev review-v1</footer>
+
+<script>
+function toggleSection(head) {{
+  head.parentElement.classList.toggle('open');
+}}
+// Auto-open recommendations
+document.addEventListener('DOMContentLoaded', () => {{
+  document.querySelectorAll('.section').forEach(s => {{
+    if (s.dataset.sectionId === 'recos') s.classList.add('open');
+  }});
+}});
+</script>
+</body></html>
+"""
+    out_path.write_text(body, encoding="utf-8")
+    return out_path

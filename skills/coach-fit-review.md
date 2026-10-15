@@ -2,15 +2,38 @@
 
 Разбор FIT: 4 уровня (quick, contextual, coaching, lookback).
 
-**Использует:** `lib.analyze`, `lib.metrics`, `lib.parse_fit`, `lib.ask_model`, `lib.coaching_corpus`.
-**Триггеры:** «разбери FIT», «проанализируй», «что скажет тренер».
+**Использует:** `lib.analyze`, `lib.metrics`, `lib.parse_fit`, `lib.ask_model`, `lib.coaching_corpus`, `lib.render_html.render_review`.
+**Триггеры:** «разбери FIT», «проанализируй», «что скажет тренер», «разбор тренировки».
 **Вход:** fit_id, mode.
-**Выход:** dict + (coaching/lookback) обязательный cited_principle.
+**Выход:** JSON → self-contained HTML (3-предложения бриф + клик-разворачиваемые детали) + (coaching/lookback) обязательный cited_principle.
+
+## Формат разбора: бриф + детали
+
+Разбор FIT'а — **это не поток текста**, а артефакт:
+
+1. **Бриф — 3 предложения**, которые видны сразу при открытии:
+   - Что фактически произошло (главное число + наблюдение)
+   - Соответствие плану (попадание / промах по target-зоне)
+   - Одно конкретное действие на ближайшие 1-2 дня
+
+2. **Детали — вкладки / секции**, сворачиваемые по клику:
+   - Summary (elapsed / moving / pause_total, distance, avg HR / max HR, cadence обоих источников, pace)
+   - HR-зоны (по moving records, не session avg)
+   - Per-km splits (только moving, иначе km внутри паузы врут)
+   - Stryd Running Dynamics (VO / stance / step length / form power), если footpod есть
+   - Pause segments (что и где было)
+   - Recommendations (linked to cited_principle)
+   - Raw chunks / data appendix (если нужен)
+
+3. **Fit-review JSON source-of-truth** в `state/reviews/{date}-{slug}.json`. Рендерится через `lib/render_html.render_review(review, out_path)` → `state/reviews/{date}-{slug}.html`. **Не пиши HTML руками** — обнови JSON и перерендери. Каждый разбор = новый JSON + новый HTML; не аккумулируй текст.
+
+Никогда не выдавай разбор FIT'а сплошным текстом в чат. Скажи: «Соберу разбор в HTML, кидаю файлом.» → пиши review JSON → рендери → отправляй HTML + 3-предложения бриф в чате. Так обзор не раздувается в wall-of-text и пользователь читает детали только когда захочет.
 
 ## Запрещено
 
 - Интерпретировать без cited_principle (coaching/lookback → REJECT).
 - Писать промпты руками.
+- Выдавать разбор FIT'а сплошным текстом в чате — только JSON/HTML/3-предложения бриф.
 - **Считать темп/HR-зоны по `total_elapsed_s` или `total_timer_s`.** Garmin elapsed/timer включают OFP-остановки, переходы через дорогу, ожидания. Это сдвигает средний темп на 30–90 сек/км и пушит среднюю ЧСС из Z2 в Z3. Всегда используй `parse_fit(..., with_streams=True)` → `moving_min` / `splits[]` (per-km по moving records) / `hr_drift_bpm` (по moving partition).
 
 ## Правила извлечения и интерпретации
