@@ -42,10 +42,11 @@ STABLE_SCHEMA_KEYS = [
     "stryd_running_dynamics",
     "stride_cm", "steps",
     "elevation_gain_m", "elevation_loss_m", "temperature_avg_c", "calories",
-    "training_effect", "splits", "recovery_hr_drop", "hr_drift_bpm",
+    "training_effect", "recovery_hr_drop", "hr_drift_bpm",
     # Raw time helpers (for audit / drift analysis):
     "elapsed_min", "timer_min", "moving_min",
     "pause_total_s", "pause_segments",
+    "trend",
     "file_hash",
 ]
 
@@ -321,81 +322,6 @@ def _summarize_moving(moving: list[dict]) -> dict:
     return out
 
 
-def _splits_per_km(moving: list[dict]) -> list[dict]:
-    """Per-km splits from moving records. Each split closes at the record that
-    crosses dist_m ≥ k·1000.
-
-    For each km we report:
-      km, dur_s, dist_m, pace_min_per_km,
-      cadence_watch_avg, cadence_stryd_avg,
-      hr_avg, hr_max,
-      power_avg (Stryd, W),
-      stride_avg_m  (derived: distance / cadence, available when cadence present).
-
-    NOTE: Garmin measures splits from the start of the *session* (includes pauses).
-    Our splits are from the start of the *moving partition*, so the first split is
-    the first 1000 m of running after any pre-run warmup stops. This is correct
-    for our purposes (we want running tempo per km, not per-elapsed-km).
-    """
-    if not moving:
-        return []
-    splits = []
-    km = 1
-    last_d: Optional[float] = None
-    split_start_t: Optional[int] = None
-    split_start_idx: Optional[int] = None
-
-    for i, r in enumerate(moving):
-        d = r.get("dist_m")
-        if d is None:
-            continue
-        if last_d is None:
-            last_d = d
-            split_start_t = r.get("t_sec")
-            split_start_idx = i
-            continue
-
-        target = km * 1000.0
-        if d >= target:
-            end_idx = i
-            end_t = r.get("t_sec")
-            if end_t is not None and split_start_t is not None and split_start_idx is not None and end_t > split_start_t:
-                dist_m = d - last_d
-                if dist_m > 0:
-                    chunk = moving[split_start_idx:end_idx + 1]
-                    dur_s = end_t - split_start_t
-                    pace = dur_s / (dist_m / 1000.0) / 60.0
-
-                    def _mean(xs):
-                        xs = [x for x in xs if x is not None]
-                        return sum(xs) / len(xs) if xs else None
-
-                    cad_w = _mean([r.get("cadence_watch") for r in chunk])
-                    cad_s = _mean([r.get("cadence_stryd") for r in chunk])
-                    hr_vals = [r.get("hr") for r in chunk if r.get("hr") is not None]
-                    pwr = _mean([r.get("stryd_power_w") for r in chunk])
-
-                    splits.append({
-                        "km": km,
-                        "t_start": int(split_start_t),
-                        "t_end": int(end_t),
-                        "dur_s": int(dur_s),
-                        "dist_m": round(dist_m, 1),
-                        "pace_min_per_km": round(pace, 2),
-                        "cadence_watch_avg": round(cad_w or 0, 1),
-                        "cadence_stryd_avg": round(cad_s or 0, 1),
-                        "hr_avg": round(_mean(hr_vals) or 0, 0),
-                        "hr_max": int(max(hr_vals, default=0)),
-                        "power_avg": round(pwr or 0, 0),
-                    })
-                    km += 1
-                    last_d = d
-                    split_start_t = end_t
-                    split_start_idx = end_idx
-
-    return splits
-
-
 # ---------------------------------------------------------------------------
 # Interval-segment detection — disabled per user instruction.
 #
@@ -410,116 +336,31 @@ def _splits_per_km(moving: list[dict]) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
-# Multi-series trend for the combined power/cadence/HR/pace chart.
+# Trend chart data — per-second samples (no bucketing, no segmentation).
+# The moving-records list itself becomes the trend. Every per-second record
+# is its own data point; pace is computed from delta(t_sec) and delta(distance).
+# Garmin is the only source of these points — no synthetic segments, no per-km
+# markers, no rolling-window smoothing. The renderer's SVG samples them as-is.
 # ---------------------------------------------------------------------------
 
-def _bucket_records_by_t(moving: list[dict], bucket_s: int = 30) -> list[dict]:
-    """Group moving records into time-bucketed summaries.
+def parse_trend(moving: list[dict]) -> list[dict]:
+    """Return per-second samples from moving records as-is.
 
-    Each bucket = {t_start, t_end, dur_s, dist_m, pace_min_per_km,
-                   cadence_watch_avg, cadence_stryd_avg,
-                   hr_avg, hr_max, power_avg,
-                   vo_cm_avg, ground_time_ms_avg}
-
-    Buckets with dur_s < bucket_s / 2 are dropped (insufficient data).
+    Each point = {t_sec, dist_m, hr, cadence (Stryd>watch), power (Stryd)}.
+    Pace is NOT computed here (the renderer does it lazily: delta per pair).
     """
-    if not moving:
-        return []
-
-    def cadence_of(r):
-        c = r.get("cadence_stryd")
-        return c if c is not None else r.get("cadence_watch")
-
-    if moving[0].get("t_sec") is None:
-        return []
-    t0 = moving[0]["t_sec"]
-    cur_bucket_t = None
-    bucket = None
-    buckets_out = []
-
-    def _flush(b):
-        if b is None:
-            return None
-        if not b["distances"]:
-            return None
-        dur = b["t_end"] - b["t_start"]
-        if dur < bucket_s / 2:
-            return None
-        dist = b["distances"][-1] - b["distances"][0]
-        if dist <= 0 or dur <= 0:
-            return None
-        pace = dur / (dist / 1000.0) / 60.0
-
-        def mean(xs):
-            xs = [x for x in xs if x is not None]
-            return sum(xs) / len(xs) if xs else None
-
-        def maxv(xs):
-            xs = [x for x in xs if x is not None]
-            return max(xs) if xs else None
-
-        out = {
-            "t_start": int(b["t_start"]),
-            "t_end": int(b["t_end"]),
-            "dur_s": dur,
-            "dist_m": round(dist, 1),
-            "pace_min_per_km": round(pace, 2),
-            "cadence_avg": round(mean(b["cad"]) or 0, 1),
-            "hr_avg": round(mean(b["hrs"]) or 0, 0),
-            "hr_max": int(maxv(b["hrs"]) or 0),
-            "power_avg": round(mean(b["pwr"]) or 0, 0),
-            "vo_cm_avg": round(mean(b["vo"]) or 0, 1),
-            "ground_time_ms_avg": round(mean(b["gt"]) or 0, 0),
-        }
-        return out
-
+    out = []
     for r in moving:
-        t = r.get("t_sec")
-        d = r.get("dist_m")
-        if t is None or d is None:
-            continue
-        bucket_idx = (t - t0) // bucket_s
-        if cur_bucket_t is None or bucket_idx != cur_bucket_t:
-            flushed = _flush(bucket)
-            if flushed:
-                buckets_out.append(flushed)
-            cur_bucket_t = bucket_idx
-            bucket = {
-                "t_start": t,
-                "t_end": t,
-                "distances": [d],
-                "cad": [], "hrs": [], "pwr": [], "vo": [], "gt": [],
-            }
-        bucket["t_end"] = t
-        bucket["distances"].append(d)
-        c = cadence_of(r)
-        if c is not None:
-            bucket["cad"].append(c)
-        if r.get("hr") is not None:
-            bucket["hrs"].append(r["hr"])
-        if r.get("stryd_power_w") is not None:
-            bucket["pwr"].append(r["stryd_power_w"])
-        if r.get("stryd_vo_cm") is not None:
-            bucket["vo"].append(r["stryd_vo_cm"])
-        if r.get("stryd_ground_time_ms") is not None:
-            bucket["gt"].append(r["stryd_ground_time_ms"])
+        out.append({
+            "t_sec": r.get("t_sec"),
+            "dist_m": r.get("dist_m"),
+            "hr": r.get("hr"),
+            "cadence_stryd": r.get("cadence_stryd"),
+            "cadence_watch": r.get("cadence_watch"),
+            "power": r.get("stryd_power_w"),
+        })
+    return out
 
-    flushed = _flush(bucket)
-    if flushed:
-        buckets_out.append(flushed)
-    return buckets_out
-
-
-def parse_trend(moving: list[dict], bucket_s: int = 30) -> list[dict]:
-    """Public entrypoint: time-bucketed summaries for the multi-series trend chart.
-
-    Default bucket = 30 sec. For ~90 min activities → ~180 buckets. Chart renders
-    each metric (pace, cadence, HR, power) on its own y-axis normalised 0..1
-    so they overlay in a single chart, not overlapping on raw units.
-
-    Buckets with insufficient data are filtered out automatically.
-    """
-    return _bucket_records_by_t(moving, bucket_s=bucket_s)
 
 
 # ---------------------------------------------------------------------------
@@ -595,20 +436,17 @@ def _normalize(garmin_output: dict, streams: Optional[list[dict]] = None) -> dic
     # --- moving / pause partition (preferred when streams present) ---
     pause_segments: list[dict] = []
     moving_summary: dict = {}
-    moving_splits: list[dict] = []
     trend_series: list[dict] = []
     if raw_streams:
         pause_segments = _detect_pauses(raw_streams)
         moving = _moving_records(raw_streams)
         moving_summary = _summarize_moving(moving)
-        moving_splits = _splits_per_km(moving)
-        trend_series = _bucket_records_by_t(moving, bucket_s=30)
+        trend_series = parse_trend(moving)
 
     if moving_summary:
         duration_min = round(moving_summary["moving_s"] / 60.0, 2)
         avg_pace = moving_summary["avg_pace_min_per_km"]
         distance_km = round(moving_summary["distance_m"] / 1000.0, 3)
-        splits = moving_splits
         avg_hr = moving_summary["avg_hr"]
         max_hr_v = moving_summary["max_hr"]
         min_hr_v = moving_summary["min_hr"]
@@ -619,27 +457,11 @@ def _normalize(garmin_output: dict, streams: Optional[list[dict]] = None) -> dic
         distance_km = round(total_distance_m / 1000.0, 3)
         duration_min = round(total_elapsed_s / 60.0, 2)
         avg_pace = round(duration_min / distance_km, 2) if distance_km else 0.0
-        splits = []
-        for lap in laps:
-            lap_dist_km = (lap.get("distance_m") or 0) / 1000.0
-            lap_dur_min = (lap.get("duration_s") or 0) / 60.0
-            if lap_dist_km > 0:
-                splits.append({
-                    "km": round(lap_dist_km, 3),
-                    "pace_min_per_km": round(lap_dur_min / lap_dist_km, 2),
-                    "hr_avg": round(lap.get("avg_hr") or 0, 1),
-                    "cadence": round(lap.get("avg_cadence") or 0, 1),
-                })
         avg_hr = round(session.get("avg_hr") or 0, 1)
         max_hr_v = int(session.get("max_hr") or 0)
         min_hr_v = 0
         cadence_v = round(session.get("avg_cadence") or 0, 1)
-        # HR drift from laps (legacy): difference between last and first lap avg_hr.
         hr_drift = 0.0
-        if len(laps) >= 2:
-            first_hr = laps[0].get("avg_hr") or 0
-            last_hr = laps[-1].get("avg_hr") or 0
-            hr_drift = round(last_hr - first_hr, 2)
 
     # File hash: prefer streams-aware hash so re-parsing with new schema invalidates
     # downstream caches (downstream caches should already key on schema version
@@ -676,19 +498,17 @@ def _normalize(garmin_output: dict, streams: Optional[list[dict]] = None) -> dic
         "temperature_avg_c": 0.0,
         "calories": round(session.get("total_calories") or 0, 1),
         "training_effect": {"aerobic_te": 0.0, "anaerobic_te": 0.0, "label": "UNKNOWN"},
-        "splits": splits,
         "recovery_hr_drop": 0,
         "hr_drift_bpm": hr_drift,
-        # Multi-series trend (30s buckets) for the combined power/cadence/HR/pace chart
+        # Multi-series trend (per-second samples) for the combined power/cadence/HR/pace chart
         "trend": trend_series,
-        "trend_buckets_s": 30,
         "elapsed_min": round(total_elapsed_s / 60.0, 2) if total_elapsed_s else 0.0,
         "timer_min": round(total_timer_s / 60.0, 2) if total_timer_s else 0.0,
         "moving_min": duration_min,
         "pause_total_s": sum(int(p["dur_s"]) for p in pause_segments),
         "pause_segments": pause_segments,
         "file_hash": digest,
-        "_schema_version": "0.6.0",
+        "_schema_version": "0.7.0",
         "_parser": "garmin_tools/fit_inspect.py",
         "_source_path": garmin_output.get("file", {}).get("path", ""),
     }

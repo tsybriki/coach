@@ -1,6 +1,12 @@
 """Build a review JSON for a FIT file: load parse_fit output and shape
 sections in the order required by render_review: title, brief[3], metrics,
-sections[km_splits, hr_zones, stryd, multi_trend, pauses, recos].
+sections[hr_zones, stryd, multi_trend, pauses, recos].
+
+GARMIN-INTRINSIC DATA ONLY. No per-km splits (Garmin doesn't write intervals for
+plain running sessions; auto-segmentation adds noise rather than signal). When
+Garmin presents an interval in a future structured workout via lap markers,
+the rendering will include it via the trend chart's pause bands — those are
+the only flags Garmin writes.
 
 Usage:
     python3 build_review.py <fit_path> <output_json> [--date YYYY-MM-DD] [--slug SLUG]
@@ -20,21 +26,6 @@ def fmt_pace(m):
     if ss == 60:
         mm += 1; ss = 0
     return f"{mm}:{ss:02d}"
-
-
-def build_km_splits_rows(splits):
-    rows = []
-    for s in splits:
-        rows.append({
-            "km": s.get("km"),
-            "pace": fmt_pace(s.get("pace_min_per_km")),
-            "hr":  s.get("hr_avg"),
-            "hr_max": s.get("hr_max"),
-            "cW": s.get("cadence_watch_avg"),
-            "cS": s.get("cadence_stryd_avg"),
-            "pwr": s.get("power_avg"),
-        })
-    return rows
 
 
 def build_review(fit_path: Path, *, date: str, slug: str, brief: list[str], summary_line: str, recos: list[dict]):
@@ -63,28 +54,7 @@ def build_review(fit_path: Path, *, date: str, slug: str, brief: list[str], summ
 
     sections = []
 
-    # KM splits with cadence + power + max HR
-    km_rows = build_km_splits_rows(d["splits"])
-    sections.append({
-        "id": "km_splits",
-        "title": "Километровые сплиты · с cadence, power, max HR",
-        "kind": "km_splits",
-        "summary": "Каждый км-переход = mean за отрезок 0..i+1 км в moving partition. Лучший/худший темп подсвечены.",
-        "data": {
-            "columns": [
-                {"key": "km",  "label": "км"},
-                {"key": "pace", "label": "pace"},
-                {"key": "hr",   "label": "HR avg"},
-                {"key": "hr_max","label": "HR max"},
-                {"key": "cW",   "label": "cW"},
-                {"key": "cS",   "label": "cS"},
-                {"key": "pwr",  "label": "pow W"},
-            ],
-            "rows": km_rows,
-        }
-    })
-
-    # HR zones from moving partition
+    # HR zones from moving partition (computed from per-second records)
     sections.append({
         "id": "hr_zones",
         "title": "HR-зоны · по moving records",
@@ -103,12 +73,12 @@ def build_review(fit_path: Path, *, date: str, slug: str, brief: list[str], summ
         }
     })
 
-    # Stryd RD
+    # Stryd Running Dynamics
     sections.append({
         "id": "stryd",
         "title": "Stryd Running Dynamics",
         "kind": "kv_grid",
-        "summary": "Stryd footpod — теперь единственный source-of-truth (per Кирилл 2026-10-15).",
+        "summary": "Stryd footpod — единственный source-of-truth (per Кирилл 2026-10-15).",
         "data": {
             "items": [
                 {"label": "Vertical Oscillation", "value": f"{vo} см", "sub": f"avg · Stryd footpod ({vo_src})", "tone": "good"},
@@ -125,30 +95,29 @@ def build_review(fit_path: Path, *, date: str, slug: str, brief: list[str], summ
         }
     })
 
-    # Multi-series trend: pace, cadence, HR, power — each normalised 0..1
-    trend_buckets = d.get("trend", [])
+    # Multi-series trend — per-second samples (no bucketing, no km-segmentation)
+    trend_samples = d.get("trend", [])
     sections.append({
         "id": "multi_trend",
         "title": "Тренд · pace / cadence / HR / power (одновременно)",
         "kind": "multi_trend",
-        "summary": "4 серии на одном графике, каждая нормирована 0..1. Серые полосы = паузы (off-watch). Оранжевые вертикали = точки-аннотации (km-границы).",
+        "summary": "4 серии на одном графике, каждая нормирована 0..1. Серые полосы = паузы (Garmin autopause). Без синтетических km-маркеров.",
         "data": {
-            "buckets": trend_buckets,
+            "samples": trend_samples,
             "series": [
                 {"key": "pace_min_per_km", "label": "pace",     "color": "#5cd6c0", "invert": True},
-                {"key": "cadence_avg",     "label": "cadence",  "color": "#7ec8e3"},
-                {"key": "hr_avg",          "label": "HR",       "color": "#ff9b6a"},
-                {"key": "power_avg",       "label": "power",    "color": "#d8a0ff"},
+                {"key": "cadence_stryd",  "label": "cadence",  "color": "#7ec8e3"},
+                {"key": "hr",             "label": "HR",       "color": "#ff9b6a"},
+                {"key": "power",          "label": "power",    "color": "#d8a0ff"},
             ],
             "pauses": [{"t_start": p["t_start"], "t_end": p["t_end"], "dur_s": p["dur_s"]} for p in d.get("pause_segments", [])],
-            "annotations": [{"at_t_s": int(s.get("t_start", 0)), "label": f'km {s["km"]}'} for s in d["splits"]],
         }
     })
 
-    # Pauses
+    # Pauses (Garmin autopause / water / etc.)
     sections.append({
         "id": "pauses",
-        "title": "Паузы · все сегменты с elapsed-временем",
+        "title": "Паузы · Garmin autopause с elapsed-временем",
         "kind": "table",
         "summary": "Разминка без больших ОФП. Все мелкие.",
         "data": {
@@ -168,7 +137,7 @@ def build_review(fit_path: Path, *, date: str, slug: str, brief: list[str], summ
         }
     })
 
-    # Recommendations
+    # Recommendations (free-form)
     sections.append({
         "id": "recos",
         "title": "Что делать",
@@ -209,3 +178,4 @@ if __name__ == "__main__":
                           recos=[])
     json.dump(review, open(out_json, "w"), indent=2, ensure_ascii=False)
     print(f"wrote {out_json}")
+

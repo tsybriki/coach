@@ -55,14 +55,14 @@
    - **(3) Действие** — одно конкретное на ближайшие 1-2 дня (`завтра 40 мин лёгкой @ метроном 170 bpm`)
    Не пиши в брифе интерпретации Stryd-метрик, сплиты или pause-анализ — это всё для деталей.
 
-2. **Детали — вкладки / секции**, сворачиваемые по клику:
-   - Summary (elapsed / moving / pause_total, distance, avg HR / max HR, cadence обоих источников, pace)
-   - HR-зоны (по moving records, не session avg)
-   - Per-km splits (только moving, иначе km внутри паузы врут)
-   - Stryd Running Dynamics (VO / stance / step length / form power), если footpod есть
-   - Pause segments (что и где было)
-   - Recommendations (linked to cited_principle)
-   - Raw chunks / data appendix (если нужен)
+2. **Детали — вкладки / секции**, сворачиваемые по клику. Стандартные kind'ы в `lib/render_html.py`:
+   - `hr_zones` — 5 полос Z1..Z5 с долей % и duration в минутах. data: `{"hr_max": 182, "zones": [{name, sec, pct}...]}`. По умолчанию используется HR-profile Кирилла (HRmax 182).
+   - `stryd` (через `kv_grid`) — Stryd RD с явной source-меткой. data: `{items: [{label, value, sub, tone}...]}`. Поле VO **обязательно** включает `(Stryd)` или `(Garmin RD)` в sub.
+   - `multi_trend` — SVG-line chart с 4-мя нормализованными 0..1 сериями: pace (инвертирован), cadence (Stryd, fallback watch), HR, power. Серые полосы = Garmin autopause-сегменты. Без синтетических km-маркеров (Garmin не пишет их для plain run, и авто-сегментация гадит).
+   - `pauses` (через `table`) — каждая пауза с at_km, t (после старта), duration, cause. **Cause спросить у пользователя сразу при pull**, иначе unknown.
+   - `recommendations` — список с priority (now/soon/later), text, cited_principle. Recomendations разворачивается по умолчанию (auto-open).
+
+   **NO `km_splits`**: Garmin Connect не пишет interval markers для plain running activities — только для Structured Workouts через Garmin Workout Builder (тогда `laps[]` в FIT содержит явные маркеры). Авто-сегментация по темпу/кад-сигналу даёт шум, не данные. Пока в плане нет interval-тренировок, разбор показывает только то, что Garmin записал. Если пользователю понадобятся интервалы — структурировать через Workout Builder, чтобы FIT имел `lap_trigger="session_end"`-куски.
 
 3. **Fit-review JSON source-of-truth** в `state/reviews/{date}-{slug}.json`. Рендерится через `lib/render_html.render_review(review, out_path)` → `state/reviews/{date}-{slug}.html`. **Не пиши HTML руками** — обнови JSON и перерендери. Каждый разбор = новый JSON + новый HTML; не аккумулируй текст.
 
@@ -75,6 +75,7 @@
 - Выдавать разбор FIT'а сплошным текстом в чате — только JSON/HTML/3-предложения бриф.
 - **Считать темп/HR-зоны по `total_elapsed_s` или `total_timer_s`.** Garmin elapsed/timer включают OFP-остановки, переходы через дорогу, ожидания. Это сдвигает средний темп на 30–90 сек/км и пушит среднюю ЧСС из Z2 в Z3. Всегда используй `parse_fit(..., with_streams=True)` → `moving_min` / `splits[]` (per-km по moving records) / `hr_drift_bpm` (по moving partition).
 - **Делать вид, что данных нет, если `parse_fit` их не отдаёт.** Если поле пустое — это сигнал проверить FIT напрямую через `fitparse`, а не утверждать «баг парсера» или «Garmin не записал». Прямой probe: `python -c "from fitparse import FitFile; ...; [print(f.name, f.value) for f in msg.fields if f.value is not None]"`. Поле может быть lowercase вместо capitalized (Garmin RD vs Stryd), или фильтр в `FitAnalysis.streams` его пропустил. Цена ошибки: ты говоришь пользователю «нет данных», он открывает Garmin UI — видит — и теряет доверие к агенту.
+- **Автоинференция сегментов по умолчанию.** Не делать в `parse_fit` разделение «интервалов» из pace-сигналов, EMA-фильтров, threshold-логики — Кирилл прямо сказал «давай не усложнять, пока не ищи интервалы сам». Garmin Connect не пишет intervals для plain running FIT (только для structured workouts через Garmin Workout Builder). Используй то, что есть в FIT напрямую — per-km splits (`parse_fit` schema 0.6.0+ уже расширен: на каждый km приходят `cadence_watch_avg`, `cadence_stryd_avg`, `hr_avg`, `hr_max`, `power_avg`). Если пользователь попросит интервалы — спроси заранее формат (одиночные интервалы, repeat groups, темп/jog/recovery) и не делай autodetection, а структурируй через Workout Builder так, чтобы FIT содержал explicit lap-markers.
 
 ## Правила извлечения и интерпретации
 
@@ -82,17 +83,15 @@
 
 - Сначала покажи три длительности: `elapsed_min` (по часам), `timer_min` (Garmin `total_timer_s`, исключает autopause ≥ ~5 сек), `moving_min` (только секунды с прогрессом дистанции). Формат: «Разбор без пауз: M:SS (бег). С паузами: M:SS (включая Xм остановок)». Если `elapsed_min - moving_min > 5 мин` — была остановка, не игнорь. Без этого шага сплиты и HR-зоны будут считаться по времени, которое включает простой, и отчёт — мусор.
 
-**Pitfall — pause-detection `moving_s` ловушка.** Простое `sum(t_cur − t_prev)` для moving records считает **секунды паузы как moving time** (потому что gap в `t_sec` большой, но сама запись ещё «беговая»). Корректная формула: `(t_cur − t_prev) == 1` → +1 секунда; gap > 1 → пропустить целиком (runner's last-stride = 1 сек, не больше). Эмпирически `len(moving_records)` ≈ `moving_s`; сверка: `total_elapsed_s − pause_total_dur_s` для прогонов без OFP обычно сходится до ±2 сек с `moving_s`.
+**Pause-detection `moving_s` ловушка.** Простое `sum(t_cur − t_prev)` для moving records считает **секунды паузы как moving time** (потому что gap в `t_sec` большой, но сама запись ещё «беговая»). Корректная формула: `(t_cur − t_prev) == 1` → +1 секунда; gap > 1 → пропустить целиком (runner's last-stride = 1 сек, не больше). Эмпирически `len(moving_records)` ≈ `moving_s`; сверка: `total_elapsed_s − pause_total_dur_s` для прогонов без OFP обычно сходится до ±2 сек с `moving_s`.
 
-1. **Splits — по `parse_fit._splits_per_km(moving_records)`**, не по elapsed-km. Если `splits[i].dur_s / 60 > 10 мин` при нормальном темпе — внутри километра была пауза; не считай темп «медленным», отметь причину (`pause_segments[]` рядом).
+1. **HR-зоны — по moving records.** `session.avg_hr` усредняет по elapsed и занижает; доля Z3 > 70% в заявленной лёгкой пробежке = темп выше Z2 (или калибровка браслета).
 
-2. **HR-зоны — по moving records.** `session.avg_hr` усредняет по elapsed и занижает; доля Z3 > 70% в заявленной лёгкой пробежке = темп выше Z2 (или калибровка браслета).
+2. **Half-split / pace drift — по moving midpoint.** Иначе разминка/остановка исказит «первую половину».
 
-3. **Half-split / pace drift — по moving midpoint.** Иначе разминка/остановка исказит «первую половину».
+3. **Pause cause**: если `pause_segments[].dur_s ≥ 60`, спроси у пользователя «это OFP / вода / травма / ожидание?». Без ответа помечай `pause_cause: unknown`. Логируй в `state/pause_log.jsonl` строки `{date, fit_id, t_sec, dur_s, cause}` чтобы трекер тренда видел распределение по причинам.
 
-4. **Warm-up splits (km 1-2 с avg HR < 70% от main set) — отбрасывай**, не считай частью основной работы.
-
-5. **Pause cause**: если `pause_segments[].dur_s ≥ 60`, спроси у пользователя «это OFP / вода / травма / ожидание?». Без ответа помечай `pause_cause: unknown`. **Не считай split «медленным» пока не узнан cause** — главный источник мусора в разборах: km 2 = 15:43 внутри 9:21 ОФП выглядит как «ужасный темп», а не как пауза внутри километра. Логируй в `state/pause_log.jsonl` строки `{date, fit_id, t_sec, dur_s, cause}` чтобы трекер тренда видел распределение по причинам.
+**Per-km splits НЕ вычислять автоматически для разбора.** Garmin не пишет interval markers для plain running — вычисление per-km-mean из per-second records = synthetic data, не реальность. Это явный запрет (см. «Что НЕ должно быть в разборе» в самом верху).
 
 ## Каденс и Running Dynamics — два независимых источника, НЕ путать
 
