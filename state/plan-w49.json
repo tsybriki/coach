@@ -22,7 +22,7 @@
       "method": "Karvonen + %HRmax",
       "zones": {
         "Z1": "100-118",
-        "Z2_low": "118-136",
+        "Z2L": "118-136",
         "Z2": "125-145",
         "Z3": "136-146",
         "Z4": "146-160",
@@ -97,7 +97,7 @@
       "name": "Easy бег 30мин Z2",
       "kind": "run",
       "subkind": "easy",
-      "focus": "Z2_low",
+      "focus": "Z2L",
       "location": "asphalt_commuter",
       "priority": 50,
       "category": "easy_runs",
@@ -106,7 +106,7 @@
         {
           "phase": "work",
           "duration_min": 30,
-          "zone": "Z2_low",
+          "zone": "Z2L",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
@@ -181,10 +181,10 @@
       "day": "СР",
       "time": "17:00",
       "duration_min": 90,
-      "name": "Длинный бег 90мин Z2_low",
+      "name": "Длинный бег 90мин Z2L",
       "kind": "run",
       "subkind": "long_Z2",
-      "focus": "Z2_low",
+      "focus": "Z2L",
       "location": "stadium_or_pool",
       "priority": 100,
       "category": "long_run",
@@ -202,11 +202,11 @@
         {
           "phase": "work",
           "duration_min": 65,
-          "zone": "Z2_low",
+          "zone": "Z2L",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
-          "notes": "Длинный бег 65мин Z2_low. Дыхание носовое, темп комфортный. Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."
+          "notes": "Длинный бег 65мин Z2L. Дыхание носовое, темп комфортный. Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."
         },
         {
           "phase": "cooldown",
@@ -289,7 +289,7 @@
         {
           "phase": "work",
           "duration_min": 45,
-          "zone": "Z2_low",
+          "zone": "Z2L",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
@@ -377,7 +377,7 @@
       "name": "Длинный вел Z2 90мин",
       "kind": "bike",
       "subkind": "long_z2",
-      "focus": "Z2_low",
+      "focus": "Z2L",
       "location": "long_ride_or_station",
       "priority": 70,
       "category": "bike",
@@ -395,11 +395,11 @@
         {
           "phase": "work",
           "duration_min": 70,
-          "zone": "Z2_low",
+          "zone": "Z2L",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
-          "notes": "Длинный вел Z2_low 70мин. Zwift watch-сессия."
+          "notes": "Длинный вел Z2L 70мин. Zwift watch-сессия."
         },
         {
           "phase": "cooldown",

@@ -24,7 +24,7 @@
 
 2. **Пиковые сессии** (RPE ≥ 7). Если за неделю 2+ сессии с RPE ≥ 7 — следующий день **не** ставить ещё одну Z3/Z4 работу.
 
-3. **HR avg vs zone target.** Если `avg_hr` > верхней границы target-зоны (например, Z2 target 125-145, avg_hr=152) — перегруз. Следующий день: Z1/Z2_low, не Z2/Z3.
+3. **HR avg vs zone target.** Если `avg_hr` > верхней границы target-зоны (например, Z2 target 125-145, avg_hr=152) — перегруз. Следующий день: Z1/Z2L, не Z2/Z3.
 
 4. **HR-drift в long-run (если есть ≥2 сегмента).** Тут нужен FIT; если FIT нет, опирайся на RPE + notes Кирилла.
 
@@ -47,7 +47,7 @@
 Из `slot.focus` текущей недели смотрим Z-распределение:
 - 0 сессий Z3+ → можно поставить interval/tempo
 - 1 сессия Z3+ → можно повторить Z3, но осторожно
-- 2+ сессий Z3+ → только Z1/Z2_low, либо recovery-swim/OFП, либо rest
+- 2+ сессий Z3+ → только Z1/Z2L, либо recovery-swim/OFП, либо rest
 - Cross-train (bike/swim) за неделю = 0 → можно добавить bike 60мин Z2 как «свежий стимул»
 
 ## Где смотреть для подтверждения
@@ -60,9 +60,9 @@
 
 - ВС 10:00 — 10К test (race, RPE 8, baseline)
 - ПН 18:30 — пул Z1 (recovery, RPE 5, без distance_km)
-- ВТ 09:00 — easy 1.5К Z2_low (RPE 3)
+- ВТ 09:00 — easy 1.5К Z2L (RPE 3)
 - ВТ 18:30 — 5К Z2 + 3К Z3 (key session, RPE 7)
-- СР 17:00 — long Z2_low 1ч (RPE 5)
+- СР 17:00 — long Z2L 1ч (RPE 5)
 - ЧТ 10:30 — cross Z2 11К (RPE 5)
 - ПТ 18:30 — recovery_swim Z1 (45мин, носовое дыхание)
 
@@ -83,6 +83,6 @@ new_slot = {
         {"phase": "work",   "duration_min": 30, "zone": "Z1", "notes": "1.5-2К кроль, каждое 4-ое 50м на спине. Носовое дыхание 6-8 гребков."},
         {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "notes": "200м заминка + растяжка плеч."}
     ],
-    "rationale": "Active recovery после 4 дней бега с пиковой нагрузкой (10К test + 5К Z2 + 3К Z3 + 10.6К Z2_low + 11.2К Z2)."
+    "rationale": "Active recovery после 4 дней бега с пиковой нагрузкой (10К test + 5К Z2 + 3К Z3 + 10.6К Z2L + 11.2К Z2)."
 }
 ```

@@ -103,7 +103,7 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .focus-pill{font-family:inherit;font-weight:600}
 .focus-pill.focus-Z1{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
 .focus-pill.focus-Z2{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
-.focus-pill.focus-Z2_low{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
+.focus-pill.focus-Z2L{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
 .focus-pill.focus-Z3{color:var(--warn);background:rgba(255,155,106,.08);border-color:rgba(255,155,106,.3)}
 .focus-pill.focus-Z4{color:var(--warn);background:rgba(255,155,106,.08);border-color:rgba(255,155,106,.3)}
 .focus-pill.focus-Z5{color:var(--cp);background:rgba(216,160,255,.08);border-color:rgba(216,160,255,.3)}
@@ -137,15 +137,23 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .step-notes{margin-top:3px;font-size:11.5px;color:var(--muted);font-style:italic;line-height:1.4}
 .step-sublist{margin:6px 0 4px 12px;padding-left:0;list-style:none;font-size:12px}
 .step-sub{padding:4px 6px;margin-bottom:2px;background:var(--bg);border-radius:4px;border-left:2px solid var(--good)}
-.ex-list{margin-top:6px;padding-left:14px;font-size:12.5px}
-.ex-item{padding:2px 0}
-.ex-item b{color:var(--accent)}
+.ex-list{margin:8px 0 0;padding-left:0;list-style:none;font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+.ex-item{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--panel);border:1px solid var(--border);border-radius:8px;margin-bottom:0}
+.ex-num{flex-shrink:0;width:22px;height:22px;background:var(--accent);color:var(--bg);font-weight:700;font-size:12px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,SFMono-Regular,monospace}
+.ex-content{flex:1;min-width:0}
+.ex-name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px}
+.ex-name{color:var(--accent);font-size:13px;font-weight:600}
+.ex-side{color:var(--accent2);font-size:11px;font-weight:600;background:rgba(92,214,192,.08);padding:1px 6px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,monospace}
+.ex-band{font-size:13px}
+.ex-focus-pill{font-size:10px;color:var(--muted);background:var(--panel2);padding:1px 6px;border-radius:4px;font-weight:500;letter-spacing:.2px}
+.ex-reps{font-size:11.5px;color:var(--text);font-family:ui-monospace,SFMono-Regular,monospace;margin-bottom:2px;font-weight:600}
+.ex-why{font-size:11.5px;color:var(--muted);line-height:1.4;font-style:italic}
 
 footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
 .empty{color:var(--muted);font-style:italic;padding:14px;text-align:center}
 </style></head><body>
 
-<script type="application/json" id="plan-data">{"title": "W48 · 2027-09-05..2027-09-11 · Берлин", "weekIso": "W48", "subtitle": "iso 2027-W36 · сезон с 2026-10-11", "totals": {"planned": 7.7, "target": 5, "delta": -2.7}, "phase": {"id": "tri_taper", "start": "2027-09-05", "end": "2027-09-10", "hours_per_week_target": 5, "goal_id": "g_tri_autumn"}, "rules": {"hr_zones": "Z1 100-118, Z2_low 118-136, Z2 125-145, Z3 136-146, Z4 146-160, Z5 160-175, Z6 175-182", "hr_zones_dict": {"Z1": "100-118", "Z2_low": "118-136", "Z2": "125-145", "Z3": "136-146", "Z4": "146-160", "Z5": "160-175", "Z6": "175-182"}}, "control_points_in_range": [], "slots": [{"id": "пн-key_run", "day": "ПН", "time": "18:45", "name": "Easy 5К + прогрессия 3К", "short": "Easy 5К + прогрессия 3К", "duration_min": 60, "kind": "run", "subkind": "easy_progression", "focus": "Z2", "location": "stadium", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка."}, {"phase": "work", "duration_min": 25, "zone": "Z2", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Easy 5К. HR ~135, темп 5:30-5:00/км."}, {"phase": "work", "duration_min": 3, "zone": "Z3", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Прогрессия 1К: 5:00 → 4:30/км."}, {"phase": "cooldown", "duration_min": 15, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "🏟", "name": "Стадион (400м)"}]}, {"id": "вт-easy_runs", "day": "ВТ", "time": "09:00", "name": "Easy бег 30мин Z2", "short": "Easy бег 30мин Z2", "duration_min": 30, "kind": "run", "subkind": "easy", "focus": "Z2_low", "location": "asphalt_commuter", "workout_pending": false, "structure": [{"phase": "work", "duration_min": 30, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Лёгкий бег. Дыхание носовое."}], "inventory": []}, {"id": "вт-key_run", "day": "ВТ", "time": "18:30", "name": "Ключевая: Интервалы 60мин Z3", "short": "Ключевая: Интервалы 60мин Z3", "duration_min": 60, "kind": "run", "subkind": "key_intervals", "focus": "Z3", "location": "asphalt_commuter", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 12, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка с ускорениями 2×100м str."}, {"phase": "set", "duration_min": 30, "zone": null, "pace_min_per_km": null, "reps": 5, "set_repeats": [{"phase": "work", "duration_min": 4, "zone": "Z3", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "400м @ 4:00/км (~1:36)."}, {"phase": "recovery", "duration_min": 2, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Jog 200м. Восстановить дыхание."}], "notes": "Интервалы Z3. Источник: spring-10k-2027-v2.md."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "⌚", "name": "Garmin / часы с HR"}]}, {"id": "ср-long_run", "day": "СР", "time": "17:00", "name": "Длинный бег 90мин Z2_low", "short": "Длинный бег 90мин Z2_low", "duration_min": 90, "kind": "run", "subkind": "long_Z2", "focus": "Z2_low", "location": "stadium_or_pool", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка 10мин Z1."}, {"phase": "work", "duration_min": 65, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Длинный бег 65мин Z2_low. Дыхание носовое, темп комфортный. Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."}, {"phase": "cooldown", "duration_min": 15, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": []}, {"id": "чт-bike", "day": "ЧТ", "time": "10:30", "name": "Вел-станок Z2 45мин (дома)", "short": "Вел-станок Z2 45мин (дома)", "duration_min": 45, "kind": "bike", "subkind": "stationary_z2", "focus": "Z2", "location": "home_stationary_bike", "workout_pending": true, "structure": [{"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка на станке. Каденс 80-85."}, {"phase": "work", "duration_min": 30, "zone": "Z2", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Стабильное Z2. Каденс 85-90. Можно Zwift watch-симулятор."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Заминка."}], "inventory": [{"icon": "🚴", "name": "Велостанок (Tacx)"}, {"icon": "🚴", "name": "Zwift-приложение"}]}, {"id": "пт-swim", "day": "ПТ", "time": "18:00", "name": "Пул 60мин easy", "short": "Пул 60мин easy", "duration_min": 60, "kind": "swim", "subkind": "easy", "focus": "Z1", "location": "pool_or_asphalt", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка."}, {"phase": "work", "duration_min": 45, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Основная часть. Носовое дыхание."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Заминка."}], "inventory": [{"icon": "🏊", "name": "Бассейн"}]}, {"id": "сб-ofp", "day": "СБ", "time": "10:00", "name": "ofp core 25мин", "short": "ofp core 25мин", "duration_min": 25, "kind": "ofp", "subkind": "core", "focus": "core", "location": "home", "workout_pending": false, "structure": [{"phase": "warmup", "exercise": "Мобилилити: hip openers, glute bridge 2×15.", "duration_min": 5, "notes": "Активация ягодиц."}, {"phase": "main", "set": {"name": "Core circuit x2 rounds", "exercises": [{"name": "Планка", "reps": "3×45с", "rest": "30с"}, {"name": "Медведи на коленях", "reps": "2×12/стор", "rest": "30с"}, {"name": "Bird-dog", "reps": "3×10/стор", "rest": "30с"}, {"name": "Glute bridge", "reps": "3×15", "rest": "30с"}, {"name": "Гиперэкстензия", "reps": "2×15", "rest": "30с"}]}, "duration_min": 20, "notes": "Акцент на заднюю цепь (превентивно от защемления спины)."}, {"phase": "cooldown", "exercise": "Растяжка 5мин. Без агрессии на грушевидную.", "duration_min": 5, "notes": "Spring-10k-2027-v2.md core program."}], "inventory": [{"icon": "🧘", "name": "Коврик"}, {"icon": "🎗", "name": "Резинка (опционально)"}]}, {"id": "вс-bike", "day": "ВС", "time": "11:00", "name": "Длинный вел Z2 90мин", "short": "Длинный вел Z2 90мин", "duration_min": 90, "kind": "bike", "subkind": "long_z2", "focus": "Z2_low", "location": "long_ride_or_station", "workout_pending": true, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}, {"phase": "work", "duration_min": 70, "zone": "Z2_low", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Длинный вел Z2_low 70мин. Zwift watch-сессия."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "🚴", "name": "Вело (улица или станок)"}]}]}</script>
+<script type="application/json" id="plan-data">{"title": "W48 · 2027-09-05..2027-09-11 · Берлин", "weekIso": "W48", "subtitle": "iso 2027-W36 · сезон с 2026-10-11", "totals": {"planned": 7.7, "target": 5, "delta": -2.7}, "phase": {"id": "tri_taper", "start": "2027-09-05", "end": "2027-09-10", "hours_per_week_target": 5, "goal_id": "g_tri_autumn"}, "rules": {"hr_zones": "Z1 100-118, Z2L 118-136, Z2 125-145, Z3 136-146, Z4 146-160, Z5 160-175, Z6 175-182", "hr_zones_dict": {"Z1": "100-118", "Z2L": "118-136", "Z2": "125-145", "Z3": "136-146", "Z4": "146-160", "Z5": "160-175", "Z6": "175-182"}}, "control_points_in_range": [], "slots": [{"id": "пн-key_run", "day": "ПН", "time": "18:45", "name": "Easy 5К + прогрессия 3К", "short": "Easy 5К + прогрессия 3К", "duration_min": 60, "kind": "run", "subkind": "easy_progression", "focus": "Z2", "location": "stadium", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка."}, {"phase": "work", "duration_min": 25, "zone": "Z2", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Easy 5К. HR ~135, темп 5:30-5:00/км."}, {"phase": "work", "duration_min": 3, "zone": "Z3", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Прогрессия 1К: 5:00 → 4:30/км."}, {"phase": "cooldown", "duration_min": 15, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "🏟", "name": "Стадион (400м)"}]}, {"id": "вт-easy_runs", "day": "ВТ", "time": "09:00", "name": "Easy бег 30мин Z2", "short": "Easy бег 30мин Z2", "duration_min": 30, "kind": "run", "subkind": "easy", "focus": "Z2L", "location": "asphalt_commuter", "workout_pending": false, "structure": [{"phase": "work", "duration_min": 30, "zone": "Z2L", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Лёгкий бег. Дыхание носовое."}], "inventory": []}, {"id": "вт-key_run", "day": "ВТ", "time": "18:30", "name": "Ключевая: Интервалы 60мин Z3", "short": "Ключевая: Интервалы 60мин Z3", "duration_min": 60, "kind": "run", "subkind": "key_intervals", "focus": "Z3", "location": "asphalt_commuter", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 12, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка с ускорениями 2×100м str."}, {"phase": "set", "duration_min": 30, "zone": null, "pace_min_per_km": null, "reps": 5, "set_repeats": [{"phase": "work", "duration_min": 4, "zone": "Z3", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "400м @ 4:00/км (~1:36)."}, {"phase": "recovery", "duration_min": 2, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Jog 200м. Восстановить дыхание."}], "notes": "Интервалы Z3. Источник: spring-10k-2027-v2.md."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "⌚", "name": "Garmin / часы с HR"}]}, {"id": "ср-long_run", "day": "СР", "time": "17:00", "name": "Длинный бег 90мин Z2L", "short": "Длинный бег 90мин Z2L", "duration_min": 90, "kind": "run", "subkind": "long_Z2", "focus": "Z2L", "location": "stadium_or_pool", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка 10мин Z1."}, {"phase": "work", "duration_min": 65, "zone": "Z2L", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Длинный бег 65мин Z2L. Дыхание носовое, темп комфортный. Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."}, {"phase": "cooldown", "duration_min": 15, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": []}, {"id": "чт-bike", "day": "ЧТ", "time": "10:30", "name": "Вел-станок Z2 45мин (дома)", "short": "Вел-станок Z2 45мин (дома)", "duration_min": 45, "kind": "bike", "subkind": "stationary_z2", "focus": "Z2", "location": "home_stationary_bike", "workout_pending": true, "structure": [{"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка на станке. Каденс 80-85."}, {"phase": "work", "duration_min": 30, "zone": "Z2", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Стабильное Z2. Каденс 85-90. Можно Zwift watch-симулятор."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Заминка."}], "inventory": [{"icon": "🚴", "name": "Велостанок (Tacx)"}, {"icon": "🚴", "name": "Zwift-приложение"}]}, {"id": "пт-swim", "day": "ПТ", "time": "18:00", "name": "Пул 60мин easy", "short": "Пул 60мин easy", "duration_min": 60, "kind": "swim", "subkind": "easy", "focus": "Z1", "location": "pool_or_asphalt", "workout_pending": false, "structure": [{"phase": "warmup", "duration_min": 5, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Разминка."}, {"phase": "work", "duration_min": 45, "zone": "Z2L", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Основная часть. Носовое дыхание."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Заминка."}], "inventory": [{"icon": "🏊", "name": "Бассейн"}]}, {"id": "сб-ofp", "day": "СБ", "time": "10:00", "name": "ofp core 25мин", "short": "ofp core 25мин", "duration_min": 25, "kind": "ofp", "subkind": "core", "focus": "core", "location": "home", "workout_pending": false, "structure": [{"phase": "warmup", "exercise": "Мобилилити: hip openers, glute bridge 2×15.", "duration_min": 5, "notes": "Активация ягодиц."}, {"phase": "main", "set": {"name": "Core circuit x2 rounds", "exercises": [{"name": "Планка", "reps": "3×45с", "rest": "30с"}, {"name": "Медведи на коленях", "reps": "2×12/стор", "rest": "30с"}, {"name": "Bird-dog", "reps": "3×10/стор", "rest": "30с"}, {"name": "Glute bridge", "reps": "3×15", "rest": "30с"}, {"name": "Гиперэкстензия", "reps": "2×15", "rest": "30с"}]}, "duration_min": 20, "notes": "Акцент на заднюю цепь (превентивно от защемления спины)."}, {"phase": "cooldown", "exercise": "Растяжка 5мин. Без агрессии на грушевидную.", "duration_min": 5, "notes": "Spring-10k-2027-v2.md core program."}], "inventory": [{"icon": "🧘", "name": "Коврик"}, {"icon": "🎗", "name": "Резинка (опционально)"}]}, {"id": "вс-bike", "day": "ВС", "time": "11:00", "name": "Длинный вел Z2 90мин", "short": "Длинный вел Z2 90мин", "duration_min": 90, "kind": "bike", "subkind": "long_z2", "focus": "Z2L", "location": "long_ride_or_station", "workout_pending": true, "structure": [{"phase": "warmup", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}, {"phase": "work", "duration_min": 70, "zone": "Z2L", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": "Длинный вел Z2L 70мин. Zwift watch-сессия."}, {"phase": "cooldown", "duration_min": 10, "zone": "Z1", "pace_min_per_km": null, "reps": null, "set_repeats": null, "notes": ""}], "inventory": [{"icon": "🚴", "name": "Вело (улица или станок)"}]}]}</script>
 
 <div id="picker" class="picker visible"></div>
 
@@ -193,14 +201,30 @@ function renderOfpStructure(structure) {
         + '</li>';
     }
     if (st.set) {
+      // Set header (название сета + формат)
       let html = '<li class="step step-set">'
         + '<div class="step-head"><span class="step-phase">main</span>'
         + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span></div>'
         + '<div class="step-name">' + escapeHtml(st.set.name) + '</div>'
+        + (st.set.format ? '<div class="step-notes">' + escapeHtml(st.set.format) + '</div>' : '')
         + '<ol class="ex-list">';
-      for (const ex of st.set.exercises) {
-        html += '<li class="ex-item"><b>' + escapeHtml(ex.name) + '</b> · ' + escapeHtml(ex.reps)
-              + (ex.rest ? ' · отдых ' + escapeHtml(ex.rest) : '') + '</li>';
+      // Каждое упражнение — структурированная карточка
+      for (let i = 0; i < (st.set.exercises || []).length; i++) {
+        const ex = st.set.exercises[i];
+        const num = i + 1;
+        const sideTag = ex.side ? ' <span class="ex-side">· ' + escapeHtml(ex.side) + '</span>' : '';
+        const bandTag = ex.band ? ' <span class="ex-band">🎗</span>' : '';
+        const focusTag = ex.focus ? ' <span class="ex-focus-pill">' + escapeHtml(ex.focus) + '</span>' : '';
+        html += '<li class="ex-item">'
+          + '<div class="ex-num">' + num + '</div>'
+          + '<div class="ex-content">'
+          + '<div class="ex-name-row">'
+          + '<b class="ex-name">' + escapeHtml(ex.name) + '</b>' + sideTag + bandTag + focusTag
+          + '</div>'
+          + '<div class="ex-reps">× ' + escapeHtml(ex.reps) + '</div>'
+          + (ex.notes ? '<div class="ex-why">' + escapeHtml(ex.notes) + '</div>' : '')
+          + '</div>'
+          + '</li>';
       }
       return html + '</ol></li>';
     }
@@ -210,31 +234,57 @@ function renderOfpStructure(structure) {
 }
 
 function renderHrStructure(structure) {
+  // v36: basis-aware rendering.
+  //   - basis="time" (default): показываем duration_min + hr_target если есть.
+  //   - basis="distance": показываем distance_m, НЕ показываем duration_min, pace_min_per_km как «X:XX/км».
+  //   - notes в sub-шагах НИКОГДА не показываются.
+  //   - top-level set header: просто "set · × 6" (без объёма, без total time/distance).
+  //     Модель может класть st.set_label (например "интервалы") — тогда выводится оно.
   const rows = structure.map(st => {
     if (st.phase === 'set' && st.set_repeats) {
-      let subHtml = st.set_repeats.map(s => {
-        let pace = s.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
-        let zone = s.zone ? '<span class="step-zone">' + escapeHtml(s.zone) + '</span>' : '';
+      // Sub-шаги внутри set
+      const subHtml = st.set_repeats.map(s => {
+        const subBasis = s.basis || 'time';
+        // distance-value: либо distance_m, либо duration_min
+        let valueHtml = '';
+        if (subBasis === 'distance' && s.distance_m) {
+          valueHtml = '<span class="step-dur">' + escapeHtml(String(s.distance_m)) + 'м</span>';
+        } else if (s.duration_min) {
+          valueHtml = '<span class="step-dur">' + escapeHtml(String(s.duration_min)) + 'мин</span>';
+        }
+        const zone = s.zone ? '<span class="step-zone">' + escapeHtml(s.zone) + '</span>' : '';
+        const hr = s.hr_target ? ' <span class="step-pace">HR ' + escapeHtml(String(s.hr_target)) + '</span>' : '';
+        const pace = s.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(s.pace_min_per_km) + '/км</span>' : '';
         return '<li class="step-sub">'
           + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(s.phase||'') + '</span>'
-          + ' <span class="step-dur">' + escapeHtml(String(s.duration_min||'')) + 'мин</span>' + pace + '</div>'
-          + (s.notes ? '<div class="step-notes">' + escapeHtml(s.notes) + '</div>' : '')
+          + ' ' + valueHtml + hr + pace + '</div>'
+          // notes в sub-шагах не показываем
           + '</li>';
       }).join('');
+      // Top-level set header — ТОЛЬКО label + reps (без объёма)
+      const setLabel = st.label || 'set';
       return '<li class="step step-set">'
-        + '<div class="step-head"><span class="step-phase">set</span>'
-        + '<span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>'
+        + '<div class="step-head"><span class="step-phase">' + escapeHtml(setLabel) + '</span>'
         + '<span class="step-reps">× ' + escapeHtml(String(st.reps||'?')) + '</span></div>'
         + '<ol class="step-sublist">' + subHtml + '</ol>'
-        + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+        // top-level notes тоже не показываем в v36
         + '</li>';
     }
-    let pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
-    let zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
+    // Top-level одиночный шаг (warmup, cooldown, work, main, etc.)
+    const topBasis = st.basis || 'time';
+    let topValue = '';
+    if (topBasis === 'distance' && st.distance_m) {
+      topValue = '<span class="step-dur">' + escapeHtml(String(st.distance_m)) + 'м</span>';
+    } else if (st.duration_min) {
+      topValue = '<span class="step-dur">' + escapeHtml(String(st.duration_min)) + 'мин</span>';
+    }
+    const zone = st.zone ? '<span class="step-zone">' + escapeHtml(st.zone) + '</span>' : '';
+    const hr = st.hr_target ? ' <span class="step-pace">HR ' + escapeHtml(String(st.hr_target)) + '</span>' : '';
+    const pace = st.pace_min_per_km ? ' <span class="step-pace">@ ' + escapeHtml(st.pace_min_per_km) + '/км</span>' : '';
     return '<li class="step">'
       + '<div class="step-head">' + zone + '<span class="step-phase">' + escapeHtml(st.phase||'') + '</span>'
-      + ' <span class="step-dur">' + escapeHtml(String(st.duration_min||'')) + 'мин</span>' + pace + '</div>'
-      + (st.notes ? '<div class="step-notes">' + escapeHtml(st.notes) + '</div>' : '')
+      + ' ' + topValue + hr + pace + '</div>'
+      // v36: top-level notes тоже не показываем (Кирилл: 'подпись внизу уродская')
       + '</li>';
   }).join('');
   return '<ol class="structure-list">' + rows + '</ol>';
@@ -311,39 +361,33 @@ function buildPicker(plan) {
   if (isActual) html += '<div class="actual-badge">✅ Фактический лог</div>';
   html += '</div>';
 
-  // Totals
-  if (plan.totals) {
-    const t = plan.totals;
-    // v29: actual-режим: показываем actual_sessions / actual_hours / actual_km
-    if (isActual && t.actual_sessions) {
-      html += '<div class="totals-card">';
-      html += '<div class="totals-grid">';
-      html += '<div class="total-cell"><div class="v">' + t.actual_sessions + '</div><div class="l">сессий</div></div>';
-      html += '<div class="total-cell"><div class="v">' + t.actual_hours + 'ч</div><div class="l">факт</div></div>';
-      html += '<div class="total-cell"><div class="v">' + (t.actual_km || 0) + 'К</div><div class="l">объём</div></div>';
-      html += '</div>';
-    } else {
-      const deltaSign = (t.delta_hours >= 0 ? '+' : '');
-      const deltaClass = (t.delta_hours >= 0 ? 'delta-positive' : 'delta-negative');
-      html += '<div class="totals-card">';
-      html += '<div class="totals-grid">';
-      html += '<div class="total-cell"><div class="v">' + t.planned_hours + 'ч</div><div class="l">planned</div></div>';
-      html += '<div class="total-cell"><div class="v">' + t.target_hours + 'ч</div><div class="l">target</div></div>';
-      html += '<div class="total-cell ' + deltaClass + '"><div class="v">' + deltaSign + t.delta_hours + 'ч</div><div class="l">delta</div></div>';
-      html += '</div>';
-    }
-    // HR zones
-    const hrzDict = (plan.rules && plan.rules.hr_zones_dict) ||
-                    (plan.rules && plan.rules.hr_zones && plan.rules.hr_zones.zones) || null;
-    if (hrzDict) {
-      html += '<div class="zones-grid">';
-      for (const k of Object.keys(hrzDict)) {
-        html += '<div class="zone"><b>' + escapeHtml(k) + '</b> ' + escapeHtml(String(hrzDict[k])) + '</div>';
-      }
-      html += '</div>';
+  // Totals (v33: всегда planned / target / delta).
+  // planned = сумма duration_min всех слотов (включая actual и planned).
+  // target = phase.hours_per_week_target (долгосрочный план).
+  // delta = planned - target: зелёный если ≥ 0, красный если < 0.
+  const slotsTotal = (plan.slots || []).reduce((sum, s) => sum + (s.duration_min || 0), 0);
+  const plannedHours = Math.round(slotsTotal / 60 * 10) / 10;
+  const targetHours = (plan.phase && plan.phase.hours_per_week_target) || 0;
+  const deltaHours = Math.round((plannedHours - targetHours) * 10) / 10;
+  const deltaSign = (deltaHours >= 0 ? '+' : '');
+  const deltaClass = (deltaHours >= 0 ? 'delta-positive' : 'delta-negative');
+  html += '<div class="totals-card">';
+  html += '<div class="totals-grid">';
+  html += '<div class="total-cell"><div class="v">' + plannedHours + 'ч</div><div class="l">planned</div></div>';
+  html += '<div class="total-cell"><div class="v">' + targetHours + 'ч</div><div class="l">expected</div></div>';
+  html += '<div class="total-cell ' + deltaClass + '"><div class="v">' + deltaSign + deltaHours + 'ч</div><div class="l">delta</div></div>';
+  html += '</div>';
+  // HR zones
+  const hrzDict = (plan.rules && plan.rules.hr_zones_dict) ||
+                  (plan.rules && plan.rules.hr_zones && plan.rules.hr_zones.zones) || null;
+  if (hrzDict) {
+    html += '<div class="zones-grid">';
+    for (const k of Object.keys(hrzDict)) {
+      html += '<div class="zone"><b>' + escapeHtml(k) + '</b> ' + escapeHtml(String(hrzDict[k])) + '</div>';
     }
     html += '</div>';
   }
+  html += '</div>';
 
   // Phase
   if (plan.phase && plan.phase.id && plan.phase.id !== '—') {

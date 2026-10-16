@@ -62,7 +62,7 @@ def _load_hr_zone_profile() -> dict:
         "rhr": 54,
         "hrr": 128,
         "method": "Karvonen + %HRmax",
-        "zones": {"Z1": "100-118", "Z2_low": "118-136", "Z2": "125-145", ...},
+        "zones": {"Z1": "100-118", "Z2L": "118-136", "Z2": "125-145", ...},
         "notes": "...",
       }
 
@@ -424,7 +424,7 @@ def parse_trend(moving: list[dict]) -> list[dict]:
 def _compute_hr_zone_stats(moving: list[dict], profile: dict) -> list[dict]:
     """Bucket seconds into per-zone counts using athlete.json hr_zones.
 
-    Uses profile['zones'] (e.g. {Z1: 100-118, Z2_low: 118-136, Z3: 136-146, ...}).
+    Uses profile['zones'] (e.g. {Z1: 100-118, Z2L: 118-136, Z3: 136-146, ...}).
     Zones are matched by name in order. Records with no HR are excluded from
     the zone-specific totals but counted separately as 'no_hr'.
 

@@ -31,7 +31,7 @@
       "method": "Karvonen + %HRmax",
       "zones": {
         "Z1": "100-118",
-        "Z2_low": "118-136",
+        "Z2L": "118-136",
         "Z2": "125-145",
         "Z3": "136-146",
         "Z4": "146-160",
@@ -63,7 +63,7 @@
         {
           "phase": "work",
           "duration_min": 30,
-          "zone": "Z2_low",
+          "zone": "Z2L",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
@@ -141,7 +141,7 @@
         {
           "phase": "work",
           "duration_min": 30,
-          "zone": "Z2_low",
+          "zone": "Z2L",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
@@ -184,7 +184,7 @@
         {
           "phase": "work",
           "duration_min": 45,
-          "zone": "Z2_low",
+          "zone": "Z2L",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,

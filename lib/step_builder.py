@@ -9,7 +9,7 @@ step_builder.py — построение структуры тренировки
 {
   'phase': 'warmup'|'work'|'recovery'|'cooldown'|'set'|'rest'|'break'|'transition',
   'duration_min': int,
-  'zone': 'Z1'|'Z2'|'Z2_low'|'Z3'|'Z4'|'Z5',
+  'zone': 'Z1'|'Z2'|'Z2L'|'Z3'|'Z4'|'Z5',
   'pace_min_per_km': '4:30'|'5:00'|None,
   'reps': int,           # только для set-блоков
   'set_repeats': list[step],  # для set-блоков
@@ -52,17 +52,17 @@ def build_structure(subkind: str, duration_min: int, focus: str = "", phase_id: 
     """
     if subkind == "easy":
         if duration_min <= 30:
-            return [_z(duration_min, "Z2_low", "work", "Лёгкий бег. Дыхание носовое.")]
+            return [_z(duration_min, "Z2L", "work", "Лёгкий бег. Дыхание носовое.")]
         elif duration_min <= 60:
             return [
                 _z(5, "Z1", "warmup", "Разминка."),
-                _z(duration_min - 15, "Z2_low", "work", "Основная часть. Носовое дыхание."),
+                _z(duration_min - 15, "Z2L", "work", "Основная часть. Носовое дыхание."),
                 _z(10, "Z1", "cooldown", "Заминка."),
             ]
         else:
             return [
                 _z(10, "Z1", "warmup"),
-                _z(duration_min - 25, "Z2_low", "work", "Лёгкий длинный бег."),
+                _z(duration_min - 25, "Z2L", "work", "Лёгкий длинный бег."),
                 _z(15, "Z1", "cooldown"),
             ]
 
@@ -72,8 +72,8 @@ def build_structure(subkind: str, duration_min: int, focus: str = "", phase_id: 
         work = duration_min - warmup - cooldown
         return [
             _z(warmup, "Z1", "warmup", "Разминка 10мин Z1."),
-            _z(work, "Z2_low", "work",
-              f"Длинный бег {work}мин Z2_low. Дыхание носовое, темп комфортный. "
+            _z(work, "Z2L", "work",
+              f"Длинный бег {work}мин Z2L. Дыхание носовое, темп комфортный. "
               f"Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."),
             _z(cooldown, "Z1", "cooldown"),
         ]
@@ -156,7 +156,7 @@ def build_structure(subkind: str, duration_min: int, focus: str = "", phase_id: 
         cooldown = 10
         return [
             _z(warmup, "Z1", "warmup"),
-            _z(duration_min - 20, "Z2_low", "work", f"Длинный вел Z2_low {duration_min-20}мин. Zwift watch-сессия."),
+            _z(duration_min - 20, "Z2L", "work", f"Длинный вел Z2L {duration_min-20}мин. Zwift watch-сессия."),
             _z(cooldown, "Z1", "cooldown"),
         ]
 

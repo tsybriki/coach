@@ -8,7 +8,7 @@
     "vo2max": 51,
     "race_pace_10k": "44:06",
     "training_paces": {
-      "Z2_low_pace": "5:40-5:50",
+      "Z2L_pace": "5:40-5:50",
       "tempo_pace": "4:50-5:20",
       "threshold_pace": "4:20-4:35",
       "vo2max_pace": "< 4:10"
@@ -22,7 +22,7 @@
     "method": "Karvonen + %HRmax",
     "zones": {
       "Z1": "100-118",
-      "Z2_low": "118-136",
+      "Z2L": "118-136",
       "Z2": "125-145",
       "Z3": "136-146",
       "Z4": "146-160",

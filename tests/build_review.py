@@ -57,7 +57,7 @@ def build_review(fit_path: Path, *, date: str, slug: str, brief: list[str], summ
     sections = []
 
     # HR zones from moving partition — computed by parse_fit using the
-    # athlete.json profile (so Z2_low / Z2 / etc. show with the user's
+    # athlete.json profile (so Z2L / Z2 / etc. show with the user's
     # actual threshold values, not renderer-side defaults).
     hr_zone_stats = d.get("hr_zone_stats", [])
     if hr_zone_stats:
@@ -65,10 +65,10 @@ def build_review(fit_path: Path, *, date: str, slug: str, brief: list[str], summ
         total_sec = sum(z.get("sec", 0) for z in hr_zone_stats)
         z3_pct = next((z["pct"] for z in hr_zone_stats if z.get("name") == "Z3"), 0)
         z4_pct = next((z["pct"] for z in hr_zone_stats if z.get("name") == "Z4"), 0)
-        z2_low_pct = next((z["pct"] for z in hr_zone_stats if z.get("name") == "Z2_low"), 0)
+        z2_low_pct = next((z["pct"] for z in hr_zone_stats if z.get("name") == "Z2L"), 0)
         z2_pct = next((z["pct"] for z in hr_zone_stats if z.get("name") == "Z2"), 0)
         summary_text = (
-            f"Z3 {z3_pct:.0f}% + Z4 {z4_pct:.0f}% = {z3_pct+z4_pct:.0f}% выше Z2_low. "
+            f"Z3 {z3_pct:.0f}% + Z4 {z4_pct:.0f}% = {z3_pct+z4_pct:.0f}% выше Z2L. "
             f"HR-границы — из athlete profile (HRmax={hr_max_from_profile})."
         )
         sections.append({
