@@ -4,7 +4,7 @@
   "_sources": {
     "fit_file": "/home/tsybriki/projects/garmin_tools/raw/running/fit/24724230740.fit",
     "fit_id": "95f5f8c6b9fe",
-    "parse_fit_schema": "0.7.0"
+    "parse_fit_schema": "0.8.0"
   },
   "title": "24724230740 · 2026-10-14",
   "date": "2026-10-14",
@@ -35,51 +35,172 @@
       "id": "hr_zones",
       "title": "HR-зоны · по moving records",
       "kind": "hr_zones",
-      "summary": "Z3 63% + Z4 10% = 73% выше Z2_low. HR-границы — из athlete profile (HRmax=182).",
+      "summary": "Z3 2% + Z4 9% = 11% выше Z2_low. HR-границы — из athlete profile (HRmax=182).",
       "data": {
         "hr_max": 182,
+        "hr_zones_profile": {
+          "hr_max": 182,
+          "rhr": 54,
+          "hrr": 128,
+          "method": "Karvonen + %HRmax",
+          "zones": {
+            "Z1": {
+              "low": 100,
+              "high": 118,
+              "raw": "100-118"
+            },
+            "Z2_low": {
+              "low": 118,
+              "high": 136,
+              "raw": "118-136"
+            },
+            "Z2": {
+              "low": 125,
+              "high": 145,
+              "raw": "125-145"
+            },
+            "Z3": {
+              "low": 136,
+              "high": 146,
+              "raw": "136-146"
+            },
+            "Z4": {
+              "low": 146,
+              "high": 160,
+              "raw": "146-160"
+            },
+            "Z5": {
+              "low": 160,
+              "high": 175,
+              "raw": "160-175"
+            },
+            "Z6": {
+              "low": 175,
+              "high": 182,
+              "raw": "175-182"
+            }
+          },
+          "raw": {
+            "Z1": "100-118",
+            "Z2_low": "118-136",
+            "Z2": "125-145",
+            "Z3": "136-146",
+            "Z4": "146-160",
+            "Z5": "160-175",
+            "Z6": "175-182"
+          },
+          "notes": "low-Z2 сдвинута вниз (118-136) — намеренно для длинных",
+          "loaded": true
+        },
         "zones": [
           {
             "name": "Z1",
-            "sec": 134,
-            "pct": 3.3,
-            "hr_low": 100,
-            "hr_high": 117
+            "low": 100,
+            "high": 118,
+            "sec": 97,
+            "pct": 1.9
           },
           {
-            "name": "Z1.5",
-            "sec": 119,
-            "pct": 3.0,
-            "hr_low": 118,
-            "hr_high": 124
+            "name": "Z2_low",
+            "low": 118,
+            "high": 136,
+            "sec": 1312,
+            "pct": 25.6
           },
           {
             "name": "Z2",
-            "sec": 788,
-            "pct": 20.2,
-            "hr_low": 125,
-            "hr_high": 135
+            "low": 125,
+            "high": 145,
+            "sec": 3086,
+            "pct": 60.3
           },
           {
             "name": "Z3",
-            "sec": 2478,
-            "pct": 63.4,
-            "hr_low": 136,
-            "hr_high": 145
+            "low": 136,
+            "high": 146,
+            "sec": 113,
+            "pct": 2.2
           },
           {
             "name": "Z4",
-            "sec": 397,
-            "pct": 10.2,
-            "hr_low": 146,
-            "hr_high": 159
+            "low": 146,
+            "high": 160,
+            "sec": 473,
+            "pct": 9.2
           },
           {
             "name": "Z5",
+            "low": 160,
+            "high": 175,
             "sec": 0,
-            "pct": 0.0,
-            "hr_low": 160,
-            "hr_high": 174
+            "pct": 0.0
+          },
+          {
+            "name": "Z6",
+            "low": 175,
+            "high": 182,
+            "sec": 37,
+            "pct": 0.7
+          }
+        ]
+      }
+    },
+    {
+      "id": "hr_profile",
+      "title": "Athlete HR-профиль · из athlete.json",
+      "kind": "kv_grid",
+      "summary": "Границы зон, HRmax, RHR, метод расчёта — все из constraints.hr_zones athlete.json.",
+      "data": {
+        "items": [
+          {
+            "label": "Z1",
+            "value": "100-118",
+            "sub": "method: Karvonen + %HRmax"
+          },
+          {
+            "label": "Z2_low",
+            "value": "118-136",
+            "sub": null
+          },
+          {
+            "label": "Z2",
+            "value": "125-145",
+            "sub": null
+          },
+          {
+            "label": "Z3",
+            "value": "136-146",
+            "sub": null
+          },
+          {
+            "label": "Z4",
+            "value": "146-160",
+            "sub": null
+          },
+          {
+            "label": "Z5",
+            "value": "160-175",
+            "sub": null
+          },
+          {
+            "label": "Z6",
+            "value": "175-182",
+            "sub": null
+          },
+          {
+            "label": "HRmax",
+            "value": "182",
+            "sub": "method: Karvonen + %HRmax"
+          },
+          {
+            "label": "RHR",
+            "value": "54",
+            "sub": "resting HR"
+          },
+          {
+            "label": "notes",
+            "value": "low-Z2 сдвинута вниз (118-136) — намеренно для длинных",
+            "sub": "athlete.json"
           }
         ]
       }

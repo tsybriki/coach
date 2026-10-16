@@ -37,7 +37,7 @@
 4. **Собрать review-JSON** по шаблону:
    - `brief[3]` по схеме (что / план / действие).
    - `metrics{}` — 8-12 ключевых значений.
-   - `sections[]` — разворачиваемые: hr_zones, splits, stryd, pauses, recos.
+   - `sections[]` — разворачиваемые: hr_zones, hr_profile, stryd, multi_trend, pauses, recos.
    - `state/reviews/{date}-{slug}.json` (source of truth).
 
 5. **Рендерить HTML**: `lib/render_html.render_review(review, path)` → `state/reviews/{date}-{slug}.html`.
@@ -58,7 +58,8 @@
    **Стиль брифа**: плотно, без воды, без восторгов. Конкретные числа + проценты + один глагол на действие. Без «очень», «просто топ», «бомбически», «это прямо» — это слова Кирилла, не твой голос. Никаких emoji кроме `→` и `·` внутри чисел. Максимум 3 предложения. **Не пиши в брифе интерпретации Stryd-метрик, сплиты или pause-анализ — это всё для деталей.**
 
 2. **Детали — вкладки / секции**, сворачиваемые по клику. Стандартные kind'ы в `lib/render_html.py`:
-   - `hr_zones` — 5 полос Z1..Z5 с долей % и duration в минутах. data: `{"hr_max": 182, "zones": [{name, sec, pct, hr_low, hr_high}...]}`. По умолчанию используется HR-profile Кирилла (HRmax 182). **HR-границы (Z3 · 136-145) показывать рядом с каждым именем зоны** — Кирилл прямо попросил (Кирилл: «Добавь рядом с названием или с номером зоны, еще пульсовый границер, что было видно и будет вообще бомбически»). Renderer ставит диапазон после имени с разделителем `·`. Preferred reading order в reviewer: `data.zones[i].hr_range` (явная строка) → `hr_low` + `hr_high` → fallback `HR_ZONE_BOUNDS[name]` в `lib/render_html.py`.
+   - `hr_zones` — полосы Z1..Z6 (а также любые кастомные зоны из `athlete.json` типа Z2_low) с долей % и duration в минутах. data: `{"hr_max": 182, "zones": [{name, sec, pct, hr_low, hr_high}...], "hr_zones_profile": {...}}`. **HR-границы (Z3 · 136-145) показывать рядом с каждым именем зоны** — Кирилл прямо попросил (Кирилл: «Добавь рядом с названием или с номером зоны, еще пульсовый границер, что было видно и будет вообще бомбически»). Renderer ставит диапазон после имени с разделителем `·`. **Границы зон берутся НЕ из renderer-side defaults, а из `state/athlete.json → constraints.hr_zones.zones`** (см. `parse_fit._load_hr_zone_profile()`). Источник-попадание в renderer (high → low priority): `data.zones[i].hr_range` (явная строка) → `hr_low` + `hr_high` → `data.hr_zones_profile.zones[name].raw` → fallback `HR_ZONE_BOUNDS[name]` (last resort, для случая когда athlete.json вообще пропал).
+   - `hr_profile` (через `kv_grid`) — отдельная секция «Athlete HR-профиль · из athlete.json». Показывает таблицу из 7+ зон (с реальными границами из профиля), HRmax, RHR, method, notes. Это полный дамп athlete profile, чтобы пользователь видел свой профиль без открытия athlete.json.
    - `stryd` (через `kv_grid`) — Stryd RD с явной source-меткой. data: `{items: [{label, value, sub, tone}...]}`. Поле VO **обязательно** включает `(Stryd)` или `(Garmin RD)` в sub.
    - `multi_trend` — SVG-line chart с 4-мя нормализованными 0..1 сериями: pace (инвертирован), cadence (Stryd, fallback watch), HR, power. Серые полосы = Garmin autopause-сегменты. Без синтетических km-маркеров (Garmin не пишет их для plain run, и авто-сегментация гадит).
    - `pauses` (через `table`) — каждая пауза с at_km, t (после старта), duration, cause. **Cause спросить у пользователя сразу при pull**, иначе unknown.

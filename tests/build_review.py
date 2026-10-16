@@ -30,6 +30,8 @@ def fmt_pace(m):
 
 def build_review(fit_path: Path, *, date: str, slug: str, brief: list[str], summary_line: str, recos: list[dict]):
     d = parse_fit(str(fit_path), with_streams=True)
+    profile = d.get("hr_zones_profile", {}) or {}
+    prof_zones = profile.get("zones", {}) if isinstance(profile, dict) else {}
     srd = d.get("stryd_running_dynamics", {})
     vo = srd.get("vertical_oscillation_cm_avg", 0)
     gt = srd.get("stance_time_ms_avg", 0)
@@ -54,27 +56,71 @@ def build_review(fit_path: Path, *, date: str, slug: str, brief: list[str], summ
 
     sections = []
 
-    # HR zones from moving partition (computed from per-second records).
-    # hr_range per zone carries the Кирилл HRmax=182 profile so the renderer
-    # doesn't have to fall back to its built-in table. Values are inclusive
-    # bounds (low .. high).
-    sections.append({
-        "id": "hr_zones",
-        "title": "HR-зоны · по moving records",
-        "kind": "hr_zones",
-        "summary": "Z3 63% + Z4 10% = 73% выше Z2_low. HR-границы — из athlete profile (HRmax=182).",
-        "data": {
-            "hr_max": 182,
-            "zones": [
-                {"name": "Z1",   "sec": 134,  "pct": 3.3,  "hr_low": 100, "hr_high": 117},
-                {"name": "Z1.5", "sec": 119,  "pct": 3.0,  "hr_low": 118, "hr_high": 124},
-                {"name": "Z2",   "sec": 788,  "pct": 20.2, "hr_low": 125, "hr_high": 135},
-                {"name": "Z3",   "sec": 2478, "pct": 63.4, "hr_low": 136, "hr_high": 145},
-                {"name": "Z4",   "sec": 397,  "pct": 10.2, "hr_low": 146, "hr_high": 159},
-                {"name": "Z5",   "sec": 0,    "pct": 0.0,  "hr_low": 160, "hr_high": 174},
-            ]
-        }
-    })
+    # HR zones from moving partition — computed by parse_fit using the
+    # athlete.json profile (so Z2_low / Z2 / etc. show with the user's
+    # actual threshold values, not renderer-side defaults).
+    hr_zone_stats = d.get("hr_zone_stats", [])
+    if hr_zone_stats:
+        hr_max_from_profile = profile.get("hr_max") or d.get("max_hr") or 182
+        total_sec = sum(z.get("sec", 0) for z in hr_zone_stats)
+        z3_pct = next((z["pct"] for z in hr_zone_stats if z.get("name") == "Z3"), 0)
+        z4_pct = next((z["pct"] for z in hr_zone_stats if z.get("name") == "Z4"), 0)
+        z2_low_pct = next((z["pct"] for z in hr_zone_stats if z.get("name") == "Z2_low"), 0)
+        z2_pct = next((z["pct"] for z in hr_zone_stats if z.get("name") == "Z2"), 0)
+        summary_text = (
+            f"Z3 {z3_pct:.0f}% + Z4 {z4_pct:.0f}% = {z3_pct+z4_pct:.0f}% выше Z2_low. "
+            f"HR-границы — из athlete profile (HRmax={hr_max_from_profile})."
+        )
+        sections.append({
+            "id": "hr_zones",
+            "title": "HR-зоны · по moving records",
+            "kind": "hr_zones",
+            "summary": summary_text,
+            "data": {
+                "hr_max": hr_max_from_profile,
+                "hr_zones_profile": profile,
+                "zones": hr_zone_stats,
+            },
+        })
+
+    # Athlete HR-zone profile (full per-zone bands from athlete.json)
+    if prof_zones:
+        items = []
+        for name, z in prof_zones.items():
+            if not isinstance(z, dict):
+                continue
+            rng = z.get("raw") or f'{z.get("low","?")}-{z.get("high","?")}'
+            sub = f'method: {profile.get("method","")}' if name == "Z1" else None
+            items.append({
+                "label": name,
+                "value": rng,
+                "sub": sub,
+            })
+        # Bottom-of-list summary
+        items.append({
+            "label": "HRmax",
+            "value": str(profile.get("hr_max") or "—"),
+            "sub": f'method: {profile.get("method","")}',
+        })
+        items.append({
+            "label": "RHR",
+            "value": str(profile.get("rhr") or "—"),
+            "sub": "resting HR",
+        })
+        notes = profile.get("notes", "")
+        if notes:
+            items.append({
+                "label": "notes",
+                "value": notes,
+                "sub": "athlete.json",
+            })
+        sections.append({
+            "id": "hr_profile",
+            "title": "Athlete HR-профиль · из athlete.json",
+            "kind": "kv_grid",
+            "summary": "Границы зон, HRmax, RHR, метод расчёта — все из constraints.hr_zones athlete.json.",
+            "data": {"items": items},
+        })
 
     # Stryd Running Dynamics
     sections.append({

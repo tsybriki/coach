@@ -844,9 +844,10 @@ HR_ZONE_COLORS = {
     "Z6":  "#c97aff",
 }
 
-# Default HR zones for Кирилл (per state/athlete.json profile, HRmax=182).
-# Format: {hr_low, hr_high} — inclusive bounds. Used as a fallback when a
-# review-JSON does not specify `hr_range` per zone.
+# Default HR zones for Кирилл (per state/athlete.json profile). Used as an
+# emergency fallback if athlete.json is not loaded — but normally the active
+# per-zone bounds come from `parse_fit._load_hr_zone_profile()` and live in the
+# review JSON's `hr_zones_profile.zones`.
 HR_ZONE_BOUNDS = {
     "Z1":   {"low": 100, "high": 117},
     "Z1.5": {"low": 118, "high": 124},
@@ -858,9 +859,13 @@ HR_ZONE_BOUNDS = {
 }
 
 
-def _zone_hr_range(zone: dict) -> str:
-    """Format HR bounds for a zone. Prefer explicit zone['hr_range']/['hr_low']/['hr_high'];
-    fall back to HR_ZONE_BOUNDS table lookup by zone name.
+def _zone_hr_range(zone: dict, profile: dict | None) -> str:
+    """Format HR bounds for a zone.
+
+    Lookup precedence (high → low priority):
+      1. zone['hr_range'] / zone['hr_low']+['hr_high'] (explicit per-zone)
+      2. profile['zones'][name] from athlete.json (via build_review → JSON)
+      3. HR_ZONE_BOUNDS[name] (renderer-side fallback table, last resort)
     """
     rng = zone.get("hr_range")
     if rng:
@@ -870,6 +875,14 @@ def _zone_hr_range(zone: dict) -> str:
     if low is not None and high is not None:
         return f"{low}-{high}"
     name = zone.get("name", "")
+    if profile and isinstance(profile, dict):
+        prof_zones = profile.get("zones", {})
+        if isinstance(prof_zones, dict) and name in prof_zones and isinstance(prof_zones[name], dict):
+            z = prof_zones[name]
+            if "low" in z and "high" in z:
+                return f"{z['low']}-{z['high']}"
+            if "raw" in z:
+                return str(z["raw"])
     fb = HR_ZONE_BOUNDS.get(name)
     if fb:
         return f"{fb['low']}-{fb['high']}"
@@ -899,6 +912,7 @@ def _render_metrics_grid(metrics: dict[str, Any]) -> str:
 def _render_hr_zones_section(data: dict[str, Any]) -> str:
     zones = data.get("zones", [])
     hr_max = data.get("hr_max")
+    profile = data.get("hr_zones_profile")
     if not zones:
         return '<div class="empty">Нет данных</div>'
     rows = []
@@ -911,7 +925,12 @@ def _render_hr_zones_section(data: dict[str, Any]) -> str:
         dur_str = f'{m}м{s:02d}с' if m else f'{s}с'
         bar_width = (pct / max(max_pct, 30)) * 100  # at least 30% scaling so small zones are visible
         color = HR_ZONE_COLORS.get(name, "#9aa3b2")
-        hr_range = _zone_hr_range(z)
+        # Range from athlete.json profile if not present in zone
+        if "hr_range" not in z and not (z.get("hr_low") is not None and z.get("hr_high") is not None):
+            if profile and isinstance(profile.get("zones", {}).get(name), dict):
+                z2 = profile["zones"][name]
+                z["hr_range"] = z2.get("raw") or f'{z2["low"]}-{z2["high"]}'
+        hr_range = _zone_hr_range(z, profile)
         name_label = f"{esc(name)} <span class='hr-zone-range'>·&nbsp;{esc(hr_range)}</span>" if hr_range else esc(name)
         rows.append(
             f'<div class="hr-zone-row">'

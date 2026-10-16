@@ -47,8 +47,67 @@ STABLE_SCHEMA_KEYS = [
     "elapsed_min", "timer_min", "moving_min",
     "pause_total_s", "pause_segments",
     "trend",
+    "hr_zones_profile",
+    "hr_zone_stats",
     "file_hash",
 ]
+
+
+def _load_hr_zone_profile() -> dict:
+    """Read heart-rate zone profile from state/athlete.json (constraints.hr_zones).
+
+    Schema (per Кирилл's athlete.json):
+      {
+        "hr_max": 182,
+        "rhr": 54,
+        "hrr": 128,
+        "method": "Karvonen + %HRmax",
+        "zones": {"Z1": "100-118", "Z2_low": "118-136", "Z2": "125-145", ...},
+        "notes": "...",
+      }
+
+    Returns dict:
+      {
+        "hr_max": int|None,
+        "rhr": int|None,
+        "hrr": int|None,
+        "method": str,
+        "zones": {name: {"low": int, "high": int, "raw": str}, ...},
+        "raw": {name: "100-118", ...},        # original strings
+        "notes": str,
+        "loaded": bool,                       # false if athlete.json missing/broken
+      }
+    """
+    try:
+        with open("/home/tsybriki/coach/state/athlete.json") as f:
+            d = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {"hr_max": None, "rhr": None, "hrr": None, "method": "",
+                "zones": {}, "raw": {}, "notes": "", "loaded": False}
+
+    # Path candidates: constraints.hr_zones (preferred), or top-level hr_zones
+    src = d.get("constraints", {}).get("hr_zones") or d.get("hr_zones") or {}
+    zones_raw = src.get("zones", {}) if isinstance(src, dict) else {}
+    parsed_zones = {}
+    for name, rng in zones_raw.items():
+        s = str(rng).strip()
+        if "-" in s:
+            try:
+                lo, hi = s.split("-", 1)
+                lo_int, hi_int = int(lo.strip()), int(hi.strip())
+                parsed_zones[name] = {"low": lo_int, "high": hi_int, "raw": s}
+            except (ValueError, AttributeError):
+                continue
+    return {
+        "hr_max": src.get("hr_max") if isinstance(src, dict) else None,
+        "rhr": src.get("rhr") if isinstance(src, dict) else None,
+        "hrr": src.get("hrr") if isinstance(src, dict) else None,
+        "method": src.get("method", "") if isinstance(src, dict) else "",
+        "zones": parsed_zones,
+        "raw": zones_raw,
+        "notes": src.get("notes", "") if isinstance(src, dict) else "",
+        "loaded": True,
+    }
 
 
 PAUSE_GAP_SECS = 2  # min t_sec gap that counts as a pause (default)
@@ -346,7 +405,7 @@ def _summarize_moving(moving: list[dict]) -> dict:
 def parse_trend(moving: list[dict]) -> list[dict]:
     """Return per-second samples from moving records as-is.
 
-    Each point = {t_sec, dist_m, hr, cadence (Stryd>watch), power (Stryd)}.
+    Each point = {t_sec, dist_m, hr, cadence_stryd, cadence_watch, power}.
     Pace is NOT computed here (the renderer does it lazily: delta per pair).
     """
     out = []
@@ -358,6 +417,58 @@ def parse_trend(moving: list[dict]) -> list[dict]:
             "cadence_stryd": r.get("cadence_stryd"),
             "cadence_watch": r.get("cadence_watch"),
             "power": r.get("stryd_power_w"),
+        })
+    return out
+
+
+def _compute_hr_zone_stats(moving: list[dict], profile: dict) -> list[dict]:
+    """Bucket seconds into per-zone counts using athlete.json hr_zones.
+
+    Uses profile['zones'] (e.g. {Z1: 100-118, Z2_low: 118-136, Z3: 136-146, ...}).
+    Zones are matched by name in order. Records with no HR are excluded from
+    the zone-specific totals but counted separately as 'no_hr'.
+
+    Returns list of dicts (one per profile zone name):
+      [{name, low, high, sec, pct}, ...] — sorted by zone high bound.
+    """
+    if not moving or not isinstance(profile, dict):
+        return []
+    prof_zones = profile.get("zones", {})
+    # Build sorted list of (name, low, high) for bucketing
+    sorted_zones = []
+    for name, z in prof_zones.items():
+        if isinstance(z, dict) and "low" in z and "high" in z:
+            sorted_zones.append((name, z["low"], z["high"]))
+    if not sorted_zones:
+        return []
+    sorted_zones.sort(key=lambda x: x[1])  # ascending low
+    counts = {name: 0 for name, _, _ in sorted_zones}
+    no_hr = 0
+    for r in moving:
+        h = r.get("hr")
+        if h is None:
+            no_hr += 1
+            continue
+        matched = False
+        for name, lo, hi in sorted_zones:
+            # Inclusive on low boundary, exclusive on high — except last zone (inclusive on both)
+            if lo <= h < hi or (name == sorted_zones[-1][0] and h <= hi):
+                counts[name] += 1
+                matched = True
+                break
+        # If HR is below all zones (warm-up, very low HR) or above all (rare),
+        # we just don't bucket it — neither zone owns it.
+    total = sum(counts.values())
+    out = []
+    for name, lo, hi in sorted_zones:
+        sec = counts[name]
+        pct = (sec / total * 100) if total else 0
+        out.append({
+            "name": name,
+            "low": lo,
+            "high": hi,
+            "sec": sec,
+            "pct": round(pct, 1),
         })
     return out
 
@@ -403,8 +514,9 @@ def _parse_stub(fit_path: Path) -> dict:
         "moving_min": 0.0,
         "pause_total_s": 0,
         "pause_segments": [],
+        "hr_zones_profile": _load_hr_zone_profile(),
         "file_hash": digest,
-        "_schema_version": "0.3.0",
+        "_schema_version": "0.8.0",
         "_parser": "stub (garmin_tools unavailable)",
     }
 
@@ -437,11 +549,14 @@ def _normalize(garmin_output: dict, streams: Optional[list[dict]] = None) -> dic
     pause_segments: list[dict] = []
     moving_summary: dict = {}
     trend_series: list[dict] = []
+    hr_profile = _load_hr_zone_profile()
+    hr_zone_stats: list[dict] = []
     if raw_streams:
         pause_segments = _detect_pauses(raw_streams)
         moving = _moving_records(raw_streams)
         moving_summary = _summarize_moving(moving)
         trend_series = parse_trend(moving)
+        hr_zone_stats = _compute_hr_zone_stats(moving, hr_profile)
 
     if moving_summary:
         duration_min = round(moving_summary["moving_s"] / 60.0, 2)
@@ -507,8 +622,10 @@ def _normalize(garmin_output: dict, streams: Optional[list[dict]] = None) -> dic
         "moving_min": duration_min,
         "pause_total_s": sum(int(p["dur_s"]) for p in pause_segments),
         "pause_segments": pause_segments,
+        "hr_zones_profile": hr_profile,
+        "hr_zone_stats": hr_zone_stats,
         "file_hash": digest,
-        "_schema_version": "0.7.0",
+        "_schema_version": "0.8.0",
         "_parser": "garmin_tools/fit_inspect.py",
         "_source_path": garmin_output.get("file", {}).get("path", ""),
     }
