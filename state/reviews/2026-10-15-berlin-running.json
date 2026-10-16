@@ -3,49 +3,184 @@
   "_lib_version": "render_html.render_review",
   "_sources": {
     "fit_file": "/home/tsybriki/projects/garmin_tools/raw/today/fit/24734796814.fit",
-    "fit_id": "24734796814",
-    "parse_fit_schema": "0.5.0",
-    "data_source": "raw/today (pulled Garmin 2026-10-15)",
-    "update_note": "После фикса парсера 0.4.0→0.5.0: Stryd RD-поля (Vertical Oscillation, Ground Time) корректно доходят. VO 6.3 см = Stryd footpod, не Garmin RD."
+    "fit_id": "082b91ec94ff",
+    "parse_fit_schema": "0.6.0"
   },
-  "title": "Berlin Running · 2026-10-15",
+  "title": "24734796814 · 2026-10-15",
   "date": "2026-10-15",
   "sport": "running",
   "summary_line": "65:09 moving / 11.50 km @ 5:40/км / HR avg 138 · negative split · cad 85-86 к финишу · Stryd VO 6.3 см / GT 293 мс",
   "brief": [
-    "65:09 в движении (3:46 пауз мелких, без ОФП), 11.50 км с negative split'ом (km 1: 6:53 → km 9: 5:32). Лучшая пробежка по структуре после 14 окт.",
-    "Stryd footpod показал Vertical Oscillation **6.3 см** и Ground Time **293 мс** — норма для любителя на 5:30 (типичный коридор 270-310 мс). Элита ниже 260, ты в правильной зоне. Каденс добрался до 85-86 spm в последние 3 км.",
-    "Каденс добрался до 85-86 spm в последние 3 км (Watch и Stryd согласованы, |Δ|=0.52). Z3 63% + Z4 10% = 73% выше Z2_low — то же что 14 окт. Действие: следующая лёгкая пробежка — 5:50/км целенаправленно."
+    "65:09 в движении (3:46 мелких пауз, без ОФП), 11.50 км с negative split'ом (km 1: 6:53 → km 9: 5:32). Лучшая структура после 14 окт.",
+    "Stryd VO 6.3 см, Ground Time 293 мс — стабильная техника. Каденс 85-86 на финише (Watch/Stryd согласованы, |Δ|=0.5).",
+    "Z3 63% + Z4 10% = 73% выше Z2_low — та же проблема с темпом. Действие: завтра 5:50 целенаправленно на З2 и метроном с первого км."
   ],
   "metrics": {
-    "moving_min": "65:09",
-    "elapsed_min": "68:55",
-    "pause_min": "3:46",
+    "moving_min": "65m09",
+    "elapsed_min": "68m55",
+    "pause_min": "3m46",
     "distance_km": "11.50",
-    "avg_pace": "5:40/км",
-    "avg_hr": "138",
-    "max_hr": "152",
+    "avg_pace": "5:40",
+    "avg_hr": 138,
+    "max_hr": 152,
     "cadence_watch": "82.8 spm",
     "cadence_stryd": "82.5 spm",
-    "cadence_disagree": "0.5 spm",
-    "vertical_oscillation_cm": "6.3",
-    "vo_source": "Stryd footpod",
-    "ground_time_ms": "292",
-    "stryd_power_avg": "328 W",
-    "hr_drift_bpm": "+7 (second half)"
+    "stryd_vo": "6.3 см (stryd)",
+    "stryd_gt": "292.5 мс (stryd)",
+    "stryd_power": "328.2 W",
+    "hr_drift": "+7.73 bpm"
   },
   "sections": [
+    {
+      "id": "km_splits",
+      "title": "Километровые сплиты · с cadence, power, max HR",
+      "kind": "km_splits",
+      "summary": "Каждый км-переход = mean за отрезок 0..i+1 км в moving partition. Лучший/худший темп подсвечены.",
+      "data": {
+        "columns": [
+          {
+            "key": "km",
+            "label": "км"
+          },
+          {
+            "key": "pace",
+            "label": "pace"
+          },
+          {
+            "key": "hr",
+            "label": "HR avg"
+          },
+          {
+            "key": "hr_max",
+            "label": "HR max"
+          },
+          {
+            "key": "cW",
+            "label": "cW"
+          },
+          {
+            "key": "cS",
+            "label": "cS"
+          },
+          {
+            "key": "pwr",
+            "label": "pow W"
+          }
+        ],
+        "rows": [
+          {
+            "km": 1,
+            "pace": "6:53",
+            "hr": 127.0,
+            "hr_max": 137,
+            "cW": 80.7,
+            "cS": 80.5,
+            "pwr": 312.0
+          },
+          {
+            "km": 2,
+            "pace": "6:11",
+            "hr": 133.0,
+            "hr_max": 143,
+            "cW": 81.8,
+            "cS": 81.6,
+            "pwr": 327.0
+          },
+          {
+            "km": 3,
+            "pace": "5:46",
+            "hr": 137.0,
+            "hr_max": 143,
+            "cW": 82.1,
+            "cS": 82.2,
+            "pwr": 332.0
+          },
+          {
+            "km": 4,
+            "pace": "6:19",
+            "hr": 133.0,
+            "hr_max": 142,
+            "cW": 81.1,
+            "cS": 80.7,
+            "pwr": 316.0
+          },
+          {
+            "km": 5,
+            "pace": "6:22",
+            "hr": 138.0,
+            "hr_max": 143,
+            "cW": 81.2,
+            "cS": 81.0,
+            "pwr": 324.0
+          },
+          {
+            "km": 6,
+            "pace": "5:42",
+            "hr": 142.0,
+            "hr_max": 148,
+            "cW": 83.0,
+            "cS": 82.9,
+            "pwr": 343.0
+          },
+          {
+            "km": 7,
+            "pace": "5:41",
+            "hr": 142.0,
+            "hr_max": 145,
+            "cW": 83.5,
+            "cS": 83.5,
+            "pwr": 327.0
+          },
+          {
+            "km": 8,
+            "pace": "5:40",
+            "hr": 142.0,
+            "hr_max": 146,
+            "cW": 84.3,
+            "cS": 84.3,
+            "pwr": 323.0
+          },
+          {
+            "km": 9,
+            "pace": "5:33",
+            "hr": 142.0,
+            "hr_max": 146,
+            "cW": 85.5,
+            "cS": 85.5,
+            "pwr": 334.0
+          },
+          {
+            "km": 10,
+            "pace": "5:54",
+            "hr": 141.0,
+            "hr_max": 147,
+            "cW": 84.7,
+            "cS": 84.4,
+            "pwr": 340.0
+          },
+          {
+            "km": 11,
+            "pace": "5:47",
+            "hr": 144.0,
+            "hr_max": 152,
+            "cW": 84.8,
+            "cS": 83.8,
+            "pwr": 346.0
+          }
+        ]
+      }
+    },
     {
       "id": "hr_zones",
       "title": "HR-зоны · по moving records",
       "kind": "hr_zones",
-      "summary": "Z3 63% + Z4 10% = 73% выше Z2_low. Та же проблема, что 14 окт.",
+      "summary": "Z3 63% + Z4 10% = 73% выше Z2_low.",
       "data": {
         "hr_max": 182,
         "zones": [
           {
             "name": "Z1",
-            "sec": 128,
+            "sec": 134,
             "pct": 3.3
           },
           {
@@ -72,259 +207,1901 @@
             "name": "Z5",
             "sec": 0,
             "pct": 0.0
-          },
-          {
-            "name": "Z6",
-            "sec": 0,
-            "pct": 0.0
-          }
-        ]
-      }
-    },
-    {
-      "id": "splits",
-      "title": "Per-km splits · moving partition",
-      "kind": "table",
-      "summary": "Negative split: km 1: 6:53 → km 9: 5:32. Каденс растёт по ходу (80 → 86). Лучшая структура тренировки.",
-      "data": {
-        "columns": [
-          {
-            "key": "km",
-            "label": "км"
-          },
-          {
-            "key": "dur",
-            "label": "dur"
-          },
-          {
-            "key": "pace",
-            "label": "pace"
-          },
-          {
-            "key": "hr",
-            "label": "HR"
-          },
-          {
-            "key": "cadW",
-            "label": "cW"
-          },
-          {
-            "key": "cadS",
-            "label": "cS"
-          },
-          {
-            "key": "formW",
-            "label": "form W"
-          },
-          {
-            "key": "airW",
-            "label": "air W"
-          },
-          {
-            "key": "powW",
-            "label": "pow W"
-          }
-        ],
-        "rows": [
-          {
-            "km": 1,
-            "dur": "6:53",
-            "pace": "6:53",
-            "hr": 127,
-            "cadW": 80,
-            "cadS": 80,
-            "formW": 103,
-            "airW": 3.0,
-            "powW": 312
-          },
-          {
-            "km": 2,
-            "dur": "6:11",
-            "pace": "6:11",
-            "hr": 132,
-            "cadW": 82,
-            "cadS": 82,
-            "formW": 102,
-            "airW": 2.9,
-            "powW": 327
-          },
-          {
-            "km": 3,
-            "dur": "5:46",
-            "pace": "5:45",
-            "hr": 137,
-            "cadW": 82,
-            "cadS": 82,
-            "formW": 103,
-            "airW": 3.1,
-            "powW": 332,
-            "_note": "negative split начался"
-          },
-          {
-            "km": 4,
-            "dur": "6:19",
-            "pace": "6:19",
-            "hr": 132,
-            "cadW": 81,
-            "cadS": 81,
-            "formW": 102,
-            "airW": 2.9,
-            "powW": 316
-          },
-          {
-            "km": 5,
-            "dur": "6:22",
-            "pace": "6:22",
-            "hr": 138,
-            "cadW": 81,
-            "cadS": 81,
-            "formW": 102,
-            "airW": 3.1,
-            "powW": 324
-          },
-          {
-            "km": 6,
-            "dur": "5:42",
-            "pace": "5:41",
-            "hr": 141,
-            "cadW": 82,
-            "cadS": 82,
-            "formW": 103,
-            "airW": 4.1,
-            "powW": 343
-          },
-          {
-            "km": 7,
-            "dur": "5:41",
-            "pace": "5:41",
-            "hr": 141,
-            "cadW": 83,
-            "cadS": 83,
-            "formW": 102,
-            "airW": 3.8,
-            "powW": 327
-          },
-          {
-            "km": 8,
-            "dur": "5:40",
-            "pace": "5:39",
-            "hr": 141,
-            "cadW": 84,
-            "cadS": 84,
-            "formW": 101,
-            "airW": 2.5,
-            "powW": 323
-          },
-          {
-            "km": 9,
-            "dur": "5:33",
-            "pace": "5:32",
-            "hr": 142,
-            "cadW": 85,
-            "cadS": 85,
-            "formW": 100,
-            "airW": 3.4,
-            "powW": 334,
-            "_note": "первый км на 85+"
-          },
-          {
-            "km": 10,
-            "dur": "5:54",
-            "pace": "5:54",
-            "hr": 141,
-            "cadW": 85,
-            "cadS": 85,
-            "formW": 100,
-            "airW": 4.2,
-            "powW": 340,
-            "_warn": "HR не падает при замедлении"
-          },
-          {
-            "km": 11,
-            "dur": "5:47",
-            "pace": "5:47",
-            "hr": 143,
-            "cadW": 86,
-            "cadS": 86,
-            "formW": 97,
-            "airW": 4.4,
-            "powW": 346,
-            "_warn": "HR растёт на финише"
           }
         ]
       }
     },
     {
       "id": "stryd",
-      "title": "Stryd Running Dynamics · ⚠️ Garmin RD source-раздельно",
+      "title": "Stryd Running Dynamics",
       "kind": "kv_grid",
-      "summary": "Stryd footpod — теперь единственный source-of-truth (per Кирилл 2026-10-15). VO и Ground Time вытащены и корректны.",
+      "summary": "Stryd footpod — теперь единственный source-of-truth (per Кирилл 2026-10-15).",
       "data": {
         "items": [
           {
-            "label": "VO (Stryd footpod)",
+            "label": "Vertical Oscillation",
             "value": "6.3 см",
-            "sub": "avg · ОТЛИЧНО (элита 5-8 см)",
+            "sub": "avg · Stryd footpod (stryd)",
             "tone": "good"
           },
           {
             "label": "Ground Time",
-            "value": "292 мс",
-            "sub": "avg · Stryd footpod",
-            "tone": "good"
-          },
-          {
-            "label": "Step Length",
-            "value": "—",
-            "sub": "Stryd не даёт step_length в этом FIT"
-          },
-          {
-            "label": "Impact Loading Rate",
-            "value": "39.8",
-            "sub": "Stryd · норма 35-50"
-          },
-          {
-            "label": "Leg Spring Stiffness",
-            "value": "11.6",
-            "sub": "Stryd · стабильно с 14 окт (11.5)",
-            "tone": "good"
+            "value": "292.5 мс",
+            "sub": "avg · Stryd (stryd)"
           },
           {
             "label": "Form Power",
-            "value": "101 W",
-            "sub": "avg · стабильно с 14 окт (102 W)",
-            "tone": "good"
+            "value": "101.1 W",
+            "sub": "avg · стабильно"
           },
           {
             "label": "Air Power",
             "value": "3.4 W",
-            "sub": "avg · +50% к 14 окт, лёгкий ветер"
+            "sub": "avg · лёгкий ветер не выявлен"
           },
           {
             "label": "Stryd Power",
-            "value": "328 W",
-            "sub": "avg · стабильно (-1 W vs 14 окт)"
+            "value": "328.2 W",
+            "sub": "avg · max 328.2W"
           },
           {
             "label": "Cadence (footpod)",
             "value": "82.5 spm",
-            "sub": "avg · на финише 86"
+            "sub": "avg · см. watch"
+          },
+          {
+            "label": "Cadence (watch)",
+            "value": "82.8 spm",
+            "sub": "avg"
+          },
+          {
+            "label": "|Cadence Δ|",
+            "value": "0.52 spm",
+            "sub": "watch vs Stryd",
+            "tone": "good"
+          },
+          {
+            "label": "Leg Spring Stiffness",
+            "value": "11.6",
+            "sub": "Stryd"
+          },
+          {
+            "label": "Impact Loading Rate",
+            "value": "39.8",
+            "sub": "Stryd"
           }
         ]
       }
     },
     {
-      "id": "sensors",
-      "title": "Какой сенсор трекать · Garmin RD vs Stryd",
-      "kind": "text",
-      "summary": "Stryd footpod и Garmin Running Dynamics измеряют похожие вещи (вертикальное колебание, ground contact time), но **по-разному**. Цифры не сопоставимы напрямую.",
-      "data": "Garmin RD = акселерометр на запястье, грубое интегрирование.\nStryd = IMU в ботинке, точнее, но считает иначе.\n\nИсторически Garmin Connect показывает Garmin RD. Если ты хочешь трендить VO неделями — **держись Garmin RD** как source-of-truth, потому что архивные данные у тебя от него.\n\nЕсли хочешь перейти на Stryd как source — это чистый сброс тренда (только с этой недели).\n\n**Моя рекомендация**: Garmin RD. Это то, что ты видишь на вебе. Если есть сегодня Garmin RD — бери его. Stryd — fallback когда Garmin RD отсутствует."
+      "id": "multi_trend",
+      "title": "Тренд · pace / cadence / HR / power (одновременно)",
+      "kind": "multi_trend",
+      "summary": "4 серии на одном графике, каждая нормирована 0..1. Серые полосы = паузы (off-watch). Оранжевые вертикали = точки-аннотации (km-границы).",
+      "data": {
+        "buckets": [
+          {
+            "t_start": 0,
+            "t_end": 29,
+            "dur_s": 29,
+            "dist_m": 78.2,
+            "pace_min_per_km": 6.18,
+            "cadence_avg": 80.2,
+            "hr_avg": 113.0,
+            "hr_max": 127,
+            "power_avg": 310.0,
+            "vo_cm_avg": 6.9,
+            "ground_time_ms_avg": 306.0
+          },
+          {
+            "t_start": 91,
+            "t_end": 119,
+            "dur_s": 28,
+            "dist_m": 68.4,
+            "pace_min_per_km": 6.82,
+            "cadence_avg": 73.7,
+            "hr_avg": 103.0,
+            "hr_max": 115,
+            "power_avg": 259.0,
+            "vo_cm_avg": 5.7,
+            "ground_time_ms_avg": 436.0
+          },
+          {
+            "t_start": 120,
+            "t_end": 149,
+            "dur_s": 29,
+            "dist_m": 79.9,
+            "pace_min_per_km": 6.05,
+            "cadence_avg": 80.5,
+            "hr_avg": 116.0,
+            "hr_max": 120,
+            "power_avg": 312.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 308.0
+          },
+          {
+            "t_start": 150,
+            "t_end": 179,
+            "dur_s": 29,
+            "dist_m": 81.8,
+            "pace_min_per_km": 5.91,
+            "cadence_avg": 80.9,
+            "hr_avg": 128.0,
+            "hr_max": 134,
+            "power_avg": 314.0,
+            "vo_cm_avg": 6.8,
+            "ground_time_ms_avg": 302.0
+          },
+          {
+            "t_start": 180,
+            "t_end": 209,
+            "dur_s": 29,
+            "dist_m": 80.2,
+            "pace_min_per_km": 6.03,
+            "cadence_avg": 80.6,
+            "hr_avg": 131.0,
+            "hr_max": 134,
+            "power_avg": 308.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 308.0
+          },
+          {
+            "t_start": 210,
+            "t_end": 239,
+            "dur_s": 29,
+            "dist_m": 80.2,
+            "pace_min_per_km": 6.02,
+            "cadence_avg": 80.8,
+            "hr_avg": 131.0,
+            "hr_max": 131,
+            "power_avg": 313.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 306.0
+          },
+          {
+            "t_start": 240,
+            "t_end": 269,
+            "dur_s": 29,
+            "dist_m": 83.0,
+            "pace_min_per_km": 5.82,
+            "cadence_avg": 81.0,
+            "hr_avg": 130.0,
+            "hr_max": 130,
+            "power_avg": 321.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 303.0
+          },
+          {
+            "t_start": 270,
+            "t_end": 299,
+            "dur_s": 29,
+            "dist_m": 81.5,
+            "pace_min_per_km": 5.93,
+            "cadence_avg": 81.4,
+            "hr_avg": 134.0,
+            "hr_max": 136,
+            "power_avg": 327.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 303.0
+          },
+          {
+            "t_start": 300,
+            "t_end": 329,
+            "dur_s": 29,
+            "dist_m": 82.2,
+            "pace_min_per_km": 5.88,
+            "cadence_avg": 81.6,
+            "hr_avg": 136.0,
+            "hr_max": 136,
+            "power_avg": 325.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 304.0
+          },
+          {
+            "t_start": 330,
+            "t_end": 359,
+            "dur_s": 29,
+            "dist_m": 83.9,
+            "pace_min_per_km": 5.76,
+            "cadence_avg": 81.5,
+            "hr_avg": 136.0,
+            "hr_max": 137,
+            "power_avg": 317.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 360,
+            "t_end": 389,
+            "dur_s": 29,
+            "dist_m": 83.6,
+            "pace_min_per_km": 5.78,
+            "cadence_avg": 82.5,
+            "hr_avg": 134.0,
+            "hr_max": 135,
+            "power_avg": 315.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 298.0
+          },
+          {
+            "t_start": 390,
+            "t_end": 419,
+            "dur_s": 29,
+            "dist_m": 83.7,
+            "pace_min_per_km": 5.77,
+            "cadence_avg": 81.9,
+            "hr_avg": 134.0,
+            "hr_max": 135,
+            "power_avg": 317.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 420,
+            "t_end": 449,
+            "dur_s": 29,
+            "dist_m": 80.9,
+            "pace_min_per_km": 5.97,
+            "cadence_avg": 81.5,
+            "hr_avg": 133.0,
+            "hr_max": 134,
+            "power_avg": 319.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 306.0
+          },
+          {
+            "t_start": 450,
+            "t_end": 479,
+            "dur_s": 29,
+            "dist_m": 80.1,
+            "pace_min_per_km": 6.04,
+            "cadence_avg": 82.0,
+            "hr_avg": 133.0,
+            "hr_max": 134,
+            "power_avg": 317.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 307.0
+          },
+          {
+            "t_start": 480,
+            "t_end": 509,
+            "dur_s": 29,
+            "dist_m": 83.8,
+            "pace_min_per_km": 5.77,
+            "cadence_avg": 82.5,
+            "hr_avg": 135.0,
+            "hr_max": 136,
+            "power_avg": 326.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 301.0
+          },
+          {
+            "t_start": 510,
+            "t_end": 539,
+            "dur_s": 29,
+            "dist_m": 87.1,
+            "pace_min_per_km": 5.55,
+            "cadence_avg": 83.4,
+            "hr_avg": 138.0,
+            "hr_max": 139,
+            "power_avg": 337.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 289.0
+          },
+          {
+            "t_start": 540,
+            "t_end": 569,
+            "dur_s": 29,
+            "dist_m": 86.9,
+            "pace_min_per_km": 5.56,
+            "cadence_avg": 83.0,
+            "hr_avg": 137.0,
+            "hr_max": 139,
+            "power_avg": 320.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 288.0
+          },
+          {
+            "t_start": 570,
+            "t_end": 599,
+            "dur_s": 29,
+            "dist_m": 86.6,
+            "pace_min_per_km": 5.58,
+            "cadence_avg": 82.2,
+            "hr_avg": 136.0,
+            "hr_max": 137,
+            "power_avg": 324.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 290.0
+          },
+          {
+            "t_start": 637,
+            "t_end": 659,
+            "dur_s": 22,
+            "dist_m": 59.0,
+            "pace_min_per_km": 6.21,
+            "cadence_avg": 67.0,
+            "hr_avg": 115.0,
+            "hr_max": 117,
+            "power_avg": 272.0,
+            "vo_cm_avg": 7.8,
+            "ground_time_ms_avg": 259.0
+          },
+          {
+            "t_start": 660,
+            "t_end": 689,
+            "dur_s": 29,
+            "dist_m": 88.3,
+            "pace_min_per_km": 5.47,
+            "cadence_avg": 82.9,
+            "hr_avg": 123.0,
+            "hr_max": 127,
+            "power_avg": 320.0,
+            "vo_cm_avg": 6.8,
+            "ground_time_ms_avg": 284.0
+          },
+          {
+            "t_start": 690,
+            "t_end": 719,
+            "dur_s": 29,
+            "dist_m": 86.9,
+            "pace_min_per_km": 5.56,
+            "cadence_avg": 82.6,
+            "hr_avg": 119.0,
+            "hr_max": 122,
+            "power_avg": 346.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 292.0
+          },
+          {
+            "t_start": 720,
+            "t_end": 749,
+            "dur_s": 29,
+            "dist_m": 85.2,
+            "pace_min_per_km": 5.67,
+            "cadence_avg": 82.9,
+            "hr_avg": 139.0,
+            "hr_max": 142,
+            "power_avg": 352.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 750,
+            "t_end": 779,
+            "dur_s": 29,
+            "dist_m": 86.1,
+            "pace_min_per_km": 5.61,
+            "cadence_avg": 83.4,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 350.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 293.0
+          },
+          {
+            "t_start": 780,
+            "t_end": 809,
+            "dur_s": 29,
+            "dist_m": 83.8,
+            "pace_min_per_km": 5.77,
+            "cadence_avg": 82.8,
+            "hr_avg": 140.0,
+            "hr_max": 143,
+            "power_avg": 340.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 810,
+            "t_end": 839,
+            "dur_s": 29,
+            "dist_m": 82.9,
+            "pace_min_per_km": 5.83,
+            "cadence_avg": 82.6,
+            "hr_avg": 139.0,
+            "hr_max": 140,
+            "power_avg": 333.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 299.0
+          },
+          {
+            "t_start": 840,
+            "t_end": 869,
+            "dur_s": 29,
+            "dist_m": 83.4,
+            "pace_min_per_km": 5.8,
+            "cadence_avg": 82.3,
+            "hr_avg": 139.0,
+            "hr_max": 139,
+            "power_avg": 332.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 300.0
+          },
+          {
+            "t_start": 870,
+            "t_end": 899,
+            "dur_s": 29,
+            "dist_m": 83.4,
+            "pace_min_per_km": 5.8,
+            "cadence_avg": 82.8,
+            "hr_avg": 137.0,
+            "hr_max": 139,
+            "power_avg": 335.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 299.0
+          },
+          {
+            "t_start": 900,
+            "t_end": 929,
+            "dur_s": 29,
+            "dist_m": 81.7,
+            "pace_min_per_km": 5.91,
+            "cadence_avg": 82.0,
+            "hr_avg": 138.0,
+            "hr_max": 139,
+            "power_avg": 328.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 304.0
+          },
+          {
+            "t_start": 930,
+            "t_end": 959,
+            "dur_s": 29,
+            "dist_m": 82.2,
+            "pace_min_per_km": 5.88,
+            "cadence_avg": 81.8,
+            "hr_avg": 137.0,
+            "hr_max": 139,
+            "power_avg": 343.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 303.0
+          },
+          {
+            "t_start": 960,
+            "t_end": 989,
+            "dur_s": 29,
+            "dist_m": 84.4,
+            "pace_min_per_km": 5.73,
+            "cadence_avg": 81.9,
+            "hr_avg": 136.0,
+            "hr_max": 139,
+            "power_avg": 325.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 990,
+            "t_end": 1019,
+            "dur_s": 29,
+            "dist_m": 84.7,
+            "pace_min_per_km": 5.71,
+            "cadence_avg": 81.8,
+            "hr_avg": 135.0,
+            "hr_max": 136,
+            "power_avg": 322.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 1020,
+            "t_end": 1049,
+            "dur_s": 29,
+            "dist_m": 84.7,
+            "pace_min_per_km": 5.71,
+            "cadence_avg": 81.5,
+            "hr_avg": 135.0,
+            "hr_max": 136,
+            "power_avg": 326.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 1050,
+            "t_end": 1079,
+            "dur_s": 29,
+            "dist_m": 84.6,
+            "pace_min_per_km": 5.71,
+            "cadence_avg": 82.0,
+            "hr_avg": 133.0,
+            "hr_max": 134,
+            "power_avg": 333.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 301.0
+          },
+          {
+            "t_start": 1080,
+            "t_end": 1109,
+            "dur_s": 29,
+            "dist_m": 85.9,
+            "pace_min_per_km": 5.63,
+            "cadence_avg": 82.1,
+            "hr_avg": 136.0,
+            "hr_max": 137,
+            "power_avg": 334.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 298.0
+          },
+          {
+            "t_start": 1110,
+            "t_end": 1139,
+            "dur_s": 29,
+            "dist_m": 86.4,
+            "pace_min_per_km": 5.59,
+            "cadence_avg": 82.2,
+            "hr_avg": 141.0,
+            "hr_max": 142,
+            "power_avg": 339.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 295.0
+          },
+          {
+            "t_start": 1140,
+            "t_end": 1169,
+            "dur_s": 29,
+            "dist_m": 83.8,
+            "pace_min_per_km": 5.76,
+            "cadence_avg": 81.5,
+            "hr_avg": 138.0,
+            "hr_max": 141,
+            "power_avg": 321.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 301.0
+          },
+          {
+            "t_start": 1206,
+            "t_end": 1229,
+            "dur_s": 23,
+            "dist_m": 52.7,
+            "pace_min_per_km": 7.27,
+            "cadence_avg": 63.8,
+            "hr_avg": 115.0,
+            "hr_max": 119,
+            "power_avg": 228.0,
+            "vo_cm_avg": 5.1,
+            "ground_time_ms_avg": 350.0
+          },
+          {
+            "t_start": 1230,
+            "t_end": 1259,
+            "dur_s": 29,
+            "dist_m": 79.7,
+            "pace_min_per_km": 6.06,
+            "cadence_avg": 82.7,
+            "hr_avg": 123.0,
+            "hr_max": 128,
+            "power_avg": 288.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 1260,
+            "t_end": 1289,
+            "dur_s": 29,
+            "dist_m": 84.4,
+            "pace_min_per_km": 5.73,
+            "cadence_avg": 82.0,
+            "hr_avg": 125.0,
+            "hr_max": 128,
+            "power_avg": 281.0,
+            "vo_cm_avg": 6.8,
+            "ground_time_ms_avg": 294.0
+          },
+          {
+            "t_start": 1290,
+            "t_end": 1319,
+            "dur_s": 29,
+            "dist_m": 86.0,
+            "pace_min_per_km": 5.62,
+            "cadence_avg": 82.3,
+            "hr_avg": 130.0,
+            "hr_max": 131,
+            "power_avg": 332.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 295.0
+          },
+          {
+            "t_start": 1320,
+            "t_end": 1349,
+            "dur_s": 29,
+            "dist_m": 86.8,
+            "pace_min_per_km": 5.57,
+            "cadence_avg": 82.0,
+            "hr_avg": 134.0,
+            "hr_max": 135,
+            "power_avg": 322.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 295.0
+          },
+          {
+            "t_start": 1350,
+            "t_end": 1379,
+            "dur_s": 29,
+            "dist_m": 87.8,
+            "pace_min_per_km": 5.51,
+            "cadence_avg": 82.3,
+            "hr_avg": 133.0,
+            "hr_max": 135,
+            "power_avg": 327.0,
+            "vo_cm_avg": 6.8,
+            "ground_time_ms_avg": 290.0
+          },
+          {
+            "t_start": 1380,
+            "t_end": 1409,
+            "dur_s": 29,
+            "dist_m": 83.8,
+            "pace_min_per_km": 5.77,
+            "cadence_avg": 81.8,
+            "hr_avg": 136.0,
+            "hr_max": 136,
+            "power_avg": 335.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 301.0
+          },
+          {
+            "t_start": 1410,
+            "t_end": 1439,
+            "dur_s": 29,
+            "dist_m": 82.8,
+            "pace_min_per_km": 5.84,
+            "cadence_avg": 81.5,
+            "hr_avg": 136.0,
+            "hr_max": 138,
+            "power_avg": 349.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 306.0
+          },
+          {
+            "t_start": 1440,
+            "t_end": 1469,
+            "dur_s": 29,
+            "dist_m": 85.7,
+            "pace_min_per_km": 5.64,
+            "cadence_avg": 82.0,
+            "hr_avg": 140.0,
+            "hr_max": 142,
+            "power_avg": 334.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 300.0
+          },
+          {
+            "t_start": 1470,
+            "t_end": 1499,
+            "dur_s": 29,
+            "dist_m": 84.9,
+            "pace_min_per_km": 5.69,
+            "cadence_avg": 82.2,
+            "hr_avg": 141.0,
+            "hr_max": 142,
+            "power_avg": 326.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 298.0
+          },
+          {
+            "t_start": 1500,
+            "t_end": 1529,
+            "dur_s": 29,
+            "dist_m": 86.6,
+            "pace_min_per_km": 5.58,
+            "cadence_avg": 82.1,
+            "hr_avg": 138.0,
+            "hr_max": 139,
+            "power_avg": 324.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 296.0
+          },
+          {
+            "t_start": 1530,
+            "t_end": 1559,
+            "dur_s": 29,
+            "dist_m": 85.4,
+            "pace_min_per_km": 5.66,
+            "cadence_avg": 81.8,
+            "hr_avg": 137.0,
+            "hr_max": 138,
+            "power_avg": 331.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 299.0
+          },
+          {
+            "t_start": 1560,
+            "t_end": 1589,
+            "dur_s": 29,
+            "dist_m": 83.3,
+            "pace_min_per_km": 5.81,
+            "cadence_avg": 81.3,
+            "hr_avg": 136.0,
+            "hr_max": 138,
+            "power_avg": 322.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 305.0
+          },
+          {
+            "t_start": 1590,
+            "t_end": 1619,
+            "dur_s": 29,
+            "dist_m": 85.2,
+            "pace_min_per_km": 5.67,
+            "cadence_avg": 81.7,
+            "hr_avg": 135.0,
+            "hr_max": 136,
+            "power_avg": 325.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 1620,
+            "t_end": 1649,
+            "dur_s": 29,
+            "dist_m": 86.2,
+            "pace_min_per_km": 5.61,
+            "cadence_avg": 82.1,
+            "hr_avg": 138.0,
+            "hr_max": 141,
+            "power_avg": 346.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 301.0
+          },
+          {
+            "t_start": 1650,
+            "t_end": 1679,
+            "dur_s": 29,
+            "dist_m": 86.6,
+            "pace_min_per_km": 5.58,
+            "cadence_avg": 82.2,
+            "hr_avg": 141.0,
+            "hr_max": 142,
+            "power_avg": 327.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 293.0
+          },
+          {
+            "t_start": 1680,
+            "t_end": 1709,
+            "dur_s": 29,
+            "dist_m": 85.5,
+            "pace_min_per_km": 5.65,
+            "cadence_avg": 82.0,
+            "hr_avg": 140.0,
+            "hr_max": 140,
+            "power_avg": 315.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 296.0
+          },
+          {
+            "t_start": 1710,
+            "t_end": 1739,
+            "dur_s": 29,
+            "dist_m": 84.2,
+            "pace_min_per_km": 5.74,
+            "cadence_avg": 82.2,
+            "hr_avg": 137.0,
+            "hr_max": 139,
+            "power_avg": 322.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 299.0
+          },
+          {
+            "t_start": 1740,
+            "t_end": 1769,
+            "dur_s": 29,
+            "dist_m": 84.3,
+            "pace_min_per_km": 5.74,
+            "cadence_avg": 82.2,
+            "hr_avg": 138.0,
+            "hr_max": 139,
+            "power_avg": 329.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 298.0
+          },
+          {
+            "t_start": 1770,
+            "t_end": 1799,
+            "dur_s": 29,
+            "dist_m": 82.1,
+            "pace_min_per_km": 5.88,
+            "cadence_avg": 81.9,
+            "hr_avg": 140.0,
+            "hr_max": 141,
+            "power_avg": 328.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 304.0
+          },
+          {
+            "t_start": 1800,
+            "t_end": 1829,
+            "dur_s": 29,
+            "dist_m": 81.6,
+            "pace_min_per_km": 5.93,
+            "cadence_avg": 81.3,
+            "hr_avg": 140.0,
+            "hr_max": 142,
+            "power_avg": 326.0,
+            "vo_cm_avg": 6.7,
+            "ground_time_ms_avg": 302.0
+          },
+          {
+            "t_start": 1830,
+            "t_end": 1848,
+            "dur_s": 18,
+            "dist_m": 46.3,
+            "pace_min_per_km": 6.48,
+            "cadence_avg": 81.2,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 359.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 317.0
+          },
+          {
+            "t_start": 1890,
+            "t_end": 1919,
+            "dur_s": 29,
+            "dist_m": 87.9,
+            "pace_min_per_km": 5.5,
+            "cadence_avg": 80.5,
+            "hr_avg": 124.0,
+            "hr_max": 128,
+            "power_avg": 309.0,
+            "vo_cm_avg": 6.8,
+            "ground_time_ms_avg": 312.0
+          },
+          {
+            "t_start": 1920,
+            "t_end": 1949,
+            "dur_s": 29,
+            "dist_m": 84.6,
+            "pace_min_per_km": 5.71,
+            "cadence_avg": 82.6,
+            "hr_avg": 132.0,
+            "hr_max": 139,
+            "power_avg": 369.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 295.0
+          },
+          {
+            "t_start": 1950,
+            "t_end": 1979,
+            "dur_s": 29,
+            "dist_m": 79.7,
+            "pace_min_per_km": 6.07,
+            "cadence_avg": 82.4,
+            "hr_avg": 142.0,
+            "hr_max": 145,
+            "power_avg": 360.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 308.0
+          },
+          {
+            "t_start": 1980,
+            "t_end": 2009,
+            "dur_s": 29,
+            "dist_m": 80.6,
+            "pace_min_per_km": 5.99,
+            "cadence_avg": 82.8,
+            "hr_avg": 146.0,
+            "hr_max": 148,
+            "power_avg": 359.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 308.0
+          },
+          {
+            "t_start": 2010,
+            "t_end": 2039,
+            "dur_s": 29,
+            "dist_m": 85.1,
+            "pace_min_per_km": 5.68,
+            "cadence_avg": 83.0,
+            "hr_avg": 147.0,
+            "hr_max": 148,
+            "power_avg": 325.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 296.0
+          },
+          {
+            "t_start": 2040,
+            "t_end": 2069,
+            "dur_s": 29,
+            "dist_m": 85.9,
+            "pace_min_per_km": 5.63,
+            "cadence_avg": 82.7,
+            "hr_avg": 144.0,
+            "hr_max": 146,
+            "power_avg": 323.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 293.0
+          },
+          {
+            "t_start": 2070,
+            "t_end": 2099,
+            "dur_s": 29,
+            "dist_m": 85.8,
+            "pace_min_per_km": 5.64,
+            "cadence_avg": 82.9,
+            "hr_avg": 143.0,
+            "hr_max": 144,
+            "power_avg": 353.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 295.0
+          },
+          {
+            "t_start": 2100,
+            "t_end": 2129,
+            "dur_s": 29,
+            "dist_m": 85.2,
+            "pace_min_per_km": 5.67,
+            "cadence_avg": 83.2,
+            "hr_avg": 144.0,
+            "hr_max": 145,
+            "power_avg": 358.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 294.0
+          },
+          {
+            "t_start": 2130,
+            "t_end": 2159,
+            "dur_s": 29,
+            "dist_m": 84.4,
+            "pace_min_per_km": 5.73,
+            "cadence_avg": 83.2,
+            "hr_avg": 146.0,
+            "hr_max": 147,
+            "power_avg": 348.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 2160,
+            "t_end": 2189,
+            "dur_s": 29,
+            "dist_m": 84.3,
+            "pace_min_per_km": 5.73,
+            "cadence_avg": 83.3,
+            "hr_avg": 146.0,
+            "hr_max": 146,
+            "power_avg": 350.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 299.0
+          },
+          {
+            "t_start": 2190,
+            "t_end": 2219,
+            "dur_s": 29,
+            "dist_m": 87.5,
+            "pace_min_per_km": 5.52,
+            "cadence_avg": 83.8,
+            "hr_avg": 144.0,
+            "hr_max": 146,
+            "power_avg": 327.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 290.0
+          },
+          {
+            "t_start": 2220,
+            "t_end": 2249,
+            "dur_s": 29,
+            "dist_m": 88.2,
+            "pace_min_per_km": 5.48,
+            "cadence_avg": 83.5,
+            "hr_avg": 143.0,
+            "hr_max": 143,
+            "power_avg": 320.0,
+            "vo_cm_avg": 6.6,
+            "ground_time_ms_avg": 284.0
+          },
+          {
+            "t_start": 2250,
+            "t_end": 2279,
+            "dur_s": 29,
+            "dist_m": 85.5,
+            "pace_min_per_km": 5.65,
+            "cadence_avg": 83.1,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 330.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 292.0
+          },
+          {
+            "t_start": 2280,
+            "t_end": 2309,
+            "dur_s": 29,
+            "dist_m": 86.1,
+            "pace_min_per_km": 5.61,
+            "cadence_avg": 83.5,
+            "hr_avg": 140.0,
+            "hr_max": 140,
+            "power_avg": 326.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 291.0
+          },
+          {
+            "t_start": 2310,
+            "t_end": 2339,
+            "dur_s": 29,
+            "dist_m": 85.4,
+            "pace_min_per_km": 5.66,
+            "cadence_avg": 83.9,
+            "hr_avg": 140.0,
+            "hr_max": 141,
+            "power_avg": 322.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 290.0
+          },
+          {
+            "t_start": 2340,
+            "t_end": 2369,
+            "dur_s": 29,
+            "dist_m": 85.4,
+            "pace_min_per_km": 5.66,
+            "cadence_avg": 84.6,
+            "hr_avg": 139.0,
+            "hr_max": 141,
+            "power_avg": 333.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 291.0
+          },
+          {
+            "t_start": 2370,
+            "t_end": 2399,
+            "dur_s": 29,
+            "dist_m": 85.6,
+            "pace_min_per_km": 5.65,
+            "cadence_avg": 83.5,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 329.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 294.0
+          },
+          {
+            "t_start": 2400,
+            "t_end": 2429,
+            "dur_s": 29,
+            "dist_m": 83.6,
+            "pace_min_per_km": 5.78,
+            "cadence_avg": 82.6,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 334.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 296.0
+          },
+          {
+            "t_start": 2430,
+            "t_end": 2459,
+            "dur_s": 29,
+            "dist_m": 83.7,
+            "pace_min_per_km": 5.77,
+            "cadence_avg": 84.1,
+            "hr_avg": 143.0,
+            "hr_max": 143,
+            "power_avg": 314.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 296.0
+          },
+          {
+            "t_start": 2460,
+            "t_end": 2489,
+            "dur_s": 29,
+            "dist_m": 84.9,
+            "pace_min_per_km": 5.69,
+            "cadence_avg": 83.6,
+            "hr_avg": 142.0,
+            "hr_max": 142,
+            "power_avg": 320.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 295.0
+          },
+          {
+            "t_start": 2490,
+            "t_end": 2519,
+            "dur_s": 29,
+            "dist_m": 84.2,
+            "pace_min_per_km": 5.74,
+            "cadence_avg": 83.3,
+            "hr_avg": 141.0,
+            "hr_max": 142,
+            "power_avg": 336.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 297.0
+          },
+          {
+            "t_start": 2520,
+            "t_end": 2549,
+            "dur_s": 29,
+            "dist_m": 85.7,
+            "pace_min_per_km": 5.64,
+            "cadence_avg": 84.4,
+            "hr_avg": 144.0,
+            "hr_max": 145,
+            "power_avg": 333.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 293.0
+          },
+          {
+            "t_start": 2550,
+            "t_end": 2579,
+            "dur_s": 29,
+            "dist_m": 82.6,
+            "pace_min_per_km": 5.85,
+            "cadence_avg": 82.3,
+            "hr_avg": 143.0,
+            "hr_max": 144,
+            "power_avg": 323.0,
+            "vo_cm_avg": 6.5,
+            "ground_time_ms_avg": 299.0
+          },
+          {
+            "t_start": 2580,
+            "t_end": 2609,
+            "dur_s": 29,
+            "dist_m": 81.0,
+            "pace_min_per_km": 5.97,
+            "cadence_avg": 82.5,
+            "hr_avg": 141.0,
+            "hr_max": 142,
+            "power_avg": 314.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 303.0
+          },
+          {
+            "t_start": 2610,
+            "t_end": 2639,
+            "dur_s": 29,
+            "dist_m": 84.7,
+            "pace_min_per_km": 5.71,
+            "cadence_avg": 84.0,
+            "hr_avg": 140.0,
+            "hr_max": 140,
+            "power_avg": 316.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 293.0
+          },
+          {
+            "t_start": 2640,
+            "t_end": 2669,
+            "dur_s": 29,
+            "dist_m": 83.4,
+            "pace_min_per_km": 5.8,
+            "cadence_avg": 83.4,
+            "hr_avg": 139.0,
+            "hr_max": 143,
+            "power_avg": 320.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 294.0
+          },
+          {
+            "t_start": 2670,
+            "t_end": 2699,
+            "dur_s": 29,
+            "dist_m": 83.9,
+            "pace_min_per_km": 5.76,
+            "cadence_avg": 84.1,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 330.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 294.0
+          },
+          {
+            "t_start": 2700,
+            "t_end": 2729,
+            "dur_s": 29,
+            "dist_m": 84.4,
+            "pace_min_per_km": 5.72,
+            "cadence_avg": 84.6,
+            "hr_avg": 141.0,
+            "hr_max": 142,
+            "power_avg": 317.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 292.0
+          },
+          {
+            "t_start": 2730,
+            "t_end": 2759,
+            "dur_s": 29,
+            "dist_m": 85.0,
+            "pace_min_per_km": 5.68,
+            "cadence_avg": 84.3,
+            "hr_avg": 140.0,
+            "hr_max": 140,
+            "power_avg": 323.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 292.0
+          },
+          {
+            "t_start": 2760,
+            "t_end": 2789,
+            "dur_s": 29,
+            "dist_m": 84.2,
+            "pace_min_per_km": 5.74,
+            "cadence_avg": 84.2,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 329.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 296.0
+          },
+          {
+            "t_start": 2790,
+            "t_end": 2819,
+            "dur_s": 29,
+            "dist_m": 87.5,
+            "pace_min_per_km": 5.52,
+            "cadence_avg": 84.8,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 326.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 289.0
+          },
+          {
+            "t_start": 2820,
+            "t_end": 2849,
+            "dur_s": 29,
+            "dist_m": 89.3,
+            "pace_min_per_km": 5.41,
+            "cadence_avg": 84.8,
+            "hr_avg": 145.0,
+            "hr_max": 146,
+            "power_avg": 332.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 285.0
+          },
+          {
+            "t_start": 2850,
+            "t_end": 2879,
+            "dur_s": 29,
+            "dist_m": 88.0,
+            "pace_min_per_km": 5.49,
+            "cadence_avg": 85.6,
+            "hr_avg": 144.0,
+            "hr_max": 145,
+            "power_avg": 325.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 285.0
+          },
+          {
+            "t_start": 2880,
+            "t_end": 2909,
+            "dur_s": 29,
+            "dist_m": 87.5,
+            "pace_min_per_km": 5.52,
+            "cadence_avg": 85.6,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 325.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 285.0
+          },
+          {
+            "t_start": 2910,
+            "t_end": 2939,
+            "dur_s": 29,
+            "dist_m": 86.9,
+            "pace_min_per_km": 5.56,
+            "cadence_avg": 85.7,
+            "hr_avg": 138.0,
+            "hr_max": 139,
+            "power_avg": 333.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 286.0
+          },
+          {
+            "t_start": 2940,
+            "t_end": 2969,
+            "dur_s": 29,
+            "dist_m": 87.0,
+            "pace_min_per_km": 5.55,
+            "cadence_avg": 85.3,
+            "hr_avg": 140.0,
+            "hr_max": 140,
+            "power_avg": 333.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 287.0
+          },
+          {
+            "t_start": 2970,
+            "t_end": 2999,
+            "dur_s": 29,
+            "dist_m": 88.1,
+            "pace_min_per_km": 5.48,
+            "cadence_avg": 85.7,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 327.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 283.0
+          },
+          {
+            "t_start": 3000,
+            "t_end": 3029,
+            "dur_s": 29,
+            "dist_m": 86.0,
+            "pace_min_per_km": 5.62,
+            "cadence_avg": 85.1,
+            "hr_avg": 144.0,
+            "hr_max": 145,
+            "power_avg": 321.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 288.0
+          },
+          {
+            "t_start": 3030,
+            "t_end": 3059,
+            "dur_s": 29,
+            "dist_m": 86.8,
+            "pace_min_per_km": 5.57,
+            "cadence_avg": 85.6,
+            "hr_avg": 141.0,
+            "hr_max": 143,
+            "power_avg": 343.0,
+            "vo_cm_avg": 6.0,
+            "ground_time_ms_avg": 288.0
+          },
+          {
+            "t_start": 3060,
+            "t_end": 3089,
+            "dur_s": 29,
+            "dist_m": 84.1,
+            "pace_min_per_km": 5.74,
+            "cadence_avg": 85.8,
+            "hr_avg": 141.0,
+            "hr_max": 142,
+            "power_avg": 333.0,
+            "vo_cm_avg": 5.9,
+            "ground_time_ms_avg": 291.0
+          },
+          {
+            "t_start": 3090,
+            "t_end": 3119,
+            "dur_s": 29,
+            "dist_m": 84.1,
+            "pace_min_per_km": 5.75,
+            "cadence_avg": 85.5,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 332.0,
+            "vo_cm_avg": 5.9,
+            "ground_time_ms_avg": 292.0
+          },
+          {
+            "t_start": 3120,
+            "t_end": 3149,
+            "dur_s": 29,
+            "dist_m": 84.2,
+            "pace_min_per_km": 5.74,
+            "cadence_avg": 85.0,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 330.0,
+            "vo_cm_avg": 5.9,
+            "ground_time_ms_avg": 295.0
+          },
+          {
+            "t_start": 3150,
+            "t_end": 3179,
+            "dur_s": 29,
+            "dist_m": 88.5,
+            "pace_min_per_km": 5.46,
+            "cadence_avg": 85.5,
+            "hr_avg": 143.0,
+            "hr_max": 144,
+            "power_avg": 340.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 284.0
+          },
+          {
+            "t_start": 3180,
+            "t_end": 3209,
+            "dur_s": 29,
+            "dist_m": 89.9,
+            "pace_min_per_km": 5.38,
+            "cadence_avg": 85.7,
+            "hr_avg": 145.0,
+            "hr_max": 146,
+            "power_avg": 340.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 281.0
+          },
+          {
+            "t_start": 3210,
+            "t_end": 3239,
+            "dur_s": 29,
+            "dist_m": 91.8,
+            "pace_min_per_km": 5.27,
+            "cadence_avg": 85.7,
+            "hr_avg": 145.0,
+            "hr_max": 146,
+            "power_avg": 341.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 275.0
+          },
+          {
+            "t_start": 3240,
+            "t_end": 3269,
+            "dur_s": 29,
+            "dist_m": 91.9,
+            "pace_min_per_km": 5.26,
+            "cadence_avg": 85.6,
+            "hr_avg": 145.0,
+            "hr_max": 146,
+            "power_avg": 347.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 276.0
+          },
+          {
+            "t_start": 3270,
+            "t_end": 3299,
+            "dur_s": 29,
+            "dist_m": 89.9,
+            "pace_min_per_km": 5.38,
+            "cadence_avg": 85.0,
+            "hr_avg": 145.0,
+            "hr_max": 146,
+            "power_avg": 347.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 281.0
+          },
+          {
+            "t_start": 3300,
+            "t_end": 3329,
+            "dur_s": 29,
+            "dist_m": 92.8,
+            "pace_min_per_km": 5.21,
+            "cadence_avg": 85.7,
+            "hr_avg": 146.0,
+            "hr_max": 146,
+            "power_avg": 343.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 275.0
+          },
+          {
+            "t_start": 3330,
+            "t_end": 3359,
+            "dur_s": 29,
+            "dist_m": 93.0,
+            "pace_min_per_km": 5.19,
+            "cadence_avg": 86.0,
+            "hr_avg": 145.0,
+            "hr_max": 146,
+            "power_avg": 345.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 273.0
+          },
+          {
+            "t_start": 3360,
+            "t_end": 3389,
+            "dur_s": 29,
+            "dist_m": 91.7,
+            "pace_min_per_km": 5.27,
+            "cadence_avg": 85.2,
+            "hr_avg": 146.0,
+            "hr_max": 147,
+            "power_avg": 341.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 276.0
+          },
+          {
+            "t_start": 3390,
+            "t_end": 3419,
+            "dur_s": 29,
+            "dist_m": 92.1,
+            "pace_min_per_km": 5.25,
+            "cadence_avg": 85.7,
+            "hr_avg": 146.0,
+            "hr_max": 146,
+            "power_avg": 346.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 276.0
+          },
+          {
+            "t_start": 3480,
+            "t_end": 3509,
+            "dur_s": 29,
+            "dist_m": 92.7,
+            "pace_min_per_km": 5.21,
+            "cadence_avg": 85.4,
+            "hr_avg": 128.0,
+            "hr_max": 132,
+            "power_avg": 350.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 278.0
+          },
+          {
+            "t_start": 3510,
+            "t_end": 3539,
+            "dur_s": 29,
+            "dist_m": 93.8,
+            "pace_min_per_km": 5.16,
+            "cadence_avg": 86.3,
+            "hr_avg": 134.0,
+            "hr_max": 138,
+            "power_avg": 349.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 275.0
+          },
+          {
+            "t_start": 3540,
+            "t_end": 3569,
+            "dur_s": 29,
+            "dist_m": 93.3,
+            "pace_min_per_km": 5.18,
+            "cadence_avg": 85.6,
+            "hr_avg": 141.0,
+            "hr_max": 142,
+            "power_avg": 336.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 276.0
+          },
+          {
+            "t_start": 3570,
+            "t_end": 3599,
+            "dur_s": 29,
+            "dist_m": 95.5,
+            "pace_min_per_km": 5.06,
+            "cadence_avg": 86.1,
+            "hr_avg": 141.0,
+            "hr_max": 142,
+            "power_avg": 349.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 270.0
+          },
+          {
+            "t_start": 3600,
+            "t_end": 3629,
+            "dur_s": 29,
+            "dist_m": 34.9,
+            "pace_min_per_km": 13.83,
+            "cadence_avg": 53.9,
+            "hr_avg": 137.0,
+            "hr_max": 143,
+            "power_avg": 242.0,
+            "vo_cm_avg": 4.3,
+            "ground_time_ms_avg": 181.0
+          },
+          {
+            "t_start": 3630,
+            "t_end": 3659,
+            "dur_s": 29,
+            "dist_m": 99.2,
+            "pace_min_per_km": 4.87,
+            "cadence_avg": 87.6,
+            "hr_avg": 135.0,
+            "hr_max": 138,
+            "power_avg": 364.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 259.0
+          },
+          {
+            "t_start": 3660,
+            "t_end": 3689,
+            "dur_s": 29,
+            "dist_m": 99.5,
+            "pace_min_per_km": 4.86,
+            "cadence_avg": 87.5,
+            "hr_avg": 141.0,
+            "hr_max": 145,
+            "power_avg": 362.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 261.0
+          },
+          {
+            "t_start": 3690,
+            "t_end": 3719,
+            "dur_s": 29,
+            "dist_m": 97.7,
+            "pace_min_per_km": 4.95,
+            "cadence_avg": 87.1,
+            "hr_avg": 147.0,
+            "hr_max": 148,
+            "power_avg": 361.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 266.0
+          },
+          {
+            "t_start": 3720,
+            "t_end": 3749,
+            "dur_s": 29,
+            "dist_m": 95.6,
+            "pace_min_per_km": 5.06,
+            "cadence_avg": 87.2,
+            "hr_avg": 150.0,
+            "hr_max": 152,
+            "power_avg": 360.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 270.0
+          },
+          {
+            "t_start": 3750,
+            "t_end": 3779,
+            "dur_s": 29,
+            "dist_m": 28.6,
+            "pace_min_per_km": 16.91,
+            "cadence_avg": 48.8,
+            "hr_avg": 142.0,
+            "hr_max": 151,
+            "power_avg": 245.0,
+            "vo_cm_avg": 4.0,
+            "ground_time_ms_avg": 137.0
+          },
+          {
+            "t_start": 3780,
+            "t_end": 3809,
+            "dur_s": 29,
+            "dist_m": 96.9,
+            "pace_min_per_km": 4.99,
+            "cadence_avg": 86.6,
+            "hr_avg": 138.0,
+            "hr_max": 141,
+            "power_avg": 377.0,
+            "vo_cm_avg": 6.3,
+            "ground_time_ms_avg": 269.0
+          },
+          {
+            "t_start": 3810,
+            "t_end": 3839,
+            "dur_s": 29,
+            "dist_m": 94.9,
+            "pace_min_per_km": 5.09,
+            "cadence_avg": 87.4,
+            "hr_avg": 144.0,
+            "hr_max": 146,
+            "power_avg": 364.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 270.0
+          },
+          {
+            "t_start": 3840,
+            "t_end": 3869,
+            "dur_s": 29,
+            "dist_m": 92.1,
+            "pace_min_per_km": 5.25,
+            "cadence_avg": 87.3,
+            "hr_avg": 148.0,
+            "hr_max": 149,
+            "power_avg": 359.0,
+            "vo_cm_avg": 5.9,
+            "ground_time_ms_avg": 278.0
+          },
+          {
+            "t_start": 3870,
+            "t_end": 3899,
+            "dur_s": 29,
+            "dist_m": 86.8,
+            "pace_min_per_km": 5.57,
+            "cadence_avg": 85.5,
+            "hr_avg": 150.0,
+            "hr_max": 151,
+            "power_avg": 333.0,
+            "vo_cm_avg": 6.0,
+            "ground_time_ms_avg": 289.0
+          },
+          {
+            "t_start": 3900,
+            "t_end": 3929,
+            "dur_s": 29,
+            "dist_m": 86.2,
+            "pace_min_per_km": 5.61,
+            "cadence_avg": 85.0,
+            "hr_avg": 146.0,
+            "hr_max": 147,
+            "power_avg": 331.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 292.0
+          },
+          {
+            "t_start": 3930,
+            "t_end": 3959,
+            "dur_s": 29,
+            "dist_m": 87.6,
+            "pace_min_per_km": 5.52,
+            "cadence_avg": 84.8,
+            "hr_avg": 144.0,
+            "hr_max": 146,
+            "power_avg": 333.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 289.0
+          },
+          {
+            "t_start": 3960,
+            "t_end": 3989,
+            "dur_s": 29,
+            "dist_m": 80.4,
+            "pace_min_per_km": 6.01,
+            "cadence_avg": 82.5,
+            "hr_avg": 142.0,
+            "hr_max": 143,
+            "power_avg": 314.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 300.0
+          },
+          {
+            "t_start": 3990,
+            "t_end": 4019,
+            "dur_s": 29,
+            "dist_m": 79.8,
+            "pace_min_per_km": 6.05,
+            "cadence_avg": 83.3,
+            "hr_avg": 140.0,
+            "hr_max": 141,
+            "power_avg": 308.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 303.0
+          },
+          {
+            "t_start": 4020,
+            "t_end": 4049,
+            "dur_s": 29,
+            "dist_m": 83.1,
+            "pace_min_per_km": 5.82,
+            "cadence_avg": 83.6,
+            "hr_avg": 139.0,
+            "hr_max": 140,
+            "power_avg": 308.0,
+            "vo_cm_avg": 6.1,
+            "ground_time_ms_avg": 299.0
+          },
+          {
+            "t_start": 4050,
+            "t_end": 4079,
+            "dur_s": 29,
+            "dist_m": 82.2,
+            "pace_min_per_km": 5.88,
+            "cadence_avg": 83.5,
+            "hr_avg": 139.0,
+            "hr_max": 139,
+            "power_avg": 324.0,
+            "vo_cm_avg": 6.2,
+            "ground_time_ms_avg": 299.0
+          },
+          {
+            "t_start": 4080,
+            "t_end": 4109,
+            "dur_s": 29,
+            "dist_m": 55.3,
+            "pace_min_per_km": 8.74,
+            "cadence_avg": 44.8,
+            "hr_avg": 136.0,
+            "hr_max": 139,
+            "power_avg": 244.0,
+            "vo_cm_avg": 3.5,
+            "ground_time_ms_avg": 227.0
+          },
+          {
+            "t_start": 4110,
+            "t_end": 4135,
+            "dur_s": 25,
+            "dist_m": 71.1,
+            "pace_min_per_km": 5.86,
+            "cadence_avg": 83.2,
+            "hr_avg": 133.0,
+            "hr_max": 134,
+            "power_avg": 328.0,
+            "vo_cm_avg": 6.4,
+            "ground_time_ms_avg": 295.0
+          }
+        ],
+        "series": [
+          {
+            "key": "pace_min_per_km",
+            "label": "pace",
+            "color": "#5cd6c0",
+            "invert": true
+          },
+          {
+            "key": "cadence_avg",
+            "label": "cadence",
+            "color": "#7ec8e3"
+          },
+          {
+            "key": "hr_avg",
+            "label": "HR",
+            "color": "#ff9b6a"
+          },
+          {
+            "key": "power_avg",
+            "label": "power",
+            "color": "#d8a0ff"
+          }
+        ],
+        "pauses": [
+          {
+            "t_start": 37,
+            "t_end": 91,
+            "dur_s": 54
+          },
+          {
+            "t_start": 608,
+            "t_end": 637,
+            "dur_s": 29
+          },
+          {
+            "t_start": 1175,
+            "t_end": 1206,
+            "dur_s": 31
+          },
+          {
+            "t_start": 1849,
+            "t_end": 1883,
+            "dur_s": 34
+          },
+          {
+            "t_start": 3433,
+            "t_end": 3471,
+            "dur_s": 38
+          },
+          {
+            "t_start": 3603,
+            "t_end": 3619,
+            "dur_s": 16
+          },
+          {
+            "t_start": 3751,
+            "t_end": 3769,
+            "dur_s": 18
+          },
+          {
+            "t_start": 4085,
+            "t_end": 4091,
+            "dur_s": 6
+          }
+        ],
+        "annotations": [
+          {
+            "at_t_s": 0,
+            "label": "km 1"
+          },
+          {
+            "at_t_s": 413,
+            "label": "km 2"
+          },
+          {
+            "at_t_s": 784,
+            "label": "km 3"
+          },
+          {
+            "at_t_s": 1130,
+            "label": "km 4"
+          },
+          {
+            "at_t_s": 1509,
+            "label": "km 5"
+          },
+          {
+            "at_t_s": 1891,
+            "label": "km 6"
+          },
+          {
+            "at_t_s": 2233,
+            "label": "km 7"
+          },
+          {
+            "at_t_s": 2574,
+            "label": "km 8"
+          },
+          {
+            "at_t_s": 2914,
+            "label": "km 9"
+          },
+          {
+            "at_t_s": 3247,
+            "label": "km 10"
+          },
+          {
+            "at_t_s": 3601,
+            "label": "km 11"
+          }
+        ]
+      }
     },
     {
       "id": "pauses",
-      "title": "Паузы · 8 сегментов, 3:46 total",
+      "title": "Паузы · все сегменты с elapsed-временем",
       "kind": "table",
-      "summary": "Без ОФП. Всего 3:46 мелких пауз (семафоры/шаги/проезды).",
+      "summary": "Разминка без больших ОФП. Все мелкие.",
       "data": {
         "columns": [
           {
@@ -349,73 +2126,83 @@
             "at_km": "0.10",
             "t": "0:37",
             "dur": "0:54",
-            "cause": "светофор / старт"
+            "cause": "unknown"
           },
           {
             "at_km": "1.57",
             "t": "10:08",
             "dur": "0:29",
-            "cause": "семафор"
+            "cause": "unknown"
           },
           {
             "at_km": "3.13",
             "t": "19:35",
             "dur": "0:31",
-            "cause": "семафор"
+            "cause": "unknown"
           },
           {
             "at_km": "4.99",
             "t": "30:49",
             "dur": "0:34",
-            "cause": "бордюр / переход"
+            "cause": "unknown"
           },
           {
             "at_km": "9.59",
             "t": "57:13",
             "dur": "0:38",
-            "cause": "семафор"
+            "cause": "unknown"
           },
           {
             "at_km": "10.01",
             "t": "60:03",
             "dur": "0:16",
-            "cause": "семафор"
+            "cause": "unknown"
           },
           {
             "at_km": "10.45",
             "t": "62:31",
             "dur": "0:18",
-            "cause": "бордюр"
+            "cause": "unknown"
           },
           {
             "at_km": "11.39",
             "t": "68:05",
             "dur": "0:06",
-            "cause": "финиш"
+            "cause": "unknown"
           }
         ]
       }
     },
     {
       "id": "recos",
-      "title": "Что делать · 5 шагов",
+      "title": "Что делать",
       "kind": "recommendations",
-      "summary": "Сдвиг по сравнению с 14 окт: каденс на финише достиг цели, осталось держать с начала + снизить темп + признать Garmin RD как единственный truth.",
+      "summary": "5 шагов по приоритету.",
       "data": [
         {
           "priority": "now",
-          "text": "Метроном 170 bpm с первого км, цель — 85 spm каждую минуту лёгкой пробежки, не дожидаясь км 9.",
-          "principle": "Каденс-дрель работает на старте, не на финише."
+          "text": "Метроном 170 bpm с первого км, цель 85 spm каждую минуту.",
+          "principle": "Каденс-дрель на старте, не на финише."
         },
         {
           "priority": "now",
-          "text": "Беги завтра 5:50 целенаправленно. 73% объёма выше Z2_low на 5:40 — это не Z2_low. Нужно найти реальную границу.",
-          "principle": "Z2_low — диапазон по HR (≤ 138), не по ощущению."
+          "text": "Беги 5:50 целенаправленно. 73% объёма выше Z2_low — это не Z2.",
+          "principle": "Z2_low — диапазон по HR ≤ 138, не по ощущению."
         },
         {
           "priority": "soon",
-          "text": "Air power сегодня 3.4W (было 2.3W). Это не сильный ветер. На следующей пробежке — если больше 10W, это будет важный сигнал.",
-          "principle": "Air power > 15-20W = либо встречный ветер, либо terrain с боковым участком."
+          "text": "Air power 3.4W (было 2.3). На следующей — если > 10W, это важный сигнал.",
+          "principle": "Air power > 15-20W = встречный ветер или terrain с боковым."
+        },
+        {
+          "priority": "later",
+          "text": "Garmin RD (отсутствует в этом FIT) ≠ Stryd. Source-of-truth = Stryd.",
+          "principle": "Гармин RD требует нагрудного ремня; Stryd всегда есть в ботинке."
+        },
+        {
+          "priority": "later",
+          "text": "Если найдёшь Z2 границу на 5:50 — это базовая отметка W3+. Трендируй.",
+          "principle": "Z2 — фундамент для полу-марафонского сезона (W28 race)."
         }
       ]
     }

@@ -981,6 +981,10 @@ def _render_section(section: dict[str, Any]) -> str:
         body = _render_kv_grid_section(data if isinstance(data, dict) else {})
     elif kind == "recommendations":
         body = _render_recommendations_section(data)
+    elif kind == "km_splits":
+        body = _render_km_splits_section(data if isinstance(data, dict) else {})
+    elif kind == "multi_trend":
+        body = _render_multi_trend_section(data if isinstance(data, dict) else {})
     elif kind == "text":
         body = f'<div class="text-block">{esc(data) if isinstance(data, str) else data}</div>'
     else:
@@ -995,6 +999,191 @@ def _render_section(section: dict[str, Any]) -> str:
         f'</div>'
         f'{summary_html}'
         f'<div class="section-body">{body}</div>'
+        f'</div>'
+    )
+
+
+def _render_km_splits_section(data: dict[str, Any]) -> str:
+    """Per-km split rows with cadence (W+S), power, max HR.
+
+    data = {"columns": [{"key", "label"}...], "rows": [{...}]}.
+    Highlights the best/worst paces with color.
+    """
+    columns = data.get("columns", [])
+    rows = data.get("rows", [])
+    if not columns or not rows:
+        return '<div class="empty">Нет данных</div>'
+
+    # Tone highlight: warn if pace > 6:00, accent2 if pace < 5:30
+    pace_col_idx = next((i for i, c in enumerate(columns) if c.get("key") == "pace"), -1)
+    pace_vals = []
+    for r in rows:
+        pv = r.get("pace")
+        if isinstance(pv, str) and ":" in pv:
+            try:
+                m, s = pv.split(":")
+                pace_vals.append(int(m) * 60 + int(s))
+            except (ValueError, IndexError):
+                pass
+        elif isinstance(pv, (int, float)):
+            pace_vals.append(pv * 60)
+    best_pace = min(pace_vals) if pace_vals else None
+    worst_pace = max(pace_vals) if pace_vals else None
+
+    head = "".join(f'<th>{esc(c.get("label", c.get("key", "")))}</th>' for c in columns)
+    body_rows = []
+    for r in rows:
+        cells = []
+        for i, c in enumerate(columns):
+            key = c.get("key", "")
+            v = r.get(key, "")
+            tone = ""
+            if key == "pace" and isinstance(v, str) and ":" in v:
+                try:
+                    m, s = v.split(":")
+                    pace_sec = int(m) * 60 + int(s)
+                    if best_pace is not None and pace_sec == best_pace:
+                        tone = ' class="cell-good"'
+                    elif worst_pace is not None and pace_sec == worst_pace:
+                        tone = ' class="cell-warn"'
+                except (ValueError, IndexError):
+                    pass
+            cells.append(f'<td{tone}>{esc(str(v))}</td>')
+        body_rows.append(f'<tr>{"".join(cells)}</tr>')
+
+    return (
+        f'<table class="data-table"><thead><tr>{head}</tr></thead>'
+        f'<tbody>{"".join(body_rows)}</tbody></table>'
+    )
+
+
+def _render_multi_trend_section(data: dict[str, Any]) -> str:
+    """SVG line chart with multiple series normalised to 0..1.
+
+    data = {"buckets": [{t_start, t_end, dur_s, dist_m, pace_min_per_km,
+                          cadence_avg, hr_avg, hr_max, power_avg, ...}],
+            "series": [{"key": "pace_min_per_km", "label": "pace",
+                        "color": "#5cd6c0", "invert": false}, ...],
+            "y_axis_labels": [..., "worst", "avg", "best"],
+            "annotations": [{"at_t_s": 123, "label": "km 5"}, ...]}
+
+    All series are normalised 0..1 by their own min/max (independent y-axes)
+    so they overlay in a single chart without scale-war.
+    """
+    buckets = data.get("buckets", [])
+    series = data.get("series", [])
+    if not buckets or not series:
+        return '<div class="empty">Нет данных для графика</div>'
+
+    # Compute normalisation per-series from bucket values
+    series_data = []  # list of (label, color, invert, polyline_points_str, render_polygon)
+    chart_w, chart_h = 600, 220
+    pad_l, pad_r, pad_t, pad_b = 36, 16, 16, 30
+    plot_w = chart_w - pad_l - pad_r
+    plot_h = chart_h - pad_t - pad_b
+    x_min = buckets[0]["t_start"]
+    x_max = buckets[-1]["t_end"]
+    if x_max == x_min:
+        return '<div class="empty">Слишком короткое окно</div>'
+
+    def x_pos(t):
+        return pad_l + (t - x_min) / (x_max - x_min) * plot_w
+
+    def y_pos(n):
+        # n in 0..1, 0=top → high values
+        return pad_t + (1.0 - n) * plot_h
+
+    svg_parts = [f'<svg class="trend-svg" viewBox="0 0 {chart_w} {chart_h}" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">']
+
+    # Background grid
+    for i in range(5):
+        y = pad_t + i * plot_h / 4
+        svg_parts.append(f'<line x1="{pad_l}" y1="{y:.1f}" x2="{pad_l+plot_w}" y2="{y:.1f}" stroke="#2a3140" stroke-width="0.5" />')
+
+    # X-axis ticks: every ~10 min (or 5 if short)
+    total_s = x_max - x_min
+    tick_step = 600 if total_s < 3600 else 1800  # 10 min vs 30 min
+    t = (x_min // tick_step + 1) * tick_step
+    while t <= x_max:
+        x = x_pos(t)
+        svg_parts.append(f'<line x1="{x:.1f}" y1="{pad_t}" x2="{x:.1f}" y2="{pad_t+plot_h}" stroke="#2a3140" stroke-width="0.3" stroke-dasharray="2,2" />')
+        svg_parts.append(f'<text x="{x:.1f}" y="{pad_t+plot_h+12}" fill="#9aa3b2" font-size="9" text-anchor="middle">{int(t//60)}m</text>')
+        t += tick_step
+    # Y-axis labels: "best" / "avg" / "worst"
+    svg_parts.append(f'<text x="{pad_l-4}" y="{pad_t+8}" fill="#9aa3b2" font-size="9" text-anchor="end">high</text>')
+    svg_parts.append(f'<text x="{pad_l-4}" y="{pad_t+plot_h/2+4}" fill="#9aa3b2" font-size="9" text-anchor="end">avg</text>')
+    svg_parts.append(f'<text x="{pad_l-4}" y="{pad_t+plot_h}" fill="#9aa3b2" font-size="9" text-anchor="end">low</text>')
+
+    # Series
+    for s in series:
+        key = s.get("key")
+        label = s.get("label", key)
+        color = s.get("color", "#7aa2ff")
+        invert = s.get("invert", False)
+        values = []
+        for b in buckets:
+            v = b.get(key)
+            if v is not None:
+                values.append(v)
+        if not values:
+            continue
+        vmin, vmax = min(values), max(values)
+        if vmax == vmin:
+            vmax = vmin + 1
+        # Build polyline
+        pts = []
+        for b in buckets:
+            v = b.get(key)
+            if v is None:
+                continue
+            t_start = b["t_start"]
+            x = x_pos(t_start)
+            n = (v - vmin) / (vmax - vmin)
+            if invert:
+                n = 1 - n
+            y = y_pos(n)
+            pts.append(f"{x:.1f},{y:.1f}")
+        if len(pts) >= 2:
+            svg_parts.append(
+                f'<polyline points="{" ".join(pts)}" stroke="{color}" '
+                f'stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />'
+            )
+            # Series label at right edge
+            last_x, last_y = pts[-1].split(",")
+            svg_parts.append(
+                f'<text x="{float(last_x)+4:.1f}" y="{float(last_y)+3:.1f}" fill="{color}" font-size="9">{esc(label)}</text>'
+            )
+
+    # Pause segments overlay: vertical bands where activity was paused
+    # (data["pauses"] optional — list of {t_start, t_end, dur_s})
+    for ps in data.get("pauses", []) or []:
+        if ps["dur_s"] < 5:
+            continue
+        x1 = x_pos(ps["t_start"])
+        x2 = x_pos(ps["t_end"])
+        svg_parts.append(
+            f'<rect x="{x1:.1f}" y="{pad_t}" width="{max(0.5, x2-x1):.1f}" '
+            f'height="{plot_h}" fill="#9aa3b2" fill-opacity="0.2" />'
+        )
+
+    # Annotations (vertical lines + labels)
+    for ann in data.get("annotations", []) or []:
+        x = x_pos(ann.get("at_t_s", 0))
+        svg_parts.append(
+            f'<line x1="{x:.1f}" y1="{pad_t}" x2="{x:.1f}" y2="{pad_t+plot_h}" stroke="#ff9b6a" stroke-width="0.8" />'
+            f'<text x="{x+2:.1f}" y="{pad_t+8}" fill="#ff9b6a" font-size="9">{esc(ann.get("label",""))}</text>'
+        )
+
+    svg_parts.append('</svg>')
+    legend_items = " ".join(
+        f'<span class="trend-legend-item"><i style="background:{esc(s.get("color","#7aa2ff"))}"></i>{esc(s.get("label", s.get("key","")))}</span>'
+        for s in series
+    )
+    return (
+        f'<div class="trend-chart">{"".join(svg_parts)}'
+        f'<div class="trend-legend">{legend_items}</div>'
+        f'<div class="muted small" style="margin-top:6px;text-align:center">'
+        f'нормализовано 0..1 на каждую серию отдельно (raw units не сопоставимы)</div>'
         f'</div>'
     )
 
@@ -1107,6 +1296,14 @@ h3{{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;c
 .data-table td{{padding:5px 8px;color:var(--text);border-bottom:1px solid rgba(255,255,255,.05)}}
 .data-table tr:last-child td{{border-bottom:none}}
 .cell-warn{{color:var(--warn)!important;font-weight:600}}
+.cell-good{{color:var(--good)!important;font-weight:600}}
+
+/* Multi-series trend chart */
+.trend-chart{{margin:6px 0 2px}}
+.trend-svg{{width:100%;height:220px;background:var(--panel2);border:1px solid var(--border);border-radius:8px}}
+.trend-legend{{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;padding:8px 4px 0;font-size:11px}}
+.trend-legend-item{{display:inline-flex;align-items:center;gap:5px}}
+.trend-legend-item i{{display:inline-block;width:10px;height:3px;border-radius:2px}}
 
 /* KV grid */
 .kv-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px}}
