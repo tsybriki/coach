@@ -844,6 +844,37 @@ HR_ZONE_COLORS = {
     "Z6":  "#c97aff",
 }
 
+# Default HR zones for Кирилл (per state/athlete.json profile, HRmax=182).
+# Format: {hr_low, hr_high} — inclusive bounds. Used as a fallback when a
+# review-JSON does not specify `hr_range` per zone.
+HR_ZONE_BOUNDS = {
+    "Z1":   {"low": 100, "high": 117},
+    "Z1.5": {"low": 118, "high": 124},
+    "Z2":   {"low": 125, "high": 135},
+    "Z3":   {"low": 136, "high": 145},
+    "Z4":   {"low": 146, "high": 159},
+    "Z5":   {"low": 160, "high": 174},
+    "Z6":   {"low": 175, "high": 182},
+}
+
+
+def _zone_hr_range(zone: dict) -> str:
+    """Format HR bounds for a zone. Prefer explicit zone['hr_range']/['hr_low']/['hr_high'];
+    fall back to HR_ZONE_BOUNDS table lookup by zone name.
+    """
+    rng = zone.get("hr_range")
+    if rng:
+        return str(rng)
+    low = zone.get("hr_low")
+    high = zone.get("hr_high")
+    if low is not None and high is not None:
+        return f"{low}-{high}"
+    name = zone.get("name", "")
+    fb = HR_ZONE_BOUNDS.get(name)
+    if fb:
+        return f"{fb['low']}-{fb['high']}"
+    return ""
+
 
 def _render_metrics_grid(metrics: dict[str, Any]) -> str:
     """2-3 column grid of label/value pairs. Robust to str|int|float."""
@@ -870,7 +901,6 @@ def _render_hr_zones_section(data: dict[str, Any]) -> str:
     hr_max = data.get("hr_max")
     if not zones:
         return '<div class="empty">Нет данных</div>'
-    # Sort zones by name then render bars
     rows = []
     max_pct = max((z.get("pct", 0) for z in zones), default=1) or 1
     for z in zones:
@@ -881,9 +911,11 @@ def _render_hr_zones_section(data: dict[str, Any]) -> str:
         dur_str = f'{m}м{s:02d}с' if m else f'{s}с'
         bar_width = (pct / max(max_pct, 30)) * 100  # at least 30% scaling so small zones are visible
         color = HR_ZONE_COLORS.get(name, "#9aa3b2")
+        hr_range = _zone_hr_range(z)
+        name_label = f"{esc(name)} <span class='hr-zone-range'>·&nbsp;{esc(hr_range)}</span>" if hr_range else esc(name)
         rows.append(
             f'<div class="hr-zone-row">'
-            f'<span class="hr-zone-name" style="--c:{color}">{esc(name)}</span>'
+            f'<span class="hr-zone-name" style="--c:{color}">{name_label}</span>'
             f'<div class="hr-zone-bar-wrap">'
             f'<div class="hr-zone-bar" style="width:{bar_width:.1f}%; background:{color}"></div>'
             f'</div>'
@@ -1256,10 +1288,11 @@ h3{{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;c
 
 /* HR zones */
 .hr-zones{{display:flex;flex-direction:column;gap:6px}}
-.hr-zone-row{{display:grid;grid-template-columns:48px 1fr 50px 60px;
+.hr-zone-row{{display:grid;grid-template-columns:88px 1fr 50px 60px;
   gap:8px;align-items:center;font-size:11.5px}}
 .hr-zone-name{{font-family:ui-monospace,SFMono-Regular,monospace;font-weight:600;
   color:var(--c,var(--text))}}
+.hr-zone-range{{color:var(--muted);font-weight:500;font-size:10.5px;margin-left:2px}}
 .hr-zone-bar-wrap{{background:var(--panel2);border:1px solid var(--border);
   border-radius:4px;height:14px;overflow:hidden}}
 .hr-zone-bar{{height:100%;border-radius:4px;min-width:4px}}

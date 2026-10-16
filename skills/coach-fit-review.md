@@ -14,9 +14,10 @@
    - `cd ~/projects/garmin_tools && .venv/bin/python latest_pull.py --sport running --count 3 --out raw/today`
    - restore после: `cp <snap>/sync_state.json .`, tokens НЕ трогай (Garmin их сам обновляет, это legitimate).
 
-2. **Распарси FIT через `parse_fit(..., with_streams=True)`** (schema ≥ 0.5.0):
-   - `moving_min`, `splits[]` (по moving records), `hr_drift_bpm` — канон.
-   - `stryd_running_dynamics{}` с `*_source` метками (Garmin RD > Stryd fallback).
+2. **Распарси FIT через `parse_fit(..., with_streams=True)`** (schema ≥ 0.7.0):
+   - `moving_min`, `hr_drift_bpm`, `stryd_running_dynamics{}` — канон.
+   - **`splits[]` УДАЛЕНО в schema 0.7.0** — Garmin не пишет interval markers для plain run, авто-km-splits были синтетикой. Не вычислять.
+   - `stryd_running_dynamics{}` с `*_source` метками (Garmin RD > Stryd fallback, Кирилл source-preference = Stryd).
 
 3. **Перед написанием брифа — валидация данных**: если какая-то ожидаемая метрика вернулась пустой (например `stryd_running_dynamics: {}` при подключённом Stryd), пробей FIT напрямую через `fitparse`:
    ```python
@@ -91,7 +92,9 @@
 
 3. **Pause cause**: если `pause_segments[].dur_s ≥ 60`, спроси у пользователя «это OFP / вода / травма / ожидание?». Без ответа помечай `pause_cause: unknown`. Логируй в `state/pause_log.jsonl` строки `{date, fit_id, t_sec, dur_s, cause}` чтобы трекер тренда видел распределение по причинам.
 
-**Per-km splits НЕ вычислять автоматически для разбора.** Garmin не пишет interval markers для plain running — вычисление per-km-mean из per-second records = synthetic data, не реальность. Это явный запрет (см. «Что НЕ должно быть в разборе» в самом верху).
+**Per-km splits НЕ вычислять для разбора.** Garmin не пишет interval markers для plain running — вычисление per-km-mean из per-second records = синтетика, не реальность. Это явный запрет. См. также раздел «Запрещено» в начале — `splits[]` УДАЛЕНО из `parse_fit` schema 0.7.0. Когда пользователю понадобятся интервалы, маршрут: structured workout через `garmin-workout-builder` skill → `laps[]` в FIT появится → coach-fit-review покажет их как есть. Без автодетекции.
+
+В coach-логе помечай `kind: ` для каждого километра если данные поступают от Garmin-lap; иначе просто ничего. Warm-up detection через «km 1-2 с avg HR < 70% от main set» автоматизировать не нужно — в разборе это и так видно в `pauses`-секции (разминка/прогулка до первой паузы показывается как gap).
 
 ## Каденс и Running Dynamics — два независимых источника, НЕ путать
 

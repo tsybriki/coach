@@ -54,21 +54,24 @@ def build_review(fit_path: Path, *, date: str, slug: str, brief: list[str], summ
 
     sections = []
 
-    # HR zones from moving partition (computed from per-second records)
+    # HR zones from moving partition (computed from per-second records).
+    # hr_range per zone carries the Кирилл HRmax=182 profile so the renderer
+    # doesn't have to fall back to its built-in table. Values are inclusive
+    # bounds (low .. high).
     sections.append({
         "id": "hr_zones",
         "title": "HR-зоны · по moving records",
         "kind": "hr_zones",
-        "summary": "Z3 63% + Z4 10% = 73% выше Z2_low.",
+        "summary": "Z3 63% + Z4 10% = 73% выше Z2_low. HR-границы — из athlete profile (HRmax=182).",
         "data": {
             "hr_max": 182,
             "zones": [
-                {"name": "Z1",   "sec": 134,  "pct": 3.3},
-                {"name": "Z1.5", "sec": 119,  "pct": 3.0},
-                {"name": "Z2",   "sec": 788,  "pct": 20.2},
-                {"name": "Z3",   "sec": 2478, "pct": 63.4},
-                {"name": "Z4",   "sec": 397,  "pct": 10.2},
-                {"name": "Z5",   "sec": 0,    "pct": 0.0},
+                {"name": "Z1",   "sec": 134,  "pct": 3.3,  "hr_low": 100, "hr_high": 117},
+                {"name": "Z1.5", "sec": 119,  "pct": 3.0,  "hr_low": 118, "hr_high": 124},
+                {"name": "Z2",   "sec": 788,  "pct": 20.2, "hr_low": 125, "hr_high": 135},
+                {"name": "Z3",   "sec": 2478, "pct": 63.4, "hr_low": 136, "hr_high": 145},
+                {"name": "Z4",   "sec": 397,  "pct": 10.2, "hr_low": 146, "hr_high": 159},
+                {"name": "Z5",   "sec": 0,    "pct": 0.0,  "hr_low": 160, "hr_high": 174},
             ]
         }
     })
