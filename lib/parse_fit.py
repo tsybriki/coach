@@ -54,32 +54,28 @@ STABLE_SCHEMA_KEYS = [
 
 
 def _load_hr_zone_profile() -> dict:
-    """Read heart-rate zone profile from state/athlete.json (constraints.hr_zones).
+    """Read heart-rate zone profile from state/athlete.json (top-level hr_zones).
 
-    Two-bucket structure (Кирилл, 2026-10-16):
-      profile['zones']    = NON-OVERLAPPING primary zones Z1..Z5 (timeline-bucketed).
-      profile['subzones'] = zones named within another zone (e.g. Z2L inside Z2).
-                            Used as focus labels for plan focus, NOT in timeline stats.
-
-    Schema:
+    Schema (Кирилл 2026-10-16):
       {
         "hr_max": 182,
         "rhr": 54,
         "hrr": 128,
         "method": "Karvonen + %HRmax",
-        "zones":    {"Z1": "100-118", "Z2": "118-145", "Z3": "145-160", "Z4": "160-170", "Z5": "170-182"},
-        "subzones": {"Z2L": {"in": "Z2", "low": 118, "high": 136, "purpose": "..."},
-                     "Z2M": {"in": "Z2", "low": 136, "high": 145, "purpose": "..."}},
+        "lth": 164,
+        "vo2_target": "172-174",
+        "zones": {"Z1": "100-118", "Z2": "118-135", "Z3": "136-150", "Z4": "150-160",
+                  "Z5": "160-168", "Z6": "169-172", "Z7": "173-182"},
         "notes": "..."
       }
 
     Returns dict:
       {
         "hr_max": int|None, "rhr": int|None, "hrr": int|None, "method": str,
-        "zones":      {name: {low, high, raw}, ...},      # primary, non-overlapping
-        "subzones":   {name: {in, low, high, raw, purpose}, ...},  # focus labels
-        "raw":        {name: "..."},            # original "100-118" strings
-        "notes":      str,
+        "lth": int|None, "vo2_target": str|None,
+        "zones":  {name: {low, high, raw}, ...},    # primary, non-overlapping
+        "raw":    {name: "..."},                    # original "100-118" strings
+        "notes":  str,
         "loaded": bool,
       }
     """
@@ -88,11 +84,11 @@ def _load_hr_zone_profile() -> dict:
             d = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         return {"hr_max": None, "rhr": None, "hrr": None, "method": "",
-                "zones": {}, "subzones": {}, "raw": {}, "notes": "", "loaded": False}
+                "lth": None, "vo2_target": None,
+                "zones": {}, "raw": {}, "notes": "", "loaded": False}
 
     src = d.get("constraints", {}).get("hr_zones") or d.get("hr_zones") or {}
     zones_raw = src.get("zones", {}) if isinstance(src, dict) else {}
-    subzones_raw = src.get("subzones", {}) if isinstance(src, dict) else {}
 
     def _parse_range(s):
         s = str(s).strip()
@@ -111,29 +107,14 @@ def _load_hr_zone_profile() -> dict:
             lo, hi, raw = p
             parsed_zones[name] = {"low": lo, "high": hi, "raw": raw}
 
-    parsed_subzones = {}
-    for name, sz in subzones_raw.items():
-        if not isinstance(sz, dict):
-            continue
-        lo = sz.get("low")
-        hi = sz.get("high")
-        if lo is None or hi is None:
-            continue
-        parsed_subzones[name] = {
-            "in": sz.get("in", ""),
-            "low": int(lo),
-            "high": int(hi),
-            "raw": f"{lo}-{hi}",
-            "purpose": sz.get("purpose", ""),
-        }
-
     return {
         "hr_max": src.get("hr_max") if isinstance(src, dict) else None,
         "rhr": src.get("rhr") if isinstance(src, dict) else None,
         "hrr": src.get("hrr") if isinstance(src, dict) else None,
         "method": src.get("method", "") if isinstance(src, dict) else "",
+        "lth": src.get("lth") if isinstance(src, dict) else None,
+        "vo2_target": src.get("vo2_target") if isinstance(src, dict) else None,
         "zones": parsed_zones,
-        "subzones": parsed_subzones,
         "raw": zones_raw,
         "notes": src.get("notes", "") if isinstance(src, dict) else "",
         "loaded": True,
@@ -454,12 +435,9 @@ def parse_trend(moving: list[dict]) -> list[dict]:
 def _compute_hr_zone_stats(moving: list[dict], profile: dict) -> list[dict]:
     """Bucket seconds into per-zone counts using athlete.json hr_zones.
 
-    Uses ONLY profile['zones'] — non-overlapping Z1..Z5 with ascending bounds.
-    profile['subzones'] (e.g. Z2L/Z2M living inside Z2) are intentionally
-    excluded from timeline-bucketing because they overlap with their parent
-    zone — counting them separately would inflate totals.
-
-    Records with no HR are skipped. Output is sorted by ascending low bound.
+    Uses ONLY profile['zones'] — non-overlapping ascending zones (currently
+    Z1..Z7 in Кирилл's profile). Records with no HR are skipped. Output is
+    sorted by ascending low bound.
     """
     if not moving or not isinstance(profile, dict):
         return []
@@ -471,18 +449,16 @@ def _compute_hr_zone_stats(moving: list[dict], profile: dict) -> list[dict]:
     if not sorted_zones:
         return []
     sorted_zones.sort(key=lambda x: x[1])  # ascending low
-    # Validate non-overlap (catches mistakes in athlete.json loudly).
-    # A boundary match is OK (prev_high == cur_low — zone boundary inclusive
-    # on top of one zone, exclusive on bottom of the next). Only true overlap
-    # (prev_high > cur_low) is a problem.
+    # Validate non-overlap. A boundary match (prev_high == cur_low) is OK —
+    # that means the next zone starts where the previous one ended. Only true
+    # overlap (cur_low < prev_hi) is an error.
     for i in range(1, len(sorted_zones)):
         prev_name, prev_lo, prev_hi = sorted_zones[i - 1]
         cur_name, cur_lo, cur_hi = sorted_zones[i]
         if cur_lo < prev_hi:
             raise ValueError(
                 f"parse_fit: HR zones in athlete.json must be non-overlapping and ascending, "
-                f"but {prev_name} [{prev_lo}, {prev_hi}) overlaps with {cur_name} [{cur_lo}, {cur_hi}). "
-                f"Move subzone definitions (Z2L/Z2M) into profile['subzones'] instead."
+                f"but {prev_name} [{prev_lo}, {prev_hi}) overlaps with {cur_name} [{cur_lo}, {cur_hi})."
             )
     counts = {name: 0 for name, _, _ in sorted_zones}
     for r in moving:
@@ -509,35 +485,21 @@ def _compute_hr_zone_stats(moving: list[dict], profile: dict) -> list[dict]:
 
 
 def _hr_zone_profile_summary(profile: dict) -> list[dict]:
-    """Return a flat list of {name, label, range, purpose} for the profile
-    overview section. Combines profile['zones'] + profile['subzones']
-    into a uniform layout (zones first, subzones annotated as "in Z2").
+    """Return a flat list of {name, range, kind} for the profile overview section.
+
+    Just iterates profile['zones'] in alphabetical order. Subzones field is
+    no longer used (Кирилл 2026-10-16 — all 7 zones are primary).
     """
     if not isinstance(profile, dict):
         return []
     items = []
     zones = profile.get("zones", {}) or {}
-    subzones = profile.get("subzones", {}) or {}
     for name in sorted(zones.keys()):
         z = zones[name]
         if not isinstance(z, dict) or "low" not in z:
             continue
         rng = f"{z['low']}-{z['high']}"
         items.append({"name": name, "range": rng, "kind": "zone"})
-    for name in sorted(subzones.keys()):
-        sz = subzones[name]
-        if not isinstance(sz, dict) or "low" not in sz:
-            continue
-        rng = f"{sz['low']}-{sz['high']}"
-        purpose = sz.get("purpose", "")
-        in_zone = sz.get("in", "")
-        items.append({
-            "name": name,
-            "range": rng,
-            "in": in_zone,
-            "purpose": purpose,
-            "kind": "subzone",
-        })
     return items
 
 

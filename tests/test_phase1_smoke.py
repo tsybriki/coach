@@ -234,7 +234,7 @@ def test_render_html_includes_v18_features():
         plan_data_match = re.search(r'<script type="application/json" id="plan-data">(.+?)</script>', content, re.DOTALL)
         assert plan_data_match, "missing plan-data"
         plan_obj = json.loads(plan_data_match.group(1))
-        # focus Z2L где-то есть
+        # focus Z2 где-то есть
         focuses = [s.get("focus", "") for s in plan_obj.get("slots", [])]
         assert any("Z2" in f for f in focuses), f"no Z2 focus in {focuses}"
         # workout_pending где-то есть
@@ -335,7 +335,7 @@ def test_step_builder_long_run():
     phases = [s["phase"] for s in structure]
     assert phases == ["warmup", "work", "cooldown"]
     assert structure[1]["duration_min"] == 65
-    assert structure[1]["zone"] == "Z2L"
+    assert structure[1]["zone"] == "Z2"
     print(f"  ✓ step_builder.long_Z2 90мин: warmup/work/cooldown по {structure[0]['duration_min']}/{structure[1]['duration_min']}/{structure[2]['duration_min']} мин")
 
 

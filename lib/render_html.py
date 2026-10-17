@@ -354,7 +354,7 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .focus-pill{font-family:inherit;font-weight:600}
 .focus-pill.focus-Z1{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
 .focus-pill.focus-Z2{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
-.focus-pill.focus-Z2L{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
+.focus-pill.focus-Z2{color:var(--accent2);background:rgba(92,214,192,.08);border-color:rgba(92,214,192,.3)}
 .focus-pill.focus-Z3{color:var(--warn);background:rgba(255,155,106,.08);border-color:rgba(255,155,106,.3)}
 .focus-pill.focus-Z4{color:var(--warn);background:rgba(255,155,106,.08);border-color:rgba(255,155,106,.3)}
 .focus-pill.focus-Z5{color:var(--cp);background:rgba(216,160,255,.08);border-color:rgba(216,160,255,.3)}
@@ -852,7 +852,7 @@ HR_ZONE_BOUNDS = {
     # Last-resort fallback (per-zone), used only if athlete.json is
     # entirely missing. Matches state/athlete.json (Кирилл 2026-10-16).
     "Z1":  {"low": 100, "high": 118},
-    "Z2L": {"low": 118, "high": 135},
+    "Z2": {"low": 118, "high": 135},
     "Z2":  {"low": 136, "high": 150},
     "Z3":  {"low": 150, "high": 160},
     "Z4":  {"low": 160, "high": 168},

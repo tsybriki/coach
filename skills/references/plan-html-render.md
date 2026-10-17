@@ -53,7 +53,7 @@ HTML: state/plan-wN.html
 {
   "phase": "warmup" | "work" | "recovery" | "cooldown",
   "duration_min": 10,
-  "zone": "Z1" | "Z2" | "Z2L" | "Z3" | "Z4" | "Z5",
+  "zone": "Z1" | "Z2" | "Z2" | "Z3" | "Z4" | "Z5",
   "pace_min_per_km": null | "4:30",
   "reps": null,
   "set_repeats": null,
@@ -108,16 +108,16 @@ HTML: state/plan-wN.html
 | kind | subkind | duration_min (run_base) | structure |
 |---|---|---|---|
 | run | easy_progression | 60 | warmup 10 + easy 25 Z2 + work 3 Z3 + cooldown 15 |
-| run | easy | 30 | work 30 Z2L |
+| run | easy | 30 | work 30 Z2 |
 | run | key_intervals | 60 | warmup 12 + set 5× {4 Z3 + 2 Z1} + cooldown 10 |
-| run | long_Z2 | 90 | warmup 10 + work 65 Z2L + cooldown 15 |
+| run | long_Z2 | 90 | warmup 10 + work 65 Z2 + cooldown 15 |
 | run | tempo | 70 | warmup 12 + work 50 Z3 + cooldown 8 |
 | run | intervals | 70 | warmup 15 + set 5× {4 Z3 + 2 Z1} + cooldown 10 |
 | run | race_pace | 75 | warmup 15 + work 50 Z4 + cooldown 10 |
 | bike | stationary_z2 | 45 | warmup 5 + work 30 Z2 + cooldown 10 |
 | bike | stationary_z3 | 60 | warmup 5 + work 45 Z3 + cooldown 10 |
-| bike | long_z2 | 90 | warmup 10 + work 70 Z2L + cooldown 10 |
-| swim | easy | 60 | warmup 5 + work 45 Z2L + cooldown 10 |
+| bike | long_z2 | 90 | warmup 10 + work 70 Z2 + cooldown 10 |
+| swim | easy | 60 | warmup 5 + work 45 Z2 + cooldown 10 |
 | swim | tempo | 60 | warmup 5 + work 45 Z3 + cooldown 10 |
 | brick | bike_run | 75 | warmup_bike + bike + T2 + run + cooldown |
 | ofp | core | 25 | warmup (exercise) + main (set of exercises) + cooldown |

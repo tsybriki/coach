@@ -28,16 +28,18 @@
       "rhr": 54,
       "hrr": 128,
       "method": "Karvonen + %HRmax",
+      "lth": 164,
+      "vo2_target": "172-174",
       "zones": {
         "Z1": "100-118",
-        "Z2L": "118-136",
-        "Z2": "125-145",
-        "Z3": "136-146",
-        "Z4": "146-160",
-        "Z5": "160-175",
-        "Z6": "175-182"
+        "Z2": "118-135",
+        "Z3": "136-150",
+        "Z4": "150-160",
+        "Z5": "160-168",
+        "Z6": "169-172",
+        "Z7": "173-182"
       },
-      "notes": "low-Z2 сдвинута вниз (118-136) — намеренно для длинных"
+      "notes": "7-зонная модель (Кирилл 2026-10-16, финал). NON-OVERLAPPING ascending: Z1<Z2<Z3<Z4<Z5<Z6<Z7. Boundaries 118/135/150/160/168/172/173 — каждая верхняя зоны = нижняя следующей, допускаются gaps в 1 удар (Z2 135→Z3 136; Z5 168→Z6 169; Z6 172→Z7 173). LTH=164 lives inside Z5 (threshold). VO2 target=172-174 sits at top of Z6 (172) and joins Z7 (173+). Z1=recovery, Z2=easy, Z3=endurance, Z4=tempo, Z5=threshold, Z6=super-threshold, Z7=VO2max. Plain numeric (no L suffix). Subzones удалены — все 7 зон — primary, не subzones."
     },
     "metric_split": {
       "by_hr_first": "easy, Z2, Z2-low, long, recovery, warmup, cooldown",
@@ -139,7 +141,7 @@
       "name": "Easy бег 60мин Z2",
       "kind": "run",
       "subkind": "easy",
-      "focus": "Z2L",
+      "focus": "Z2",
       "location": "stadium_or_pool",
       "priority": 100,
       "category": "long_run",
@@ -157,7 +159,7 @@
         {
           "phase": "work",
           "duration_min": 45,
-          "zone": "Z2L",
+          "zone": "Z2",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
@@ -244,7 +246,7 @@
         {
           "phase": "work",
           "duration_min": 30,
-          "zone": "Z2L",
+          "zone": "Z2",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,

@@ -34,7 +34,7 @@
 
 3. **Totals-карточка сверху в picker** (как было в v18):
    - Три ячейки: planned / target / delta. Delta зелёный если `≥0`, оранжевый если `<0`.
-   - HR-зоны: `zones-grid` с 2-колоночной сеткой `Z1=110-125`, `Z2L=125-140`, `Z2=125-145`, и т.д.
+   - HR-зоны: `zones-grid` с 2-колоночной сеткой `Z1=110-125`, `Z2=125-140`, `Z2=125-145`, и т.д.
 
 4. **Phase-card** после totals: «Фаза · run_base · 12.10 → 18.10 · target 5ч/нед · goal g_run_spring».
 
@@ -314,6 +314,42 @@ print('stderr:', result.stderr)
 ## Aliases (для совместимости со старыми названиями)
 
 `weekly-helper`, `weekly-card-builder`.
+
+## Сначала методология тренировок, потом зоны (v40)
+
+Пользователь дал жёсткий фидбек: «Самое важное во всей этой затее — это планирование тренировок прежде всего. Если зоны уебищные, как планировать тренировки? Изучи методики планирования тренировок, какие там нужны зоны?» — Кирилл, 2026-10-16.
+
+При настройке `state/athlete.json → hr_zones` (или при любом изменении границ зон) **начинай с методологии тренировок**, а зоны выводи как её производную:
+
+1. Определи цели периода (что тренируем: база, темп, threshold, VO2max).
+2. Сверься с **2-3 стандартными моделями** (Friel 7-zone / Coggan 7-zone / Garmin Connect default 5-zone), прежде чем выдумывать свои границы. У каждой — своё именование, своё определение «tempo» и «threshold», разные диапазоны.
+3. Зафиксируй **якорные физиологические маркеры** (LTH, VO2max, HRmax) — это числа из теста, а не произвольные round numbers.
+4. **Только после этого** рисуй границы зон в athlete.json — и проверь non-overlap + ascending (`parse_fit._compute_hr_zone_stats` валидирует, ловит `cur_low < prev_hi`).
+5. Если придумываешь новую зону (типа Z2 easy) — это **primary zone в athlete.json**, не subzone. Subzones (через `hr_zones.subzones`) — это **focus-лейблы для plan-данных, не timeline-bucketing**.
+
+**Без методологии не лезь в зоны.** Если пользователь просит «сделай мне новые зоны» — первым делом спроси «по какой методологии?» (Friel? Coggan? Garmin default? свою с конкретными границами?). Без методологии — выдашь мусор с пересекающимися Z2/Z2/Z3.
+
+## Workout templates — production rule (v41)
+
+Когда пользователь говорит «через 1-2 недели начнём fartlek / tempo / threshold intervals» — это запрос на **workout template layer**, не на генерацию одного рандомного слота. Workout templates — **first-class objects** в планировщике, не ad-hoc структуры.
+
+Минимальный набор (привязка к 6-зонной модели Кирилла, Z1=100-118, Z2=118-135, Z2=136-150, Z3=150-160, Z4=160-168 с LTH=164, Z5=169-172, Z6=173-182):
+
+| Шаблон | Цель | Зона | Длительность | Структура |
+|---|---|---|---|---|
+| Recovery run | восстановление | Z1 | 20-30 мин | continuous, easy HR |
+| Easy long | база | Z2 | 60-90 мин | continuous, conversational |
+| Steady aerobic | верх аэробной | Z2 | 40-60 мин | continuous, easy mid |
+| Tempo continuous | tempo foundation | Z3 | 25-40 мин | warmup → sustained tempo → cooldown |
+| Fartlek | игровая стимуляция | Z3-Z6 mix | 40-50 мин | warmup → 6-10×(1-2 мин быстро / 1 мин easy) → cooldown |
+| Threshold intervals | LTH работа | Z4 (LTH=164) | 50-60 мин | warmup → 4-5×(5-8 мин @ 164 / 1-2 мин jog) → cooldown |
+| Super-threshold | выше LTH | Z5 | 40-50 мин | warmup → 3-4×(4-6 мин @ 170 / 2-3 мин jog) → cooldown |
+| VO2max intervals | аэробная мощность | Z6 | 40-50 мин | warmup → 5-6×(3 мин @ 173-178 / 1:30 jog) → cooldown |
+| Speed/repeats | neuromuscular | Z6 max | 30-40 мин | warmup → 8-10×(200м / 200м jog) → cooldown |
+
+Эти шаблоны **не выводятся в athlete.json** — они живут в **отдельном словаре workout_templates** (например, `lib/workout_templates.py` или `state/workout_templates.json`), и `plan_generate` ссылается на них по имени. Не дублируй structure в `state/plan-wN.json` руками.
+
+**Pitfall — не привязывай шаблон к одной зоне жёстко.** Tempo по Friel ≈ 80-87% HRmax, твоя Z3 = 82-88% — почти совпадает; sweet-spot/lthr-3% по Coggan ≈ 88-93% = **низ твоей Z4**, а не верх Z3. Поэтому при выборе шаблона **сверяй целевой %HRmax** с athlete.json, а не имя шаблона → имя зоны напрямую. Иначе «threshold intervals по Friel» (90% HRmax) попадёт в Z4/Z5 Кирилла — правильно, а «tempo по Friel» (85% HRmax) попадёт в Z3 Кирилла — и это правильно, **только если сводишь оба определения через %HRmax**, а не через имя шаблона.
 
 ## Pre-amble (наследуется всеми coach-* skill'ами)
 
