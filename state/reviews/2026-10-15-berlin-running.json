@@ -13,7 +13,7 @@
   "brief": [
     "65:09 в движении (3:46 мелких пауз, без ОФП), 11.50 км с negative split'ом (km 1: 6:53 → km 9: 5:32). Лучшая структура после 14 окт.",
     "Stryd VO 6.3 см, Ground Time 293 мс — стабильная техника. Каденс 85-86 на финише (Watch/Stryd согласованы, |Δ|=0.5).",
-    "Z3 63% + Z4 10% = 73% выше Z2_low — та же проблема с темпом. Действие: завтра 5:50 целенаправленно на З2 и метроном с первого км."
+    "Z3 63% + Z4 10% = 73% выше Z2L — та же проблема с темпом. Действие: завтра 5:50 целенаправленно на З2 и метроном с первого км."
   ],
   "metrics": {
     "moving_min": "65m09",
@@ -35,7 +35,7 @@
       "id": "hr_zones",
       "title": "HR-зоны · по moving records",
       "kind": "hr_zones",
-      "summary": "Z3 6% + Z4 10% = 16% выше Z2_low. HR-границы — из athlete profile (HRmax=182).",
+      "summary": "Z3 1% + Z4 0% = 1% выше Z2L. HR-границы — из athlete profile (HRmax=182).",
       "data": {
         "hr_max": 182,
         "hr_zones_profile": {
@@ -49,47 +49,63 @@
               "high": 118,
               "raw": "100-118"
             },
-            "Z2_low": {
+            "Z2L": {
               "low": 118,
-              "high": 136,
-              "raw": "118-136"
+              "high": 135,
+              "raw": "118-135"
             },
             "Z2": {
-              "low": 125,
-              "high": 145,
-              "raw": "125-145"
+              "low": 136,
+              "high": 150,
+              "raw": "136-150"
             },
             "Z3": {
-              "low": 136,
-              "high": 146,
-              "raw": "136-146"
+              "low": 150,
+              "high": 160,
+              "raw": "150-160"
             },
             "Z4": {
-              "low": 146,
-              "high": 160,
-              "raw": "146-160"
+              "low": 160,
+              "high": 168,
+              "raw": "160-168"
             },
             "Z5": {
-              "low": 160,
-              "high": 175,
-              "raw": "160-175"
+              "low": 169,
+              "high": 172,
+              "raw": "169-172"
             },
             "Z6": {
-              "low": 175,
+              "low": 173,
               "high": 182,
-              "raw": "175-182"
+              "raw": "173-182"
+            }
+          },
+          "subzones": {
+            "Z2L": {
+              "in": "Z2L",
+              "low": 118,
+              "high": 135,
+              "raw": "118-135",
+              "purpose": "easy / conversational / long runs (most km)"
+            },
+            "Z2M": {
+              "in": "Z2",
+              "low": 136,
+              "high": 150,
+              "raw": "136-150",
+              "purpose": "mid-aerobic / steady / marathon-pace work"
             }
           },
           "raw": {
             "Z1": "100-118",
-            "Z2_low": "118-136",
-            "Z2": "125-145",
-            "Z3": "136-146",
-            "Z4": "146-160",
-            "Z5": "160-175",
-            "Z6": "175-182"
+            "Z2L": "118-135",
+            "Z2": "136-150",
+            "Z3": "150-160",
+            "Z4": "160-168",
+            "Z5": "169-172",
+            "Z6": "173-182"
           },
-          "notes": "low-Z2 сдвинута вниз (118-136) — намеренно для длинных",
+          "notes": "6-зонная модель (Кирилл 2026-10-16). NON-OVERLAPPING ascending: Z1<Z2L<Z2<Z3<Z4<Z5<Z6. Boundaries 118/135/150/160/168/172/173 — каждая верхняя зоны = нижняя следующей. LTH=164 lives inside Z4. VO2 target=172-174 sits at top of Z5 (172) and joins Z6 (173+). Z2L (118-135) — easy / conversational / long runs, dominant by km. Z2 (136-150) — endurance / upper aerobic, steady marathon work. Z2L is a primary zone, not a subzone: it is its own bucket (slow-aerobic capillarization) with Z2 (upper-aerobic) as the next zone. Z2L subzones-annotation kept for legacy compat.",
           "loaded": true
         },
         "zones": [
@@ -101,46 +117,46 @@
             "pct": 2.8
           },
           {
-            "name": "Z2_low",
+            "name": "Z2L",
             "low": 118,
-            "high": 136,
-            "sec": 907,
-            "pct": 23.2
+            "high": 135,
+            "sec": 731,
+            "pct": 18.7
           },
           {
             "name": "Z2",
-            "low": 125,
-            "high": 145,
-            "sec": 2239,
-            "pct": 57.3
+            "low": 136,
+            "high": 150,
+            "sec": 2841,
+            "pct": 72.7
           },
           {
             "name": "Z3",
-            "low": 136,
-            "high": 146,
-            "sec": 239,
-            "pct": 6.1
+            "low": 150,
+            "high": 160,
+            "sec": 34,
+            "pct": 0.9
           },
           {
             "name": "Z4",
-            "low": 146,
-            "high": 160,
-            "sec": 397,
-            "pct": 10.2
+            "low": 160,
+            "high": 168,
+            "sec": 0,
+            "pct": 0.0
           },
           {
             "name": "Z5",
-            "low": 160,
-            "high": 175,
+            "low": 169,
+            "high": 172,
             "sec": 0,
             "pct": 0.0
           },
           {
             "name": "Z6",
-            "low": 175,
+            "low": 173,
             "high": 182,
-            "sec": 19,
-            "pct": 0.5
+            "sec": 195,
+            "pct": 5.0
           }
         ]
       }
@@ -158,33 +174,33 @@
             "sub": "method: Karvonen + %HRmax"
           },
           {
-            "label": "Z2_low",
-            "value": "118-136",
+            "label": "Z2L",
+            "value": "118-135",
             "sub": null
           },
           {
             "label": "Z2",
-            "value": "125-145",
+            "value": "136-150",
             "sub": null
           },
           {
             "label": "Z3",
-            "value": "136-146",
+            "value": "150-160",
             "sub": null
           },
           {
             "label": "Z4",
-            "value": "146-160",
+            "value": "160-168",
             "sub": null
           },
           {
             "label": "Z5",
-            "value": "160-175",
+            "value": "169-172",
             "sub": null
           },
           {
             "label": "Z6",
-            "value": "175-182",
+            "value": "173-182",
             "sub": null
           },
           {
@@ -199,7 +215,7 @@
           },
           {
             "label": "notes",
-            "value": "low-Z2 сдвинута вниз (118-136) — намеренно для длинных",
+            "value": "6-зонная модель (Кирилл 2026-10-16). NON-OVERLAPPING ascending: Z1<Z2L<Z2<Z3<Z4<Z5<Z6. Boundaries 118/135/150/160/168/172/173 — каждая верхняя зоны = нижняя следующей. LTH=164 lives inside Z4. VO2 target=172-174 sits at top of Z5 (172) and joins Z6 (173+). Z2L (118-135) — easy / conversational / long runs, dominant by km. Z2 (136-150) — endurance / upper aerobic, steady marathon work. Z2L is a primary zone, not a subzone: it is its own bucket (slow-aerobic capillarization) with Z2 (upper-aerobic) as the next zone. Z2L subzones-annotation kept for legacy compat.",
             "sub": "athlete.json"
           }
         ]
@@ -31711,8 +31727,8 @@
         },
         {
           "priority": "now",
-          "text": "Беги 5:50 целенаправленно. 73% объёма выше Z2_low — это не Z2.",
-          "principle": "Z2_low — диапазон по HR ≤ 138, не по ощущению."
+          "text": "Беги 5:50 целенаправленно. 73% объёма выше Z2L — это не Z2.",
+          "principle": "Z2L — диапазон по HR ≤ 138, не по ощущению."
         },
         {
           "priority": "soon",

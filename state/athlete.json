@@ -20,16 +20,32 @@
     "rhr": 54,
     "hrr": 128,
     "method": "Karvonen + %HRmax",
+    "lth": 164,
+    "vo2_target": "172-174",
     "zones": {
       "Z1": "100-118",
-      "Z2L": "118-136",
-      "Z2": "125-145",
-      "Z3": "136-146",
-      "Z4": "146-160",
-      "Z5": "160-175",
-      "Z6": "175-182"
+      "Z2L": "118-135",
+      "Z2": "136-150",
+      "Z3": "150-160",
+      "Z4": "160-168",
+      "Z5": "169-172",
+      "Z6": "173-182"
     },
-    "notes": "low-Z2 сдвинута вниз (118-136) — намеренно для длинных"
+    "subzones": {
+      "Z2L": {
+        "in": "Z2L",
+        "low": 118,
+        "high": 135,
+        "purpose": "easy / conversational / long runs (most km)"
+      },
+      "Z2M": {
+        "in": "Z2",
+        "low": 136,
+        "high": 150,
+        "purpose": "mid-aerobic / steady / marathon-pace work"
+      }
+    },
+    "notes": "6-зонная модель (Кирилл 2026-10-16). NON-OVERLAPPING ascending: Z1<Z2L<Z2<Z3<Z4<Z5<Z6. Boundaries 118/135/150/160/168/172/173 — каждая верхняя зоны = нижняя следующей. LTH=164 lives inside Z4. VO2 target=172-174 sits at top of Z5 (172) and joins Z6 (173+). Z2L (118-135) — easy / conversational / long runs, dominant by km. Z2 (136-150) — endurance / upper aerobic, steady marathon work. Z2L is a primary zone, not a subzone: it is its own bucket (slow-aerobic capillarization) with Z2 (upper-aerobic) as the next zone. Z2L subzones-annotation kept for legacy compat."
   },
   "injuries": [
     {

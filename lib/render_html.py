@@ -849,13 +849,15 @@ HR_ZONE_COLORS = {
 # per-zone bounds come from `parse_fit._load_hr_zone_profile()` and live in the
 # review JSON's `hr_zones_profile.zones`.
 HR_ZONE_BOUNDS = {
-    "Z1":   {"low": 100, "high": 117},
-    "Z1.5": {"low": 118, "high": 124},
-    "Z2":   {"low": 125, "high": 135},
-    "Z3":   {"low": 136, "high": 145},
-    "Z4":   {"low": 146, "high": 159},
-    "Z5":   {"low": 160, "high": 174},
-    "Z6":   {"low": 175, "high": 182},
+    # Last-resort fallback (per-zone), used only if athlete.json is
+    # entirely missing. Matches state/athlete.json (Кирилл 2026-10-16).
+    "Z1":  {"low": 100, "high": 118},
+    "Z2L": {"low": 118, "high": 135},
+    "Z2":  {"low": 136, "high": 150},
+    "Z3":  {"low": 150, "high": 160},
+    "Z4":  {"low": 160, "high": 168},
+    "Z5":  {"low": 169, "high": 172},
+    "Z6":  {"low": 173, "high": 182},
 }
 
 
