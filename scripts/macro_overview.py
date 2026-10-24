@@ -1,160 +1,192 @@
 #!/usr/bin/env python3
 """
-macro_overview.py — макро-план сезона → self-contained HTML (overview).
+macro_overview.py — общий план сезона → self-contained HTML.
 
-Источник данных: state/season_plan.json (фазы, TT, гонки) + state/athlete.json (зоны)
-+ ~/.hermes/coach/plans/spring-10k-2027-v2.md (помесячная/понедельная разбивка по неделям).
+Источник: state/season_plan.json (weekly_macro[], phases[], control_points[], races[]).
+Показывает ВСЕ недели сезона (W1–W49) с датами, а не только детализированные.
 
-Правила:
-- JSON — source of truth, HTML — производный (как в lib/render_html.py).
-- Self-contained: без fetch(), без CDN. Открывается двойным тапом на Android.
-- Тёмная гамма: --bg #0f1115, --accent #7aa2ff и т.д. (design tokens coach-планов).
+Структура страницы:
+  1. Шапка: сезон, даты, два пика
+  2. Дорожная карта фаз: каждая фаза — блок с неделями, целями и объёмом
+  3. Контрольные точки и гонки
+  4. Как это читать (короткие пояснения)
 
 Запуск:
-    python3 macro_overview.py [--out state/macro-overview.html]
+    python3 scripts/macro_overview.py
+    python3 scripts/macro_overview.py --out /tmp/ov.html
 """
 from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-MACRO_MD = Path.home() / ".hermes/coach/plans/spring-10k-2027-v2.md"
+sys.path.insert(0, str(REPO))
 
-# Средний темп макро-плана для перевода км → минуты (Z2 + интервалы смешаны).
-PACE_MIN_PER_KM = 5.7
+from lib import season_week  # noqa: E402
+
+PACE_MIN_PER_KM = 5.7  # мин/км для перевода бега в часы (оценка)
+
+MONTHS_SHORT = ["янв", "фев", "мар", "апр", "мая", "июн",
+                "июл", "авг", "сен", "окт", "ноя", "дек"]
+
+KIND_COLOR = {"run": "var(--run)", "bike": "var(--bike)",
+              "swim": "var(--swim)", "ofp": "var(--ofp)"}
 
 
-def _num(s: str) -> float:
-    m = re.search(r"(\d+)", s)
-    return float(m.group(1)) if m else 0.0
+def esc(s) -> str:
+    return (str(s if s is not None else "").replace("&", "&amp;")
+            .replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;"))
 
 
-def _mins(s: str) -> int:
-    """'2×25м' → 50, '1×60м' → 60, '1×30м' → 30."""
-    m = re.search(r"(\d+)\s*[×x]\s*(\d+)", s)
-    if m:
-        return int(m.group(1)) * int(m.group(2))
-    m = re.search(r"(\d+)", s)
+def _num(s) -> int:
+    import re
+    m = re.search(r"(\d+)", str(s))
     return int(m.group(1)) if m else 0
 
 
-def parse_macro_weeks(md_path: Path) -> dict[int, dict]:
-    """Парсит таблицу 'ПЛАН ПО НЕДЕЛЯМ' из макро- md."""
-    text = md_path.read_text(encoding="utf-8")
-    out: dict[int, dict] = {}
-    for line in text.splitlines():
-        if not line.startswith("|"):
-            continue
-        cells = [c.strip() for c in line.strip("|").split("|")]
-        if len(cells) < 9:
-            continue
-        m = re.fullmatch(r"W(\d+)", cells[0].replace("*", "").strip())
-        if not m:
-            continue
-        out[int(m.group(1))] = dict(
-            macro_date=cells[1], run=cells[2], long=cells[3],
-            key=re.sub(r"\*\*", "", cells[4]),
-            core=cells[5], bike=cells[6], swim=cells[7], total=cells[8],
-        )
-    return out
+def _mins(s) -> int:
+    import re
+    m = re.search(r"(\d+)\s*[×x]\s*(\d+)", str(s))
+    if m:
+        return int(m.group(1)) * int(m.group(2))
+    m = re.search(r"(\d+)", str(s))
+    return int(m.group(1)) if m else 0
+
+
+def fmt_range(ws: date, we: date) -> str:
+    """'11 – 17 окт' / '28 апр – 4 мая'"""
+    if ws.month == we.month:
+        return "{}–{} {}".format(ws.day, we.day, MONTHS_SHORT[we.month - 1])
+    return "{} {} – {} {}".format(ws.day, MONTHS_SHORT[ws.month - 1],
+                                 we.day, MONTHS_SHORT[we.month - 1])
+
+
+def fmt_day(d: date) -> str:
+    return "{} {}".format(d.day, MONTHS_SHORT[d.month - 1])
 
 
 def build_data(season_plan_path: Path, athlete_path: Path) -> dict:
-    """Данные овервью.
-
-    Источник — season_plan.json (weekly_macro[]): цели, объёмы, компоненты.
-    Конкретные структуры качественных сессий НЕ хранятся здесь: макро задаёт
-    цель (goal) и масштаб (scale), а вариант подбирает quality_session при
-    планировании недели. Список вариантов подтягивается из workout_templates.json
-    для отображения «возможных структур» на неделю.
-    """
-    sys.path.insert(0, str(REPO))
-    from lib import season_week
-
     sp = json.loads(season_plan_path.read_text(encoding="utf-8"))
     at = json.loads(athlete_path.read_text(encoding="utf-8"))
     start = sp.get("season_start_date", "2026-10-11")
-    templates = json.loads((REPO / "state/workout_templates.json").read_text(encoding="utf-8")).get("templates", {})
+    total_weeks = sp.get("horizon", {}).get("season_week_count", 49)
 
-    phase_goal_map = {p["id"]: p.get("goal", "") for p in sp.get("phases", []) if p.get("goal")}
+    templates = json.loads(
+        (REPO / "state/workout_templates.json").read_text(encoding="utf-8")
+    ).get("templates", {})
 
+    wm = {w["season_week"]: w for w in sp.get("weekly_macro", [])}
+
+    # --- недели: все 49, детализированные помечены ---
     weeks = []
-    for entry in sp.get("weekly_macro", []):
-        w = entry["season_week"]
-        ws, we = season_week.season_week_to_dates(w, start)
-        run_km = entry.get("run_km", 0)
-        run_h = round(round(run_km * PACE_MIN_PER_KM) / 60, 1)
-        bike_h = round(_mins(entry.get("bike", "")) / 60, 1)
-        swim_h = round(_mins(entry.get("swim", "")) / 60, 1)
-        ofp_h = round(_mins(entry.get("core", "")) / 60, 1)
-        comp_h = round(run_h + bike_h + swim_h + ofp_h, 1)
-        total_h = entry.get("total_h", 0)
-        q = entry.get("quality", {})
-        goal = q.get("goal", "")
-        scale = q.get("scale", "")
-        tpl = templates.get(goal, {})
-        variants = [v for v in tpl.get("variants", []) if v.get("scale") == scale]
-        weeks.append({
-            "w": w,
+    for n in range(1, total_weeks + 1):
+        ws, we = season_week.season_week_to_dates(n, start)
+        entry = wm.get(n)
+        w = {
+            "w": n,
             "start": ws.isoformat(),
             "end": we.isoformat(),
-            "run_km": run_km,
-            "long_km": entry.get("long_km", 0),
-            "phase": entry.get("phase", ""),
-            "phase_goal": phase_goal_map.get(entry.get("phase", ""), ""),
-            "goal": goal,
-            "goal_label": tpl.get("label", goal),
-            "goal_text": q.get("goal_text") or tpl.get("goal", ""),
-            "scale_text": q.get("scale_text", ""),
-            "scale": scale,
-            "work_zone": tpl.get("work_zone", ""),
-            "develops": tpl.get("develops", ""),
-            "variants": [{"id": v.get("id"), "label": v.get("label"), "work_m": v.get("work_m")}
-                         for v in variants],
-            "run_h": run_h, "bike_h": bike_h, "swim_h": swim_h, "ofp_h": ofp_h,
-            "comp_h": comp_h,
-            "total_macro_h": total_h,
-            "gap_h": round(total_h - comp_h, 1),
-            "core": entry.get("core", ""), "bike": entry.get("bike", ""), "swim": entry.get("swim", ""),
+            "start_d": fmt_range(ws, we),
+            "detailed": entry is not None,
+        }
+        if entry:
+            q = entry.get("quality") or {}
+            gid = q.get("goal")
+            tpl = templates.get(gid, {})
+            run_km = entry.get("run_km", 0)
+            w.update({
+                "run_km": run_km,
+                "long_km": entry.get("long_km", 0),
+                "run_h": round(round(run_km * PACE_MIN_PER_KM) / 60, 1),
+                "bike_h": round(_mins(entry.get("bike", "")) / 60, 1),
+                "swim_h": round(_mins(entry.get("swim", "")) / 60, 1),
+                "ofp_h": round(_mins(entry.get("core", "")) / 60, 1),
+                "goal_text": q.get("goal_text") or tpl.get("goal", ""),
+                "phase": entry.get("phase", ""),
+                "variants": [{"label": v.get("label"), "work_m": v.get("work_m")}
+                             for v in tpl.get("variants", []) if v.get("scale") == q.get("scale")],
+            })
+            w["comp_h"] = round(w["run_h"] + w["bike_h"] + w["swim_h"] + w["ofp_h"], 1)
+            w["total_h"] = entry.get("total_h", 0)
+        weeks.append(w)
+
+    # --- фазы: недели каждой фазы + цели ---
+    phase_meta = {p["id"]: p for p in sp.get("phases", [])}
+    phases = []
+    for p in sp.get("phases", []):
+        s = season_week.date_to_season_week(p["start"], start)
+        e = season_week.date_to_season_week(p.get("end", p["start"]), start)
+        ws, we = season_week.season_week_to_dates(s, start)
+        ph_weeks = [w for w in weeks if s <= w["w"] <= e]
+        detailed = [w for w in ph_weeks if w["detailed"]]
+        # Границы даты — фактические даты фазы из season_plan (они не совпадают
+        # с границами недель: фаза может кончиться в середине недели).
+        fs = datetime.fromisoformat(p["start"]).date()
+        fe = datetime.fromisoformat(p.get("end", p["start"])).date()
+        phases.append({
+            "id": p["id"],
+            "goal": p.get("goal", ""),
+            "focus": p.get("focus", ""),
+            "start": p["start"],
+            "end": p.get("end", p["start"]),
+            "w_from": s, "w_to": e,
+            "date_range": "{} {} — {} {}".format(
+                fmt_day(fs), fs.year, fmt_day(fe), fe.year),
+            "weeks_count": len(ph_weeks),
+            "detailed_count": len(detailed),
+            "target_h": p.get("hours_per_week_target"),
+            "is_event": bool(p.get("event")),
+            "notes": p.get("notes", ""),
+            "detailed": detailed,
         })
 
-    # CP привязаны только к неделе (season_week). День качественной сессии
-    # выбирается при планировании недели — в макро его нет.
-    tts = [{
-        "id": c["id"], "w": c.get("season_week"),
-        "kind": c.get("kind", "quality"),
-        "quality_goal": c.get("quality_goal"),
-        "what": c["what"], "target": c.get("target_value"),
-        "protocol": c.get("protocol", ""),
-    } for c in sp.get("control_points", [])]
+    # --- TT и гонки ---
+    tts = []
+    for c in sp.get("control_points", []):
+        s = c.get("session", {})
+        tts.append({
+            "w": c.get("season_week"),
+            "what": c["what"],
+            "test_type": s.get("test_type", ""),
+            "target_sec": s.get("target_sec"),
+            "pace": s.get("pace_min_per_km", ""),
+            "session_goal": s.get("session_goal", ""),
+            "kind": c.get("kind", ""),
+        })
+    races = []
+    for r in sp.get("races", []):
+        d = datetime.fromisoformat(r["date"]).date()
+        races.append({
+            "name": r["name"], "date": r["date"], "start": r.get("start_time", ""),
+            "w": season_week.date_to_season_week(d, start),
+            "date_short": fmt_day(d),
+            "weekday": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][d.weekday()],
+        })
 
-    races = [{
-        "name": r["name"], "date": r["date"],
-        "start": r.get("start_time", ""),
-        "w": season_week.date_to_season_week(r["date"], start),
-        "weekday": datetime.fromisoformat(r["date"]).strftime("%a"),
-    } for r in sp.get("races", [])]
+    # --- KPI ---
+    det = [w for w in weeks if w["detailed"]]
+    peak = max(det, key=lambda w: w["run_km"]) if det else None
 
     return {
-        "title": "Макро-план сезона · W1–W49",
-        "subtitle": (f"Сезон с {start} · гонка 1: S25 Berlin 10K 18.04.2027 · "
-                     f"гонка 2: олимпийский триатлон 12.09.2027"),
+        "title": "Макро-план сезона",
         "season_start": start,
-        "season_weeks": sp.get("horizon", {}).get("season_week_count", 49),
+        "total_weeks": total_weeks,
+        "detailed_weeks": len(det),
+        "phases": phases,
         "weeks": weeks,
-        "phases": sp.get("phases", []),
         "tts": tts,
         "races": races,
+        "peak_week": peak["w"] if peak else None,
+        "peak_km": peak["run_km"] if peak else 0,
+        "max_week_h": max((w["total_h"] for w in det), default=0),
         "zones": at.get("hr_zones", {}).get("zones", {}),
         "hr_max": at.get("hr_zones", {}).get("hr_max"),
         "rhr": at.get("hr_zones", {}).get("rhr"),
-        "pace_min_per_km": PACE_MIN_PER_KM,
-        "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "generated_at": datetime.now().strftime("%d.%m.%Y %H:%M"),
     }
 
 
@@ -174,221 +206,251 @@ TEMPLATE = """<!doctype html>
 html,body{margin:0;background:var(--bg);color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   -webkit-text-size-adjust:100%;line-height:1.45}
-body{padding:14px 12px 60px;max-width:860px;margin:0 auto}
-h1{font-size:20px;margin:0 0 4px}
-h2{font-size:15px;margin:22px 0 8px;color:var(--accent)}
-h3{font-size:12px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+body{padding:16px 12px 60px;max-width:880px;margin:0 auto}
+h1{font-size:21px;margin:0 0 3px}
+h2{font-size:16px;margin:26px 0 10px;color:var(--accent);display:flex;
+  align-items:baseline;gap:9px;flex-wrap:wrap}
+h2 .hint{font-size:11.5px;color:var(--muted);font-weight:400}
 .sub{color:var(--muted);font-size:12.5px;margin-bottom:14px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px}
 
-/* сводка */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.kpi{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:8px 6px;text-align:center}
-.kpi .v{font-size:15px;font-weight:600;color:var(--accent2);font-family:ui-monospace,SFMono-Regular,monospace}
-.kpi .l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-.zones-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;font-size:10.5px;margin-top:10px}
-.zone{background:var(--panel2);padding:4px 8px;border-radius:6px;border:1px solid var(--border);color:var(--muted)}
-.zone b{color:var(--accent);font-family:ui-monospace,SFMono-Regular,monospace;font-size:10.5px;margin-right:3px}
+.hero{background:linear-gradient(135deg,rgba(122,162,255,.09),rgba(92,214,192,.05));
+  border:1px solid rgba(122,162,255,.28);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.hero-dates{font-family:ui-monospace,SFMono-Regular,monospace;font-size:13px;color:var(--accent2)}
+.hero h1{font-size:21px}
+.hero-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.peaks{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.peak{background:rgba(15,17,21,.45);border:1px solid var(--border);border-radius:9px;
+  padding:7px 11px;flex:1;min-width:132px}
+.peak .pl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.peak .pv{font-size:14px;font-weight:600;color:var(--accent2);font-family:ui-monospace,monospace;margin-top:2px}
+.peak .pd{font-size:10.5px;color:var(--muted);margin-top:1px}
 
-/* бары объёма */
-.bar{height:20px;border-radius:5px;overflow:hidden;display:flex;background:var(--panel2);margin:5px 0 3px}
-.bar div{height:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  font-size:10px;line-height:20px;padding-left:4px;color:#0f1115;font-weight:600}
-.bar .b-run{background:var(--run)}
-.bar .b-bike{background:var(--bike)}
-.bar .b-swim{background:var(--swim)}
-.bar .b-ofp{background:var(--ofp)}
-.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10.5px;color:var(--muted);margin-top:2px}
-.legend span{display:flex;align-items:center;gap:4px}
+.zones{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:10.5px;margin-bottom:6px}
+.zone{background:var(--panel2);padding:4px 7px;border-radius:6px;border:1px solid var(--border);color:var(--muted)}
+.zone b{color:var(--accent);font-family:ui-monospace,monospace;font-size:10.5px;margin-right:2px}
+
+/* фаза */
+.phase{background:var(--panel);border:1px solid var(--border);border-radius:13px;
+  padding:12px 14px;margin-bottom:11px;overflow:hidden}
+.phase.event{border-color:rgba(126,231,135,.4);background:linear-gradient(135deg,rgba(126,231,135,.07),var(--panel))}
+.phase-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
+  padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:9px}
+.phase-l{font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:8px}
+.phase-w{font-size:10.5px;color:var(--muted);font-family:ui-monospace,monospace;
+  background:var(--panel2);padding:2px 7px;border-radius:5px;border:1px solid var(--border);
+  white-space:nowrap}
+.phase-r{text-align:right;font-size:11px;color:var(--muted);white-space:nowrap}
+.phase-r b{display:block;color:var(--text);font-size:12.5px;font-weight:600}
+.phase-goal{font-size:13px;color:var(--accent2);font-weight:600;margin-bottom:3px}
+.phase-focus{font-size:11.5px;color:var(--muted);line-height:1.45;margin-bottom:9px}
+.phase-note{font-size:11.5px;color:var(--warn);margin-bottom:8px}
+
+/* таблица недель */
+.wk{width:100%;border-collapse:collapse;font-size:11.5px}
+.wk th{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;
+  text-align:left;padding:4px 5px;border-bottom:1px solid var(--border);font-weight:600}
+.wk td{padding:6px 5px;border-bottom:1px solid rgba(42,49,64,.5);vertical-align:top}
+.wk tr:last-child td{border-bottom:none}
+.wk .wn{font-family:ui-monospace,monospace;font-weight:600;color:var(--accent);
+  width:52px;white-space:nowrap}
+.wk .wd{font-family:ui-monospace,monospace;color:var(--muted);font-size:10.5px;width:92px;white-space:nowrap}
+.wk .wg{width:44%}
+.wk .wg b{color:var(--accent2);font-weight:600;font-size:11.5px}
+.wk .wg .wg-top{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.wk .wg span{color:var(--muted);font-size:10px;display:block;margin-top:1px}
+.wk .num{text-align:right;font-family:ui-monospace,monospace;white-space:nowrap}
+.wk .km{color:var(--run);font-weight:600}
+.wk .mk{color:var(--muted);font-size:10px}
+.wk tr.ttr td{background:rgba(255,155,106,.07)}
+.wk tr.racerow td{background:rgba(126,231,135,.09)}
+.wk tr.now td{background:rgba(122,162,255,.13)}
+.badge{display:inline-block;font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:4px;
+  letter-spacing:.3px;vertical-align:1px;margin-left:4px}
+.badge-tt{background:rgba(255,155,106,.16);color:var(--warn);border:1px solid rgba(255,155,106,.3)}
+.badge-race{background:rgba(126,231,135,.16);color:var(--good);border:1px solid rgba(126,231,135,.3)}
+.badge-now{background:rgba(122,162,255,.18);color:var(--accent);border:1px solid rgba(122,162,255,.35)}
+.badge-next{background:rgba(92,214,192,.14);color:var(--accent2);border:1px solid rgba(92,214,192,.3)}
+.mini{height:5px;border-radius:3px;background:var(--panel2);overflow:hidden;min-width:38px;margin-top:3px}
+.mini i{display:block;height:100%}
+.dim{opacity:.42}
+.undet{font-size:10.5px;color:var(--muted);font-style:italic}
+
+/* сетка календаря */
+.cal{display:flex;flex-wrap:wrap;gap:3px;margin:10px 0 4px}
+.cw{width:30px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;
+  font-size:9.5px;font-family:ui-monospace,monospace;background:var(--panel2);
+  color:var(--muted);border:1px solid var(--border);position:relative}
+.cw.det{background:rgba(92,214,192,.14);color:var(--accent2);border-color:rgba(92,214,192,.3)}
+.cw.tt{background:rgba(255,155,106,.16);color:var(--warn);border-color:rgba(255,155,106,.35)}
+.cw.race{background:rgba(126,231,135,.18);color:var(--good);border-color:rgba(126,231,135,.4)}
+.cw.now{outline:2px solid var(--accent);outline-offset:1px}
+.cal-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10.5px;color:var(--muted);margin-top:6px}
+.cal-legend span{display:flex;align-items:center;gap:4px}
 .dot{width:9px;height:9px;border-radius:2px;display:inline-block}
 
-/* таблица */
-table{width:100%;border-collapse:collapse;font-size:11.5px}
-th{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;
-  text-align:left;padding:6px 4px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg)}
-td{padding:7px 4px;border-bottom:1px solid rgba(42,49,64,.6)}
-tr:last-child td{border-bottom:none}
-td.num,th.num{text-align:right;font-family:ui-monospace,SFMono-Regular,monospace}
-td.w{color:var(--accent);font-weight:600;font-family:ui-monospace,SFMono-Regular,monospace}
-td.date{color:var(--muted);font-size:10.5px}
-tr.tt-row td{background:rgba(255,155,106,.07)}
-tr.race-row td{background:rgba(126,231,135,.08)}
-tr.now-row td{background:rgba(122,162,255,.12)}
-.tag{display:inline-block;font-size:9px;padding:1px 5px;border-radius:4px;font-weight:600;letter-spacing:.3px}
-.tag-tt{background:rgba(255,155,106,.15);color:var(--warn);border:1px solid rgba(255,155,106,.3)}
-.tag-race{background:rgba(126,231,135,.15);color:var(--good);border:1px solid rgba(126,231,135,.3)}
-.gap-pos{color:var(--warn)}
-.gap-neg{color:var(--good)}
-.mini-bar{height:6px;border-radius:3px;background:var(--panel2);overflow:hidden;min-width:44px}
-.mini-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--run),var(--accent2))}
 .note{background:rgba(122,162,255,.06);border:1px solid rgba(122,162,255,.25);
-  border-radius:8px;padding:10px 12px;font-size:12.5px;line-height:1.5}
+  border-radius:9px;padding:10px 12px;font-size:12px;line-height:1.55;color:var(--text)}
 .note b{color:var(--accent)}
-.warn{background:rgba(255,155,106,.07);border:1px solid rgba(255,155,106,.3);
-  border-radius:8px;padding:10px 12px;font-size:12.5px;line-height:1.5}
-.warn b{color:var(--warn)}
-details{margin:6px 0}
-summary{cursor:pointer;font-size:12.5px;color:var(--accent);padding:4px 0}
-ul{margin:6px 0;padding-left:19px;font-size:12.5px;line-height:1.55}
-li{margin-bottom:3px}
-footer{margin-top:20px;text-align:center;font-size:11px;color:var(--muted)}
+.note ul{margin:6px 0 0;padding-left:18px}
+.note li{margin-bottom:3px}
+footer{margin-top:22px;text-align:center;font-size:11px;color:var(--muted)}
 </style></head><body>
 
-<h1>__TITLE__</h1>
-<div class="sub">__SUBTITLE__</div>
-
-<div class="card">
-  <h3>Сезон в цифрах</h3>
-  <div class="kpi-grid" id="kpis"></div>
-  <div class="zones-grid" id="zones"></div>
-</div>
-
-<div class="card">
-  <h3>Объём по видам — состав по неделям</h3>
-  <p class="sub" style="margin:0 0 8px">Длина полосы = сумма компонентов недели (бег+вел+плав+ОФП). Подписи — часы.</p>
-  <div id="bars"></div>
-  <div class="legend">
-    <span><i class="dot" style="background:var(--run)"></i>бег</span>
-    <span><i class="dot" style="background:var(--bike)"></i>вел</span>
-    <span><i class="dot" style="background:var(--swim)"></i>плав</span>
-    <span><i class="dot" style="background:var(--ofp)"></i>ОФП</span>
+<div class="hero">
+  <div class="hero-top">
+    <div>
+      <h1>__TITLE__</h1>
+      <div class="hero-sub">__SUB__</div>
+    </div>
+    <div class="hero-dates">__DATES__</div>
   </div>
+  <div class="peaks" id="peaks"></div>
 </div>
 
-<h2>Помесячная разбивка</h2>
-<div class="card">
-  <table>
-    <thead><tr>
-      <th>W</th><th>Даты</th><th class="num">Бег</th><th class="num">Long</th>
-      <th>Цель недели</th><th class="num">Бег ч</th><th class="num">Вел</th>
-      <th class="num">Плав</th><th class="num">ОФП</th><th class="num">Σ ч</th>
-      <th class="num">Total</th><th class="num">Δ</th>
-    </tr></thead>
-    <tbody id="wtbody"></tbody>
-  </table>
+<h2>Календарь сезона <span class="hint">49 недель · подсвечены детализированные</span></h2>
+<div class="cal" id="cal"></div>
+<div class="cal-legend">
+  <span><i class="dot" style="background:var(--accent2)"></i>детализировано</span>
+  <span><i class="dot" style="background:var(--warn)"></i>контрольная точка</span>
+  <span><i class="dot" style="background:var(--good)"></i>гонка</span>
 </div>
 
-<h2>Контрольные точки и гонки</h2>
-<div class="card"><ul id="ctl"></ul></div>
+<h2>Фазы</h2>
+<div id="phases"></div>
 
-<h2>Читать это</h2>
+<h2>Контрольные точки</h2>
+<div id="tts"></div>
+
+<h2>Как это читать</h2>
 <div class="note" id="notes"></div>
 
 <footer>Сгенерировано __GENERATED__ · coach · macro_overview.py</footer>
 
 <script type="application/json" id="plan-data">__DATA__</script>
 <script>
-const DATA = JSON.parse(document.getElementById('plan-data').textContent);
-const WEEK = DATA.weeks;
-const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const D = JSON.parse(document.getElementById('plan-data').textContent);
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const ttWeeks = new Set(D.tts.map(t=>t.w));
+const raceWeeks = new Set(D.races.map(r=>r.w));
 
-const today = new Date();
-function inWeek(ws, we){ const a=new Date(ws+'T00:00:00'), b=new Date(we+'T23:59:59');
-  return today>=a && today<=b; }
+// Пики
+document.getElementById('peaks').innerHTML = [
+  ['Пик бега', 'W'+D.peak_week+' · '+D.peak_km+'К', 'неделя максимального объёма'],
+  ['Детализировано', D.detailed_weeks+' из '+D.total_weeks, 'недель с понедельной раскладкой'],
+  ['Макс. неделя', D.max_week_h+'ч', 'по колонке Total макро'],
+  ['Контрольных точек', String(D.tts.length), 'TT внутри сезона'],
+].map(([l,v,d]) => '<div class="peak"><div class="pl">'+esc(l)+'</div><div class="pv">'+esc(v)
+  + '</div><div class="pd">'+esc(d)+'</div></div>').join('');
 
-// KPI
-const last = WEEK[WEEK.length-1];
-const peakKm = Math.max(...WEEK.map(w=>w.run_km));
-const peakW  = WEEK.find(w=>w.run_km===peakKm);
-document.getElementById('kpis').innerHTML = [
-  ['W'+peakW.w, 'пик бега'],
-  [peakKm+'К', 'макс. объём'],
-  [Math.max(...WEEK.map(w=>w.total_macro_h))+'ч', 'макс. неделя'],
-  [DATA.tts.length, 'контрольных точек'],
-].map(([v,l])=>'<div class="kpi"><div class="v">'+esc(v)+'</div><div class="l">'+esc(l)+'</div></div>').join('');
+// Календарь 49 недель
+const cal = document.getElementById('cal');
+cal.innerHTML = D.weeks.map(w => {
+  let cls = 'cw';
+  if (w.detailed) cls += ' det';
+  if (ttWeeks.has(w.w)) cls += ' tt';
+  if (raceWeeks.has(w.w)) cls += ' race';
+  return '<div class="'+cls+'" title="W'+w.w+' · '+w.start_d+'">'+w.w+'</div>';
+}).join('');
 
-document.getElementById('zones').innerHTML = Object.entries(DATA.zones)
-  .map(([k,v])=>'<div class="zone"><b>'+esc(k)+'</b> '+esc(v)+'</div>').join('');
+// Фазы
+const nowW = (() => {
+  const t = new Date().toISOString().slice(0,10);
+  const hit = D.weeks.find(w => w.start <= t && t <= w.end);
+  return hit ? hit.w : null;
+})();
+// Следующая неделя — та, которую планируем (текущая ещё не закончилась)
+const nextW = nowW ? ((D.weeks.find(w => w.w > nowW) || {}).w) : null;
 
-// бары по неделям
-const maxComp = Math.max(...WEEK.map(w=>w.comp_h));
-document.getElementById('bars').innerHTML = WEEK.map(w=>{
-  const pct = h => (h/ (maxComp) * 100).toFixed(2) + '%';
-  const seg = (cls,h,label)=> h>0 ? '<div class="'+cls+'" style="width:'+pct(h)+'" title="'+label+'">'+label+'</div>' : '';
-  return '<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px">'
-    + '<div style="width:26px;font-family:ui-monospace,monospace;font-size:10px;color:var(--muted)">W'+w.w+'</div>'
-    + '<div class="bar" style="flex:1">'
-    + seg('b-run', w.run_h, w.run_h+'ч')
-    + seg('b-bike', w.bike_h, w.bike_h+'ч')
-    + seg('b-swim', w.swim_h, w.swim_h+'ч')
-    + seg('b-ofp', w.ofp_h, w.ofp_h+'ч')
-    + '</div>'
-    + '<div style="width:42px;text-align:right;font-family:ui-monospace,monospace;font-size:10px;color:var(--accent2)">'+w.comp_h+'ч</div>'
+document.getElementById('phases').innerHTML = D.phases.map(p => {
+  let rows = '';
+  if (p.detailed.length) {
+    for (const w of p.detailed) {
+      let cls = '';
+      let badge = '';
+      if (ttWeeks.has(w.w)) { cls = 'ttr'; badge = '<span class="badge badge-tt">TT</span>'; }
+      if (raceWeeks.has(w.w)) { cls = 'racerow'; badge = '<span class="badge badge-race">ГОНКА</span>'; }
+      if (nowW === w.w) { cls = 'now'; badge += '<span class="badge badge-now">сейчас</span>'; }
+      else if (nextW === w.w) { badge += '<span class="badge badge-next">планируется</span>'; }
+      const vs = (w.variants||[]).map(v=>v.label).join(' · ');
+      rows += '<tr class="'+cls+'">'
+        + '<td class="wn">'+w.w+'</td>'
+        + '<td class="wd">'+esc(w.start_d)+'</td>'
+        + '<td class="wg"><div class="wg-top"><b>'+esc(w.goal_text)+'</b>'+badge+'</div>'
+        +   (vs ? '<span>'+esc(vs)+'</span>' : '')
+        + '</td>'
+        + '<td class="num km">'+w.run_km+'К</td>'
+        + '<td class="num mk">'+w.long_km+'К</td>'
+        + '<td class="num">'+w.comp_h+'ч</td>'
+        + '<td class="num mk">'+w.total_h+'ч</td>'
+        + '</tr>';
+    }
+  } else {
+    rows = '<tr><td class="wn">' + p.w_from + '–' + p.w_to + '</td>'
+      + '<td class="undet" colspan="6">не детализировано по неделям — фаза задаёт только вектор</td></tr>';
+  }
+  const head = '<div class="phase-hd">'
+    + '<div class="phase-l">' + esc(p.id) + ' <span class="phase-w">W' + p.w_from + '–W' + p.w_to + '</span></div>'
+    + '<div class="phase-r"><b>' + p.date_range + '</b>' + p.weeks_count + ' нед.'
+    + (p.target_h ? ' · target ' + p.target_h + 'ч/нед' : '') + '</div>'
     + '</div>';
+  const goal = p.goal ? '<div class="phase-goal">' + esc(p.goal) + '</div>' : '';
+  const focus = p.focus ? '<div class="phase-focus">' + esc(p.focus) + '</div>' : '';
+  const note = p.notes ? '<div class="phase-note">' + esc(p.notes) + '</div>' : '';
+  const cols = p.detailed.length
+    ? '<th class="num">Бег</th><th class="num">Long</th>'
+      + '<th class="num">Σ ч</th><th class="num">Total</th>'
+    : '';
+  const tbl = '<table class="wk"><thead><tr>'
+    + '<th>W</th><th>Даты</th><th>Цель недели</th>' + cols
+    + '</tr></thead><tbody>' + rows + '</tbody></table>';
+  return '<div class="phase' + (p.is_event ? ' event' : '') + '">' + head + goal + focus + note + tbl + '</div>';
 }).join('');
 
-// таблица
-const ttWeeks = new Set(DATA.tts.map(t=>t.w));
-const raceWeeks = new Set(DATA.races.map(r=>r.w));
-const nowWeek = WEEK.find(w=>inWeek(w.start,w.end));
-document.getElementById('wtbody').innerHTML = WEEK.map(w=>{
-  let cls='', tag='';
-  if (raceWeeks.has(w.w)) { cls='race-row'; tag='<span class="tag tag-race">ГОНКА</span>'; }
-  else if (ttWeeks.has(w.w)) { cls='tt-row'; tag='<span class="tag tag-tt">TT</span>'; }
-  if (nowWeek && nowWeek.w===w.w) cls='now-row';
-  const gapCls = w.gap_h>=0?'gap-pos':'gap-neg';
-  return '<tr class="'+cls+'">'
-    + '<td class="w">'+w.w+'</td>'
-    + '<td class="date">'+esc(w.start.slice(8))+'.'+esc(w.start.slice(5,7))+' – '+esc(w.end.slice(8))+'.'+esc(w.end.slice(5,7))+'</td>'
-    + '<td class="num">'+w.run_km+'К</td>'
-    + '<td class="num">'+w.long_km+'К</td>'
-    + '<td style="font-size:10.5px"><b>'+esc(w.goal_text||w.goal||w.goal_label)+'</b>'
-    + (w.phase_goal ? '<div style="color:var(--muted);font-size:9.5px;margin-top:2px">фаза: '+esc(w.phase_goal)+'</div>' : '')
-    + (w.variants && w.variants.length
-       ? '<div style="color:var(--muted);font-size:9.5px;margin-top:2px">'
-         + esc(w.variants.map(v=>v.label+' ('+v.work_m+'м)').join(' · ')) + '</div>'
-       : '')
-    + ' '+tag+'</td>'
-    + '<td class="num">'+w.run_h+'</td>'
-    + '<td class="num">'+w.bike_h+'</td>'
-    + '<td class="num">'+w.swim_h+'</td>'
-    + '<td class="num">'+w.ofp_h+'</td>'
-    + '<td class="num" style="color:var(--accent2)">'+w.comp_h+'</td>'
-    + '<td class="num">'+w.total_macro_h+'</td>'
-    + '<td class="num '+gapCls+'">'+(w.gap_h>=0?'+':'')+w.gap_h+'</td>'
-    + '</tr>';
+// TT
+const ttRows = D.tts.map(t => {
+  const target = t.target_sec ? Math.floor(t.target_sec/60)+':'+String(t.target_sec%60).padStart(2,'0') : '—';
+  const types = {pace:'темповый', max:'max effort', sim:'симуляция', metric:'замер'};
+  return '<tr><td class="wn">W'+t.w+'</td>'
+    + '<td class="wd">' + (t.test_type ? (types[t.test_type]||t.test_type) : 'замер') + '</td>'
+    + '<td class="wg"><b>' + esc(t.what) + '</b><span>' + esc(t.session_goal||'') + '</span></td>'
+    + '<td class="num">' + target + '</td>'
+    + '<td class="num mk">' + (t.pace ? t.pace + '/км' : '—') + '</td></tr>';
 }).join('');
+document.getElementById('tts').innerHTML = '<div class="phase"><table class="wk"><thead><tr>'
+  + '<th>W</th><th>Тип</th><th>Что и зачем</th><th class="num">Цель</th><th class="num">Темп</th>'
+  + '</tr></thead><tbody>' + ttRows + '</tbody></table></div>';
 
-// контрольные точки и гонки
-const items = [];
-DATA.tts.forEach(t=>{
-  items.push('<li><b>W'+t.w+'</b> · '+esc(t.what)
-    + (t.target? ' · цель '+(t.target>=60? Math.floor(t.target/60)+':'+String(t.target%60).padStart(2,'0') : t.target+'с') : '')
-    + '</li>');
-});
-DATA.races.forEach(r=>{
-  items.push('<li><b>'+esc(r.weekday)+' '+esc(r.date)+'</b> · W'+r.w+' · <b>'+esc(r.name)+'</b>'+(r.start?' · старт '+esc(r.start):'')+'</li>');
-});
-document.getElementById('ctl').innerHTML = items.join('');
+// Гонки
+const raceHtml = D.races.map(r => '<div class="peak" style="margin-bottom:8px">'
+  + '<div class="pl">W' + r.w + ' · ' + esc(r.weekday) + '</div>'
+  + '<div class="pv" style="font-size:13px">' + esc(r.name) + '</div>'
+  + '<div class="pd">' + esc(r.date) + (r.start ? ' · старт ' + esc(r.start) : '') + '</div></div>').join('');
+document.getElementById('tts').innerHTML += '<div class="phase">' + raceHtml + '</div>';
 
-// заметки
-const gaps = WEEK.map(w=>w.gap_h);
-const avgGap = (gaps.reduce((a,b)=>a+b,0)/gaps.length).toFixed(1);
+// Пояснения
 document.getElementById('notes').innerHTML =
-  '<b>Колонка Total ≠ сумма компонентов.</b> В макро-плане Total указан как одно число, '
-  + 'но сумма бег+вел+плав+ОФП даёт меньше на <b>'+avgGap+' ч в среднем</b> (от '
-  + Math.min(...gaps).toFixed(1)+' до '+Math.max(...gaps).toFixed(1)+' ч). Разрыв растёт с объёмом. '
-  + 'Именно поэтому факт W1 (6.27 ч) больше, чем сумма компонентов макро W1 (4.65 ч) — '
-  + 'фактические недели ближе к Total, чем к сумме. Перед тем как ставить цель «9 ч/нед», '
-  + 'надо решить, что считается истиной: Total или сумма компонентов.<br><br>'
-  + '<b>Даты в макро-таблице</b> — понедельники (W1 = 12.10), а сезон в season_plan.json начинается '
-  + 'с воскресенья (W1 = 11.10). Разница 1 день — именно из-за неё все TT стояли на четверге. '
-  + 'Здесь даты приведены к season_week (вс→сб).<br><br>'
-  + '<b>Макро задаёт цель, а не структуру.</b> Колонка «Цель» — это адаптационная задача недели '
-  + '(VO2max / threshold / tempo и т.д.). Конкретная структура (5×800 или 4×1К) подбирается при '
-  + 'планировании недели из каталога шаблонов — варианты показаны мелким шрифтом под целью. '
-  + 'Guard: объём работы не откатывается ниже 0.9 × последней реальной интервальной сессии. <br><br>'
-  + '<b>Бег переведён в часы</b> по среднему темпу '+DATA.pace_min_per_km+' мин/км (Z2 и интервалы смешаны), '
-  + 'поэтому это оценка, а не точный трек.';
+  '<b>Недельная раскладка есть только у ' + D.detailed_weeks + ' недель.</b> '
+  + 'Остальные недели сезона заданы фазой (вектор развития и объём), '
+  + 'конкретика по ним не расписана — она появится при планировании.<br><br>'
+  + '<b>Колонка Σ ч — сумма компонентов</b> (бег + вел + плав + ОФП), '
+  + '<b>Total — колонка из макро-плана</b>. Они не сходятся: разрыв растёт с объёмом. '
+  + 'Фактические недели ближе к Total, чем к сумме — отсюда вопрос, что считать целью.<br><br>'
+  + '<b>Бег переведён в часы</b> по среднему темпу 5.7 мин/км (Z2 и интервалы смешаны) — это оценка.';
 </script>
 </body></html>"""
 
 
 def render(data: dict, out_path: Path) -> Path:
+    sub = "Два пика: S25 Berlin 10K (18.04.2027) → олимпийский триатлон (12.09.2027)"
+    dates = "{} — {}".format(
+        datetime.fromisoformat(data["season_start"]).strftime("%d.%m.%Y"),
+        "18.09.2027")
     body = (TEMPLATE
-            .replace("__TITLE__", data["title"])
-            .replace("__SUBTITLE__", data["subtitle"])
-            .replace("__GENERATED__", data["generated_at"])
+            .replace("__TITLE__", esc(data["title"]))
+            .replace("__SUB__", esc(sub))
+            .replace("__DATES__", esc(dates))
+            .replace("__GENERATED__", esc(data["generated_at"]))
             .replace("__DATA__", json.dumps(data, ensure_ascii=False)))
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(body, encoding="utf-8")
@@ -405,7 +467,8 @@ def main() -> None:
     Path(args.json_out).write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
     out = render(data, Path(args.out))
     print(f"json: {args.json_out}")
-    print(f"html: {out} ({out.stat().st_size} B, {len(data['weeks'])} недель)")
+    print(f"html: {out} ({out.stat().st_size} B, {len(data['weeks'])} недель, "
+          f"{len(data['phases'])} фаз, {len(data['tts'])} TT)")
 
 
 if __name__ == "__main__":
