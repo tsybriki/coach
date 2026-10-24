@@ -19,7 +19,7 @@
       "method": "pace_with_hr_cap",
       "work_zone": "Z6",
       "hr_target": 172,
-      "pace": "<4:10",
+      "pace": "< 4:00",
       "rest_zone": "Z1",
       "indicators": "Время в Z6/Z7, темп на 800м, падение скорости в последних 200м",
       "phases": [
@@ -31,7 +31,7 @@
       "variants": [
         {
           "id": "6x400",
-          "label": "6×400",
+          "label": "6×400 @ 3:55",
           "scale": "light",
           "work_m": 2400,
           "blocks": [
@@ -50,7 +50,7 @@
         },
         {
           "id": "8x400",
-          "label": "8×400",
+          "label": "8×400 @ 3:45",
           "scale": "light",
           "work_m": 3200,
           "blocks": [
@@ -69,7 +69,7 @@
         },
         {
           "id": "10x200",
-          "label": "10×200",
+          "label": "10×200 @ 3:40",
           "scale": "medium",
           "work_m": 2000,
           "blocks": [
@@ -88,7 +88,7 @@
         },
         {
           "id": "5x800",
-          "label": "5×800",
+          "label": "5×800 @ 3:55",
           "scale": "medium",
           "work_m": 4000,
           "blocks": [
@@ -107,7 +107,7 @@
         },
         {
           "id": "2x2k+800",
-          "label": "2×2К + 1×800",
+          "label": "2×2К @ 4:05 + 1×800 @ 3:50",
           "scale": "medium",
           "work_m": 4800,
           "blocks": [
@@ -136,7 +136,7 @@
         },
         {
           "id": "4x2k",
-          "label": "4×2К",
+          "label": "4×2К @ 4:10",
           "scale": "heavy",
           "work_m": 8000,
           "blocks": [
@@ -155,7 +155,7 @@
         },
         {
           "id": "5x2k",
-          "label": "5×2К",
+          "label": "5×2К @ 4:05",
           "scale": "heavy",
           "work_m": 10000,
           "blocks": [
@@ -174,7 +174,7 @@
         },
         {
           "id": "8x1k",
-          "label": "8×1К",
+          "label": "8×1К @ 3:50",
           "scale": "peak",
           "work_m": 8000,
           "blocks": [
@@ -201,7 +201,7 @@
       "method": "pace_with_hr_cap",
       "work_zone": "Z5",
       "hr_target": 164,
-      "pace": "4:20-4:35",
+      "pace": "4:10-4:20",
       "rest_zone": "Z1",
       "indicators": "Темп на 1К без просадки, HR держится в Z5 без выхода в Z6",
       "phases": [
@@ -212,7 +212,7 @@
       "variants": [
         {
           "id": "4x1k_easy",
-          "label": "4×1К @ 4:35",
+          "label": "4×1К @ 4:20",
           "scale": "light",
           "work_m": 4000,
           "blocks": [
@@ -231,7 +231,7 @@
         },
         {
           "id": "4x1k",
-          "label": "4×1К @ 4:25",
+          "label": "4×1К @ 4:15",
           "scale": "medium",
           "work_m": 4000,
           "blocks": [
@@ -250,7 +250,7 @@
         },
         {
           "id": "5x1k",
-          "label": "5×1К @ 4:25",
+          "label": "5×1К @ 4:12",
           "scale": "medium",
           "work_m": 5000,
           "blocks": [
@@ -269,7 +269,7 @@
         },
         {
           "id": "6x800",
-          "label": "6×800 @ 4:20",
+          "label": "6×800 @ 4:10",
           "scale": "heavy",
           "work_m": 4800,
           "blocks": [
@@ -288,7 +288,7 @@
         },
         {
           "id": "8x800",
-          "label": "8×800 @ 4:15",
+          "label": "8×800 @ 4:08",
           "scale": "peak",
           "work_m": 6400,
           "blocks": [
@@ -315,7 +315,7 @@
       "method": "pace_with_hr_cap",
       "work_zone": "Z5",
       "hr_target": 164,
-      "pace": "4:20-4:30",
+      "pace": "4:10-4:15",
       "rest_zone": "Z1",
       "indicators": "Ровный темп на 2К без дрейфа HR, отсутствие завала в последние 400м",
       "phases": [
@@ -325,7 +325,7 @@
       "variants": [
         {
           "id": "2x2k",
-          "label": "2×2К @ 4:30",
+          "label": "2×2К @ 4:15",
           "scale": "light",
           "work_m": 4000,
           "blocks": [
@@ -344,7 +344,7 @@
         },
         {
           "id": "3x2k",
-          "label": "3×2К @ 4:25",
+          "label": "3×2К @ 4:12",
           "scale": "medium",
           "work_m": 6000,
           "blocks": [
@@ -363,7 +363,7 @@
         },
         {
           "id": "4x2k",
-          "label": "4×2К @ 4:20",
+          "label": "4×2К @ 4:10",
           "scale": "heavy",
           "work_m": 8000,
           "blocks": [
@@ -382,7 +382,7 @@
         },
         {
           "id": "2x3k",
-          "label": "2×3К @ 4:25",
+          "label": "2×3К @ 4:12",
           "scale": "heavy",
           "work_m": 6000,
           "blocks": [
@@ -409,7 +409,7 @@
       "method": "hr_or_pace",
       "work_zone": "Z4",
       "hr_target": 158,
-      "pace": "4:50-5:20",
+      "pace": "4:20-4:45",
       "rest_zone": "Z1",
       "indicators": "Ровный HR в Z4, отсутствие завала, длина непрерывного отрезка",
       "phases": [
@@ -492,7 +492,7 @@
       "method": "pace_with_hr_cap",
       "work_zone": "Z5",
       "hr_target": 168,
-      "pace": "4:00-4:30",
+      "pace": "4:00-4:15",
       "rest_zone": "Z1",
       "indicators": "Порог держится без завала, скоростной блок в конце — на Z6 без перебора",
       "phases": [
@@ -502,7 +502,7 @@
       "variants": [
         {
           "id": "3x1k+2x400",
-          "label": "3×1К (порог) + 2×400 (VO2)",
+          "label": "3×1К @ 4:15 + 2×400 @ 3:45",
           "scale": "light",
           "work_m": 3800,
           "blocks": [
@@ -531,7 +531,7 @@
         },
         {
           "id": "3x1k+2x800",
-          "label": "3×1К (порог) + 2×800 (VO2)",
+          "label": "3×1К @ 4:12 + 2×800 @ 3:50",
           "scale": "medium",
           "work_m": 4600,
           "blocks": [
@@ -560,7 +560,7 @@
         },
         {
           "id": "5k+4x400",
-          "label": "5К tempo + 4×400 (VO2)",
+          "label": "5К tempo @ 4:10 + 4×400 @ 3:45",
           "scale": "heavy",
           "work_m": 6600,
           "blocks": [
@@ -594,7 +594,7 @@
       "method": "pace_with_hr_cap",
       "work_zone": "Z4",
       "hr_target": 168,
-      "pace": "4:30→3:45",
+      "pace": "4:20→3:45",
       "rest_zone": "Z1",
       "indicators": "Ровный подъём темпа по ступеням, контроль на вершине",
       "phases": [
@@ -603,7 +603,7 @@
       "variants": [
         {
           "id": "800-600-400",
-          "label": "800 → 600 → 400",
+          "label": "800 @ 4:20 → 600 @ 4:00 → 400 @ 3:45",
           "scale": "light",
           "work_m": 1800,
           "blocks": [
@@ -637,7 +637,7 @@
         },
         {
           "id": "1k-800-400",
-          "label": "1К → 800 → 400",
+          "label": "1К @ 4:20 → 800 @ 3:55 → 400 @ 3:45",
           "scale": "medium",
           "work_m": 2200,
           "blocks": [
@@ -671,7 +671,7 @@
         },
         {
           "id": "1200-800-600-400",
-          "label": "1200 → 800 → 600 → 400",
+          "label": "1200 @ 4:20 → 800 @ 3:55 → 600 @ 3:50 → 400 @ 3:45",
           "scale": "heavy",
           "work_m": 3000,
           "blocks": [
@@ -719,7 +719,7 @@
       "method": "free",
       "work_zone": "Z5",
       "hr_target": 166,
-      "pace": "5:20 / 4:00",
+      "pace": "5:10 / 3:50",
       "rest_zone": "Z1",
       "indicators": "Общее самочувствие, отсутствие перебора в быстрых отрезках",
       "phases": [
@@ -729,7 +729,7 @@
       "variants": [
         {
           "id": "200-800 x4",
-          "label": "4 цикла: 200@5:20 + 800@4:00",
+          "label": "4 цикла: 200@5:10 + 800@3:50",
           "scale": "light",
           "work_m": 4000,
           "blocks": [
@@ -748,7 +748,7 @@
         },
         {
           "id": "200-800 x6",
-          "label": "6 циклов: 200@5:20 + 800@4:00",
+          "label": "6 циклов: 200@5:10 + 800@3:50",
           "scale": "medium",
           "work_m": 6000,
           "blocks": [
@@ -767,7 +767,7 @@
         },
         {
           "id": "200-800 x8",
-          "label": "8 циклов: 200@5:20 + 800@4:00",
+          "label": "8 циклов: 200@5:10 + 800@3:50",
           "scale": "heavy",
           "work_m": 8000,
           "blocks": [
@@ -794,7 +794,7 @@
       "method": "hr_then_pace",
       "work_zone": "Z2",
       "hr_target": 145,
-      "pace": "5:00→4:30",
+      "pace": "4:50→4:25",
       "rest_zone": "Z1",
       "indicators": "Ровный Z2 до последней части, контроль темпа в прогрессии",
       "phases": [
@@ -913,5 +913,6 @@
         }
       ]
     }
-  }
+  },
+  "_goal_note": "Темпы пересчитаны под цель сезона: 10К за 40:00 = 4:00/км. Порог (LTH 164) = 4:10–4:20, VO2max < 4:00, race pace = 4:00."
 }

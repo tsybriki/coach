@@ -219,6 +219,8 @@ def build_data(season_plan_path: Path, athlete_path: Path,
             "weekday": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"][d.weekday()],
         })
 
+    season_goal = sp.get("season_goal", {})
+
     det = [w for w in weeks if w["detailed"]]
     peak = max(det, key=lambda w: w["run_km"]) if det else None
     act_weeks = [w for w in weeks if "actual" in w]
@@ -239,6 +241,7 @@ def build_data(season_plan_path: Path, athlete_path: Path,
         "actual_run_km": sum(w["actual"]["run_km"] for w in act_weeks),
         "actual_h": round(sum(w["actual"]["total_h"] for w in act_weeks), 1),
         "color_label": COLOR_LABEL,
+        "season_goal": season_goal,
         "generated_at": datetime.now().strftime("%d.%m.%Y %H:%M"),
     }
 
@@ -272,6 +275,12 @@ h2 .hint{font-size:11px;color:var(--muted);font-weight:400}
 .hero{background:linear-gradient(135deg,rgba(122,162,255,.09),rgba(92,214,192,.05));
   border:1px solid rgba(122,162,255,.26);border-radius:14px;padding:13px 15px;margin-bottom:14px}
 .hero h1{font-size:20px}
+.goal-hero{border-color:rgba(255,107,90,.35);
+  background:linear-gradient(135deg,rgba(255,107,90,.10),rgba(122,162,255,.05))}
+.goal-line{font-size:9.5px;color:var(--warn);text-transform:uppercase;letter-spacing:.7px;
+  font-weight:700}
+.goal-head{font-size:19px;font-weight:700;color:#ff8f7a;line-height:1.25;margin:3px 0 4px}
+.goal-gap{font-size:11.5px;color:var(--muted);margin-bottom:9px}
 .hero-sub{font-size:12px;color:var(--muted);margin-top:3px}
 .hero-dates{font-family:ui-monospace,monospace;font-size:12px;color:var(--accent2);margin-top:6px}
 .peaks{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:11px}
@@ -386,7 +395,10 @@ table.tt-tbl .sm{color:var(--muted);font-size:10px}
 footer{margin-top:20px;text-align:center;font-size:11px;color:var(--muted)}
 </style></head><body>
 
-<div class="hero">
+<div class="hero goal-hero">
+  <div class="goal-line">ЦЕЛЬ СЕЗОНА</div>
+  <div class="goal-head" id="goalhead"></div>
+  <div class="goal-gap" id="goalgap"></div>
   <h1>__TITLE__</h1>
   <div class="hero-sub">Два пика: S25 Berlin 10K (18.04.2027) → олимпийский триатлон (12.09.2027)</div>
   <div class="hero-dates">__DATES__</div>
@@ -418,6 +430,14 @@ const ttWeeks = new Set(D.tts.map(t=>t.w));
 const raceWeeks = new Set(D.races.map(r=>r.w));
 const COLORVAR = {teal:'var(--c-teal)', orange:'var(--c-orange)', ember:'var(--c-ember)',
   red:'var(--c-red)', violet:'var(--c-violet)', cp:'var(--cp)', gray:'var(--c-gray)'};
+
+// Цель сезона
+const SG = D.season_goal || {};
+if (SG.headline) {
+  document.getElementById('goalhead').textContent = SG.headline;
+  document.getElementById('goalgap').textContent =
+    'сейчас ' + (SG.current_form||'') + ' · разрыв ' + (SG.gap||'');
+}
 
 // Пики
 document.getElementById('peaks').innerHTML = [

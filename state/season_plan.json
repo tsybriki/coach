@@ -14,19 +14,22 @@
       "race_date": "2027-04-18",
       "goal_metric": {
         "type": "time_sec",
-        "target": 2460,
-        "target_friendly": "41:00"
+        "target": 2400,
+        "target_friendly": "40:00"
       },
       "priority": 1,
       "primary": true,
       "venue": "S25 Berlin 10K, Olympischer Platz → Olympiastadion Berlin",
       "start_time": "10:30",
       "realistic_fork": {
-        "best": "40:30",
-        "likely": "41:00",
-        "conservative": "41:30",
-        "pbandit_pb": "40:00 (если всё идеально)"
-      }
+        "best": "40:00",
+        "likely": "40:30",
+        "conservative": "41:00",
+        "pb": "40:04 (личный рекорд, 2026?)",
+        "_note": "Цель сезона — штурм 40:00 (4:00/км). Всё в макро подчинено этому темпу: race-pace блок должен выходить на 4:00, а не на 4:20."
+      },
+      "race_pace_min_per_km": "4:00",
+      "target_pace_min_per_km": "4:00"
     },
     {
       "id": "g_tri_autumn",
@@ -165,16 +168,17 @@
         "test_type": "pace",
         "distance_m": 3000,
         "target_sec": 840,
-        "session_goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.",
+        "session_goal": "Темповый тест 3К: фиксируем текущий порог на старте цикла.",
         "measures": [
           "threshold_pace",
           "hr_drift"
         ],
         "protocol": "разминка 15мин Z1 → 3К на 4:40/км (контроль темпа по 200м, сплит-обратный) → заминка 12мин Z1",
-        "pass_criteria": "Держать 4:40/км без просадки на последней 1К. Дрейф ≤ 5 с/км. HR держится в Z3–Z4 (до 160), без выхода в Z5.",
-        "fail_action": "Не дтянул → задерживаем Phase 1 на +1 неделю (правило макро). Объём следующей недели не растёт.",
+        "pass_criteria": "≤ 14:00 при HR ≤ 165 — порог подтверждён, берём лестницу к 4:00.",
+        "fail_action": "> 14:00 или HR > 168 — порог ниже расчётного, сдвигаем лестницу на +1 неделю.",
         "pace_min_per_km": "4:40",
-        "pace_sec_per_km": 280.0
+        "pace_sec_per_km": 280.0,
+        "_ladder_note": "Лестница под цель сезона 40:00 (4:00/км)."
       }
     },
     {
@@ -196,16 +200,17 @@
         "test_type": "max",
         "distance_m": 5000,
         "target_sec": 1350,
-        "session_goal": "Максимальная скорость на 5К — меряем VO2max и способность держать темп на усталости.",
+        "session_goal": "Максимум 5К: сколько реально держится в отказ.",
         "measures": [
           "vo2max",
           "threshold_pace"
         ],
         "protocol": "разминка 15мин Z1 → 5К all-out (не тянуть на старте, но держать максимум со 2-го километра) → заминка 12мин Z1",
-        "pass_criteria": "Финиш ≤ 22:30. Темп на последней 1К не хуже первой более чем на 10 с/км. HR держится в Z5, без провала.",
-        "fail_action": "Не дотянул → объём не наращиваем, W9–W10 остаются Z2/tempo. Пересмотр через W12 (следующая 3К TT).",
+        "pass_criteria": "≤ 22:30 — скорость на 10К уже близка к 4:10.",
+        "fail_action": "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11.",
         "pace_min_per_km": "4:30",
-        "pace_sec_per_km": 270.0
+        "pace_sec_per_km": 270.0,
+        "_ladder_note": "Лестница под цель сезона 40:00 (4:00/км)."
       }
     },
     {
@@ -225,46 +230,49 @@
       "session": {
         "test_type": "max",
         "distance_m": 3000,
-        "target_sec": 780,
-        "session_goal": "Максимальная скорость на 3К — основной тест VO2max в середине сезона.",
+        "target_sec": 740,
+        "session_goal": "Максимум 3К: проверяем, что порог ушёл в 4:07.",
         "measures": [
           "top_end_speed",
           "vo2max"
         ],
         "protocol": "разминка 15мин Z1 → 3К all-out → заминка 12мин Z1",
-        "pass_criteria": "Финиш ≤ 13:30 — план жив. > 13:30 — риск, пересмотр фазы.",
-        "fail_action": "> 13:30 → риск для плана, откат объёма на 1–2 недели.",
-        "pace_min_per_km": "4:20",
-        "pace_sec_per_km": 260.0
+        "pass_criteria": "≤ 12:20 при HR 168+ — порог на месте, идём к race pace.",
+        "fail_action": "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма.",
+        "pace_min_per_km": "4:07",
+        "pace_sec_per_km": 260.0,
+        "_ladder_note": "Лестница под цель сезона 40:00 (4:00/км)."
       }
     },
     {
-      "id": "cp_2_3k_w16",
+      "id": "cp_5k_w16",
       "goal_id": "g_run_spring",
       "phase": "run_build",
-      "what": "2-3×3K average",
+      "what": "5K max",
       "protocol": "3×3K intervals, take mean",
       "metric_target": "avg_time_sec",
       "measures": [
         "threshold_pace"
       ],
       "target_value": 810,
-      "season_week": 15,
+      "season_week": 16,
       "quality_goal": "time_trial",
       "kind": "quality",
       "session": {
         "test_type": "max",
-        "distance_m": 3000,
-        "target_sec": 810,
-        "session_goal": "Средняя скорость на 3К в серии — меряем способность удерживать темп между повторами.",
+        "distance_m": 5000,
+        "target_sec": 1230,
+        "session_goal": "Максимум 5К в середине фазы build: проверяем 4:06 — уверенно ли держится темп, который через месяц станет гонкой.",
         "measures": [
+          "vo2max",
           "threshold_pace"
         ],
-        "protocol": "разминка 15мин Z1 → 3×3К, среднее время по трём отрезкам → заминка 12мин Z1",
-        "pass_criteria": "Среднее ≤ 13:30 (810 с). Разброс между отрезками ≤ 5 с/км. Три 3К подряд на одном темпе.",
-        "fail_action": "Среднее > 13:30 → переход на 2-месцевый бонусный блок (по правилу макро для W16).",
-        "pace_min_per_km": "4:30",
-        "pace_sec_per_km": 270.0
+        "protocol": "разминка 15мин Z1 → 5К в максимум (контроль сплитов по 400м) → заминка 15мин Z1",
+        "pass_criteria": "≤ 20:30 при HR 168+ на финише. Темп на последнем К не хуже первого более чем на 10 с/км.",
+        "fail_action": "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика.",
+        "pace_min_per_km": "4:06",
+        "pace_sec_per_km": 270.0,
+        "_ladder_note": "Лестница под цель сезона 40:00 (4:00/км)."
       }
     },
     {
@@ -284,16 +292,17 @@
       "session": {
         "test_type": "pace",
         "distance_m": 5000,
-        "target_sec": 1320,
-        "session_goal": "Гонка-темп 4:25/км на 5К — проверяем готовность к апрельской гонке.",
+        "target_sec": 1200,
+        "session_goal": "Гонка-темп 4:00/км на 5К — проверяем, что держим темп цели на 40:00.",
         "measures": [
           "race_readiness"
         ],
-        "protocol": "разминка 15мин Z1 → 5К на 4:25/км → заминка 12мин Z1",
-        "pass_criteria": "Финиш ≤ 22:00. < 21:45 — PB в апреле в кармане.",
-        "fail_action": "≥ 22:00 — пересмотреть тапер и объём.",
-        "pace_min_per_km": "4:24",
-        "pace_sec_per_km": 264.0
+        "protocol": "разминка 15мин Z1 → 5К на 4:00/км (контроль сплитов по 200м) → заминка 12мин Z1",
+        "pass_criteria": "≤ 20:00 — темп цели доступен, PB в апреле в кармане.",
+        "fail_action": "≥ 20:15 — гонка-темп не закрыт: тапер сдвигается, объём в W24–W25 режется.",
+        "pace_min_per_km": "4:00",
+        "pace_sec_per_km": 264.0,
+        "_ladder_note": "Лестница под цель сезона 40:00 (4:00/км)."
       }
     },
     {
@@ -373,7 +382,7 @@
     "g_tri_autumn_eff_pct": 40,
     "reason": "Phase 1 stub — реальное распределение через goal_allocator.candidates() в Phase 2. Сейчас зафиксировано по spring-10k-2027-v2.md: основной объём до W24 под 10К, далее transition к tri."
   },
-  "current_volume_hours_per_week": 4,
+  "current_volume_hours_per_week": 6.3,
   "volume_progression_rules": {
     "weekly_increase_max_pct": 10,
     "step_weeks": 3,
@@ -415,11 +424,12 @@
       "quality": {
         "goal": "threshold_speed",
         "scale": "light",
-        "_legacy_structure": "4×1К @ 4:30 (Z3)",
+        "_legacy_structure": "4×1К @ 4:25 (Z3)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace",
         "scale_text": "объёмная работа",
-        "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К"
+        "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×25м",
       "bike": "1×45м",
@@ -434,11 +444,12 @@
       "quality": {
         "goal": "vo2max",
         "scale": "light",
-        "_legacy_structure": "6×400 @ 4:00 (Z4), отдых 2м jog",
+        "_legacy_structure": "6×400 @ 3:55 (Z4), отдых 2м jog",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем VO2max",
         "scale_text": "объёмная работа",
-        "develops": "Аэробная мощность — верхняя граница аэробной системы"
+        "develops": "Аэробная мощность — верхняя граница аэробной системы",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×25м",
       "bike": "1×60м",
@@ -472,11 +483,12 @@
       "quality": {
         "goal": "mixed",
         "scale": "medium",
-        "_legacy_structure": "3×1К @ 4:25 + 2×800 @ 4:00",
+        "_legacy_structure": "3×1К @ 4:20 + 2×800 @ 3:55",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace и VO2max",
         "scale_text": "средняя интенсивность",
-        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости"
+        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×25м",
       "bike": "1×60м",
@@ -491,11 +503,12 @@
       "quality": {
         "goal": "pyramid",
         "scale": "medium",
-        "_legacy_structure": "1К @ 4:25 → 800 @ 4:00 → 400 @ 3:45",
+        "_legacy_structure": "1К @ 4:20 → 800 @ 3:55 → 400 @ 3:45",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем переключение зон",
         "scale_text": "средняя интенсивность",
-        "develops": "Переход от аэробной работы к пороговой и выше — навык смены интенсивности"
+        "develops": "Переход от аэробной работы к пороговой и выше — навык смены интенсивности",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×25м",
       "bike": "1×60м",
@@ -510,11 +523,12 @@
       "quality": {
         "goal": "tempo",
         "scale": "medium",
-        "_legacy_structure": "5К tempo @ 4:30",
+        "_legacy_structure": "5К tempo @ 4:20 (Z3-Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем аэробную мощность",
         "scale_text": "средняя интенсивность",
-        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность"
+        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "1×60м",
@@ -548,11 +562,12 @@
       "quality": {
         "goal": "threshold_speed",
         "scale": "medium",
-        "_legacy_structure": "4×1К @ 4:20 (Z3-Z4)",
+        "_legacy_structure": "4×1К @ 4:15 (Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace",
         "scale_text": "средняя интенсивность",
-        "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К"
+        "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -567,11 +582,12 @@
       "quality": {
         "goal": "vo2max",
         "scale": "medium",
-        "_legacy_structure": "8×400 @ 3:50 (Z5)",
+        "_legacy_structure": "8×400 @ 3:45 (Z5)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем VO2max",
         "scale_text": "средняя интенсивность",
-        "develops": "Аэробная мощность — верхняя граница аэробной системы"
+        "develops": "Аэробная мощность — верхняя граница аэробной системы",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -586,11 +602,12 @@
       "quality": {
         "goal": "fartlek",
         "scale": "medium",
-        "_legacy_structure": "Фартлек 200@5:20 + 800@4:00, 6 циклов",
+        "_legacy_structure": "Фартлек 200@5:10 + 800@3:50, 6 циклов",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем общую аэробную мощность",
         "scale_text": "средняя интенсивность",
-        "develops": "Игровая стимуляция: чередование лёгкого и быстрого без жёсткой структуры"
+        "develops": "Игровая стимуляция: чередование лёгкого и быстрого без жёсткой структуры",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -605,7 +622,7 @@
       "quality": {
         "goal": "time_trial",
         "scale": "light",
-        "_legacy_structure": "3К TT (пт 01.01.2027): цель 13:00",
+        "_legacy_structure": "3К TT @ max (пт 01.01.2027): цель 12:20 · 4:07/км",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Проверяем форму на контрольной точке",
         "scale_text": "объёмная работа",
@@ -624,11 +641,12 @@
       "quality": {
         "goal": "threshold_power",
         "scale": "light",
-        "_legacy_structure": "3×2К @ 4:20 (Z4) ⚡ первый длинный",
+        "_legacy_structure": "3×2К @ 4:15 (Z4) ⚡ первый длинный",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем способность держать threshold pace",
         "scale_text": "объёмная работа",
-        "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH"
+        "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -643,11 +661,12 @@
       "quality": {
         "goal": "threshold_speed",
         "scale": "heavy",
-        "_legacy_structure": "6×800 @ 4:00 (Z4) отдых 90с",
+        "_legacy_structure": "6×800 @ 4:10 (Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace",
         "scale_text": "высокая интенсивность",
-        "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К"
+        "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×75м",
@@ -662,11 +681,12 @@
       "quality": {
         "goal": "mixed",
         "scale": "heavy",
-        "_legacy_structure": "5К tempo @ 4:25 + 4×400 @ 3:50",
+        "_legacy_structure": "5К tempo @ 4:15 + 4×400 @ 3:45",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace и VO2max",
         "scale_text": "высокая интенсивность",
-        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости"
+        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×75м",
@@ -681,7 +701,7 @@
       "quality": {
         "goal": "time_trial",
         "scale": "medium",
-        "_legacy_structure": "5К TT @ max (пт 22.01): цель 22:00",
+        "_legacy_structure": "5К TT @ max (пт 22.01): цель 20:30 · 4:06/км",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Проверяем форму на контрольной точке",
         "scale_text": "средняя интенсивность",
@@ -700,11 +720,12 @@
       "quality": {
         "goal": "threshold_power",
         "scale": "medium",
-        "_legacy_structure": "4×2К @ 4:20, отдых 3м",
+        "_legacy_structure": "4×2К @ 4:12 (Z4), отдых 3м",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем способность держать threshold pace",
         "scale_text": "средняя интенсивность",
-        "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH"
+        "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×75м",
@@ -719,11 +740,12 @@
       "quality": {
         "goal": "tempo",
         "scale": "heavy",
-        "_legacy_structure": "8К long tempo @ 4:25",
+        "_legacy_structure": "8К long tempo @ 4:12 (Z3-Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем аэробную мощность",
         "scale_text": "высокая интенсивность",
-        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность"
+        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×90м",
@@ -738,11 +760,12 @@
       "quality": {
         "goal": "tempo",
         "scale": "heavy",
-        "_legacy_structure": "5К tempo @ 4:18 (Z3-Z4)",
+        "_legacy_structure": "6К tempo @ 4:08 (Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем аэробную мощность",
         "scale_text": "высокая интенсивность",
-        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность"
+        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×90м",
@@ -757,11 +780,12 @@
       "quality": {
         "goal": "vo2max",
         "scale": "heavy",
-        "_legacy_structure": "5×2К @ 4:10 (Z4) ⚡ race-pace touch",
+        "_legacy_structure": "5×2К @ 4:05 (Z4-Z5) ⚡ race-pace touch",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем VO2max",
         "scale_text": "высокая интенсивность",
-        "develops": "Аэробная мощность — верхняя граница аэробной системы"
+        "develops": "Аэробная мощность — верхняя граница аэробной системы",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×90м",
@@ -776,11 +800,12 @@
       "quality": {
         "goal": "tempo",
         "scale": "peak",
-        "_legacy_structure": "12К long tempo @ 4:18",
+        "_legacy_structure": "10К long tempo @ 4:05 (Z3-Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем аэробную мощность",
         "scale_text": "пиковая работа",
-        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность"
+        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×90м",
@@ -795,11 +820,12 @@
       "quality": {
         "goal": "threshold_power",
         "scale": "heavy",
-        "_legacy_structure": "4×2К @ 4:05, отдых 3м",
+        "_legacy_structure": "4×2К @ 4:05 (Z4), отдых 3м",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем способность держать threshold pace",
         "scale_text": "высокая интенсивность",
-        "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH"
+        "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×30м",
       "bike": "2×90м",
@@ -814,11 +840,12 @@
       "quality": {
         "goal": "time_trial",
         "scale": "heavy",
-        "_legacy_structure": "5К TT @ race pace (пт 19.03): цель 22:00",
+        "_legacy_structure": "5К @ race pace 4:00 — цель 20:00 (готовим 40:00 на 10К)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Проверяем форму на контрольной точке",
         "scale_text": "высокая интенсивность",
-        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции"
+        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×25м",
       "bike": "2×60м",
@@ -833,11 +860,12 @@
       "quality": {
         "goal": "mixed",
         "scale": "light",
-        "_legacy_structure": "2×2К @ 4:00, отдых 4м + 1×800 @ 3:50",
+        "_legacy_structure": "2×2К @ 4:02 + 1×800 @ 3:50",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace и VO2max",
         "scale_text": "объёмная работа",
-        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости"
+        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×25м",
       "bike": "2×60м",
@@ -852,11 +880,12 @@
       "quality": {
         "goal": "mixed",
         "scale": "light",
-        "_legacy_structure": "1×1К @ 4:00, 1×800 @ 3:55, 1×400 @ 3:45",
+        "_legacy_structure": "1×2К @ 4:00 + 1×1К @ 3:55 + 400 @ 3:45",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace и VO2max",
         "scale_text": "объёмная работа",
-        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости"
+        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
       },
       "core": "2×25м",
       "bike": "1×45м",
@@ -864,5 +893,20 @@
       "total_h": 7.0,
       "phase": "run_specific"
     }
-  ]
+  ],
+  "season_goal": {
+    "headline": "10К за 40:00 (4:00/км) на S25 Berlin, 18.04.2027",
+    "race_pace_min_per_km": "4:00",
+    "target_time": "40:00",
+    "current_form": "10К 44:06 (4:24/км), 11.10.2026",
+    "gap": "24 с/км (+10.3% скорости)",
+    "rules": [
+      "Race-pace блок в макро (W17–W25) обязан выходить на 4:00/км — иначе цель недостижима.",
+      "Любая контрольная точка, которая не даёт темп 4:00, — это не проверка готовности, а проверка формы.",
+      "Порог (threshold) — это 4:10–4:15/км, а не 4:20–4:35. Фактический порог по FIT 13.10 ≈ 4:35–4:39.",
+      "Если к W19 фактический порог не дошёл до 4:15 — пересмотр фазы, а не продление тупика."
+    ],
+    "_source": "Кирилл, 2026-10-24: «План должен штурмовать 40.00 в апреле на S25»"
+  },
+  "_season_goal_note": "Цель сезона — season_goal. Не придумывать темпы ниже 4:00 в race-pace блоке."
 }

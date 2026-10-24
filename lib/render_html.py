@@ -235,6 +235,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
         "phase_focus": (plan.get("phase") or {}).get("focus"),
         "week_goal": plan.get("week_goal"),
         "week_goal_detail": plan.get("week_goal_detail"),
+        "season_goal": plan.get("season_goal"),
         "slots": [
             {
                 "id": s.get("id"),
@@ -345,6 +346,12 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .summary-totals{margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:var(--accent2);font-weight:600;text-align:center;font-family:ui-monospace,SFMono-Regular,monospace}
 
 .plan-title{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:4px}
+.season-goal-box{margin:10px 0 4px;padding:10px 12px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(255,107,90,.12),rgba(122,162,255,.06));
+  border:1px solid rgba(255,107,90,.32)}
+.sg-label{font-size:9.5px;color:#ff8f7a;text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+.sg-head{font-size:15px;font-weight:700;color:#ff9b88;line-height:1.3;margin:3px 0 3px}
+.sg-gap{font-size:11px;color:var(--muted)}
 .plan-title h1{font-size:18px;margin:0}
 .plan-title .week{font-size:12px;color:var(--muted);margin-top:2px}
 .plan-rules{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
@@ -683,6 +690,15 @@ function buildPicker(plan) {
   let html = '<div class="plan-title">';
   html += '<h1>' + escapeHtml(plan.title || 'Тренировки') + '</h1>';
   if (plan.weekIso) html += '<div class="week">' + escapeHtml(plan.weekIso) + '</div>';
+  // ЦЕЛЬ СЕЗОНА — всегда на виду, чтобы нельзя было забыть темп
+  const SG = plan.season_goal;
+  if (SG && SG.headline) {
+    html += '<div class="season-goal-box">'
+         + '<div class="sg-label">ЦЕЛЬ СЕЗОНА</div>'
+         + '<div class="sg-head">' + escapeHtml(SG.headline) + '</div>'
+         + '<div class="sg-gap">' + escapeHtml((SG.current_form || '') + ' · разрыв ' + (SG.gap || '')) + '</div>'
+         + '</div>';
+  }
   if (plan.subtitle) html += '<div class="week">' + escapeHtml(plan.subtitle) + '</div>';
   if (isActual) html += '<div class="actual-badge">✅ Фактический лог</div>';
   html += '</div>';
