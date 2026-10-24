@@ -69,6 +69,45 @@ def generate_plan_with_html(season_week: int | str,
     }
 
 
+def generate_preview_with_html(season_week: int | str,
+                                out_dir: str | Path = "state",
+                                plan_json: str | Path | None = None) -> dict[str, Any]:
+    """
+    Компактное read-only превью недели → HTML.
+
+    Отличие от generate_plan_with_html: не перегенерирует план, а читает
+    готовый state/plan-wN.json и строит плоский список «день → тренировка».
+    Использует scripts/week_preview.py как рендерер.
+    """
+    import sys as _sys
+    from pathlib import Path as _Path
+
+    if plan_json is None:
+        plan_json = _Path(out_dir) / f"plan-w{season_week}.json"
+    plan_json = _Path(plan_json)
+    if not plan_json.exists():
+        raise FileNotFoundError(f"нет плана: {plan_json} (сначала generate_plan_with_html)")
+
+    plan = json.loads(plan_json.read_text(encoding="utf-8"))
+
+    scripts_dir = _Path(__file__).resolve().parent.parent / "scripts"
+    if str(scripts_dir) not in _sys.path:
+        _sys.path.insert(0, str(scripts_dir))
+    import week_preview  # noqa: E402
+
+    data = week_preview.build(plan)
+    out_path = _Path(out_dir) / f"preview-w{season_week}.html"
+    week_preview.render(data, out_path)
+
+    return {
+        "preview_path": str(out_path),
+        "season_week": season_week,
+        "slots_count": data["slots_count"],
+        "days": len(data["days"]),
+        "week_goal": data.get("week_goal"),
+    }
+
+
 def generate_all_weeks(start_w: int = 1, end_w: int = 48,
                         out_dir: str | Path = "state",
                         season_plan_path: str | Path = "state/season_plan.json") -> list[dict]:
