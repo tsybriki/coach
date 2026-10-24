@@ -103,6 +103,7 @@ def build_data(season_plan_path: Path, athlete_path: Path) -> dict:
             "end": we.isoformat(),
             "run_km": run_km,
             "long_km": entry.get("long_km", 0),
+            "phase": entry.get("phase", ""),
             "goal": goal,
             "goal_label": tpl.get("label", goal),
             "goal_text": tpl.get("goal", ""),
@@ -118,11 +119,12 @@ def build_data(season_plan_path: Path, athlete_path: Path) -> dict:
             "core": entry.get("core", ""), "bike": entry.get("bike", ""), "swim": entry.get("swim", ""),
         })
 
-    # CP привязаны к неделе (season_week) и дню внутри недели (weekday).
-    # Конкретной даты в макро нет — она вычисляется, но не хранится.
+    # CP привязаны только к неделе (season_week). День качественной сессии
+    # выбирается при планировании недели — в макро его нет.
     tts = [{
         "id": c["id"], "w": c.get("season_week"),
-        "weekday": c.get("weekday", ""),
+        "kind": c.get("kind", "quality"),
+        "quality_goal": c.get("quality_goal"),
         "what": c["what"], "target": c.get("target_value"),
         "protocol": c.get("protocol", ""),
     } for c in sp.get("control_points", [])]
@@ -346,7 +348,7 @@ document.getElementById('wtbody').innerHTML = WEEK.map(w=>{
 // контрольные точки и гонки
 const items = [];
 DATA.tts.forEach(t=>{
-  items.push('<li><b>'+esc(t.weekday||'')+' недели W'+t.w+'</b> · '+esc(t.what)
+  items.push('<li><b>W'+t.w+'</b> · '+esc(t.what)
     + (t.target? ' · цель '+(t.target>=60? Math.floor(t.target/60)+':'+String(t.target%60).padStart(2,'0') : t.target+'с') : '')
     + '</li>');
 });

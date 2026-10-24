@@ -24,7 +24,7 @@ from typing import Any
 from .volume_check import check_volume
 from .season_week import (
     season_week_to_iso, season_week_to_dates,
-    phase_for_season_week, cp_date, DAY_ORDER,
+    phase_for_season_week, DAY_ORDER,
 )
 from .step_builder import build_structure, ofp_structure
 
@@ -200,13 +200,31 @@ def _layout_slots(phase_focus: dict, constraints: dict,
                 # Интенсивные под запретом — пропускаем
                 continue
 
-            # Качественная сессия недели: цель из макро, структура из шаблона.
-            # Применяется к ПЕРВОМУ key_run-слоту недели — качественная сессия в неделе одна.
+            # Качественная сессия в неделе ОДНА — цель недели одна.
+            # key_run в фазе даёт ДВА беговых слота:
+            #   1) первый (ПН) — качественная сессия: структура из шаблона по цели недели;
+            #   2) второй (ВТ) — объёмный бег Z2 (не интенсивный).
+            # В CP-неделю качественную роль берёт сам CP (первый key_run не создаётся),
+            # объёмный бег остаётся.
+            is_volume_run = False
+            if cat_name == "key_run" and spec["kind"] == "run":
+                cp_is_quality = bool(quality_selection and quality_selection.get("is_cp"))
+                if cp_is_quality and not quality_applied:
+                    # CP занимает роль качественной сессии — обычный key_run не создаём
+                    quality_applied = True
+                    continue
+                if quality_applied:
+                    # качественная роль уже занята → этот key_run = объёмный бег Z2
+                    spec["subkind"] = "easy"
+                    spec["focus"] = "Z2"
+                    is_volume_run = True
+
             is_quality = bool(
                 quality_selection
                 and cat_name == "key_run"
                 and spec["kind"] == "run"
                 and not quality_applied
+                and not is_volume_run
             )
             if is_quality:
                 spec["quality_selection"] = quality_selection
@@ -290,7 +308,8 @@ def _build_slot_structure(spec: dict) -> list[dict]:
 
 
 def _select_quality_for_week(season_plan: dict, season_week: int,
-                              variant_id: str | None = None) -> dict | None:
+                              variant_id: str | None = None,
+                              cp: dict | None = None) -> dict | None:
     """
     Достаёт цель качественной сессии недели из макро и выбирает конкретную структуру.
 
@@ -307,6 +326,12 @@ def _select_quality_for_week(season_plan: dict, season_week: int,
     q = entry.get("quality") or {}
     goal = q.get("goal")
     scale = q.get("scale")
+
+    # CP с quality_goal переопределяет цель недели (TT-недели: goal = time_trial)
+    if cp and cp.get("quality_goal"):
+        goal = cp["quality_goal"]
+        scale = (entry.get("quality") or {}).get("scale") or "light"
+
     if not goal:
         return None
 
@@ -321,8 +346,13 @@ def _select_quality_for_week(season_plan: dict, season_week: int,
         plan_context = prev_q.get("work_m")
 
     from .quality_session import choose_quality
-    return choose_quality(goal, scale or "medium", variant_id=variant_id,
-                          plan_context_work_m=plan_context)
+    sel = choose_quality(goal, scale or "medium", variant_id=variant_id,
+                         plan_context_work_m=plan_context)
+    if cp and cp.get("quality_goal"):
+        sel["is_cp"] = True
+        sel["cp_id"] = cp.get("id")
+        sel["cp_target"] = cp.get("target_value")
+    return sel
 
 
 def _quality_slot_name(qsel: dict) -> str:
@@ -375,6 +405,61 @@ def _slot_name(spec: dict) -> str:
     return f"{kind} {sub} {spec['duration_min']}мин"
 
 
+def _place_cp(cp: dict, constraints: dict, slots: list[dict]) -> tuple[str, dict] | None:
+    """Выбирает день и окно для control point.
+
+    В макро у CP нет ни даты, ни дня недели — день определяется ЗДЕСЬ, при
+    планировании недели. Порядок предпочтения:
+      1. Окна, пригодные для бега (стадион/асфальт/бассейн) — в порядке дней недели.
+      2. Дни, где уже стоит качественная сессия (key_run) — день не дублируется.
+      3. Если подходящего бегового окна нет — любое окно с максимальной длительностью.
+
+    Возвращает (day, window) или None, если разместить негде.
+    """
+    windows_by_day = _windows_by_day(constraints)
+    if not windows_by_day:
+        return None
+
+    busy = {(s["day"], s["time"]) for s in slots if s.get("kind") == "run"}
+
+    # Минимальная длительность окна: разминка 15 + работа + заминка 12 ≈ 35 мин.
+    # Короткое окно (Вт 09:00 = 30 мин) для TT не подходит.
+    need_min = cp.get("min_window_min", 45)
+
+    run_locs = ("stadium", "asphalt", "pool", "stadium_or_pool", "pool_or_asphalt")
+
+    # 1) Беговые окна достаточной длины, день не занят другой беговой сессией
+    for day in DAY_ORDER:
+        for win in windows_by_day.get(day, []):
+            loc = win.get("location", "")
+            if not any(k in loc for k in run_locs):
+                continue
+            if win.get("duration_min", 0) < need_min:
+                continue
+            if (day, win.get("start", "")) in busy:
+                continue
+            return day, win
+
+    # 2) Беговые окна, день свободен (даже если окно короткое) — лучше короткое,
+    #    чем контрольная точка вообще без окна
+    for day in DAY_ORDER:
+        for win in windows_by_day.get(day, []):
+            loc = win.get("location", "")
+            if not any(k in loc for k in run_locs):
+                continue
+            if (day, win.get("start", "")) in busy:
+                continue
+            return day, win
+
+    # 3) Хоть что-то: самое длинное окно недели
+    best = None
+    for day in DAY_ORDER:
+        for win in windows_by_day.get(day, []):
+            if best is None or win.get("duration_min", 0) > best[1].get("duration_min", 0):
+                best = (day, win)
+    return best
+
+
 def _pick_cp_window(windows: list[dict], cp: dict) -> dict:
     """Выбирает окно для control point.
 
@@ -389,8 +474,18 @@ def _pick_cp_window(windows: list[dict], cp: dict) -> dict:
     return windows[-1]
 
 
-def _build_cp_structure(cp: dict, win: dict) -> list[dict]:
-    """Структура контрольной точки: разминка → работа на время → заминка."""
+def _build_cp_structure(cp: dict, win: dict,
+                        quality_selection: dict | None = None) -> list[dict]:
+    """Структура контрольной точки.
+
+    Если CP задаёт качественную сессию (quality_goal) — структура берётся
+    из выбранного шаблона (вариант time_trial), с разминкой и заминкой.
+    Иначе (kind=metric, информационный замер) — разминка → работа → заминка.
+    """
+    if quality_selection and quality_selection.get("is_cp"):
+        from .quality_session import build_structure_from_variant
+        return build_structure_from_variant(quality_selection.get("variant") or {})
+
     dur = win.get("duration_min", 60)
     warmup = 15
     cooldown = 10
@@ -542,7 +637,11 @@ def generate(season_week: int | str,
             if qo.get("variant_id"):
                 quality_variant_id = qo["variant_id"]
             break
-    quality_selection = _select_quality_for_week(sp, sw, variant_id=quality_variant_id)
+    # CP с quality_goal переопределяет цель недели (TT-недели).
+    # Тогда обычная key_run-сессия не создаётся — качественная сессия одна.
+    cp_quality = next((c for c in cp_in_range if c.get("quality_goal")), None)
+    quality_selection = _select_quality_for_week(
+        sp, sw, variant_id=quality_variant_id, cp=cp_quality)
 
     slots = _layout_slots(phase_focus, cn, quality_selection=quality_selection)
     slots, applied_log = _apply_overrides(slots, ov.get("overrides", []), sw,
@@ -557,19 +656,17 @@ def generate(season_week: int | str,
                 break
 
     # CP-слоты
-    # CP привязан к season_week + weekday (конкретной даты в макро нет).
-    # День берём из weekday, слот ставим в окно, подходящее для бега
-    # (стадион/асфальт), а не в первое попавшееся окно дня.
-    # Иначе 3К TT в ПТ вставал на велотренажёр в ЧТ (баг, найден Кириллом 2026-10-24).
+    # CP привязан ТОЛЬКО к season_week — ни даты, ни дня недели в макро нет.
+    # День качественной сессии выбирается ЗДЕСЬ, при планировании недели:
+    # перебираем окна по дням и берём подходящее для бега.
+    # CP с quality_goal = качественная сессия недели (заменяет обычную key_run).
+    # CP без quality_goal (kind=metric) = информационный замер метрики.
     cp_slots = []
     for cp in cp_in_range:
-        day = cp.get("weekday") or _day_for(week_start, cp.get("date", ""))
-        if not day:
+        placement = _place_cp(cp, cn, slots)
+        if not placement:
             continue
-        windows = cn.get("weekly_windows", {}).get(day, [])
-        if not windows:
-            continue
-        win = _pick_cp_window(windows, cp)
+        day, win = placement
         cp_slots.append({
             "id": f"cp-{cp['id']}",
             "day": day,
@@ -581,8 +678,23 @@ def generate(season_week: int | str,
             "metric_target": cp.get("metric_target", ""),
             "target_value": cp.get("target_value", ""),
             "location": win.get("location", ""),
-            "structure": _build_cp_structure(cp, win),
+            "structure": _build_cp_structure(cp, win, quality_selection),
         })
+        # CP, задающий качественную сессию: прокидываем выбор шаблона,
+        # чтобы карточка показывала цель, вариант и объём работы.
+        if quality_selection and quality_selection.get("is_cp"):
+            cp_slots[-1]["subkind"] = "quality"
+            cp_slots[-1]["quality_selection"] = quality_selection
+            cp_slots[-1]["quality_goal"] = quality_selection.get("goal")
+            cp_slots[-1]["quality_variant"] = quality_selection.get("variant", {}).get("id")
+            cp_slots[-1]["quality_work_m"] = quality_selection.get("work_m")
+            cp_slots[-1]["focus"] = quality_selection.get("template_meta", {}).get("work_zone", "")
+            cp_slots[-1]["duration_min"] = sum(st.get("duration_min") or 0
+                                               for st in cp_slots[-1]["structure"])
+            if quality_selection.get("rationale"):
+                cp_slots[-1]["rationale"] = quality_selection["rationale"]
+            if quality_selection.get("warning"):
+                cp_slots[-1]["quality_warning"] = quality_selection["warning"]
 
     all_slots = cp_slots + slots
 

@@ -239,11 +239,11 @@ def build_structure_from_variant(variant: dict,
                 "phase": "work",
                 "basis": "distance",
                 "distance_m": block["distance_m"],
+                "duration_min": mins,
                 "zone": block.get("zone", "Z4"),
                 "hr_target": block.get("hr_target"),
                 "pace_min_per_km": block.get("pace"),
             })
-            _ = mins  # длительность выводится рендером из дистанции
 
         elif btype == "pyramid":
             steps.append({
@@ -288,13 +288,18 @@ def build_structure_from_variant(variant: dict,
             })
 
         elif btype == "tt":
+            # all-out: длительность оценивается по pace, если он задан
+            pace = block.get("pace", "all-out")
+            mins = _distance_minutes(block["distance_m"], pace) if pace != "all-out" \
+                else _distance_minutes(block["distance_m"], "4:20")
             steps.append({
                 "phase": "work",
                 "basis": "distance",
                 "distance_m": block["distance_m"],
+                "duration_min": mins,
                 "zone": block.get("zone", "Z7"),
                 "hr_target": block.get("hr_target"),
-                "pace_min_per_km": block.get("pace"),
+                "pace_min_per_km": pace,
             })
 
         elif btype == "progression":

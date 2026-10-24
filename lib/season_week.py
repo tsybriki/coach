@@ -73,9 +73,9 @@ def control_points_for_season_week(season_week: int, control_points: list[dict],
                                     season_start: str | date = "2026-10-11") -> list[dict]:
     """Возвращает CP которые попадают в season_week.
 
-    CP привязаны к season_week (+ weekday). Дата не хранится — она вычисляется
-    от season_week и weekday, иначе привязка к конкретной дате рассинхронизируется
-    с календарём при любом сдвиге сезона.
+    CP привязаны ТОЛЬКО к season_week — ни конкретной даты, ни дня недели.
+    День качественной сессии выбирается при планировании недели (по окнам и
+    ограничениям), поэтому в макро он не зафиксирован.
     """
     out = []
     for cp in control_points:
@@ -87,27 +87,14 @@ def control_points_for_season_week(season_week: int, control_points: list[dict],
     return out
 
 
-def cp_date(cp: dict, season_start: str | date = "2026-10-11") -> date | None:
-    """Вычисляет дату CP от season_week + weekday. None если не хватает данных."""
-    sw = cp.get("season_week")
-    if sw is None:
-        return None
-    ws, we = season_week_to_dates(sw, season_start)
-    wd = cp.get("weekday")
-    if not wd:
-        return None
-    try:
-        idx = DAY_ORDER.index(wd)
-    except ValueError:
-        return None
-    if idx > 6:
-        return None
-    return ws + timedelta(days=idx)
+def cp_quality_goal(cp: dict) -> str | None:
+    """Цель качественной сессии, которую задаёт CP (None — CP информационный)."""
+    return cp.get("quality_goal")
 
 
-def cp_weekday(cp: dict) -> str | None:
-    """День внутри недели для CP (ПН/ВТ/... или None)."""
-    return cp.get("weekday")
+def cp_is_quality(cp: dict) -> bool:
+    """CP задаёт качественную сессию недели (а не просто замер метрики)."""
+    return bool(cp.get("quality_goal"))
 
 
 def total_season_weeks(season_end: str | date, season_start: str | date = "2026-10-11") -> int:

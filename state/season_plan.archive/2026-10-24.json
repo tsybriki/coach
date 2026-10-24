@@ -127,7 +127,6 @@
     {
       "id": "cp_3k_w4",
       "goal_id": "g_run_spring",
-      "date": "2026-11-06",
       "phase": "run_base",
       "what": "3K time trial",
       "protocol": "warmup + 3K all-out + cooldown",
@@ -137,12 +136,12 @@
         "vo2max_proxy"
       ],
       "target_value": 840,
-      "season_week": 4
+      "season_week": 4,
+      "weekday": "ПТ"
     },
     {
       "id": "cp_5k_w8",
       "goal_id": "g_run_spring",
-      "date": "2026-12-04",
       "phase": "run_base",
       "what": "5K max",
       "protocol": "warmup + 5K all-out + cooldown",
@@ -152,12 +151,12 @@
         "threshold_pace"
       ],
       "target_value": 1350,
-      "season_week": 8
+      "season_week": 8,
+      "weekday": "ПТ"
     },
     {
       "id": "cp_3k_w12",
       "goal_id": "g_run_spring",
-      "date": "2027-01-01",
       "phase": "run_base",
       "what": "3K max",
       "protocol": "warmup + 3K all-out + cooldown",
@@ -166,12 +165,12 @@
         "top_end_speed"
       ],
       "target_value": 780,
-      "season_week": 12
+      "season_week": 12,
+      "weekday": "ПТ"
     },
     {
       "id": "cp_2_3k_w16",
       "goal_id": "g_run_spring",
-      "date": "2027-01-22",
       "phase": "run_build",
       "what": "2-3×3K average",
       "protocol": "3×3K intervals, take mean",
@@ -180,12 +179,12 @@
         "threshold_pace"
       ],
       "target_value": 810,
-      "season_week": 15
+      "season_week": 15,
+      "weekday": "ПТ"
     },
     {
       "id": "cp_5k_w23",
       "goal_id": "g_run_spring",
-      "date": "2027-03-19",
       "phase": "run_specific",
       "what": "5K @ race pace",
       "protocol": "warmup + 5K at 4:25/km + cooldown",
@@ -194,12 +193,12 @@
         "race_readiness"
       ],
       "target_value": 1320,
-      "season_week": 23
+      "season_week": 23,
+      "weekday": "ПТ"
     },
     {
       "id": "cp_olympic_sim_w32",
       "goal_id": "g_tri_autumn",
-      "date": "2027-07-30",
       "phase": "tri_build",
       "what": "Olympic-distance brick (swim-bike-run)",
       "protocol": "1.5K swim + 40K bike + 10K run",
@@ -209,12 +208,12 @@
         "race_pace_under_fatigue"
       ],
       "target_value": 10200,
-      "season_week": 42
+      "season_week": 42,
+      "weekday": "ПТ"
     },
     {
       "id": "cp_general_hr_drift",
       "goal_id": null,
-      "date": "2026-12-14",
       "phase": "run_base",
       "what": "HR drift baseline",
       "metric_target": "drift_bpm_per_km",
@@ -222,7 +221,8 @@
         "hr_drift"
       ],
       "target_value": 0.5,
-      "season_week": 10
+      "season_week": 10,
+      "weekday": "ПН"
     }
   ],
   "races": [
@@ -258,8 +258,8 @@
   "season_end_date": "2027-09-12",
   "_season_week_notes": "W1=12.10.2026. season_week не зависит от ISO недели — это ordinal. Конвертация через lib/season_week.py.",
   "last_replan": {
-    "reason": "Макро-план переведён на слой целей: вместо зашитых структур сессий (6×400, 4×1К, 3×2К...) weekly_macro[].quality хранит адаптационную цель (goal) и масштаб (scale). Конкретная структура выбирается при планировании недели из state/workout_templates.json. Инициировано Кириллом 2026-10-24.",
-    "at": "2026-10-24T14:51:30+00:00"
+    "reason": "Убраны конкретные даты контрольных точек: CP теперь привязаны к season_week + weekday (день внутри недели). Дата вычисляется от season_week, а не хранится — чтобы не плодились дубли и не было рассинхрона с календарём. Инициировано Кириллом 2026-10-24.",
+    "at": "2026-10-24T15:07:17+00:00"
   },
   "weekly_macro": [
     {
