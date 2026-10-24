@@ -18,6 +18,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from .parse_fit import parse_fit, GARMIN_TOOLS, GARMIN_TOOLS_VENV_PYTHON
+from .season_week import cp_date
 
 
 def _now_iso() -> str:
@@ -121,12 +122,23 @@ def _ingest_single(fit_path: Path,
     }
     idx["fits"].append(index_entry)
 
-    # CP match
+    # CP match: по неделе и дню (конкретной даты у CP в макро больше нет).
     cp_match = None
     if season_plan_path.exists():
         sp = json.loads(season_plan_path.read_text(encoding="utf-8"))
         for cp in sp.get("control_points", []):
             if cp.get("date") == date:
+                cp_match = cp
+                break
+            sw = cp.get("season_week")
+            wd = cp.get("weekday")
+            if sw is None or not wd:
+                continue
+            try:
+                cp_d = cp_date(cp, sp.get("season_start_date", "2026-10-11"))
+            except Exception:
+                cp_d = None
+            if cp_d is not None and cp_d.isoformat() == date:
                 cp_match = cp
                 break
     if cp_match:

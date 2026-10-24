@@ -868,66 +868,59 @@
   "tts": [
     {
       "id": "cp_3k_w4",
-      "date": "2026-11-06",
       "w": 4,
+      "weekday": "ПТ",
       "what": "3K time trial",
       "target": 840,
-      "protocol": "warmup + 3K all-out + cooldown",
-      "weekday": "Fri"
+      "protocol": "warmup + 3K all-out + cooldown"
     },
     {
       "id": "cp_5k_w8",
-      "date": "2026-12-04",
       "w": 8,
+      "weekday": "ПТ",
       "what": "5K max",
       "target": 1350,
-      "protocol": "warmup + 5K all-out + cooldown",
-      "weekday": "Fri"
+      "protocol": "warmup + 5K all-out + cooldown"
     },
     {
       "id": "cp_3k_w12",
-      "date": "2027-01-01",
       "w": 12,
+      "weekday": "ПТ",
       "what": "3K max",
       "target": 780,
-      "protocol": "warmup + 3K all-out + cooldown",
-      "weekday": "Fri"
+      "protocol": "warmup + 3K all-out + cooldown"
     },
     {
       "id": "cp_2_3k_w16",
-      "date": "2027-01-22",
       "w": 15,
+      "weekday": "ПТ",
       "what": "2-3×3K average",
       "target": 810,
-      "protocol": "3×3K intervals, take mean",
-      "weekday": "Fri"
+      "protocol": "3×3K intervals, take mean"
     },
     {
       "id": "cp_5k_w23",
-      "date": "2027-03-19",
       "w": 23,
+      "weekday": "ПТ",
       "what": "5K @ race pace",
       "target": 1320,
-      "protocol": "warmup + 5K at 4:25/km + cooldown",
-      "weekday": "Fri"
+      "protocol": "warmup + 5K at 4:25/km + cooldown"
     },
     {
       "id": "cp_olympic_sim_w32",
-      "date": "2027-07-30",
       "w": 42,
+      "weekday": "ПТ",
       "what": "Olympic-distance brick (swim-bike-run)",
       "target": 10200,
-      "protocol": "1.5K swim + 40K bike + 10K run",
-      "weekday": "Fri"
+      "protocol": "1.5K swim + 40K bike + 10K run"
     },
     {
       "id": "cp_general_hr_drift",
-      "date": "2026-12-14",
       "w": 10,
+      "weekday": "ПН",
       "what": "HR drift baseline",
       "target": 0.5,
-      "protocol": "",
-      "weekday": "Mon"
+      "protocol": ""
     }
   ],
   "races": [
@@ -958,5 +951,5 @@
   "hr_max": 182,
   "rhr": 54,
   "pace_min_per_km": 5.7,
-  "generated_at": "2026-10-24 14:57"
+  "generated_at": "2026-10-24 15:09"
 }

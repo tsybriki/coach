@@ -24,11 +24,9 @@ from typing import Any
 from .volume_check import check_volume
 from .season_week import (
     season_week_to_iso, season_week_to_dates,
-    phase_for_season_week,
+    phase_for_season_week, cp_date, DAY_ORDER,
 )
 from .step_builder import build_structure, ofp_structure
-
-DAY_ORDER = ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"]
 
 
 def _day_for(week_start, target_date: str) -> str | None:
@@ -559,12 +557,13 @@ def generate(season_week: int | str,
                 break
 
     # CP-слоты
-    # CP несёт свою дату → день определяется из неё, а слот ставится в окно,
-    # подходящее для бега (стадион/асфальт), а не в первое попавшееся окно дня.
+    # CP привязан к season_week + weekday (конкретной даты в макро нет).
+    # День берём из weekday, слот ставим в окно, подходящее для бега
+    # (стадион/асфальт), а не в первое попавшееся окно дня.
     # Иначе 3К TT в ПТ вставал на велотренажёр в ЧТ (баг, найден Кириллом 2026-10-24).
     cp_slots = []
     for cp in cp_in_range:
-        day = _day_for(week_start, cp["date"])
+        day = cp.get("weekday") or _day_for(week_start, cp.get("date", ""))
         if not day:
             continue
         windows = cn.get("weekly_windows", {}).get(day, [])

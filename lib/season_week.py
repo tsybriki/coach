@@ -8,6 +8,11 @@ from __future__ import annotations
 
 from datetime import date, datetime, timedelta
 
+# Порядок дней в тренировочной неделе: неделя начинается с воскресенья (вс→сб).
+# Живёт здесь, а не в plan_generate, чтобы не было циклического импорта
+# (season_week не должен зависеть от генератора плана).
+DAY_ORDER = ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"]
+
 
 def _parse(d: str | date) -> date:
     if isinstance(d, date):
@@ -66,12 +71,43 @@ def phase_for_season_week(season_week: int, phases: list[dict],
 
 def control_points_for_season_week(season_week: int, control_points: list[dict],
                                     season_start: str | date = "2026-10-11") -> list[dict]:
-    """Возвращает CP которые попадают в season_week."""
+    """Возвращает CP которые попадают в season_week.
+
+    CP привязаны к season_week (+ weekday). Дата не хранится — она вычисляется
+    от season_week и weekday, иначе привязка к конкретной дате рассинхронизируется
+    с календарём при любом сдвиге сезона.
+    """
     out = []
     for cp in control_points:
-        if date_to_season_week(cp["date"], season_start) == season_week:
+        sw = cp.get("season_week")
+        if sw is None and cp.get("date"):
+            sw = date_to_season_week(cp["date"], season_start)
+        if sw == season_week:
             out.append(cp)
     return out
+
+
+def cp_date(cp: dict, season_start: str | date = "2026-10-11") -> date | None:
+    """Вычисляет дату CP от season_week + weekday. None если не хватает данных."""
+    sw = cp.get("season_week")
+    if sw is None:
+        return None
+    ws, we = season_week_to_dates(sw, season_start)
+    wd = cp.get("weekday")
+    if not wd:
+        return None
+    try:
+        idx = DAY_ORDER.index(wd)
+    except ValueError:
+        return None
+    if idx > 6:
+        return None
+    return ws + timedelta(days=idx)
+
+
+def cp_weekday(cp: dict) -> str | None:
+    """День внутри недели для CP (ПН/ВТ/... или None)."""
+    return cp.get("weekday")
 
 
 def total_season_weeks(season_end: str | date, season_start: str | date = "2026-10-11") -> int:

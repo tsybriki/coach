@@ -258,7 +258,384 @@
   "season_end_date": "2027-09-12",
   "_season_week_notes": "W1=12.10.2026. season_week не зависит от ISO недели — это ordinal. Конвертация через lib/season_week.py.",
   "last_replan": {
-    "reason": "CP-даты TT сдвинуты на пятницу: в season_plan.json все time-trial стояли на четверге, а макро-план (spring-10k-2027-v2.md) фиксирует TT на пятницу. Сдвиг +1 день, season_week всех CP не меняется. Найдено Кириллом 2026-10-24.",
-    "at": "2026-10-24T13:45:37+00:00"
-  }
+    "reason": "Макро-план переведён на слой целей: вместо зашитых структур сессий (6×400, 4×1К, 3×2К...) weekly_macro[].quality хранит адаптационную цель (goal) и масштаб (scale). Конкретная структура выбирается при планировании недели из state/workout_templates.json. Инициировано Кириллом 2026-10-24.",
+    "at": "2026-10-24T14:51:30+00:00"
+  },
+  "weekly_macro": [
+    {
+      "season_week": 1,
+      "run_km": 27,
+      "long_km": 12,
+      "quality": {
+        "goal": "progression",
+        "scale": "light",
+        "_legacy_structure": "Easy 8К с прогрессией 4:30 на 3К",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×25м",
+      "bike": "1×45м",
+      "swim": "1×30м",
+      "total_h": 6.5
+    },
+    {
+      "season_week": 2,
+      "run_km": 30,
+      "long_km": 13,
+      "quality": {
+        "goal": "threshold_speed",
+        "scale": "light",
+        "_legacy_structure": "4×1К @ 4:30 (Z3)",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×25м",
+      "bike": "1×45м",
+      "swim": "1×30м",
+      "total_h": 7.0
+    },
+    {
+      "season_week": 3,
+      "run_km": 35,
+      "long_km": 14,
+      "quality": {
+        "goal": "vo2max",
+        "scale": "light",
+        "_legacy_structure": "6×400 @ 4:00 (Z4), отдых 2м jog",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×25м",
+      "bike": "1×60м",
+      "swim": "1×30м",
+      "total_h": 7.5
+    },
+    {
+      "season_week": 4,
+      "run_km": 38,
+      "long_km": 14,
+      "quality": {
+        "goal": "time_trial",
+        "scale": "light",
+        "_legacy_structure": "3К TT (пт 06.11): цель 14:00",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×25м",
+      "bike": "1×60м",
+      "swim": "1×30м",
+      "total_h": 8.0
+    },
+    {
+      "season_week": 5,
+      "run_km": 40,
+      "long_km": 16,
+      "quality": {
+        "goal": "mixed",
+        "scale": "medium",
+        "_legacy_structure": "3×1К @ 4:25 + 2×800 @ 4:00",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×25м",
+      "bike": "1×60м",
+      "swim": "1×40м",
+      "total_h": 8.5
+    },
+    {
+      "season_week": 6,
+      "run_km": 42,
+      "long_km": 16,
+      "quality": {
+        "goal": "pyramid",
+        "scale": "medium",
+        "_legacy_structure": "1К @ 4:25 → 800 @ 4:00 → 400 @ 3:45",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×25м",
+      "bike": "1×60м",
+      "swim": "1×40м",
+      "total_h": 9.0
+    },
+    {
+      "season_week": 7,
+      "run_km": 45,
+      "long_km": 18,
+      "quality": {
+        "goal": "tempo",
+        "scale": "medium",
+        "_legacy_structure": "5К tempo @ 4:30",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "1×60м",
+      "swim": "1×40м",
+      "total_h": 9.5
+    },
+    {
+      "season_week": 8,
+      "run_km": 48,
+      "long_km": 14,
+      "quality": {
+        "goal": "time_trial",
+        "scale": "medium",
+        "_legacy_structure": "5К TT (пт 04.12): цель 22:30",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×60м",
+      "swim": "1×40м",
+      "total_h": 10.0
+    },
+    {
+      "season_week": 9,
+      "run_km": 50,
+      "long_km": 16,
+      "quality": {
+        "goal": "threshold_speed",
+        "scale": "medium",
+        "_legacy_structure": "4×1К @ 4:20 (Z3-Z4)",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×60м",
+      "swim": "1×40м",
+      "total_h": 10.5
+    },
+    {
+      "season_week": 10,
+      "run_km": 50,
+      "long_km": 18,
+      "quality": {
+        "goal": "vo2max",
+        "scale": "medium",
+        "_legacy_structure": "8×400 @ 3:50 (Z5)",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×60м",
+      "swim": "2×40м",
+      "total_h": 11.0
+    },
+    {
+      "season_week": 11,
+      "run_km": 50,
+      "long_km": 16,
+      "quality": {
+        "goal": "fartlek",
+        "scale": "medium",
+        "_legacy_structure": "Фартлек 200@5:20 + 800@4:00, 6 циклов",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×60м",
+      "swim": "2×40м",
+      "total_h": 11.0
+    },
+    {
+      "season_week": 12,
+      "run_km": 45,
+      "long_km": 12,
+      "quality": {
+        "goal": "time_trial",
+        "scale": "light",
+        "_legacy_structure": "3К TT (пт 01.01.2027): цель 13:00",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×25м",
+      "bike": "1×60м",
+      "swim": "1×40м",
+      "total_h": 9.5
+    },
+    {
+      "season_week": 13,
+      "run_km": 50,
+      "long_km": 16,
+      "quality": {
+        "goal": "threshold_power",
+        "scale": "light",
+        "_legacy_structure": "3×2К @ 4:20 (Z4) ⚡ первый длинный",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×60м",
+      "swim": "2×45м",
+      "total_h": 10.5
+    },
+    {
+      "season_week": 14,
+      "run_km": 55,
+      "long_km": 18,
+      "quality": {
+        "goal": "threshold_speed",
+        "scale": "heavy",
+        "_legacy_structure": "6×800 @ 4:00 (Z4) отдых 90с",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×75м",
+      "swim": "2×45м",
+      "total_h": 11.5
+    },
+    {
+      "season_week": 15,
+      "run_km": 55,
+      "long_km": 18,
+      "quality": {
+        "goal": "mixed",
+        "scale": "heavy",
+        "_legacy_structure": "5К tempo @ 4:25 + 4×400 @ 3:50",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×75м",
+      "swim": "2×45м",
+      "total_h": 11.5
+    },
+    {
+      "season_week": 16,
+      "run_km": 55,
+      "long_km": 16,
+      "quality": {
+        "goal": "time_trial",
+        "scale": "medium",
+        "_legacy_structure": "5К TT @ max (пт 22.01): цель 22:00",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×75м",
+      "swim": "2×45м",
+      "total_h": 11.5
+    },
+    {
+      "season_week": 17,
+      "run_km": 55,
+      "long_km": 18,
+      "quality": {
+        "goal": "threshold_power",
+        "scale": "medium",
+        "_legacy_structure": "4×2К @ 4:20, отдых 3м",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×75м",
+      "swim": "2×45м",
+      "total_h": 11.5
+    },
+    {
+      "season_week": 18,
+      "run_km": 60,
+      "long_km": 20,
+      "quality": {
+        "goal": "tempo",
+        "scale": "heavy",
+        "_legacy_structure": "8К long tempo @ 4:25",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×90м",
+      "swim": "2×45м",
+      "total_h": 13.0
+    },
+    {
+      "season_week": 19,
+      "run_km": 65,
+      "long_km": 22,
+      "quality": {
+        "goal": "tempo",
+        "scale": "heavy",
+        "_legacy_structure": "5К tempo @ 4:18 (Z3-Z4)",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×90м",
+      "swim": "2×45м",
+      "total_h": 13.5
+    },
+    {
+      "season_week": 20,
+      "run_km": 65,
+      "long_km": 22,
+      "quality": {
+        "goal": "vo2max",
+        "scale": "heavy",
+        "_legacy_structure": "5×2К @ 4:10 (Z4) ⚡ race-pace touch",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×90м",
+      "swim": "2×45м",
+      "total_h": 14.0
+    },
+    {
+      "season_week": 21,
+      "run_km": 70,
+      "long_km": 22,
+      "quality": {
+        "goal": "tempo",
+        "scale": "peak",
+        "_legacy_structure": "12К long tempo @ 4:18",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×90м",
+      "swim": "2×45м",
+      "total_h": 14.0
+    },
+    {
+      "season_week": 22,
+      "run_km": 70,
+      "long_km": 24,
+      "quality": {
+        "goal": "threshold_power",
+        "scale": "heavy",
+        "_legacy_structure": "4×2К @ 4:05, отдых 3м",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×30м",
+      "bike": "2×90м",
+      "swim": "2×45м",
+      "total_h": 14.0
+    },
+    {
+      "season_week": 23,
+      "run_km": 60,
+      "long_km": 14,
+      "quality": {
+        "goal": "time_trial",
+        "scale": "heavy",
+        "_legacy_structure": "5К TT @ race pace (пт 19.03): цель 22:00",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×25м",
+      "bike": "2×60м",
+      "swim": "1×45м",
+      "total_h": 11.5
+    },
+    {
+      "season_week": 24,
+      "run_km": 45,
+      "long_km": 10,
+      "quality": {
+        "goal": "mixed",
+        "scale": "light",
+        "_legacy_structure": "2×2К @ 4:00, отдых 4м + 1×800 @ 3:50",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×25м",
+      "bike": "2×60м",
+      "swim": "1×45м",
+      "total_h": 9.0
+    },
+    {
+      "season_week": 25,
+      "run_km": 35,
+      "long_km": 6,
+      "quality": {
+        "goal": "mixed",
+        "scale": "light",
+        "_legacy_structure": "1×1К @ 4:00, 1×800 @ 3:55, 1×400 @ 3:45",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+      },
+      "core": "2×25м",
+      "bike": "1×45м",
+      "swim": "1×30м",
+      "total_h": 7.0
+    }
+  ]
 }
