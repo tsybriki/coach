@@ -1,0 +1,264 @@
+{
+  "schema_version": "0.1.0",
+  "horizon": {
+    "start": "2026-10-11",
+    "end": "2027-09-18",
+    "season_id": "S25_Berlin_10K_2027_plus_Tri_Autumn_2027",
+    "season_week_count": 49,
+    "_note": "season_week = ordinal from 11-10-2026 (Sun). W1=11-17 окт (Sun-Sat), W27=11-17 апр 2027, W48=5-11 сен 2027. Race events: race_run=18 апр (Sun, W28), race_tri=12 сен (Sun, W49)."
+  },
+  "goals": [
+    {
+      "id": "g_run_spring",
+      "discipline": "run_10k",
+      "race_date": "2027-04-18",
+      "goal_metric": {
+        "type": "time_sec",
+        "target": 2460,
+        "target_friendly": "41:00"
+      },
+      "priority": 1,
+      "primary": true,
+      "venue": "S25 Berlin 10K, Olympischer Platz → Olympiastadion Berlin",
+      "start_time": "10:30",
+      "realistic_fork": {
+        "best": "40:30",
+        "likely": "41:00",
+        "conservative": "41:30",
+        "pbandit_pb": "40:00 (если всё идеально)"
+      }
+    },
+    {
+      "id": "g_tri_autumn",
+      "discipline": "tri_olympic",
+      "race_date": "2027-09-12",
+      "goal_metric": {
+        "type": "finish_under",
+        "target_sec": 9900,
+        "target_friendly": "sub 2:45"
+      },
+      "priority": 2,
+      "primary": false,
+      "venue": "TBD",
+      "start_time": "TBD"
+    }
+  ],
+  "phases": [
+    {
+      "id": "run_base",
+      "goal_id": "g_run_spring",
+      "start": "2026-10-11",
+      "end": "2027-01-02",
+      "hours_per_week_target": 5
+    },
+    {
+      "id": "run_build",
+      "goal_id": "g_run_spring",
+      "start": "2027-01-03",
+      "end": "2027-02-20",
+      "hours_per_week_target": 7
+    },
+    {
+      "id": "run_specific",
+      "goal_id": "g_run_spring",
+      "start": "2027-02-21",
+      "end": "2027-04-03",
+      "hours_per_week_target": 8
+    },
+    {
+      "id": "run_taper",
+      "goal_id": "g_run_spring",
+      "start": "2027-04-04",
+      "end": "2027-04-16",
+      "hours_per_week_target": 4
+    },
+    {
+      "id": "race_run",
+      "goal_id": "g_run_spring",
+      "start": "2027-04-17",
+      "end": "2027-04-17",
+      "event": true
+    },
+    {
+      "id": "transition",
+      "goal_id": "g_tri_autumn",
+      "start": "2027-04-18",
+      "end": "2027-05-08",
+      "hours_per_week_target": 5,
+      "notes": "снижение бега, вход в плавание/вело"
+    },
+    {
+      "id": "tri_base",
+      "goal_id": "g_tri_autumn",
+      "start": "2027-05-09",
+      "end": "2027-06-19",
+      "hours_per_week_target": 6
+    },
+    {
+      "id": "tri_build",
+      "goal_id": "g_tri_autumn",
+      "start": "2027-06-20",
+      "end": "2027-08-07",
+      "hours_per_week_target": 8
+    },
+    {
+      "id": "tri_specific",
+      "goal_id": "g_tri_autumn",
+      "start": "2027-08-08",
+      "end": "2027-09-04",
+      "hours_per_week_target": 10
+    },
+    {
+      "id": "tri_taper",
+      "goal_id": "g_tri_autumn",
+      "start": "2027-09-05",
+      "end": "2027-09-10",
+      "hours_per_week_target": 5
+    },
+    {
+      "id": "race_tri",
+      "goal_id": "g_tri_autumn",
+      "start": "2027-09-11",
+      "end": "2027-09-11",
+      "event": true
+    }
+  ],
+  "control_points": [
+    {
+      "id": "cp_3k_w4",
+      "goal_id": "g_run_spring",
+      "date": "2026-11-06",
+      "phase": "run_base",
+      "what": "3K time trial",
+      "protocol": "warmup + 3K all-out + cooldown",
+      "metric_target": "time_sec",
+      "measures": [
+        "top_end_speed",
+        "vo2max_proxy"
+      ],
+      "target_value": 840,
+      "season_week": 4
+    },
+    {
+      "id": "cp_5k_w8",
+      "goal_id": "g_run_spring",
+      "date": "2026-12-04",
+      "phase": "run_base",
+      "what": "5K max",
+      "protocol": "warmup + 5K all-out + cooldown",
+      "metric_target": "time_sec",
+      "measures": [
+        "vo2max",
+        "threshold_pace"
+      ],
+      "target_value": 1350,
+      "season_week": 8
+    },
+    {
+      "id": "cp_3k_w12",
+      "goal_id": "g_run_spring",
+      "date": "2027-01-01",
+      "phase": "run_base",
+      "what": "3K max",
+      "protocol": "warmup + 3K all-out + cooldown",
+      "metric_target": "time_sec",
+      "measures": [
+        "top_end_speed"
+      ],
+      "target_value": 780,
+      "season_week": 12
+    },
+    {
+      "id": "cp_2_3k_w16",
+      "goal_id": "g_run_spring",
+      "date": "2027-01-22",
+      "phase": "run_build",
+      "what": "2-3×3K average",
+      "protocol": "3×3K intervals, take mean",
+      "metric_target": "avg_time_sec",
+      "measures": [
+        "threshold_pace"
+      ],
+      "target_value": 810,
+      "season_week": 15
+    },
+    {
+      "id": "cp_5k_w23",
+      "goal_id": "g_run_spring",
+      "date": "2027-03-19",
+      "phase": "run_specific",
+      "what": "5K @ race pace",
+      "protocol": "warmup + 5K at 4:25/km + cooldown",
+      "metric_target": "time_sec",
+      "measures": [
+        "race_readiness"
+      ],
+      "target_value": 1320,
+      "season_week": 23
+    },
+    {
+      "id": "cp_olympic_sim_w32",
+      "goal_id": "g_tri_autumn",
+      "date": "2027-07-30",
+      "phase": "tri_build",
+      "what": "Olympic-distance brick (swim-bike-run)",
+      "protocol": "1.5K swim + 40K bike + 10K run",
+      "metric_target": "finish_sec",
+      "measures": [
+        "transition_efficiency",
+        "race_pace_under_fatigue"
+      ],
+      "target_value": 10200,
+      "season_week": 42
+    },
+    {
+      "id": "cp_general_hr_drift",
+      "goal_id": null,
+      "date": "2026-12-14",
+      "phase": "run_base",
+      "what": "HR drift baseline",
+      "metric_target": "drift_bpm_per_km",
+      "measures": [
+        "hr_drift"
+      ],
+      "target_value": 0.5,
+      "season_week": 10
+    }
+  ],
+  "races": [
+    {
+      "goal_id": "g_run_spring",
+      "date": "2027-04-18",
+      "name": "S25 Berlin 10K",
+      "start_time": "10:30"
+    },
+    {
+      "goal_id": "g_tri_autumn",
+      "date": "2027-09-12",
+      "name": "Olympic triathlon (TBD)",
+      "start_time": "TBD"
+    }
+  ],
+  "chosen_allocation": {
+    "snapshot_date": "2026-10-13",
+    "strategy": "balanced_60_40",
+    "g_run_spring_eff_pct": 60,
+    "g_tri_autumn_eff_pct": 40,
+    "reason": "Phase 1 stub — реальное распределение через goal_allocator.candidates() в Phase 2. Сейчас зафиксировано по spring-10k-2027-v2.md: основной объём до W24 под 10К, далее transition к tri."
+  },
+  "current_volume_hours_per_week": 4,
+  "volume_progression_rules": {
+    "weekly_increase_max_pct": 10,
+    "step_weeks": 3,
+    "step_hours": 1,
+    "deload_every_n_weeks": 4
+  },
+  "_source": "plans/spring-10k-2027-v2.md (полный сезон) + architecture v13 (структура с goals[])",
+  "season_start_date": "2026-10-11",
+  "season_end_date": "2027-09-12",
+  "_season_week_notes": "W1=12.10.2026. season_week не зависит от ISO недели — это ordinal. Конвертация через lib/season_week.py.",
+  "last_replan": {
+    "reason": "CP-даты TT сдвинуты на пятницу: в season_plan.json все time-trial стояли на четверге, а макро-план (spring-10k-2027-v2.md) фиксирует TT на пятницу. Сдвиг +1 день, season_week всех CP не меняется. Найдено Кириллом 2026-10-24.",
+    "at": "2026-10-24T13:45:37+00:00"
+  }
+}

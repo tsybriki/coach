@@ -1,0 +1,522 @@
+{
+  "schema_version": "0.2.0",
+  "updated_at": "2026-10-24",
+  "_purpose": "Каталог качественных сессий по АДАПТАЦИОННЫМ ЦЕЛЯМ. Макро-план (season_plan.json → weekly_macro[].quality) хранит только цель (goal) и масштаб (scale) — конкретная структура выбирается на этапе планирования недели. Правило: макро = зачем, шаблон = как.",
+  "_zones_ref": "state/athlete.json → hr_zones (7-зонная модель: Z1 100-118, Z2 118-135, Z3 136-150, Z4 150-160 tempo, Z5 160-168 threshold (LTH=164), Z6 169-172 super-threshold, Z7 173-182 VO2max)",
+  "_scales": ["light", "medium", "heavy", "peak"],
+  "_selection_rule": "Вариант выбирается по (goal, scale). Дополнительно действует guard объёма: work_m выбранного варианта не должен быть ниже 0.9 × объёма последней интервальной сессии за 21 день (state/quality_history.json). Если подходящих вариантов в полосе нет — берётся максимальный по объёму в полосе.",
+  "templates": {
+    "vo2max": {
+      "id": "vo2max",
+      "label": "VO2max",
+      "goal": "Развиваем VO2max",
+      "develops": "Аэробная мощность — верхняя граница аэробной системы",
+      "method": "pace_with_hr_cap",
+      "work_zone": "Z6",
+      "hr_target": 172,
+      "pace": "<4:10",
+      "rest_zone": "Z1",
+      "indicators": "Время в Z6/Z7, темп на 800м, падение скорости в последних 200м",
+      "phases": ["run_base", "run_build", "run_specific", "run_taper"],
+      "variants": [
+        {
+          "id": "6x400",
+          "label": "6×400",
+          "scale": "light",
+          "work_m": 2400,
+          "blocks": [
+            {"type": "reps", "reps": 6, "distance_m": 400, "pace": "4:00", "zone": "Z6", "hr_target": 172, "rest_min": 2, "rest_distance_m": 250}
+          ],
+          "note": "Стартовый объём в теме: 2400 м на Z6"
+        },
+        {
+          "id": "8x400",
+          "label": "8×400",
+          "scale": "light",
+          "work_m": 3200,
+          "blocks": [
+            {"type": "reps", "reps": 8, "distance_m": 400, "pace": "3:55", "zone": "Z6", "hr_target": 172, "rest_min": 1.5, "rest_distance_m": 200}
+          ],
+          "note": "Плотнее 6×400: ~3200 м на Z6, отдых короче"
+        },
+        {
+          "id": "10x200",
+          "label": "10×200",
+          "scale": "medium",
+          "work_m": 2000,
+          "blocks": [
+            {"type": "reps", "reps": 10, "distance_m": 200, "pace": "3:35", "zone": "Z6", "hr_target": 170, "rest_min": 1, "rest_distance_m": 200}
+          ],
+          "note": "Высокая плотность, короткий объём — нервно-мышечная работа"
+        },
+        {
+          "id": "5x800",
+          "label": "5×800",
+          "scale": "medium",
+          "work_m": 4000,
+          "blocks": [
+            {"type": "reps", "reps": 5, "distance_m": 800, "pace": "4:00", "zone": "Z6", "hr_target": 172, "rest_min": 3, "rest_distance_m": 400}
+          ],
+          "note": "Длиннее в VO2-темпе, объём ×1.7 от 400м"
+        },
+        {
+          "id": "2x2k+800",
+          "label": "2×2К + 1×800",
+          "scale": "medium",
+          "work_m": 4800,
+          "blocks": [
+            {"type": "reps", "reps": 2, "distance_m": 2000, "pace": "4:00", "zone": "Z6", "hr_target": 172, "rest_min": 4, "rest_distance_m": 400},
+            {"type": "reps", "reps": 1, "distance_m": 800, "pace": "3:50", "zone": "Z6", "hr_target": 172, "rest_min": 0, "rest_distance_m": 0}
+          ],
+          "note": "Сокращённая версия — в тапер-неделю"
+        },
+        {
+          "id": "4x2k",
+          "label": "4×2К",
+          "scale": "heavy",
+          "work_m": 8000,
+          "blocks": [
+            {"type": "reps", "reps": 4, "distance_m": 2000, "pace": "4:05", "zone": "Z6", "hr_target": 172, "rest_min": 3, "rest_distance_m": 400}
+          ],
+          "note": "Длинные отрезки в VO2-темпе — большая аэробная мощность"
+        },
+        {
+          "id": "5x2k",
+          "label": "5×2К",
+          "scale": "heavy",
+          "work_m": 10000,
+          "blocks": [
+            {"type": "reps", "reps": 5, "distance_m": 2000, "pace": "4:10", "zone": "Z6", "hr_target": 172, "rest_min": 3, "rest_distance_m": 400}
+          ],
+          "note": "Максимальный объём VO2-работы в сезоне"
+        },
+        {
+          "id": "8x1k",
+          "label": "8×1К",
+          "scale": "peak",
+          "work_m": 8000,
+          "blocks": [
+            {"type": "reps", "reps": 8, "distance_m": 1000, "pace": "3:50", "zone": "Z6", "hr_target": 172, "rest_min": 2, "rest_distance_m": 300}
+          ],
+          "note": "Плотный объём на скорости — пиковая работа"
+        }
+      ]
+    },
+    "threshold_speed": {
+      "id": "threshold_speed",
+      "label": "Threshold — короткие повторы",
+      "goal": "Развиваем threshold pace",
+      "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
+      "method": "pace_with_hr_cap",
+      "work_zone": "Z5",
+      "hr_target": 164,
+      "pace": "4:20-4:35",
+      "rest_zone": "Z1",
+      "indicators": "Темп на 1К без просадки, HR держится в Z5 без выхода в Z6",
+      "phases": ["run_base", "run_build", "run_specific"],
+      "variants": [
+        {
+          "id": "4x1k_easy",
+          "label": "4×1К @ 4:35",
+          "scale": "light",
+          "work_m": 4000,
+          "blocks": [
+            {"type": "reps", "reps": 4, "distance_m": 1000, "pace": "4:35", "zone": "Z5", "hr_target": 162, "rest_min": 2, "rest_distance_m": 300}
+          ],
+          "note": "Порог, но с запасом — вход в тему"
+        },
+        {
+          "id": "4x1k",
+          "label": "4×1К @ 4:25",
+          "scale": "medium",
+          "work_m": 4000,
+          "blocks": [
+            {"type": "reps", "reps": 4, "distance_m": 1000, "pace": "4:25", "zone": "Z5", "hr_target": 164, "rest_min": 2, "rest_distance_m": 300}
+          ],
+          "note": "Рабочая комбинация LTH: 4 повтора по 1К на 4:25"
+        },
+        {
+          "id": "5x1k",
+          "label": "5×1К @ 4:25",
+          "scale": "medium",
+          "work_m": 5000,
+          "blocks": [
+            {"type": "reps", "reps": 5, "distance_m": 1000, "pace": "4:25", "zone": "Z5", "hr_target": 164, "rest_min": 2, "rest_distance_m": 300}
+          ],
+          "note": "Больше повторов на том же пороге"
+        },
+        {
+          "id": "6x800",
+          "label": "6×800 @ 4:20",
+          "scale": "heavy",
+          "work_m": 4800,
+          "blocks": [
+            {"type": "reps", "reps": 6, "distance_m": 800, "pace": "4:20", "zone": "Z5", "hr_target": 165, "rest_min": 2, "rest_distance_m": 300}
+          ],
+          "note": "Компактнее по времени, тот же объём"
+        },
+        {
+          "id": "8x800",
+          "label": "8×800 @ 4:15",
+          "scale": "peak",
+          "work_m": 6400,
+          "blocks": [
+            {"type": "reps", "reps": 8, "distance_m": 800, "pace": "4:15", "zone": "Z5", "hr_target": 165, "rest_min": 1.5, "rest_distance_m": 250}
+          ],
+          "note": "Пиковое число повторов на пороге"
+        }
+      ]
+    },
+    "threshold_power": {
+      "id": "threshold_power",
+      "label": "Threshold — длинные отрезки",
+      "goal": "Развиваем способность держать threshold pace",
+      "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
+      "method": "pace_with_hr_cap",
+      "work_zone": "Z5",
+      "hr_target": 164,
+      "pace": "4:20-4:30",
+      "rest_zone": "Z1",
+      "indicators": "Ровный темп на 2К без дрейфа HR, отсутствие завала в последние 400м",
+      "phases": ["run_build", "run_specific"],
+      "variants": [
+        {
+          "id": "2x2k",
+          "label": "2×2К @ 4:30",
+          "scale": "light",
+          "work_m": 4000,
+          "blocks": [
+            {"type": "reps", "reps": 2, "distance_m": 2000, "pace": "4:30", "zone": "Z5", "hr_target": 162, "rest_min": 4, "rest_distance_m": 400}
+          ],
+          "note": "Первый длинный интервал — 2 отрезка, объём скромный"
+        },
+        {
+          "id": "3x2k",
+          "label": "3×2К @ 4:25",
+          "scale": "medium",
+          "work_m": 6000,
+          "blocks": [
+            {"type": "reps", "reps": 3, "distance_m": 2000, "pace": "4:25", "zone": "Z5", "hr_target": 164, "rest_min": 3, "rest_distance_m": 400}
+          ],
+          "note": "Классические 3×2К на пороге"
+        },
+        {
+          "id": "4x2k",
+          "label": "4×2К @ 4:20",
+          "scale": "heavy",
+          "work_m": 8000,
+          "blocks": [
+            {"type": "reps", "reps": 4, "distance_m": 2000, "pace": "4:20", "zone": "Z5", "hr_target": 165, "rest_min": 3, "rest_distance_m": 400}
+          ],
+          "note": "Пик объёма на пороге"
+        },
+        {
+          "id": "2x3k",
+          "label": "2×3К @ 4:25",
+          "scale": "heavy",
+          "work_m": 6000,
+          "blocks": [
+            {"type": "reps", "reps": 2, "distance_m": 3000, "pace": "4:25", "zone": "Z5", "hr_target": 164, "rest_min": 4, "rest_distance_m": 500}
+          ],
+          "note": "Меньше повторов, но длиннее — другой стимул на пороге"
+        }
+      ]
+    },
+    "tempo": {
+      "id": "tempo",
+      "label": "Tempo",
+      "goal": "Развиваем аэробную мощность",
+      "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
+      "method": "hr_or_pace",
+      "work_zone": "Z4",
+      "hr_target": 158,
+      "pace": "4:50-5:20",
+      "rest_zone": "Z1",
+      "indicators": "Ровный HR в Z4, отсутствие завала, длина непрерывного отрезка",
+      "phases": ["run_base", "run_build", "run_specific"],
+      "variants": [
+        {
+          "id": "4k",
+          "label": "4К tempo",
+          "scale": "light",
+          "work_m": 4000,
+          "blocks": [
+            {"type": "continuous", "distance_m": 4000, "pace": "5:00", "zone": "Z4", "hr_target": 155}
+          ],
+          "note": "Короткий непрерывный отрезок"
+        },
+        {
+          "id": "5k",
+          "label": "5К tempo",
+          "scale": "medium",
+          "work_m": 5000,
+          "blocks": [
+            {"type": "continuous", "distance_m": 5000, "pace": "4:55", "zone": "Z4", "hr_target": 158}
+          ],
+          "note": "Рабочая длина tempo"
+        },
+        {
+          "id": "8k",
+          "label": "8К tempo",
+          "scale": "heavy",
+          "work_m": 8000,
+          "blocks": [
+            {"type": "continuous", "distance_m": 8000, "pace": "4:45", "zone": "Z4", "hr_target": 158}
+          ],
+          "note": "Длинный непрерывный отрезок на Z4"
+        },
+        {
+          "id": "12k",
+          "label": "12К long tempo",
+          "scale": "peak",
+          "work_m": 12000,
+          "blocks": [
+            {"type": "continuous", "distance_m": 12000, "pace": "4:35", "zone": "Z4", "hr_target": 160}
+          ],
+          "note": "Пиковая длина — 12К непрерывно"
+        }
+      ]
+    },
+    "mixed": {
+      "id": "mixed",
+      "label": "Порог + VO2max",
+      "goal": "Развиваем порог и VO2max в одной сессии",
+      "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
+      "method": "pace_with_hr_cap",
+      "work_zone": "Z5",
+      "hr_target": 168,
+      "pace": "4:00-4:30",
+      "rest_zone": "Z1",
+      "indicators": "Порог держится без завала, скоростной блок в конце — на Z6 без перебора",
+      "phases": ["run_base", "run_build"],
+      "variants": [
+        {
+          "id": "3x1k+2x400",
+          "label": "3×1К (порог) + 2×400 (VO2)",
+          "scale": "light",
+          "work_m": 3800,
+          "blocks": [
+            {"type": "reps", "reps": 3, "distance_m": 1000, "pace": "4:30", "zone": "Z5", "hr_target": 162, "rest_min": 2, "rest_distance_m": 300},
+            {"type": "reps", "reps": 2, "distance_m": 400, "pace": "3:50", "zone": "Z6", "hr_target": 170, "rest_min": 2, "rest_distance_m": 250}
+          ],
+          "note": "Пороговая часть + скоростной хвост"
+        },
+        {
+          "id": "3x1k+2x800",
+          "label": "3×1К (порог) + 2×800 (VO2)",
+          "scale": "medium",
+          "work_m": 4600,
+          "blocks": [
+            {"type": "reps", "reps": 3, "distance_m": 1000, "pace": "4:25", "zone": "Z5", "hr_target": 164, "rest_min": 2, "rest_distance_m": 300},
+            {"type": "reps", "reps": 2, "distance_m": 800, "pace": "3:55", "zone": "Z6", "hr_target": 172, "rest_min": 3, "rest_distance_m": 300}
+          ],
+          "note": "Рабочая комбинация макро"
+        },
+        {
+          "id": "5k+4x400",
+          "label": "5К tempo + 4×400 (VO2)",
+          "scale": "heavy",
+          "work_m": 6600,
+          "blocks": [
+            {"type": "continuous", "distance_m": 5000, "pace": "4:45", "zone": "Z4", "hr_target": 158},
+            {"type": "reps", "reps": 4, "distance_m": 400, "pace": "3:50", "zone": "Z6", "hr_target": 172, "rest_min": 2, "rest_distance_m": 250}
+          ],
+          "note": "Длинный tempo-блок + скоростной финал"
+        }
+      ]
+    },
+    "pyramid": {
+      "id": "pyramid",
+      "label": "Пирамида",
+      "goal": "Развиваем переключение зон",
+      "develops": "Переход от аэробной работы к пороговой и выше — навык смены интенсивности",
+      "method": "pace_with_hr_cap",
+      "work_zone": "Z4",
+      "hr_target": 168,
+      "pace": "4:30→3:45",
+      "rest_zone": "Z1",
+      "indicators": "Ровный подъём темпа по ступеням, контроль на вершине",
+      "phases": ["run_base"],
+      "variants": [
+        {
+          "id": "800-600-400",
+          "label": "800 → 600 → 400",
+          "scale": "light",
+          "work_m": 1800,
+          "blocks": [
+            {"type": "pyramid", "steps": [
+              {"distance_m": 800, "pace": "4:30", "zone": "Z4", "hr_target": 155},
+              {"distance_m": 600, "pace": "4:10", "zone": "Z5", "hr_target": 163},
+              {"distance_m": 400, "pace": "3:45", "zone": "Z6", "hr_target": 170}
+            ], "rest_min": 2, "rest_distance_m": 250}
+          ],
+          "note": "Три ступени, короткий объём"
+        },
+        {
+          "id": "1k-800-400",
+          "label": "1К → 800 → 400",
+          "scale": "medium",
+          "work_m": 2200,
+          "blocks": [
+            {"type": "pyramid", "steps": [
+              {"distance_m": 1000, "pace": "4:30", "zone": "Z4", "hr_target": 155},
+              {"distance_m": 800, "pace": "4:10", "zone": "Z5", "hr_target": 163},
+              {"distance_m": 400, "pace": "3:45", "zone": "Z6", "hr_target": 170}
+            ], "rest_min": 2, "rest_distance_m": 250}
+          ],
+          "note": "Классическая пирамида"
+        },
+        {
+          "id": "1200-800-600-400",
+          "label": "1200 → 800 → 600 → 400",
+          "scale": "heavy",
+          "work_m": 3000,
+          "blocks": [
+            {"type": "pyramid", "steps": [
+              {"distance_m": 1200, "pace": "4:35", "zone": "Z4", "hr_target": 155},
+              {"distance_m": 800, "pace": "4:15", "zone": "Z5", "hr_target": 163},
+              {"distance_m": 600, "pace": "3:55", "zone": "Z5", "hr_target": 166},
+              {"distance_m": 400, "pace": "3:40", "zone": "Z6", "hr_target": 170}
+            ], "rest_min": 2, "rest_distance_m": 250}
+          ],
+          "note": "Четыре ступени, больше объёма"
+        }
+      ]
+    },
+    "fartlek": {
+      "id": "fartlek",
+      "label": "Фартлек",
+      "goal": "Развиваем общую аэробную мощность",
+      "develops": "Игровая стимуляция: чередование лёгкого и быстрого без жёсткой структуры",
+      "method": "free",
+      "work_zone": "Z5",
+      "hr_target": 166,
+      "pace": "5:20 / 4:00",
+      "rest_zone": "Z1",
+      "indicators": "Общее самочувствие, отсутствие перебора в быстрых отрезках",
+      "phases": ["run_base", "run_build"],
+      "variants": [
+        {
+          "id": "200-800 x4",
+          "label": "4 цикла: 200@5:20 + 800@4:00",
+          "scale": "light",
+          "work_m": 4000,
+          "blocks": [
+            {"type": "fartlek", "cycles": 4, "easy_distance_m": 200, "easy_pace": "5:20", "hard_distance_m": 800, "hard_pace": "4:00", "hard_zone": "Z5", "hr_target": 164}
+          ],
+          "note": "4 цикла"
+        },
+        {
+          "id": "200-800 x6",
+          "label": "6 циклов: 200@5:20 + 800@4:00",
+          "scale": "medium",
+          "work_m": 6000,
+          "blocks": [
+            {"type": "fartlek", "cycles": 6, "easy_distance_m": 200, "easy_pace": "5:20", "hard_distance_m": 800, "hard_pace": "4:00", "hard_zone": "Z5", "hr_target": 164}
+          ],
+          "note": "6 циклов — рабочий объём"
+        },
+        {
+          "id": "200-800 x8",
+          "label": "8 циклов: 200@5:20 + 800@4:00",
+          "scale": "heavy",
+          "work_m": 8000,
+          "blocks": [
+            {"type": "fartlek", "cycles": 8, "easy_distance_m": 200, "easy_pace": "5:20", "hard_distance_m": 800, "hard_pace": "4:00", "hard_zone": "Z5", "hr_target": 166}
+          ],
+          "note": "8 циклов — максимум"
+        }
+      ]
+    },
+    "progression": {
+      "id": "progression",
+      "label": "Прогрессия",
+      "goal": "Развиваем базу: поднимаем темп в конце сессии",
+      "develops": "Аэробная база + способность держать темп под нагрузкой",
+      "method": "hr_then_pace",
+      "work_zone": "Z2",
+      "hr_target": 145,
+      "pace": "5:00→4:30",
+      "rest_zone": "Z1",
+      "indicators": "Ровный Z2 до последней части, контроль темпа в прогрессии",
+      "phases": ["run_base", "run_build", "run_specific", "run_taper"],
+      "variants": [
+        {
+          "id": "8k+3k",
+          "label": "8К + прогрессия 3К",
+          "scale": "light",
+          "work_m": 8000,
+          "blocks": [
+            {"type": "progression", "easy_distance_m": 5000, "progression_distance_m": 3000, "from_pace": "5:00", "to_pace": "4:30", "zone": "Z3", "hr_target": 146}
+          ],
+          "note": "5К Z2 + 3К с набором темпа"
+        },
+        {
+          "id": "10k+5k",
+          "label": "10К + прогрессия 5К",
+          "scale": "medium",
+          "work_m": 10000,
+          "blocks": [
+            {"type": "progression", "easy_distance_m": 5000, "progression_distance_m": 5000, "from_pace": "5:00", "to_pace": "4:30", "zone": "Z3", "hr_target": 146}
+          ],
+          "note": "Ровная база + длинная прогрессия"
+        },
+        {
+          "id": "12k+5k",
+          "label": "12К + прогрессия 5К",
+          "scale": "heavy",
+          "work_m": 12000,
+          "blocks": [
+            {"type": "progression", "easy_distance_m": 7000, "progression_distance_m": 5000, "from_pace": "5:05", "to_pace": "4:35", "zone": "Z3", "hr_target": 148}
+          ],
+          "note": "Объёмная база с длинным финишем"
+        }
+      ]
+    },
+    "time_trial": {
+      "id": "time_trial",
+      "label": "Time trial",
+      "goal": "Замеряем форму на контрольной точке",
+      "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции",
+      "method": "all_out",
+      "work_zone": "Z7",
+      "hr_target": 182,
+      "pace": "all-out",
+      "rest_zone": "Z1",
+      "indicators": "Время на дистанции, темп по 200м, дефицит к цели",
+      "phases": ["run_base", "run_build", "run_specific"],
+      "variants": [
+        {
+          "id": "3k",
+          "label": "3К all-out",
+          "scale": "light",
+          "work_m": 3000,
+          "blocks": [
+            {"type": "tt", "distance_m": 3000, "pace": "all-out", "zone": "Z7", "hr_target": 182}
+          ],
+          "note": "Короткий тест — контроль top-end скорости"
+        },
+        {
+          "id": "5k",
+          "label": "5К all-out",
+          "scale": "medium",
+          "work_m": 5000,
+          "blocks": [
+            {"type": "tt", "distance_m": 5000, "pace": "all-out", "zone": "Z7", "hr_target": 182}
+          ],
+          "note": "Основной тест — VO2max и threshold"
+        },
+        {
+          "id": "5k_race",
+          "label": "5К @ race pace",
+          "scale": "heavy",
+          "work_m": 5000,
+          "blocks": [
+            {"type": "tt", "distance_m": 5000, "pace": "4:25", "zone": "Z6", "hr_target": 172}
+          ],
+          "note": "Гонка-темп — проверка готовности к April"
+        }
+      ]
+    }
+  }
+}

@@ -28,7 +28,7 @@ from .season_week import (
 )
 from .step_builder import build_structure, ofp_structure
 
-DAY_ORDER = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"]
+DAY_ORDER = ["ВС", "ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ"]
 
 
 def _day_for(week_start, target_date: str) -> str | None:
@@ -158,11 +158,18 @@ def _auto_zwift_check(slot: dict, constraints: dict) -> bool:
     return True
 
 
-def _layout_slots(phase_focus: dict, constraints: dict) -> list[dict]:
-    """Раскладка phase по weekly_windows с учётом приоритетов."""
+def _layout_slots(phase_focus: dict, constraints: dict,
+                  quality_selection: dict | None = None) -> list[dict]:
+    """Раскладка phase по weekly_windows с учётом приоритетов.
+
+    quality_selection — результат quality_session.choose_quality() для этой недели:
+    {goal, scale, variant, ...}. Если задан, ключевой беговой слот получает
+    структуру ИЗ ШАБЛОНА (конкретные повторы/темп/отдых), а не из зашитого subkind.
+    """
     windows_by_day = _windows_by_day(constraints)
     forbidden = constraints.get("forbidden", {})
     slots = []
+    quality_applied = False
 
     # Категории по приоритету
     categories = [
@@ -194,6 +201,18 @@ def _layout_slots(phase_focus: dict, constraints: dict) -> list[dict]:
             if forbidden_rule and cat_name in ("key_run", "long_run", "brick"):
                 # Интенсивные под запретом — пропускаем
                 continue
+
+            # Качественная сессия недели: цель из макро, структура из шаблона.
+            # Применяется к ПЕРВОМУ key_run-слоту недели — качественная сессия в неделе одна.
+            is_quality = bool(
+                quality_selection
+                and cat_name == "key_run"
+                and spec["kind"] == "run"
+                and not quality_applied
+            )
+            if is_quality:
+                spec["quality_selection"] = quality_selection
+
             slot = {
                 "id": f"{day.lower()}-{cat_name}",
                 "day": day,
@@ -209,6 +228,32 @@ def _layout_slots(phase_focus: dict, constraints: dict) -> list[dict]:
                 "workout_ref": None,
                 "structure": _build_slot_structure(spec),
             }
+            if is_quality:
+                quality_applied = True
+                slot["subkind"] = "quality"
+                slot["focus"] = quality_selection.get("template_meta", {}).get("work_zone", "Z4")
+                slot["quality_goal"] = quality_selection.get("goal")
+                slot["quality_scale"] = quality_selection.get("scale")
+                slot["quality_variant"] = quality_selection.get("variant", {}).get("id")
+                slot["quality_work_m"] = quality_selection.get("work_m")
+                slot["quality_selection"] = quality_selection
+                slot["structure"] = spec.get("_structure_override") or slot["structure"]
+                slot["name"] = _quality_slot_name(quality_selection)
+                # Длительность слота = фактическая длительность выбранной структуры
+                struct_min = sum(
+                    st.get("duration_min") or 0
+                    for st in slot["structure"]
+                    if st.get("phase") != "set" or not st.get("set_repeats")
+                ) + sum(
+                    (st.get("duration_min") or 0)
+                    for st in slot["structure"]
+                    if st.get("phase") == "set" and st.get("set_repeats")
+                )
+                slot["duration_min"] = struct_min
+                if quality_selection.get("rationale"):
+                    slot["rationale"] = quality_selection["rationale"]
+                if quality_selection.get("warning"):
+                    slot["quality_warning"] = quality_selection["warning"]
             if _auto_zwift_check(slot, constraints):
                 slot["workout_pending"] = True
             slots.append(slot)
@@ -223,6 +268,8 @@ def _build_slot_structure(spec: dict) -> list[dict]:
 
     Возвращает list[step] с warmup/work/cooldown/set и zones.
     OFP использует ofp_structure (упражнения вместо HR-зон).
+    Если в spec задан готовый quality_selection — берём структуру из шаблона
+    (конкретная структура выбирается при планировании недели, а не зашита в макро).
     """
     from .step_builder import build_structure, ofp_structure
     kind = spec.get("kind", "")
@@ -230,9 +277,63 @@ def _build_slot_structure(spec: dict) -> list[dict]:
     duration = spec.get("duration_min", 0)
     focus = spec.get("focus", "")
     phase_id = spec.get("phase_id", "")
+
+    qsel = spec.get("quality_selection")
+    if qsel and kind == "run":
+        from .quality_session import build_structure_from_variant
+        variant = qsel.get("variant") or {}
+        steps = build_structure_from_variant(variant)
+        spec["_structure_override"] = steps
+        return steps
+
     if kind == "ofp":
         return ofp_structure(subkind, duration)
     return build_structure(subkind, duration, focus, phase_id)
+
+
+def _select_quality_for_week(season_plan: dict, season_week: int,
+                              variant_id: str | None = None) -> dict | None:
+    """
+    Достаёт цель качественной сессии недели из макро и выбирает конкретную структуру.
+
+    Макро (weekly_macro[].quality) хранит только {goal, scale}. Структура выбирается
+    из state/workout_templates.json через quality_session.choose_quality() —
+    с guard'ом объёма по state/quality_history.json.
+
+    variant_id — точный выбор варианта (например из override: "5x800").
+    """
+    wm = season_plan.get("weekly_macro") or []
+    entry = next((w for w in wm if w.get("season_week") == season_week), None)
+    if not entry:
+        return None
+    q = entry.get("quality") or {}
+    goal = q.get("goal")
+    scale = q.get("scale")
+    if not goal:
+        return None
+
+    # Контекст макро-лестницы: work_m предыдущей недели плана (для флага скачков)
+    plan_context = None
+    prev = next((w for w in wm if w.get("season_week") == season_week - 1), None)
+    if prev:
+        from .quality_session import choose_quality as _cq
+        prev_q = _cq(prev.get("quality", {}).get("goal", ""),
+                     prev.get("quality", {}).get("scale", "medium"),
+                     variant_id=prev.get("quality", {}).get("variant_id"))
+        plan_context = prev_q.get("work_m")
+
+    from .quality_session import choose_quality
+    return choose_quality(goal, scale or "medium", variant_id=variant_id,
+                          plan_context_work_m=plan_context)
+
+
+def _quality_slot_name(qsel: dict) -> str:
+    """Имя слота качественной сессии: цель + выбранный вариант."""
+    meta = qsel.get("template_meta") or {}
+    variant = qsel.get("variant") or {}
+    label = meta.get("label") or qsel.get("goal", "")
+    vlabel = variant.get("label", "")
+    return f"{label}: {vlabel}" if vlabel else label
 
 
 def _slot_name(spec: dict) -> str:
@@ -276,7 +377,88 @@ def _slot_name(spec: dict) -> str:
     return f"{kind} {sub} {spec['duration_min']}мин"
 
 
-def _apply_overrides(slots: list[dict], overrides: list[dict], season_week: int) -> tuple[list[dict], list[dict]]:
+def _pick_cp_window(windows: list[dict], cp: dict) -> dict:
+    """Выбирает окно для control point.
+
+    CP — это всегда беговая работа (time trial). Поэтому берём окно,
+    пригодное для бега (стадион / асфальт / бассейн), а не велотренажёр.
+    Если подходящего окна нет — берём последнее окно дня (вечернее).
+    """
+    run_locs = ("stadium", "asphalt", "pool", "stadium_or_pool", "pool_or_asphalt")
+    for w in windows:
+        if any(k in w.get("location", "") for k in run_locs):
+            return w
+    return windows[-1]
+
+
+def _build_cp_structure(cp: dict, win: dict) -> list[dict]:
+    """Структура контрольной точки: разминка → работа на время → заминка."""
+    dur = win.get("duration_min", 60)
+    warmup = 15
+    cooldown = 10
+    work = max(dur - warmup - cooldown, 5)
+    tv = cp.get("target_value")
+    target = ""
+    if isinstance(tv, int) and tv > 0:
+        target = f"цель {tv // 60}:{tv % 60:02d}"
+    return [
+        {"phase": "warmup", "basis": "time", "duration_min": warmup, "zone": "Z1", "pace_min_per_km": None},
+        {"phase": "work", "basis": "time", "duration_min": work, "zone": "Z5", "hr_target": None, "pace_min_per_km": None},
+        {"phase": "cooldown", "basis": "time", "duration_min": cooldown, "zone": "Z1", "pace_min_per_km": None},
+    ]
+
+
+def _build_slot_from_spec(spec: dict, quality_selection: dict | None = None) -> dict:
+    """Собирает слот из спеки override'а. structure — из spec или через step_builder."""
+    slot = {
+        "id": spec["id"],
+        "day": spec["day"],
+        "time": spec.get("time", ""),
+        "duration_min": spec.get("duration_min", 0),
+        "name": spec.get("name", ""),
+        "kind": spec.get("kind", ""),
+        "subkind": spec.get("subkind", ""),
+        "focus": spec.get("focus", ""),
+        "location": spec.get("location", ""),
+        "priority": spec.get("priority", 50),
+        "category": spec.get("category", ""),
+        "workout_ref": None,
+    }
+    if spec.get("structure"):
+        slot["structure"] = spec["structure"]
+    elif spec.get("subkind") == "quality" and quality_selection:
+        # Слот качественной сессии: структура из выбранного шаблона
+        from .quality_session import build_structure_from_variant
+        slot["structure"] = build_structure_from_variant(quality_selection.get("variant") or {})
+        slot["quality_goal"] = quality_selection.get("goal")
+        slot["quality_scale"] = quality_selection.get("scale")
+        slot["quality_variant"] = quality_selection.get("variant", {}).get("id")
+        slot["quality_work_m"] = quality_selection.get("work_m")
+        slot["quality_selection"] = quality_selection
+        slot["focus"] = quality_selection.get("template_meta", {}).get("work_zone", slot["focus"])
+        slot["duration_min"] = sum(st.get("duration_min") or 0 for st in slot["structure"])
+    else:
+        slot["structure"] = _build_slot_structure({
+            "kind": slot["kind"],
+            "subkind": slot["subkind"],
+            "duration_min": slot["duration_min"],
+            "focus": slot["focus"],
+        })
+    if spec.get("rationale"):
+        slot["rationale"] = spec["rationale"]
+    if quality_selection and slot.get("subkind") == "quality":
+        # Объединяем rationale спеки и rationale выбора шаблона
+        parts = [slot.get("rationale", ""), quality_selection.get("rationale", "")]
+        slot["rationale"] = " ".join(p for p in parts if p).strip()
+        if quality_selection.get("warning"):
+            slot["quality_warning"] = quality_selection["warning"]
+    if spec.get("workout_pending"):
+        slot["workout_pending"] = True
+    return slot
+
+
+def _apply_overrides(slots: list[dict], overrides: list[dict], season_week: int,
+                     quality_selection: dict | None = None) -> tuple[list[dict], list[dict]]:
     """Применяет overrides для конкретной недели. Возвращает (slots_after, applied_log)."""
     applied_log = []
     week_overrides = [o for o in overrides if o.get("week") == f"W{season_week}" or o.get("season_week") == season_week]
@@ -285,6 +467,24 @@ def _apply_overrides(slots: list[dict], overrides: list[dict], season_week: int)
         reason = ov.get("reason", "")
         if not reason:
             continue
+        if ov.get("replace_slots"):
+            # Неделя переопределена целиком (travel-неделя, деload, спец-раскладка).
+            specs = ov["replace_slots"] if isinstance(ov["replace_slots"], list) else ov.get("slots", [])
+            new_slots = [_build_slot_from_spec(s, quality_selection) for s in specs]
+            new_slots.sort(key=lambda s: (DAY_ORDER.index(s["day"]), s.get("time", "")))
+            applied_log.append({
+                "ov": "replace_slots",
+                "applied": True,
+                "reason": reason,
+                "slots_before": len(slots),
+                "slots_after": len(new_slots),
+            })
+            slots = new_slots
+        if ov.get("add_slots"):
+            for spec in ov["add_slots"]:
+                slots.append(_build_slot_from_spec(spec))
+            slots.sort(key=lambda s: (DAY_ORDER.index(s["day"]), s.get("time", "")))
+            applied_log.append({"ov": "add_slots", "applied": True, "reason": reason})
         if ov.get("add_swim_sessions"):
             # Добавляем swim-сессию в СБ (окно пустое обычно, но если есть — ставим)
             for sw in ov["add_swim_sessions"]:
@@ -333,30 +533,75 @@ def generate(season_week: int | str,
 
     phase_id = current_phase["id"] if current_phase else "run_base"
     phase_focus = _phase_focus_runs(phase_id)
-    slots = _layout_slots(phase_focus, cn)
-    slots, applied_log = _apply_overrides(slots, ov.get("overrides", []), sw)
+
+    # Качественная сессия недели: цель берём из макро (weekly_macro[].quality),
+    # конкретную структуру выбираем из каталога шаблонов с guard'ом объёма.
+    # variant_id можно задать в override недели — точный выбор варианта.
+    quality_variant_id = None
+    for o in ov.get("overrides", []):
+        if o.get("week") == f"W{sw}" or o.get("season_week") == sw:
+            qo = o.get("quality") or {}
+            if qo.get("variant_id"):
+                quality_variant_id = qo["variant_id"]
+            break
+    quality_selection = _select_quality_for_week(sp, sw, variant_id=quality_variant_id)
+
+    slots = _layout_slots(phase_focus, cn, quality_selection=quality_selection)
+    slots, applied_log = _apply_overrides(slots, ov.get("overrides", []), sw,
+                                         quality_selection=quality_selection)
+
+    # Контекст нагрузки предыдущей недели (для решения «что ставим»)
+    load_context = None
+    for o in ov.get("overrides", []):
+        if o.get("week") == f"W{sw}" or o.get("season_week") == sw:
+            if o.get("load_context"):
+                load_context = o["load_context"]
+                break
 
     # CP-слоты
+    # CP несёт свою дату → день определяется из неё, а слот ставится в окно,
+    # подходящее для бега (стадион/асфальт), а не в первое попавшееся окно дня.
+    # Иначе 3К TT в ПТ вставал на велотренажёр в ЧТ (баг, найден Кириллом 2026-10-24).
     cp_slots = []
     for cp in cp_in_range:
         day = _day_for(week_start, cp["date"])
-        if day:
-            windows = cn.get("weekly_windows", {}).get(day, [])
-            if windows:
-                cp_slots.append({
-                    "id": f"cp-{cp['id']}",
-                    "day": day,
-                    "time": windows[0].get("start", ""),
-                    "duration_min": windows[0].get("duration_min", 60),
-                    "name": f"CONTROL: {cp['what']}",
-                    "kind": "control_point",
-                    "control_point_id": cp["id"],
-                    "metric_target": cp.get("metric_target", ""),
-                    "target_value": cp.get("target_value", ""),
-                    "location": windows[0].get("location", ""),
-                })
+        if not day:
+            continue
+        windows = cn.get("weekly_windows", {}).get(day, [])
+        if not windows:
+            continue
+        win = _pick_cp_window(windows, cp)
+        cp_slots.append({
+            "id": f"cp-{cp['id']}",
+            "day": day,
+            "time": win.get("start", ""),
+            "duration_min": win.get("duration_min", 60),
+            "name": f"CONTROL: {cp['what']}",
+            "kind": "control_point",
+            "control_point_id": cp["id"],
+            "metric_target": cp.get("metric_target", ""),
+            "target_value": cp.get("target_value", ""),
+            "location": win.get("location", ""),
+            "structure": _build_cp_structure(cp, win),
+        })
 
     all_slots = cp_slots + slots
+
+    # Control point имеет приоритет: обычные слоты в том же окне (день+время)
+    # вытесняются — иначе TT делит окно с плавкой/велом и обе сессии нереальны.
+    if cp_slots:
+        cp_keys = {(s["day"], s["time"]) for s in cp_slots}
+        dropped = [s for s in all_slots
+                   if s["kind"] != "control_point" and (s["day"], s["time"]) in cp_keys]
+        if dropped:
+            applied_log.append({
+                "ov": "control_point_priority",
+                "applied": True,
+                "reason": "CP вытесняет обычные слоты из своего окна",
+                "dropped": [{"id": s["id"], "day": s["day"], "time": s["time"]} for s in dropped],
+            })
+            all_slots = [s for s in all_slots if s not in dropped]
+
     all_slots.sort(key=lambda s: (DAY_ORDER.index(s["day"]), s.get("time", "")))
 
     vc = check_volume(current_phase, cn) if current_phase else {"ok": True}
@@ -384,6 +629,7 @@ def generate(season_week: int | str,
             },
         },
         "slots": all_slots,
+        "load_context": load_context,
         "control_points_in_range": [cp["id"] for cp in cp_in_range],
         "control_point_slots": cp_slots,
         "overrides_applied": applied_log,

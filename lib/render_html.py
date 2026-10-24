@@ -67,6 +67,8 @@ def _inventory_for(s: dict) -> list[dict]:
         inv.append({"icon": "🚴", "name": "Велостанок (Tacx)"})
     elif loc == "stadium":
         inv.append({"icon": "🏟", "name": "Стадион (400м)"})
+    elif loc == "stadium_or_pool":
+        inv.append({"icon": "🏟", "name": "Стадион 400м (или бассейн)"})
     elif loc == "pool_or_asphalt":
         if kind == "swim":
             inv.append({"icon": "🏊", "name": "Бассейн"})
@@ -228,6 +230,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
             "hr_zones_dict": hrz_dict,
         },
         "control_points_in_range": plan.get("control_points_in_range", []),
+        "load_context": plan.get("load_context"),
         "slots": [
             {
                 "id": s.get("id"),
@@ -241,6 +244,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
                 "focus": s.get("focus"),
                 "location": s.get("location"),
                 "workout_pending": s.get("workout_pending", False),
+                "rationale": s.get("rationale"),
                 "structure": s.get("structure", []),
                 "inventory": _inventory_for(s),
             }
@@ -306,6 +310,11 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .phase-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:8px}
 .phase-card h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 3px}
 .phase-card p{font-size:11.5px;color:var(--text);margin:0;line-height:1.4}
+.load-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:8px}
+.load-card h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 6px}
+.load-list{margin:0;padding-left:17px;font-size:11.5px;line-height:1.5;color:var(--text)}
+.load-list li{margin-bottom:3px}
+.load-source{margin-top:7px;padding-top:6px;border-top:1px solid var(--border);font-size:10.5px;color:var(--muted);line-height:1.4}
 
 .cp-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:8px}
 .cp-card h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 3px}
@@ -366,6 +375,8 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .actual-line{color:var(--text);font-size:13px;line-height:1.4}
 .actual-line b{color:var(--good);font-weight:600}
 .actual-notes{margin-top:5px;font-size:12px;color:var(--muted);font-style:italic;line-height:1.4}
+.rationale{background:rgba(122,162,255,.06);border:1px solid rgba(122,162,255,.25);border-radius:8px;padding:9px 12px;margin:0 0 12px;font-size:12.5px;color:var(--text);line-height:1.45}
+.rationale-title{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);font-weight:600;margin-bottom:4px}
 .inv-item{display:flex;gap:8px;align-items:center;padding:2px 0}
 .inv-icon{color:var(--warn);font-size:14px;width:18px;text-align:center}
 
@@ -563,6 +574,15 @@ function renderCard(slot) {
 
   const stepsHtml = renderStructure(slot.structure, kind);
 
+  // v38: rationale — зачем эта тренировка именно сейчас
+  let rationaleHtml = '';
+  if (slot.rationale) {
+    rationaleHtml = '<div class="rationale">'
+      + '<div class="rationale-title">Зачем</div>'
+      + escapeHtml(slot.rationale)
+      + '</div>';
+  }
+
   // v29: actual-блок (если есть в slot.actual) — показывается зелёным
   let actualHtml = '';
   if (slot.actual && (slot.actual.distance_km || slot.actual.time_sec || slot.actual.notes)) {
@@ -596,6 +616,7 @@ function renderCard(slot) {
     + escapeHtml(String(slot.duration_min)) + ' мин</div>'
     + (metaHtml ? '<div class="card-meta-row">' + metaHtml + '</div>' : '')
     + actualHtml
+    + rationaleHtml
     + invHtml
     + '<h3>Структура тренировки</h3>'
     + stepsHtml
@@ -648,6 +669,21 @@ function buildPicker(plan) {
          + ' · target ' + plan.phase.hours_per_week_target + 'ч/нед'
          + (plan.phase.goal_id ? ' · goal ' + escapeHtml(plan.phase.goal_id) : '')
          + '</p>';
+    html += '</div>';
+  }
+
+  // Load context (нагрузка предыдущей недели → решения по этой)
+  if (plan.load_context && plan.load_context.items && plan.load_context.items.length) {
+    html += '<div class="load-card">';
+    html += '<h3>' + escapeHtml(plan.load_context.title || 'Нагрузка') + '</h3>';
+    html += '<ul class="load-list">';
+    for (const line of plan.load_context.items) {
+      html += '<li>' + escapeHtml(line) + '</li>';
+    }
+    html += '</ul>';
+    if (plan.load_context.source) {
+      html += '<div class="load-source">' + escapeHtml(plan.load_context.source) + '</div>';
+    }
     html += '</div>';
   }
 
