@@ -7,243 +7,309 @@
 :root{
   --bg:#0f1115;--panel:#161a22;--panel2:#1d222c;--border:#2a3140;
   --text:#e6e9ef;--muted:#9aa3b2;
-  --accent:#7aa2ff;--accent2:#5cd6c0;--warn:#ff9b6a;--good:#7ee787;--cp:#d8a0ff;
-  --run:#7ec8e3;--bike:#f08a5a;--swim:#5cd6c0;--ofp:#d8a0ff;
+  --accent:#7aa2ff;--warn:#ff9b6a;--good:#7ee787;--cp:#d8a0ff;
+  --c-teal:#5cd6c0;--c-orange:#ff9b6a;--c-red:#ff6b5a;
+  --c-violet:#d8a0ff;--c-ember:#ff8f6b;--c-gray:#5a6472;
+  --run:#7ec8e3;--bike:#f08a5a;--swim:#5cd6c0;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   -webkit-text-size-adjust:100%;line-height:1.45}
-body{padding:16px 12px 60px;max-width:880px;margin:0 auto}
-h1{font-size:21px;margin:0 0 3px}
-h2{font-size:16px;margin:26px 0 10px;color:var(--accent);display:flex;
-  align-items:baseline;gap:9px;flex-wrap:wrap}
-h2 .hint{font-size:11.5px;color:var(--muted);font-weight:400}
-.sub{color:var(--muted);font-size:12.5px;margin-bottom:14px}
+body{padding:14px 12px 50px;max-width:820px;margin:0 auto}
+h1{font-size:20px;margin:0 0 3px}
+h2{font-size:14px;margin:24px 0 9px;color:var(--accent);display:flex;
+  align-items:baseline;gap:8px;flex-wrap:wrap}
+h2 .hint{font-size:11px;color:var(--muted);font-weight:400}
+.sub{color:var(--muted);font-size:12.5px;margin-bottom:12px}
 
+/* шапка */
 .hero{background:linear-gradient(135deg,rgba(122,162,255,.09),rgba(92,214,192,.05));
-  border:1px solid rgba(122,162,255,.28);border-radius:14px;padding:14px 16px;margin-bottom:14px}
-.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.hero-dates{font-family:ui-monospace,SFMono-Regular,monospace;font-size:13px;color:var(--accent2)}
-.hero h1{font-size:21px}
-.hero-sub{font-size:12px;color:var(--muted);margin-top:4px}
-.peaks{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
-.peak{background:rgba(15,17,21,.45);border:1px solid var(--border);border-radius:9px;
-  padding:7px 11px;flex:1;min-width:132px}
+  border:1px solid rgba(122,162,255,.26);border-radius:14px;padding:13px 15px;margin-bottom:14px}
+.hero h1{font-size:20px}
+.hero-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.hero-dates{font-family:ui-monospace,monospace;font-size:12px;color:var(--accent2);margin-top:6px}
+.peaks{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:11px}
+.peak{background:rgba(15,17,21,.45);border:1px solid var(--border);border-radius:9px;padding:7px 10px}
 .peak .pl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.peak .pv{font-size:14px;font-weight:600;color:var(--accent2);font-family:ui-monospace,monospace;margin-top:2px}
-.peak .pd{font-size:10.5px;color:var(--muted);margin-top:1px}
+.peak .pv{font-size:14px;font-weight:600;color:var(--accent2);font-family:ui-monospace,monospace;margin-top:1px}
+.peak .pd{font-size:10px;color:var(--muted);margin-top:1px}
 
-.zones{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:10.5px;margin-bottom:6px}
-.zone{background:var(--panel2);padding:4px 7px;border-radius:6px;border:1px solid var(--border);color:var(--muted)}
-.zone b{color:var(--accent);font-family:ui-monospace,monospace;font-size:10.5px;margin-right:2px}
+/* легенда цвета */
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.lg{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--muted);
+  background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:3px 8px}
+.lg i{width:9px;height:9px;border-radius:2px;display:inline-block}
 
-/* фаза */
-.phase{background:var(--panel);border:1px solid var(--border);border-radius:13px;
-  padding:12px 14px;margin-bottom:11px;overflow:hidden}
-.phase.event{border-color:rgba(126,231,135,.4);background:linear-gradient(135deg,rgba(126,231,135,.07),var(--panel))}
-.phase-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
-  padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:9px}
-.phase-l{font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:8px}
-.phase-w{font-size:10.5px;color:var(--muted);font-family:ui-monospace,monospace;
-  background:var(--panel2);padding:2px 7px;border-radius:5px;border:1px solid var(--border);
-  white-space:nowrap}
-.phase-r{text-align:right;font-size:11px;color:var(--muted);white-space:nowrap}
-.phase-r b{display:block;color:var(--text);font-size:12.5px;font-weight:600}
-.phase-goal{font-size:13px;color:var(--accent2);font-weight:600;margin-bottom:3px}
-.phase-focus{font-size:11.5px;color:var(--muted);line-height:1.45;margin-bottom:9px}
-.phase-note{font-size:11.5px;color:var(--warn);margin-bottom:8px}
-
-/* таблица недель */
-.wk{width:100%;border-collapse:collapse;font-size:11.5px}
-.wk th{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;
-  text-align:left;padding:4px 5px;border-bottom:1px solid var(--border);font-weight:600}
-.wk td{padding:6px 5px;border-bottom:1px solid rgba(42,49,64,.5);vertical-align:top}
-.wk tr:last-child td{border-bottom:none}
-.wk .wn{font-family:ui-monospace,monospace;font-weight:600;color:var(--accent);
-  width:52px;white-space:nowrap}
-.wk .wd{font-family:ui-monospace,monospace;color:var(--muted);font-size:10.5px;width:92px;white-space:nowrap}
-.wk .wg{width:44%}
-.wk .wg b{color:var(--accent2);font-weight:600;font-size:11.5px}
-.wk .wg .wg-top{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
-.wk .wg span{color:var(--muted);font-size:10px;display:block;margin-top:1px}
-.wk .num{text-align:right;font-family:ui-monospace,monospace;white-space:nowrap}
-.wk .km{color:var(--run);font-weight:600}
-.wk .mk{color:var(--muted);font-size:10px}
-.wk tr.ttr td{background:rgba(255,155,106,.07)}
-.wk tr.racerow td{background:rgba(126,231,135,.09)}
-.wk tr.now td{background:rgba(122,162,255,.13)}
-.badge{display:inline-block;font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:4px;
-  letter-spacing:.3px;vertical-align:1px;margin-left:4px}
-.badge-tt{background:rgba(255,155,106,.16);color:var(--warn);border:1px solid rgba(255,155,106,.3)}
-.badge-race{background:rgba(126,231,135,.16);color:var(--good);border:1px solid rgba(126,231,135,.3)}
-.badge-now{background:rgba(122,162,255,.18);color:var(--accent);border:1px solid rgba(122,162,255,.35)}
-.badge-next{background:rgba(92,214,192,.14);color:var(--accent2);border:1px solid rgba(92,214,192,.3)}
-.mini{height:5px;border-radius:3px;background:var(--panel2);overflow:hidden;min-width:38px;margin-top:3px}
-.mini i{display:block;height:100%}
-.dim{opacity:.42}
-.undet{font-size:10.5px;color:var(--muted);font-style:italic}
-
-/* сетка календаря */
-.cal{display:flex;flex-wrap:wrap;gap:3px;margin:10px 0 4px}
-.cw{width:30px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;
-  font-size:9.5px;font-family:ui-monospace,monospace;background:var(--panel2);
-  color:var(--muted);border:1px solid var(--border);position:relative}
-.cw.det{background:rgba(92,214,192,.14);color:var(--accent2);border-color:rgba(92,214,192,.3)}
-.cw.tt{background:rgba(255,155,106,.16);color:var(--warn);border-color:rgba(255,155,106,.35)}
-.cw.race{background:rgba(126,231,135,.18);color:var(--good);border-color:rgba(126,231,135,.4)}
+/* календарь */
+.cal{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
+.cw{width:28px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-family:ui-monospace,monospace;background:var(--panel2);
+  color:var(--muted);border:1px solid var(--border)}
+.cw.det{color:var(--text)}
+.cw.tt{background:rgba(255,155,106,.2);color:var(--warn);border-color:rgba(255,155,106,.4)}
+.cw.race{background:rgba(126,231,135,.2);color:var(--good);border-color:rgba(126,231,135,.42)}
 .cw.now{outline:2px solid var(--accent);outline-offset:1px}
-.cal-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10.5px;color:var(--muted);margin-top:6px}
-.cal-legend span{display:flex;align-items:center;gap:4px}
-.dot{width:9px;height:9px;border-radius:2px;display:inline-block}
 
-.note{background:rgba(122,162,255,.06);border:1px solid rgba(122,162,255,.25);
-  border-radius:9px;padding:10px 12px;font-size:12px;line-height:1.55;color:var(--text)}
+/* неделя — collapsible */
+.wk{background:var(--panel);border:1px solid var(--border);border-radius:11px;
+  margin-bottom:6px;overflow:hidden}
+.wk.t-teal{border-left:3px solid var(--c-teal)}
+.wk.t-orange{border-left:3px solid var(--c-orange)}
+.wk.t-ember{border-left:3px solid var(--c-ember)}
+.wk.t-red{border-left:3px solid var(--c-red)}
+.wk.t-violet{border-left:3px solid var(--c-violet)}
+.wk.t-cp{border-left:3px solid var(--cp)}
+.wk.t-gray{border-left:3px solid var(--c-gray);opacity:.7}
+.wk.tt{box-shadow:inset 0 0 0 1px rgba(255,155,106,.25)}
+.wk.now{box-shadow:inset 0 0 0 1px rgba(122,162,255,.4)}
+
+.wk-hd{display:flex;align-items:center;gap:9px;padding:9px 12px;cursor:pointer;
+  user-select:none;-webkit-tap-highlight-color:transparent;flex-wrap:wrap}
+@media (max-width:430px){
+  .wk-hd{gap:7px;padding:9px 10px}
+  .wk-d{width:auto;font-size:10px;white-space:nowrap}
+  .wk-t{flex:1 1 100%;order:3;margin-top:-2px}
+  .wk-metrics{order:4;margin-left:auto}
+  .wk-gt{font-size:12px}
+}
+.wk-hd:active{background:var(--panel2)}
+.wk-n{font-family:ui-monospace,monospace;font-weight:700;font-size:12px;color:var(--muted);
+  width:26px;flex-shrink:0}
+.wk-d{font-family:ui-monospace,monospace;font-size:10.5px;color:var(--muted);
+  flex-shrink:0;width:92px;white-space:nowrap}
+.wk-t{flex:1;min-width:0}
+.wk-gt{font-size:12.5px;font-weight:600;color:var(--text);line-height:1.3}
+.wk-metrics{display:flex;gap:5px;flex-shrink:0;align-items:center;flex-wrap:wrap;
+  justify-content:flex-end}
+.chip{font-size:9.5px;font-family:ui-monospace,monospace;padding:1px 6px;border-radius:5px;
+  background:var(--panel2);border:1px solid var(--border);color:var(--muted);white-space:nowrap}
+.chip.run{color:var(--run);border-color:rgba(126,200,227,.3);background:rgba(126,200,227,.08)}
+.chip.bike{color:var(--bike);border-color:rgba(240,138,90,.3);background:rgba(240,138,90,.08)}
+.chip.swim{color:var(--swim);border-color:rgba(92,214,192,.3);background:rgba(92,214,192,.08)}
+.chip.act{color:var(--good);border-color:rgba(126,231,135,.35);background:rgba(126,231,135,.1)}
+.chip.tt{color:var(--warn);border-color:rgba(255,155,106,.4);background:rgba(255,155,106,.12);font-weight:700}
+.chip.next{color:var(--accent);border-color:rgba(122,162,255,.4);background:rgba(122,162,255,.12);font-weight:700}
+.caret{color:var(--muted);font-size:10px;flex-shrink:0;transition:transform .15s}
+.wk.open .caret{transform:rotate(90deg)}
+
+.wk-body{display:none;padding:0 12px 11px 12px;border-top:1px solid var(--border)}
+.wk.open .wk-body{display:block}
+.wk-goal{font-size:11.5px;color:var(--text);margin:8px 0 7px}
+.wk-goal b{color:var(--accent2)}
+.wk-vars{font-size:10.5px;color:var(--muted);margin-bottom:8px}
+.wk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;margin-bottom:8px}
+.mt{background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:5px 8px}
+.mt .ml{font-size:8.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.mt .mv{font-size:13px;font-weight:600;font-family:ui-monospace,monospace;margin-top:1px}
+.mt.run .mv{color:var(--run)} .mt.bike .mv{color:var(--bike)}
+.mt.swim .mv{color:var(--swim)} .mt.act .mv{color:var(--good)}
+.mt.plan .mv{color:var(--accent2)}
+.cmp{display:flex;align-items:center;gap:6px;margin-bottom:8px;font-size:10.5px}
+.cmp .cbar{flex:1;height:6px;border-radius:3px;background:var(--panel2);overflow:hidden;display:flex}
+.cmp .cbar i{display:block;height:100%}
+.cmp .cl{color:var(--muted);font-family:ui-monospace,monospace;white-space:nowrap}
+.phase-note{font-size:11px;color:var(--warn);margin-top:6px}
+
+.fphase{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:10px 13px;margin-bottom:8px}
+.fphase-hd{display:flex;justify-content:space-between;align-items:baseline;gap:9px;
+  padding-bottom:7px;border-bottom:1px solid var(--border);margin-bottom:7px}
+.fphase-l{font-size:13.5px;font-weight:600}
+.fphase-l span{font-size:10px;color:var(--muted);font-family:ui-monospace,monospace;
+  background:var(--panel2);padding:1px 6px;border-radius:4px;margin-left:6px}
+.fphase-r{font-size:10.5px;color:var(--muted);text-align:right;white-space:nowrap}
+.fphase-goal{font-size:12.5px;color:var(--accent2);font-weight:600}
+.fphase-focus{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+
+table.tt-tbl{width:100%;border-collapse:collapse;font-size:11px;margin-top:7px}
+table.tt-tbl th{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;
+  text-align:left;padding:4px 5px;border-bottom:1px solid var(--border)}
+table.tt-tbl td{padding:6px 5px;border-bottom:1px solid rgba(42,49,64,.5);vertical-align:top}
+table.tt-tbl tr:last-child td{border-bottom:none}
+table.tt-tbl .n{font-family:ui-monospace,monospace;color:var(--accent);font-weight:600}
+table.tt-tbl .num{text-align:right;font-family:ui-monospace,monospace;white-space:nowrap}
+table.tt-tbl .sm{color:var(--muted);font-size:10px}
+.race{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.race:last-child{border-bottom:none}
+.race .rw{font-family:ui-monospace,monospace;font-size:11px;color:var(--good);width:74px;flex-shrink:0}
+.race .rn{font-size:12.5px;font-weight:600}
+.race .rd{font-size:10.5px;color:var(--muted)}
+.note{background:rgba(122,162,255,.06);border:1px solid rgba(122,162,255,.24);
+  border-radius:9px;padding:10px 12px;font-size:11.5px;line-height:1.55}
 .note b{color:var(--accent)}
-.note ul{margin:6px 0 0;padding-left:18px}
-.note li{margin-bottom:3px}
-footer{margin-top:22px;text-align:center;font-size:11px;color:var(--muted)}
+footer{margin-top:20px;text-align:center;font-size:11px;color:var(--muted)}
 </style></head><body>
 
 <div class="hero">
-  <div class="hero-top">
-    <div>
-      <h1>Макро-план сезона</h1>
-      <div class="hero-sub">Два пика: S25 Berlin 10K (18.04.2027) → олимпийский триатлон (12.09.2027)</div>
-    </div>
-    <div class="hero-dates">11.10.2026 — 18.09.2027</div>
-  </div>
+  <h1>Макро-план сезона</h1>
+  <div class="hero-sub">Два пика: S25 Berlin 10K (18.04.2027) → олимпийский триатлон (12.09.2027)</div>
+  <div class="hero-dates">11.10.2026 — 18.09.2027</div>
   <div class="peaks" id="peaks"></div>
 </div>
 
-<h2>Календарь сезона <span class="hint">49 недель · подсвечены детализированные</span></h2>
+<h2>Легенда фокуса <span class="hint">цвет недели = что поднимаем</span></h2>
+<div class="legend" id="legend"></div>
+
+<h2>Календарь сезона <span class="hint">49 недель</span></h2>
 <div class="cal" id="cal"></div>
-<div class="cal-legend">
-  <span><i class="dot" style="background:var(--accent2)"></i>детализировано</span>
-  <span><i class="dot" style="background:var(--warn)"></i>контрольная точка</span>
-  <span><i class="dot" style="background:var(--good)"></i>гонка</span>
-</div>
+
+<h2>Недели <span class="hint">тап — раскрыть: план, факт, цель</span></h2>
+<div id="weeks"></div>
 
 <h2>Фазы</h2>
 <div id="phases"></div>
 
 <h2>Контрольные точки</h2>
-<div id="tts"></div>
+<div class="fphase" id="tts"></div>
 
-<h2>Как это читать</h2>
-<div class="note" id="notes"></div>
+<footer>Сгенерировано 24.10.2026 21:25 · coach · macro_overview.py</footer>
 
-<footer>Сгенерировано 24.10.2026 18:30 · coach · macro_overview.py</footer>
-
-<script type="application/json" id="plan-data">{"title": "Макро-план сезона", "season_start": "2026-10-11", "total_weeks": 49, "detailed_weeks": 25, "phases": [{"id": "run_base", "goal": "Поднимаем базовый объём", "focus": "Аэробная база: растёт общий объём бега, интенсивность ниже порога. Фундамент под всё остальное.", "start": "2026-10-11", "end": "2027-01-02", "w_from": 1, "w_to": 12, "date_range": "11 окт 2026 — 2 янв 2027", "weeks_count": 12, "detailed_count": 12, "target_h": 5, "is_event": false, "notes": "", "detailed": [{"w": 1, "start": "2026-10-11", "end": "2026-10-17", "start_d": "11–17 окт", "detailed": true, "run_km": 27, "long_km": 12, "run_h": 2.6, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем базовый объём", "phase": "run_base", "variants": [{"label": "8К + прогрессия 3К", "work_m": 8000}], "comp_h": 4.7, "total_h": 6.5}, {"w": 2, "start": "2026-10-18", "end": "2026-10-24", "start_d": "18–24 окт", "detailed": true, "run_km": 30, "long_km": 13, "run_h": 2.9, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace", "phase": "run_base", "variants": [{"label": "4×1К @ 4:35", "work_m": 4000}], "comp_h": 5.0, "total_h": 7.0}, {"w": 3, "start": "2026-10-25", "end": "2026-10-31", "start_d": "25–31 окт", "detailed": true, "run_km": 35, "long_km": 14, "run_h": 3.3, "bike_h": 1.0, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем VO2max", "phase": "run_base", "variants": [{"label": "6×400", "work_m": 2400}, {"label": "8×400", "work_m": 3200}], "comp_h": 5.6, "total_h": 7.5}, {"w": 4, "start": "2026-11-01", "end": "2026-11-07", "start_d": "1–7 ноя", "detailed": true, "run_km": 38, "long_km": 14, "run_h": 3.6, "bike_h": 1.0, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_base", "variants": [{"label": "Темповый тест", "work_m": 3000}], "comp_h": 5.9, "total_h": 8.0}, {"w": 5, "start": "2026-11-08", "end": "2026-11-14", "start_d": "8–14 ноя", "detailed": true, "run_km": 40, "long_km": 16, "run_h": 3.8, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_base", "variants": [{"label": "3×1К (порог) + 2×800 (VO2)", "work_m": 4600}], "comp_h": 6.3, "total_h": 8.5}, {"w": 6, "start": "2026-11-15", "end": "2026-11-21", "start_d": "15–21 ноя", "detailed": true, "run_km": 42, "long_km": 16, "run_h": 4.0, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "Поднимаем переключение зон", "phase": "run_base", "variants": [{"label": "1К → 800 → 400", "work_m": 2200}], "comp_h": 6.5, "total_h": 9.0}, {"w": 7, "start": "2026-11-22", "end": "2026-11-28", "start_d": "22–28 ноя", "detailed": true, "run_km": 45, "long_km": 18, "run_h": 4.3, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_base", "variants": [{"label": "5К tempo", "work_m": 5000}], "comp_h": 7.0, "total_h": 9.5}, {"w": 8, "start": "2026-11-29", "end": "2026-12-05", "start_d": "29 ноя – 5 дек", "detailed": true, "run_km": 48, "long_km": 14, "run_h": 4.6, "bike_h": 2.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_base", "variants": [{"label": "Тест на максимум", "work_m": 5000}], "comp_h": 8.3, "total_h": 10.0}, {"w": 9, "start": "2026-12-06", "end": "2026-12-12", "start_d": "6–12 дек", "detailed": true, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "Поднимаем threshold pace", "phase": "run_base", "variants": [{"label": "4×1К @ 4:25", "work_m": 4000}, {"label": "5×1К @ 4:25", "work_m": 5000}], "comp_h": 8.5, "total_h": 10.5}, {"w": 10, "start": "2026-12-13", "end": "2026-12-19", "start_d": "13–19 дек", "detailed": true, "run_km": 50, "long_km": 18, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.3, "ofp_h": 1.0, "goal_text": "Поднимаем VO2max", "phase": "run_base", "variants": [{"label": "10×200", "work_m": 2000}, {"label": "5×800", "work_m": 4000}, {"label": "2×2К + 1×800", "work_m": 4800}], "comp_h": 9.1, "total_h": 11.0}, {"w": 11, "start": "2026-12-20", "end": "2026-12-26", "start_d": "20–26 дек", "detailed": true, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.3, "ofp_h": 1.0, "goal_text": "Поднимаем общую аэробную мощность", "phase": "run_base", "variants": [{"label": "6 циклов: 200@5:20 + 800@4:00", "work_m": 6000}], "comp_h": 9.1, "total_h": 11.0}, {"w": 12, "start": "2026-12-27", "end": "2027-01-02", "start_d": "27 дек – 2 янв", "detailed": true, "run_km": 45, "long_km": 12, "run_h": 4.3, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_base", "variants": [{"label": "Темповый тест", "work_m": 3000}], "comp_h": 6.8, "total_h": 9.5}]}, {"id": "run_build", "goal": "Поднимаем threshold pace", "focus": "Порог аэробного обмена: темп на LTH растёт, появляются длинные интервалы 2К.", "start": "2027-01-03", "end": "2027-02-20", "w_from": 13, "w_to": 19, "date_range": "3 янв 2027 — 20 фев 2027", "weeks_count": 7, "detailed_count": 7, "target_h": 7, "is_event": false, "notes": "", "detailed": [{"w": 13, "start": "2027-01-03", "end": "2027-01-09", "start_d": "3–9 янв", "detailed": true, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_build", "variants": [{"label": "2×2К @ 4:30", "work_m": 4000}], "comp_h": 9.3, "total_h": 10.5}, {"w": 14, "start": "2027-01-10", "end": "2027-01-16", "start_d": "10–16 янв", "detailed": true, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем threshold pace", "phase": "run_build", "variants": [{"label": "6×800 @ 4:20", "work_m": 4800}], "comp_h": 10.2, "total_h": 11.5}, {"w": 15, "start": "2027-01-17", "end": "2027-01-23", "start_d": "17–23 янв", "detailed": true, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_build", "variants": [{"label": "5К tempo + 4×400 (VO2)", "work_m": 6600}], "comp_h": 10.2, "total_h": 11.5}, {"w": 16, "start": "2027-01-24", "end": "2027-01-30", "start_d": "24–30 янв", "detailed": true, "run_km": 55, "long_km": 16, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_build", "variants": [{"label": "Тест на максимум", "work_m": 5000}], "comp_h": 10.2, "total_h": 11.5}, {"w": 17, "start": "2027-01-31", "end": "2027-02-06", "start_d": "31 янв – 6 фев", "detailed": true, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_build", "variants": [{"label": "3×2К @ 4:25", "work_m": 6000}], "comp_h": 10.2, "total_h": 11.5}, {"w": 18, "start": "2027-02-07", "end": "2027-02-13", "start_d": "7–13 фев", "detailed": true, "run_km": 60, "long_km": 20, "run_h": 5.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_build", "variants": [{"label": "8К tempo", "work_m": 8000}], "comp_h": 11.2, "total_h": 13.0}, {"w": 19, "start": "2027-02-14", "end": "2027-02-20", "start_d": "14–20 фев", "detailed": true, "run_km": 65, "long_km": 22, "run_h": 6.2, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_build", "variants": [{"label": "8К tempo", "work_m": 8000}], "comp_h": 11.7, "total_h": 13.5}]}, {"id": "run_specific", "goal": "Поднимаем race pace", "focus": "Специфика под гонку: темп на соревновательной скорости, race-pace отрезки в ключевой работе.", "start": "2027-02-21", "end": "2027-04-03", "w_from": 20, "w_to": 25, "date_range": "21 фев 2027 — 3 апр 2027", "weeks_count": 6, "detailed_count": 6, "target_h": 8, "is_event": false, "notes": "", "detailed": [{"w": 20, "start": "2027-02-21", "end": "2027-02-27", "start_d": "21–27 фев", "detailed": true, "run_km": 65, "long_km": 22, "run_h": 6.2, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем VO2max", "phase": "run_specific", "variants": [{"label": "4×2К", "work_m": 8000}, {"label": "5×2К", "work_m": 10000}], "comp_h": 11.7, "total_h": 14.0}, {"w": 21, "start": "2027-02-28", "end": "2027-03-06", "start_d": "28 фев – 6 мар", "detailed": true, "run_km": 70, "long_km": 22, "run_h": 6.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_specific", "variants": [{"label": "12К long tempo", "work_m": 12000}], "comp_h": 12.2, "total_h": 14.0}, {"w": 22, "start": "2027-03-07", "end": "2027-03-13", "start_d": "7–13 мар", "detailed": true, "run_km": 70, "long_km": 24, "run_h": 6.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_specific", "variants": [{"label": "4×2К @ 4:20", "work_m": 8000}, {"label": "2×3К @ 4:25", "work_m": 6000}], "comp_h": 12.2, "total_h": 14.0}, {"w": 23, "start": "2027-03-14", "end": "2027-03-20", "start_d": "14–20 мар", "detailed": true, "run_km": 60, "long_km": 14, "run_h": 5.7, "bike_h": 2.0, "swim_h": 0.8, "ofp_h": 0.8, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_specific", "variants": [], "comp_h": 9.3, "total_h": 11.5}, {"w": 24, "start": "2027-03-21", "end": "2027-03-27", "start_d": "21–27 мар", "detailed": true, "run_km": 45, "long_km": 10, "run_h": 4.3, "bike_h": 2.0, "swim_h": 0.8, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_specific", "variants": [{"label": "3×1К (порог) + 2×400 (VO2)", "work_m": 3800}], "comp_h": 7.9, "total_h": 9.0}, {"w": 25, "start": "2027-03-28", "end": "2027-04-03", "start_d": "28 мар – 3 апр", "detailed": true, "run_km": 35, "long_km": 6, "run_h": 3.3, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_specific", "variants": [{"label": "3×1К (порог) + 2×400 (VO2)", "work_m": 3800}], "comp_h": 5.4, "total_h": 7.0}]}, {"id": "run_taper", "goal": "Сохраняем качество, снижаем объём", "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей.", "start": "2027-04-04", "end": "2027-04-16", "w_from": 26, "w_to": 27, "date_range": "4 апр 2027 — 16 апр 2027", "weeks_count": 2, "detailed_count": 0, "target_h": 4, "is_event": false, "notes": "", "detailed": []}, {"id": "race_run", "goal": "Гонка", "focus": "S25 Berlin 10K — главная цель сезона.", "start": "2027-04-17", "end": "2027-04-17", "w_from": 27, "w_to": 27, "date_range": "17 апр 2027 — 17 апр 2027", "weeks_count": 1, "detailed_count": 0, "target_h": null, "is_event": true, "notes": "", "detailed": []}, {"id": "transition", "goal": "Переключаемся на вел и плав", "focus": "Бег уходит на второй план, вел и плавание набирают объём.", "start": "2027-04-18", "end": "2027-05-08", "w_from": 28, "w_to": 30, "date_range": "18 апр 2027 — 8 мая 2027", "weeks_count": 3, "detailed_count": 0, "target_h": 5, "is_event": false, "notes": "снижение бега, вход в плавание/вело", "detailed": []}, {"id": "tri_base", "goal": "Поднимаем базу триатлона", "focus": "Объёмная база трёх видов спорта под олимпийскую дистанцию.", "start": "2027-05-09", "end": "2027-06-19", "w_from": 31, "w_to": 36, "date_range": "9 мая 2027 — 19 июн 2027", "weeks_count": 6, "detailed_count": 0, "target_h": 6, "is_event": false, "notes": "", "detailed": []}, {"id": "tri_build", "goal": "Поднимаем bricks и race-sim", "focus": "Связки и симуляции соревновательного темпа под нагрузкой.", "start": "2027-06-20", "end": "2027-08-07", "w_from": 37, "w_to": 43, "date_range": "20 июн 2027 — 7 авг 2027", "weeks_count": 7, "detailed_count": 0, "target_h": 8, "is_event": false, "notes": "", "detailed": []}, {"id": "tri_specific", "goal": "Поднимаем специфику триатлона", "focus": "Гонка-темп, переходы, длинные отрезки под усталостью.", "start": "2027-08-08", "end": "2027-09-04", "w_from": 44, "w_to": 47, "date_range": "8 авг 2027 — 4 сен 2027", "weeks_count": 4, "detailed_count": 0, "target_h": 10, "is_event": false, "notes": "", "detailed": []}, {"id": "tri_taper", "goal": "Сохраняем качество, снижаем объём", "focus": "Тапер к олимпийскому триатлону.", "start": "2027-09-05", "end": "2027-09-10", "w_from": 48, "w_to": 48, "date_range": "5 сен 2027 — 10 сен 2027", "weeks_count": 1, "detailed_count": 0, "target_h": 5, "is_event": false, "notes": "", "detailed": []}, {"id": "race_tri", "goal": "Гонка", "focus": "Олимпийский триатлон — второй пик сезона.", "start": "2027-09-11", "end": "2027-09-11", "w_from": 48, "w_to": 48, "date_range": "11 сен 2027 — 11 сен 2027", "weeks_count": 1, "detailed_count": 0, "target_h": null, "is_event": true, "notes": "", "detailed": []}], "weeks": [{"w": 1, "start": "2026-10-11", "end": "2026-10-17", "start_d": "11–17 окт", "detailed": true, "run_km": 27, "long_km": 12, "run_h": 2.6, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем базовый объём", "phase": "run_base", "variants": [{"label": "8К + прогрессия 3К", "work_m": 8000}], "comp_h": 4.7, "total_h": 6.5}, {"w": 2, "start": "2026-10-18", "end": "2026-10-24", "start_d": "18–24 окт", "detailed": true, "run_km": 30, "long_km": 13, "run_h": 2.9, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace", "phase": "run_base", "variants": [{"label": "4×1К @ 4:35", "work_m": 4000}], "comp_h": 5.0, "total_h": 7.0}, {"w": 3, "start": "2026-10-25", "end": "2026-10-31", "start_d": "25–31 окт", "detailed": true, "run_km": 35, "long_km": 14, "run_h": 3.3, "bike_h": 1.0, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем VO2max", "phase": "run_base", "variants": [{"label": "6×400", "work_m": 2400}, {"label": "8×400", "work_m": 3200}], "comp_h": 5.6, "total_h": 7.5}, {"w": 4, "start": "2026-11-01", "end": "2026-11-07", "start_d": "1–7 ноя", "detailed": true, "run_km": 38, "long_km": 14, "run_h": 3.6, "bike_h": 1.0, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_base", "variants": [{"label": "Темповый тест", "work_m": 3000}], "comp_h": 5.9, "total_h": 8.0}, {"w": 5, "start": "2026-11-08", "end": "2026-11-14", "start_d": "8–14 ноя", "detailed": true, "run_km": 40, "long_km": 16, "run_h": 3.8, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_base", "variants": [{"label": "3×1К (порог) + 2×800 (VO2)", "work_m": 4600}], "comp_h": 6.3, "total_h": 8.5}, {"w": 6, "start": "2026-11-15", "end": "2026-11-21", "start_d": "15–21 ноя", "detailed": true, "run_km": 42, "long_km": 16, "run_h": 4.0, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "Поднимаем переключение зон", "phase": "run_base", "variants": [{"label": "1К → 800 → 400", "work_m": 2200}], "comp_h": 6.5, "total_h": 9.0}, {"w": 7, "start": "2026-11-22", "end": "2026-11-28", "start_d": "22–28 ноя", "detailed": true, "run_km": 45, "long_km": 18, "run_h": 4.3, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_base", "variants": [{"label": "5К tempo", "work_m": 5000}], "comp_h": 7.0, "total_h": 9.5}, {"w": 8, "start": "2026-11-29", "end": "2026-12-05", "start_d": "29 ноя – 5 дек", "detailed": true, "run_km": 48, "long_km": 14, "run_h": 4.6, "bike_h": 2.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_base", "variants": [{"label": "Тест на максимум", "work_m": 5000}], "comp_h": 8.3, "total_h": 10.0}, {"w": 9, "start": "2026-12-06", "end": "2026-12-12", "start_d": "6–12 дек", "detailed": true, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "Поднимаем threshold pace", "phase": "run_base", "variants": [{"label": "4×1К @ 4:25", "work_m": 4000}, {"label": "5×1К @ 4:25", "work_m": 5000}], "comp_h": 8.5, "total_h": 10.5}, {"w": 10, "start": "2026-12-13", "end": "2026-12-19", "start_d": "13–19 дек", "detailed": true, "run_km": 50, "long_km": 18, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.3, "ofp_h": 1.0, "goal_text": "Поднимаем VO2max", "phase": "run_base", "variants": [{"label": "10×200", "work_m": 2000}, {"label": "5×800", "work_m": 4000}, {"label": "2×2К + 1×800", "work_m": 4800}], "comp_h": 9.1, "total_h": 11.0}, {"w": 11, "start": "2026-12-20", "end": "2026-12-26", "start_d": "20–26 дек", "detailed": true, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.3, "ofp_h": 1.0, "goal_text": "Поднимаем общую аэробную мощность", "phase": "run_base", "variants": [{"label": "6 циклов: 200@5:20 + 800@4:00", "work_m": 6000}], "comp_h": 9.1, "total_h": 11.0}, {"w": 12, "start": "2026-12-27", "end": "2027-01-02", "start_d": "27 дек – 2 янв", "detailed": true, "run_km": 45, "long_km": 12, "run_h": 4.3, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_base", "variants": [{"label": "Темповый тест", "work_m": 3000}], "comp_h": 6.8, "total_h": 9.5}, {"w": 13, "start": "2027-01-03", "end": "2027-01-09", "start_d": "3–9 янв", "detailed": true, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_build", "variants": [{"label": "2×2К @ 4:30", "work_m": 4000}], "comp_h": 9.3, "total_h": 10.5}, {"w": 14, "start": "2027-01-10", "end": "2027-01-16", "start_d": "10–16 янв", "detailed": true, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем threshold pace", "phase": "run_build", "variants": [{"label": "6×800 @ 4:20", "work_m": 4800}], "comp_h": 10.2, "total_h": 11.5}, {"w": 15, "start": "2027-01-17", "end": "2027-01-23", "start_d": "17–23 янв", "detailed": true, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_build", "variants": [{"label": "5К tempo + 4×400 (VO2)", "work_m": 6600}], "comp_h": 10.2, "total_h": 11.5}, {"w": 16, "start": "2027-01-24", "end": "2027-01-30", "start_d": "24–30 янв", "detailed": true, "run_km": 55, "long_km": 16, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_build", "variants": [{"label": "Тест на максимум", "work_m": 5000}], "comp_h": 10.2, "total_h": 11.5}, {"w": 17, "start": "2027-01-31", "end": "2027-02-06", "start_d": "31 янв – 6 фев", "detailed": true, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_build", "variants": [{"label": "3×2К @ 4:25", "work_m": 6000}], "comp_h": 10.2, "total_h": 11.5}, {"w": 18, "start": "2027-02-07", "end": "2027-02-13", "start_d": "7–13 фев", "detailed": true, "run_km": 60, "long_km": 20, "run_h": 5.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_build", "variants": [{"label": "8К tempo", "work_m": 8000}], "comp_h": 11.2, "total_h": 13.0}, {"w": 19, "start": "2027-02-14", "end": "2027-02-20", "start_d": "14–20 фев", "detailed": true, "run_km": 65, "long_km": 22, "run_h": 6.2, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_build", "variants": [{"label": "8К tempo", "work_m": 8000}], "comp_h": 11.7, "total_h": 13.5}, {"w": 20, "start": "2027-02-21", "end": "2027-02-27", "start_d": "21–27 фев", "detailed": true, "run_km": 65, "long_km": 22, "run_h": 6.2, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем VO2max", "phase": "run_specific", "variants": [{"label": "4×2К", "work_m": 8000}, {"label": "5×2К", "work_m": 10000}], "comp_h": 11.7, "total_h": 14.0}, {"w": 21, "start": "2027-02-28", "end": "2027-03-06", "start_d": "28 фев – 6 мар", "detailed": true, "run_km": 70, "long_km": 22, "run_h": 6.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_specific", "variants": [{"label": "12К long tempo", "work_m": 12000}], "comp_h": 12.2, "total_h": 14.0}, {"w": 22, "start": "2027-03-07", "end": "2027-03-13", "start_d": "7–13 мар", "detailed": true, "run_km": 70, "long_km": 24, "run_h": 6.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_specific", "variants": [{"label": "4×2К @ 4:20", "work_m": 8000}, {"label": "2×3К @ 4:25", "work_m": 6000}], "comp_h": 12.2, "total_h": 14.0}, {"w": 23, "start": "2027-03-14", "end": "2027-03-20", "start_d": "14–20 мар", "detailed": true, "run_km": 60, "long_km": 14, "run_h": 5.7, "bike_h": 2.0, "swim_h": 0.8, "ofp_h": 0.8, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_specific", "variants": [], "comp_h": 9.3, "total_h": 11.5}, {"w": 24, "start": "2027-03-21", "end": "2027-03-27", "start_d": "21–27 мар", "detailed": true, "run_km": 45, "long_km": 10, "run_h": 4.3, "bike_h": 2.0, "swim_h": 0.8, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_specific", "variants": [{"label": "3×1К (порог) + 2×400 (VO2)", "work_m": 3800}], "comp_h": 7.9, "total_h": 9.0}, {"w": 25, "start": "2027-03-28", "end": "2027-04-03", "start_d": "28 мар – 3 апр", "detailed": true, "run_km": 35, "long_km": 6, "run_h": 3.3, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_specific", "variants": [{"label": "3×1К (порог) + 2×400 (VO2)", "work_m": 3800}], "comp_h": 5.4, "total_h": 7.0}, {"w": 26, "start": "2027-04-04", "end": "2027-04-10", "start_d": "4–10 апр", "detailed": false}, {"w": 27, "start": "2027-04-11", "end": "2027-04-17", "start_d": "11–17 апр", "detailed": false}, {"w": 28, "start": "2027-04-18", "end": "2027-04-24", "start_d": "18–24 апр", "detailed": false}, {"w": 29, "start": "2027-04-25", "end": "2027-05-01", "start_d": "25 апр – 1 мая", "detailed": false}, {"w": 30, "start": "2027-05-02", "end": "2027-05-08", "start_d": "2–8 мая", "detailed": false}, {"w": 31, "start": "2027-05-09", "end": "2027-05-15", "start_d": "9–15 мая", "detailed": false}, {"w": 32, "start": "2027-05-16", "end": "2027-05-22", "start_d": "16–22 мая", "detailed": false}, {"w": 33, "start": "2027-05-23", "end": "2027-05-29", "start_d": "23–29 мая", "detailed": false}, {"w": 34, "start": "2027-05-30", "end": "2027-06-05", "start_d": "30 мая – 5 июн", "detailed": false}, {"w": 35, "start": "2027-06-06", "end": "2027-06-12", "start_d": "6–12 июн", "detailed": false}, {"w": 36, "start": "2027-06-13", "end": "2027-06-19", "start_d": "13–19 июн", "detailed": false}, {"w": 37, "start": "2027-06-20", "end": "2027-06-26", "start_d": "20–26 июн", "detailed": false}, {"w": 38, "start": "2027-06-27", "end": "2027-07-03", "start_d": "27 июн – 3 июл", "detailed": false}, {"w": 39, "start": "2027-07-04", "end": "2027-07-10", "start_d": "4–10 июл", "detailed": false}, {"w": 40, "start": "2027-07-11", "end": "2027-07-17", "start_d": "11–17 июл", "detailed": false}, {"w": 41, "start": "2027-07-18", "end": "2027-07-24", "start_d": "18–24 июл", "detailed": false}, {"w": 42, "start": "2027-07-25", "end": "2027-07-31", "start_d": "25–31 июл", "detailed": false}, {"w": 43, "start": "2027-08-01", "end": "2027-08-07", "start_d": "1–7 авг", "detailed": false}, {"w": 44, "start": "2027-08-08", "end": "2027-08-14", "start_d": "8–14 авг", "detailed": false}, {"w": 45, "start": "2027-08-15", "end": "2027-08-21", "start_d": "15–21 авг", "detailed": false}, {"w": 46, "start": "2027-08-22", "end": "2027-08-28", "start_d": "22–28 авг", "detailed": false}, {"w": 47, "start": "2027-08-29", "end": "2027-09-04", "start_d": "29 авг – 4 сен", "detailed": false}, {"w": 48, "start": "2027-09-05", "end": "2027-09-11", "start_d": "5–11 сен", "detailed": false}, {"w": 49, "start": "2027-09-12", "end": "2027-09-18", "start_d": "12–18 сен", "detailed": false}], "tts": [{"w": 4, "what": "3K time trial", "test_type": "pace", "target_sec": 840, "pace": "4:40", "session_goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.", "kind": "quality"}, {"w": 8, "what": "5K max", "test_type": "max", "target_sec": 1350, "pace": "4:30", "session_goal": "Максимальная скорость на 5К — меряем VO2max и способность держать темп на усталости.", "kind": "quality"}, {"w": 12, "what": "3K max", "test_type": "max", "target_sec": 780, "pace": "4:20", "session_goal": "Максимальная скорость на 3К — основной тест VO2max в середине сезона.", "kind": "quality"}, {"w": 15, "what": "2-3×3K average", "test_type": "max", "target_sec": 810, "pace": "4:30", "session_goal": "Средняя скорость на 3К в серии — меряем способность удерживать темп между повторами.", "kind": "quality"}, {"w": 23, "what": "5K @ race pace", "test_type": "pace", "target_sec": 1320, "pace": "4:24", "session_goal": "Гонка-темп 4:25/км на 5К — проверяем готовность к апрельской гонке.", "kind": "quality"}, {"w": 42, "what": "Olympic-distance brick (swim-bike-run)", "test_type": "sim", "target_sec": 10200, "pace": "", "session_goal": "Симуляция олимпийского триатлона — эффективность переходов и темп под усталостью.", "kind": "metric"}, {"w": 10, "what": "HR drift baseline", "test_type": "metric", "target_sec": 0, "pace": "", "session_goal": "Замер HR-дрейфа на длинном беге — контроль аэробной базы, не отдельная сессия.", "kind": "metric"}], "races": [{"name": "S25 Berlin 10K", "date": "2027-04-18", "start": "10:30", "w": 28, "date_short": "18 апр", "weekday": "Вс"}, {"name": "Olympic triathlon (TBD)", "date": "2027-09-12", "start": "TBD", "w": 49, "date_short": "12 сен", "weekday": "Вс"}], "peak_week": 21, "peak_km": 70, "max_week_h": 14.0, "zones": {"Z1": "100-118", "Z2": "118-135", "Z3": "136-150", "Z4": "150-160", "Z5": "160-168", "Z6": "169-172", "Z7": "173-182"}, "hr_max": 182, "rhr": 54, "generated_at": "24.10.2026 18:30"}</script>
+<script type="application/json" id="plan-data">{"title": "Макро-план сезона", "season_start": "2026-10-11", "total_weeks": 49, "detailed_weeks": 25, "phases": [{"id": "run_base", "goal": "Поднимаем базовый объём", "focus": "Аэробная база: растёт общий объём бега, интенсивность ниже порога. Фундамент под всё остальное.", "w_from": 1, "w_to": 12, "date_range": "11 окт 2026 — 2 янв 2027", "weeks_count": 12, "target_h": 5, "is_event": false, "notes": "", "detailed": [{"w": 1, "start": "2026-10-11", "end": "2026-10-17", "start_d": "11–17 окт", "detailed": true, "is_now": false, "is_next": false, "run_km": 27, "long_km": 12, "run_h": 2.6, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем базовый объём", "phase": "run_base", "color": "teal", "variants": [{"label": "8К + прогрессия 3К", "work_m": 8000}], "comp_h": 4.7, "total_h": 6.5, "actual": {"run_km": 51.2, "bike_km": 5.0, "swim_km": 4.1, "sessions": 8, "total_h": 6.27, "run_h": 4.6, "bike_h": 0.2, "swim_h": 1.5}}, {"w": 2, "start": "2026-10-18", "end": "2026-10-24", "start_d": "18–24 окт", "detailed": true, "is_now": true, "is_next": false, "run_km": 30, "long_km": 13, "run_h": 2.9, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace", "phase": "run_base", "color": "orange", "variants": [{"label": "4×1К @ 4:35", "work_m": 4000}], "comp_h": 5.0, "total_h": 7.0, "actual": {"run_km": 0, "bike_km": 90.0, "swim_km": 0, "sessions": 5, "total_h": 5.14, "run_h": 0.0, "bike_h": 5.2, "swim_h": 0.0}}, {"w": 3, "start": "2026-10-25", "end": "2026-10-31", "start_d": "25–31 окт", "detailed": true, "is_now": false, "is_next": true, "run_km": 35, "long_km": 14, "run_h": 3.3, "bike_h": 1.0, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем VO2max", "phase": "run_base", "color": "red", "variants": [{"label": "6×400", "work_m": 2400}, {"label": "8×400", "work_m": 3200}], "comp_h": 5.6, "total_h": 7.5}, {"w": 4, "start": "2026-11-01", "end": "2026-11-07", "start_d": "1–7 ноя", "detailed": true, "is_now": false, "is_next": false, "run_km": 38, "long_km": 14, "run_h": 3.6, "bike_h": 1.0, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "темповый тест · 3K time trial · 4:40/км", "phase": "run_base", "color": "cp", "variants": [{"label": "Темповый тест", "work_m": 3000}], "comp_h": 5.9, "total_h": 8.0, "is_tt": true}, {"w": 5, "start": "2026-11-08", "end": "2026-11-14", "start_d": "8–14 ноя", "detailed": true, "is_now": false, "is_next": false, "run_km": 40, "long_km": 16, "run_h": 3.8, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_base", "color": "ember", "variants": [{"label": "3×1К (порог) + 2×800 (VO2)", "work_m": 4600}], "comp_h": 6.3, "total_h": 8.5}, {"w": 6, "start": "2026-11-15", "end": "2026-11-21", "start_d": "15–21 ноя", "detailed": true, "is_now": false, "is_next": false, "run_km": 42, "long_km": 16, "run_h": 4.0, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "Поднимаем переключение зон", "phase": "run_base", "color": "violet", "variants": [{"label": "1К → 800 → 400", "work_m": 2200}], "comp_h": 6.5, "total_h": 9.0}, {"w": 7, "start": "2026-11-22", "end": "2026-11-28", "start_d": "22–28 ноя", "detailed": true, "is_now": false, "is_next": false, "run_km": 45, "long_km": 18, "run_h": 4.3, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_base", "color": "orange", "variants": [{"label": "5К tempo", "work_m": 5000}], "comp_h": 7.0, "total_h": 9.5}, {"w": 8, "start": "2026-11-29", "end": "2026-12-05", "start_d": "29 ноя – 5 дек", "detailed": true, "is_now": false, "is_next": false, "run_km": 48, "long_km": 14, "run_h": 4.6, "bike_h": 2.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "тест на максимум · 5K max · 4:30/км", "phase": "run_base", "color": "cp", "variants": [{"label": "Тест на максимум", "work_m": 5000}], "comp_h": 8.3, "total_h": 10.0, "is_tt": true}, {"w": 9, "start": "2026-12-06", "end": "2026-12-12", "start_d": "6–12 дек", "detailed": true, "is_now": false, "is_next": false, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "Поднимаем threshold pace", "phase": "run_base", "color": "orange", "variants": [{"label": "4×1К @ 4:25", "work_m": 4000}, {"label": "5×1К @ 4:25", "work_m": 5000}], "comp_h": 8.5, "total_h": 10.5}, {"w": 10, "start": "2026-12-13", "end": "2026-12-19", "start_d": "13–19 дек", "detailed": true, "is_now": false, "is_next": false, "run_km": 50, "long_km": 18, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.3, "ofp_h": 1.0, "goal_text": "Поднимаем VO2max", "phase": "run_base", "color": "red", "variants": [{"label": "10×200", "work_m": 2000}, {"label": "5×800", "work_m": 4000}, {"label": "2×2К + 1×800", "work_m": 4800}], "comp_h": 9.1, "total_h": 11.0}, {"w": 11, "start": "2026-12-20", "end": "2026-12-26", "start_d": "20–26 дек", "detailed": true, "is_now": false, "is_next": false, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.3, "ofp_h": 1.0, "goal_text": "Поднимаем общую аэробную мощность", "phase": "run_base", "color": "violet", "variants": [{"label": "6 циклов: 200@5:20 + 800@4:00", "work_m": 6000}], "comp_h": 9.1, "total_h": 11.0}, {"w": 12, "start": "2026-12-27", "end": "2027-01-02", "start_d": "27 дек – 2 янв", "detailed": true, "is_now": false, "is_next": false, "run_km": 45, "long_km": 12, "run_h": 4.3, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "тест на максимум · 3K max · 4:20/км", "phase": "run_base", "color": "cp", "variants": [{"label": "Темповый тест", "work_m": 3000}], "comp_h": 6.8, "total_h": 9.5, "is_tt": true}], "has_actual": true}, {"id": "run_build", "goal": "Поднимаем threshold pace", "focus": "Порог аэробного обмена: темп на LTH растёт, появляются длинные интервалы 2К.", "w_from": 13, "w_to": 19, "date_range": "3 янв 2027 — 20 фев 2027", "weeks_count": 7, "target_h": 7, "is_event": false, "notes": "", "detailed": [{"w": 13, "start": "2027-01-03", "end": "2027-01-09", "start_d": "3–9 янв", "detailed": true, "is_now": false, "is_next": false, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_build", "color": "orange", "variants": [{"label": "2×2К @ 4:30", "work_m": 4000}], "comp_h": 9.3, "total_h": 10.5}, {"w": 14, "start": "2027-01-10", "end": "2027-01-16", "start_d": "10–16 янв", "detailed": true, "is_now": false, "is_next": false, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем threshold pace", "phase": "run_build", "color": "orange", "variants": [{"label": "6×800 @ 4:20", "work_m": 4800}], "comp_h": 10.2, "total_h": 11.5}, {"w": 15, "start": "2027-01-17", "end": "2027-01-23", "start_d": "17–23 янв", "detailed": true, "is_now": false, "is_next": false, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "тест на максимум · 2-3×3K average · 4:30/км", "phase": "run_build", "color": "ember", "variants": [{"label": "5К tempo + 4×400 (VO2)", "work_m": 6600}], "comp_h": 10.2, "total_h": 11.5, "is_tt": true}, {"w": 16, "start": "2027-01-24", "end": "2027-01-30", "start_d": "24–30 янв", "detailed": true, "is_now": false, "is_next": false, "run_km": 55, "long_km": 16, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_build", "color": "cp", "variants": [{"label": "Тест на максимум", "work_m": 5000}], "comp_h": 10.2, "total_h": 11.5}, {"w": 17, "start": "2027-01-31", "end": "2027-02-06", "start_d": "31 янв – 6 фев", "detailed": true, "is_now": false, "is_next": false, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_build", "color": "orange", "variants": [{"label": "3×2К @ 4:25", "work_m": 6000}], "comp_h": 10.2, "total_h": 11.5}, {"w": 18, "start": "2027-02-07", "end": "2027-02-13", "start_d": "7–13 фев", "detailed": true, "is_now": false, "is_next": false, "run_km": 60, "long_km": 20, "run_h": 5.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_build", "color": "orange", "variants": [{"label": "8К tempo", "work_m": 8000}], "comp_h": 11.2, "total_h": 13.0}, {"w": 19, "start": "2027-02-14", "end": "2027-02-20", "start_d": "14–20 фев", "detailed": true, "is_now": false, "is_next": false, "run_km": 65, "long_km": 22, "run_h": 6.2, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_build", "color": "orange", "variants": [{"label": "8К tempo", "work_m": 8000}], "comp_h": 11.7, "total_h": 13.5}], "has_actual": false}, {"id": "run_specific", "goal": "Поднимаем race pace", "focus": "Специфика под гонку: темп на соревновательной скорости, race-pace отрезки в ключевой работе.", "w_from": 20, "w_to": 25, "date_range": "21 фев 2027 — 3 апр 2027", "weeks_count": 6, "target_h": 8, "is_event": false, "notes": "", "detailed": [{"w": 20, "start": "2027-02-21", "end": "2027-02-27", "start_d": "21–27 фев", "detailed": true, "is_now": false, "is_next": false, "run_km": 65, "long_km": 22, "run_h": 6.2, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем VO2max", "phase": "run_specific", "color": "red", "variants": [{"label": "4×2К", "work_m": 8000}, {"label": "5×2К", "work_m": 10000}], "comp_h": 11.7, "total_h": 14.0}, {"w": 21, "start": "2027-02-28", "end": "2027-03-06", "start_d": "28 фев – 6 мар", "detailed": true, "is_now": false, "is_next": false, "run_km": 70, "long_km": 22, "run_h": 6.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_specific", "color": "orange", "variants": [{"label": "12К long tempo", "work_m": 12000}], "comp_h": 12.2, "total_h": 14.0}, {"w": 22, "start": "2027-03-07", "end": "2027-03-13", "start_d": "7–13 мар", "detailed": true, "is_now": false, "is_next": false, "run_km": 70, "long_km": 24, "run_h": 6.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_specific", "color": "orange", "variants": [{"label": "4×2К @ 4:20", "work_m": 8000}, {"label": "2×3К @ 4:25", "work_m": 6000}], "comp_h": 12.2, "total_h": 14.0}, {"w": 23, "start": "2027-03-14", "end": "2027-03-20", "start_d": "14–20 мар", "detailed": true, "is_now": false, "is_next": false, "run_km": 60, "long_km": 14, "run_h": 5.7, "bike_h": 2.0, "swim_h": 0.8, "ofp_h": 0.8, "goal_text": "темповый тест · 5K @ race pace · 4:24/км", "phase": "run_specific", "color": "cp", "variants": [], "comp_h": 9.3, "total_h": 11.5, "is_tt": true}, {"w": 24, "start": "2027-03-21", "end": "2027-03-27", "start_d": "21–27 мар", "detailed": true, "is_now": false, "is_next": false, "run_km": 45, "long_km": 10, "run_h": 4.3, "bike_h": 2.0, "swim_h": 0.8, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_specific", "color": "ember", "variants": [{"label": "3×1К (порог) + 2×400 (VO2)", "work_m": 3800}], "comp_h": 7.9, "total_h": 9.0}, {"w": 25, "start": "2027-03-28", "end": "2027-04-03", "start_d": "28 мар – 3 апр", "detailed": true, "is_now": false, "is_next": false, "run_km": 35, "long_km": 6, "run_h": 3.3, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_specific", "color": "ember", "variants": [{"label": "3×1К (порог) + 2×400 (VO2)", "work_m": 3800}], "comp_h": 5.4, "total_h": 7.0}], "has_actual": false}, {"id": "run_taper", "goal": "Сохраняем качество, снижаем объём", "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей.", "w_from": 26, "w_to": 27, "date_range": "4 апр 2027 — 16 апр 2027", "weeks_count": 2, "target_h": 4, "is_event": false, "notes": "", "detailed": [], "has_actual": false}, {"id": "race_run", "goal": "Гонка", "focus": "S25 Berlin 10K — главная цель сезона.", "w_from": 27, "w_to": 27, "date_range": "17 апр 2027 — 17 апр 2027", "weeks_count": 1, "target_h": null, "is_event": true, "notes": "", "detailed": [], "has_actual": false}, {"id": "transition", "goal": "Переключаемся на вел и плав", "focus": "Бег уходит на второй план, вел и плавание набирают объём.", "w_from": 28, "w_to": 30, "date_range": "18 апр 2027 — 8 мая 2027", "weeks_count": 3, "target_h": 5, "is_event": false, "notes": "снижение бега, вход в плавание/вело", "detailed": [], "has_actual": false}, {"id": "tri_base", "goal": "Поднимаем базу триатлона", "focus": "Объёмная база трёх видов спорта под олимпийскую дистанцию.", "w_from": 31, "w_to": 36, "date_range": "9 мая 2027 — 19 июн 2027", "weeks_count": 6, "target_h": 6, "is_event": false, "notes": "", "detailed": [], "has_actual": false}, {"id": "tri_build", "goal": "Поднимаем bricks и race-sim", "focus": "Связки и симуляции соревновательного темпа под нагрузкой.", "w_from": 37, "w_to": 43, "date_range": "20 июн 2027 — 7 авг 2027", "weeks_count": 7, "target_h": 8, "is_event": false, "notes": "", "detailed": [], "has_actual": false}, {"id": "tri_specific", "goal": "Поднимаем специфику триатлона", "focus": "Гонка-темп, переходы, длинные отрезки под усталостью.", "w_from": 44, "w_to": 47, "date_range": "8 авг 2027 — 4 сен 2027", "weeks_count": 4, "target_h": 10, "is_event": false, "notes": "", "detailed": [], "has_actual": false}, {"id": "tri_taper", "goal": "Сохраняем качество, снижаем объём", "focus": "Тапер к олимпийскому триатлону.", "w_from": 48, "w_to": 48, "date_range": "5 сен 2027 — 10 сен 2027", "weeks_count": 1, "target_h": 5, "is_event": false, "notes": "", "detailed": [], "has_actual": false}, {"id": "race_tri", "goal": "Гонка", "focus": "Олимпийский триатлон — второй пик сезона.", "w_from": 48, "w_to": 48, "date_range": "11 сен 2027 — 11 сен 2027", "weeks_count": 1, "target_h": null, "is_event": true, "notes": "", "detailed": [], "has_actual": false}], "weeks": [{"w": 1, "start": "2026-10-11", "end": "2026-10-17", "start_d": "11–17 окт", "detailed": true, "is_now": false, "is_next": false, "run_km": 27, "long_km": 12, "run_h": 2.6, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем базовый объём", "phase": "run_base", "color": "teal", "variants": [{"label": "8К + прогрессия 3К", "work_m": 8000}], "comp_h": 4.7, "total_h": 6.5, "actual": {"run_km": 51.2, "bike_km": 5.0, "swim_km": 4.1, "sessions": 8, "total_h": 6.27, "run_h": 4.6, "bike_h": 0.2, "swim_h": 1.5}}, {"w": 2, "start": "2026-10-18", "end": "2026-10-24", "start_d": "18–24 окт", "detailed": true, "is_now": true, "is_next": false, "run_km": 30, "long_km": 13, "run_h": 2.9, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace", "phase": "run_base", "color": "orange", "variants": [{"label": "4×1К @ 4:35", "work_m": 4000}], "comp_h": 5.0, "total_h": 7.0, "actual": {"run_km": 0, "bike_km": 90.0, "swim_km": 0, "sessions": 5, "total_h": 5.14, "run_h": 0.0, "bike_h": 5.2, "swim_h": 0.0}}, {"w": 3, "start": "2026-10-25", "end": "2026-10-31", "start_d": "25–31 окт", "detailed": true, "is_now": false, "is_next": true, "run_km": 35, "long_km": 14, "run_h": 3.3, "bike_h": 1.0, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем VO2max", "phase": "run_base", "color": "red", "variants": [{"label": "6×400", "work_m": 2400}, {"label": "8×400", "work_m": 3200}], "comp_h": 5.6, "total_h": 7.5}, {"w": 4, "start": "2026-11-01", "end": "2026-11-07", "start_d": "1–7 ноя", "detailed": true, "is_now": false, "is_next": false, "run_km": 38, "long_km": 14, "run_h": 3.6, "bike_h": 1.0, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "темповый тест · 3K time trial · 4:40/км", "phase": "run_base", "color": "cp", "variants": [{"label": "Темповый тест", "work_m": 3000}], "comp_h": 5.9, "total_h": 8.0, "is_tt": true}, {"w": 5, "start": "2026-11-08", "end": "2026-11-14", "start_d": "8–14 ноя", "detailed": true, "is_now": false, "is_next": false, "run_km": 40, "long_km": 16, "run_h": 3.8, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_base", "color": "ember", "variants": [{"label": "3×1К (порог) + 2×800 (VO2)", "work_m": 4600}], "comp_h": 6.3, "total_h": 8.5}, {"w": 6, "start": "2026-11-15", "end": "2026-11-21", "start_d": "15–21 ноя", "detailed": true, "is_now": false, "is_next": false, "run_km": 42, "long_km": 16, "run_h": 4.0, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "Поднимаем переключение зон", "phase": "run_base", "color": "violet", "variants": [{"label": "1К → 800 → 400", "work_m": 2200}], "comp_h": 6.5, "total_h": 9.0}, {"w": 7, "start": "2026-11-22", "end": "2026-11-28", "start_d": "22–28 ноя", "detailed": true, "is_now": false, "is_next": false, "run_km": 45, "long_km": 18, "run_h": 4.3, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_base", "color": "orange", "variants": [{"label": "5К tempo", "work_m": 5000}], "comp_h": 7.0, "total_h": 9.5}, {"w": 8, "start": "2026-11-29", "end": "2026-12-05", "start_d": "29 ноя – 5 дек", "detailed": true, "is_now": false, "is_next": false, "run_km": 48, "long_km": 14, "run_h": 4.6, "bike_h": 2.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "тест на максимум · 5K max · 4:30/км", "phase": "run_base", "color": "cp", "variants": [{"label": "Тест на максимум", "work_m": 5000}], "comp_h": 8.3, "total_h": 10.0, "is_tt": true}, {"w": 9, "start": "2026-12-06", "end": "2026-12-12", "start_d": "6–12 дек", "detailed": true, "is_now": false, "is_next": false, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 0.7, "ofp_h": 1.0, "goal_text": "Поднимаем threshold pace", "phase": "run_base", "color": "orange", "variants": [{"label": "4×1К @ 4:25", "work_m": 4000}, {"label": "5×1К @ 4:25", "work_m": 5000}], "comp_h": 8.5, "total_h": 10.5}, {"w": 10, "start": "2026-12-13", "end": "2026-12-19", "start_d": "13–19 дек", "detailed": true, "is_now": false, "is_next": false, "run_km": 50, "long_km": 18, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.3, "ofp_h": 1.0, "goal_text": "Поднимаем VO2max", "phase": "run_base", "color": "red", "variants": [{"label": "10×200", "work_m": 2000}, {"label": "5×800", "work_m": 4000}, {"label": "2×2К + 1×800", "work_m": 4800}], "comp_h": 9.1, "total_h": 11.0}, {"w": 11, "start": "2026-12-20", "end": "2026-12-26", "start_d": "20–26 дек", "detailed": true, "is_now": false, "is_next": false, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.3, "ofp_h": 1.0, "goal_text": "Поднимаем общую аэробную мощность", "phase": "run_base", "color": "violet", "variants": [{"label": "6 циклов: 200@5:20 + 800@4:00", "work_m": 6000}], "comp_h": 9.1, "total_h": 11.0}, {"w": 12, "start": "2026-12-27", "end": "2027-01-02", "start_d": "27 дек – 2 янв", "detailed": true, "is_now": false, "is_next": false, "run_km": 45, "long_km": 12, "run_h": 4.3, "bike_h": 1.0, "swim_h": 0.7, "ofp_h": 0.8, "goal_text": "тест на максимум · 3K max · 4:20/км", "phase": "run_base", "color": "cp", "variants": [{"label": "Темповый тест", "work_m": 3000}], "comp_h": 6.8, "total_h": 9.5, "is_tt": true}, {"w": 13, "start": "2027-01-03", "end": "2027-01-09", "start_d": "3–9 янв", "detailed": true, "is_now": false, "is_next": false, "run_km": 50, "long_km": 16, "run_h": 4.8, "bike_h": 2.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_build", "color": "orange", "variants": [{"label": "2×2К @ 4:30", "work_m": 4000}], "comp_h": 9.3, "total_h": 10.5}, {"w": 14, "start": "2027-01-10", "end": "2027-01-16", "start_d": "10–16 янв", "detailed": true, "is_now": false, "is_next": false, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем threshold pace", "phase": "run_build", "color": "orange", "variants": [{"label": "6×800 @ 4:20", "work_m": 4800}], "comp_h": 10.2, "total_h": 11.5}, {"w": 15, "start": "2027-01-17", "end": "2027-01-23", "start_d": "17–23 янв", "detailed": true, "is_now": false, "is_next": false, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "тест на максимум · 2-3×3K average · 4:30/км", "phase": "run_build", "color": "ember", "variants": [{"label": "5К tempo + 4×400 (VO2)", "work_m": 6600}], "comp_h": 10.2, "total_h": 11.5, "is_tt": true}, {"w": 16, "start": "2027-01-24", "end": "2027-01-30", "start_d": "24–30 янв", "detailed": true, "is_now": false, "is_next": false, "run_km": 55, "long_km": 16, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Проверяем форму на контрольной точке", "phase": "run_build", "color": "cp", "variants": [{"label": "Тест на максимум", "work_m": 5000}], "comp_h": 10.2, "total_h": 11.5}, {"w": 17, "start": "2027-01-31", "end": "2027-02-06", "start_d": "31 янв – 6 фев", "detailed": true, "is_now": false, "is_next": false, "run_km": 55, "long_km": 18, "run_h": 5.2, "bike_h": 2.5, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_build", "color": "orange", "variants": [{"label": "3×2К @ 4:25", "work_m": 6000}], "comp_h": 10.2, "total_h": 11.5}, {"w": 18, "start": "2027-02-07", "end": "2027-02-13", "start_d": "7–13 фев", "detailed": true, "is_now": false, "is_next": false, "run_km": 60, "long_km": 20, "run_h": 5.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_build", "color": "orange", "variants": [{"label": "8К tempo", "work_m": 8000}], "comp_h": 11.2, "total_h": 13.0}, {"w": 19, "start": "2027-02-14", "end": "2027-02-20", "start_d": "14–20 фев", "detailed": true, "is_now": false, "is_next": false, "run_km": 65, "long_km": 22, "run_h": 6.2, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_build", "color": "orange", "variants": [{"label": "8К tempo", "work_m": 8000}], "comp_h": 11.7, "total_h": 13.5}, {"w": 20, "start": "2027-02-21", "end": "2027-02-27", "start_d": "21–27 фев", "detailed": true, "is_now": false, "is_next": false, "run_km": 65, "long_km": 22, "run_h": 6.2, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем VO2max", "phase": "run_specific", "color": "red", "variants": [{"label": "4×2К", "work_m": 8000}, {"label": "5×2К", "work_m": 10000}], "comp_h": 11.7, "total_h": 14.0}, {"w": 21, "start": "2027-02-28", "end": "2027-03-06", "start_d": "28 фев – 6 мар", "detailed": true, "is_now": false, "is_next": false, "run_km": 70, "long_km": 22, "run_h": 6.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем аэробную мощность", "phase": "run_specific", "color": "orange", "variants": [{"label": "12К long tempo", "work_m": 12000}], "comp_h": 12.2, "total_h": 14.0}, {"w": 22, "start": "2027-03-07", "end": "2027-03-13", "start_d": "7–13 мар", "detailed": true, "is_now": false, "is_next": false, "run_km": 70, "long_km": 24, "run_h": 6.7, "bike_h": 3.0, "swim_h": 1.5, "ofp_h": 1.0, "goal_text": "Поднимаем способность держать threshold pace", "phase": "run_specific", "color": "orange", "variants": [{"label": "4×2К @ 4:20", "work_m": 8000}, {"label": "2×3К @ 4:25", "work_m": 6000}], "comp_h": 12.2, "total_h": 14.0}, {"w": 23, "start": "2027-03-14", "end": "2027-03-20", "start_d": "14–20 мар", "detailed": true, "is_now": false, "is_next": false, "run_km": 60, "long_km": 14, "run_h": 5.7, "bike_h": 2.0, "swim_h": 0.8, "ofp_h": 0.8, "goal_text": "темповый тест · 5K @ race pace · 4:24/км", "phase": "run_specific", "color": "cp", "variants": [], "comp_h": 9.3, "total_h": 11.5, "is_tt": true}, {"w": 24, "start": "2027-03-21", "end": "2027-03-27", "start_d": "21–27 мар", "detailed": true, "is_now": false, "is_next": false, "run_km": 45, "long_km": 10, "run_h": 4.3, "bike_h": 2.0, "swim_h": 0.8, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_specific", "color": "ember", "variants": [{"label": "3×1К (порог) + 2×400 (VO2)", "work_m": 3800}], "comp_h": 7.9, "total_h": 9.0}, {"w": 25, "start": "2027-03-28", "end": "2027-04-03", "start_d": "28 мар – 3 апр", "detailed": true, "is_now": false, "is_next": false, "run_km": 35, "long_km": 6, "run_h": 3.3, "bike_h": 0.8, "swim_h": 0.5, "ofp_h": 0.8, "goal_text": "Поднимаем threshold pace и VO2max", "phase": "run_specific", "color": "ember", "variants": [{"label": "3×1К (порог) + 2×400 (VO2)", "work_m": 3800}], "comp_h": 5.4, "total_h": 7.0}, {"w": 26, "start": "2027-04-04", "end": "2027-04-10", "start_d": "4–10 апр", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 27, "start": "2027-04-11", "end": "2027-04-17", "start_d": "11–17 апр", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 28, "start": "2027-04-18", "end": "2027-04-24", "start_d": "18–24 апр", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 29, "start": "2027-04-25", "end": "2027-05-01", "start_d": "25 апр – 1 мая", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 30, "start": "2027-05-02", "end": "2027-05-08", "start_d": "2–8 мая", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 31, "start": "2027-05-09", "end": "2027-05-15", "start_d": "9–15 мая", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 32, "start": "2027-05-16", "end": "2027-05-22", "start_d": "16–22 мая", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 33, "start": "2027-05-23", "end": "2027-05-29", "start_d": "23–29 мая", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 34, "start": "2027-05-30", "end": "2027-06-05", "start_d": "30 мая – 5 июн", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 35, "start": "2027-06-06", "end": "2027-06-12", "start_d": "6–12 июн", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 36, "start": "2027-06-13", "end": "2027-06-19", "start_d": "13–19 июн", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 37, "start": "2027-06-20", "end": "2027-06-26", "start_d": "20–26 июн", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 38, "start": "2027-06-27", "end": "2027-07-03", "start_d": "27 июн – 3 июл", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 39, "start": "2027-07-04", "end": "2027-07-10", "start_d": "4–10 июл", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 40, "start": "2027-07-11", "end": "2027-07-17", "start_d": "11–17 июл", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 41, "start": "2027-07-18", "end": "2027-07-24", "start_d": "18–24 июл", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 42, "start": "2027-07-25", "end": "2027-07-31", "start_d": "25–31 июл", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 43, "start": "2027-08-01", "end": "2027-08-07", "start_d": "1–7 авг", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 44, "start": "2027-08-08", "end": "2027-08-14", "start_d": "8–14 авг", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 45, "start": "2027-08-15", "end": "2027-08-21", "start_d": "15–21 авг", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 46, "start": "2027-08-22", "end": "2027-08-28", "start_d": "22–28 авг", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 47, "start": "2027-08-29", "end": "2027-09-04", "start_d": "29 авг – 4 сен", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 48, "start": "2027-09-05", "end": "2027-09-11", "start_d": "5–11 сен", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}, {"w": 49, "start": "2027-09-12", "end": "2027-09-18", "start_d": "12–18 сен", "detailed": false, "is_now": false, "is_next": false, "color": "gray"}], "tts": [{"w": 4, "what": "3K time trial", "test_type": "pace", "target_sec": 840, "pace": "4:40", "session_goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа."}, {"w": 8, "what": "5K max", "test_type": "max", "target_sec": 1350, "pace": "4:30", "session_goal": "Максимальная скорость на 5К — меряем VO2max и способность держать темп на усталости."}, {"w": 12, "what": "3K max", "test_type": "max", "target_sec": 780, "pace": "4:20", "session_goal": "Максимальная скорость на 3К — основной тест VO2max в середине сезона."}, {"w": 15, "what": "2-3×3K average", "test_type": "max", "target_sec": 810, "pace": "4:30", "session_goal": "Средняя скорость на 3К в серии — меряем способность удерживать темп между повторами."}, {"w": 23, "what": "5K @ race pace", "test_type": "pace", "target_sec": 1320, "pace": "4:24", "session_goal": "Гонка-темп 4:25/км на 5К — проверяем готовность к апрельской гонке."}, {"w": 42, "what": "Olympic-distance brick (swim-bike-run)", "test_type": "sim", "target_sec": 10200, "pace": "", "session_goal": "Симуляция олимпийского триатлона — эффективность переходов и темп под усталостью."}, {"w": 10, "what": "HR drift baseline", "test_type": "metric", "target_sec": 0, "pace": "", "session_goal": "Замер HR-дрейфа на длинном беге — контроль аэробной базы, не отдельная сессия."}], "races": [{"name": "S25 Berlin 10K", "date": "2027-04-18", "start": "10:30", "w": 28, "date_short": "18 апр", "weekday": "Вс"}, {"name": "Olympic triathlon (TBD)", "date": "2027-09-12", "start": "TBD", "w": 49, "date_short": "12 сен", "weekday": "Вс"}], "peak_week": 21, "peak_km": 70, "max_week_h": 14.0, "actual_weeks": 2, "actual_run_km": 51.2, "actual_h": 11.4, "color_label": {"teal": "объём", "orange": "threshold / tempo", "ember": "порог + VO2", "red": "VO2max", "violet": "анаэробная скорость", "cp": "контрольная точка", "gray": "не детализировано"}, "generated_at": "24.10.2026 21:25"}</script>
 <script>
 const D = JSON.parse(document.getElementById('plan-data').textContent);
 const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const ttWeeks = new Set(D.tts.map(t=>t.w));
 const raceWeeks = new Set(D.races.map(r=>r.w));
+const COLORVAR = {teal:'var(--c-teal)', orange:'var(--c-orange)', ember:'var(--c-ember)',
+  red:'var(--c-red)', violet:'var(--c-violet)', cp:'var(--cp)', gray:'var(--c-gray)'};
 
 // Пики
 document.getElementById('peaks').innerHTML = [
-  ['Пик бега', 'W'+D.peak_week+' · '+D.peak_km+'К', 'неделя максимального объёма'],
-  ['Детализировано', D.detailed_weeks+' из '+D.total_weeks, 'недель с понедельной раскладкой'],
+  ['Пик бега', 'W'+D.peak_week+' · '+D.peak_km+'К', 'макс. объём недели'],
+  ['Детализировано', D.detailed_weeks+'/'+D.total_weeks, 'недель с раскладкой'],
+  ['Факт', D.actual_weeks+' нед · '+D.actual_run_km+'К', 'реальный бег за сезон'],
   ['Макс. неделя', D.max_week_h+'ч', 'по колонке Total макро'],
-  ['Контрольных точек', String(D.tts.length), 'TT внутри сезона'],
 ].map(([l,v,d]) => '<div class="peak"><div class="pl">'+esc(l)+'</div><div class="pv">'+esc(v)
   + '</div><div class="pd">'+esc(d)+'</div></div>').join('');
 
-// Календарь 49 недель
-const cal = document.getElementById('cal');
-cal.innerHTML = D.weeks.map(w => {
+// Легенда
+document.getElementById('legend').innerHTML = Object.entries(D.color_label).map(([k,v]) =>
+  '<span class="lg"><i style="background:'+(COLORVAR[k]||'var(--c-gray)')+'"></i>'+esc(v)+'</span>').join('');
+
+// Календарь
+document.getElementById('cal').innerHTML = D.weeks.map(w => {
   let cls = 'cw';
   if (w.detailed) cls += ' det';
+  if (w.is_now) cls += ' now';
   if (ttWeeks.has(w.w)) cls += ' tt';
   if (raceWeeks.has(w.w)) cls += ' race';
-  return '<div class="'+cls+'" title="W'+w.w+' · '+w.start_d+'">'+w.w+'</div>';
+  const style = w.detailed && !ttWeeks.has(w.w) && !raceWeeks.has(w.w)
+    ? ' style="border-left:2px solid '+(COLORVAR[w.color]||'var(--c-gray)')+'"' : '';
+  return '<div class="'+cls+'"'+style+' title="W'+w.w+' · '+w.start_d+'">'+w.w+'</div>';
 }).join('');
 
-// Фазы
-const nowW = (() => {
-  const t = new Date().toISOString().slice(0,10);
-  const hit = D.weeks.find(w => w.start <= t && t <= w.end);
-  return hit ? hit.w : null;
-})();
-// Следующая неделя — та, которую планируем (текущая ещё не закончилась)
-const nextW = nowW ? ((D.weeks.find(w => w.w > nowW) || {}).w) : null;
-
-document.getElementById('phases').innerHTML = D.phases.map(p => {
-  let rows = '';
-  if (p.detailed.length) {
-    for (const w of p.detailed) {
-      let cls = '';
-      let badge = '';
-      if (ttWeeks.has(w.w)) { cls = 'ttr'; badge = '<span class="badge badge-tt">TT</span>'; }
-      if (raceWeeks.has(w.w)) { cls = 'racerow'; badge = '<span class="badge badge-race">ГОНКА</span>'; }
-      if (nowW === w.w) { cls = 'now'; badge += '<span class="badge badge-now">сейчас</span>'; }
-      else if (nextW === w.w) { badge += '<span class="badge badge-next">планируется</span>'; }
-      const vs = (w.variants||[]).map(v=>v.label).join(' · ');
-      rows += '<tr class="'+cls+'">'
-        + '<td class="wn">'+w.w+'</td>'
-        + '<td class="wd">'+esc(w.start_d)+'</td>'
-        + '<td class="wg"><div class="wg-top"><b>'+esc(w.goal_text)+'</b>'+badge+'</div>'
-        +   (vs ? '<span>'+esc(vs)+'</span>' : '')
-        + '</td>'
-        + '<td class="num km">'+w.run_km+'К</td>'
-        + '<td class="num mk">'+w.long_km+'К</td>'
-        + '<td class="num">'+w.comp_h+'ч</td>'
-        + '<td class="num mk">'+w.total_h+'ч</td>'
-        + '</tr>';
-    }
-  } else {
-    rows = '<tr><td class="wn">' + p.w_from + '–' + p.w_to + '</td>'
-      + '<td class="undet" colspan="6">не детализировано по неделям — фаза задаёт только вектор</td></tr>';
+// Недели — collapsible
+document.getElementById('weeks').innerHTML = D.weeks.map(w => {
+  const chips = [];
+  if (w.is_now) chips.push('<span class="chip next">сейчас</span>');
+  if (w.is_next) chips.push('<span class="chip next">планируется</span>');
+  if (ttWeeks.has(w.w)) chips.push('<span class="chip tt">TT</span>');
+  if (raceWeeks.has(w.w)) chips.push('<span class="chip act">ГОНКА</span>');
+  if (w.detailed) {
+    chips.push('<span class="chip run">'+w.run_km+'К</span>');
   }
-  const head = '<div class="phase-hd">'
-    + '<div class="phase-l">' + esc(p.id) + ' <span class="phase-w">W' + p.w_from + '–W' + p.w_to + '</span></div>'
-    + '<div class="phase-r"><b>' + p.date_range + '</b>' + p.weeks_count + ' нед.'
-    + (p.target_h ? ' · target ' + p.target_h + 'ч/нед' : '') + '</div>'
+  const a = w.actual;
+  if (a) {
+    if (a.run_km) chips.push('<span class="chip act">факт '+a.run_km+'К</span>');
+    else chips.push('<span class="chip">факт бега 0</span>');
+  }
+
+  // тело
+  let body = '';
+  if (w.detailed) {
+    body += '<div class="wk-goal"><b>' + esc(w.goal_text) + '</b></div>';
+    if (w.variants && w.variants.length) {
+      body += '<div class="wk-vars">варианты структуры: ' + esc(w.variants.map(v=>v.label).join(' · ')) + '</div>';
+    }
+    body += '<div class="wk-grid">'
+      + '<div class="mt plan"><div class="ml">план · бег</div><div class="mv">'+w.run_km+'К</div></div>'
+      + '<div class="mt plan"><div class="ml">long Z2</div><div class="mv">'+w.long_km+'К</div></div>'
+      + '<div class="mt plan"><div class="ml">план · Σ</div><div class="mv">'+w.comp_h+'ч</div></div>'
+      + '<div class="mt plan"><div class="ml">total макро</div><div class="mv">'+w.total_h+'ч</div></div>'
+      + '</div>';
+  }
+  if (a) {
+    body += '<div class="wk-grid">'
+      + '<div class="mt run"><div class="ml">факт · бег</div><div class="mv">'+a.run_km+'К</div></div>'
+      + '<div class="mt act"><div class="ml">факт · объём</div><div class="mv">'+a.total_h+'ч</div></div>'
+      + '<div class="mt bike"><div class="ml">факт · вел</div><div class="mv">'+a.bike_km+'К</div></div>'
+      + '<div class="mt swim"><div class="ml">факт · плав</div><div class="mv">'+a.swim_km+'К</div></div>'
+      + '</div>';
+    body += '<div class="cmp"><span class="cl">сессий: '+a.sessions+'</span></div>';
+    // сравнение план/факт по бегу
+    if (w.detailed && w.run_km) {
+      const p = w.run_km, f = a.run_km;
+      const ratio = Math.min(f / p, 1);
+      body += '<div class="cmp"><span class="cl">бег план/факт</span>'
+        + '<span class="cbar"><i style="width:'+(ratio*100).toFixed(0)+'%;background:var(--good)"></i></span>'
+        + '<span class="cl">' + p + 'К → ' + f + 'К</span></div>';
+    }
+  } else if (!w.detailed) {
+    body += '<div class="wk-vars">не детализировано по неделям — фаза задаёт только вектор</div>';
+  }
+
+  const title = w.detailed ? w.goal_text : (w.actual ? 'прошедшая неделя' : 'не детализировано');
+  return '<div class="wk t-'+(w.color||'gray')+(ttWeeks.has(w.w)?' tt':'')+(w.is_now?' now':'')+'" data-w="'+w.w+'">'
+    + '<div class="wk-hd"><span class="wk-n">'+w.w+'</span>'
+    + '<span class="wk-d">'+esc(w.start_d)+'</span>'
+    + '<span class="wk-t"><span class="wk-gt">'+esc(title)+'</span></span>'
+    + '<span class="wk-metrics">'+chips.join('')+'</span>'
+    + '<span class="caret">▶</span></div>'
+    + '<div class="wk-body">'+body+'</div></div>';
+}).join('');
+
+// раскрытие
+document.querySelectorAll('.wk-hd').forEach(h => {
+  h.addEventListener('click', () => {
+    const wk = h.parentElement;
+    const open = wk.classList.toggle('open');
+    h.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+});
+
+// Фазы
+document.getElementById('phases').innerHTML = D.phases.map(p => {
+  const head = '<div class="fphase-hd">'
+    + '<div class="fphase-l">' + esc(p.id) + '<span>W'+p.w_from+'–W'+p.w_to+'</span></div>'
+    + '<div class="fphase-r">' + p.weeks_count + ' нед.'
+    + (p.target_h ? ' · ' + p.target_h + 'ч/нед' : '') + '<br>' + esc(p.date_range) + '</div>'
     + '</div>';
-  const goal = p.goal ? '<div class="phase-goal">' + esc(p.goal) + '</div>' : '';
-  const focus = p.focus ? '<div class="phase-focus">' + esc(p.focus) + '</div>' : '';
+  const goal = p.goal ? '<div class="fphase-goal">' + esc(p.goal) + '</div>' : '';
+  const focus = p.focus ? '<div class="fphase-focus">' + esc(p.focus) + '</div>' : '';
   const note = p.notes ? '<div class="phase-note">' + esc(p.notes) + '</div>' : '';
-  const cols = p.detailed.length
-    ? '<th class="num">Бег</th><th class="num">Long</th>'
-      + '<th class="num">Σ ч</th><th class="num">Total</th>'
-    : '';
-  const tbl = '<table class="wk"><thead><tr>'
-    + '<th>W</th><th>Даты</th><th>Цель недели</th>' + cols
-    + '</tr></thead><tbody>' + rows + '</tbody></table>';
-  return '<div class="phase' + (p.is_event ? ' event' : '') + '">' + head + goal + focus + note + tbl + '</div>';
+  const chips = p.detailed.map(w => {
+    let c = '';
+    if (w.is_now) c += '<span class="chip next">сейчас</span>';
+    if (w.is_next) c += '<span class="chip next">планируется</span>';
+    if (ttWeeks.has(w.w)) c += '<span class="chip tt">TT</span>';
+    if (w.actual) c += '<span class="chip act">факт ' + w.actual.run_km + 'К</span>';
+    c += '<span class="chip run">' + w.run_km + 'К</span>';
+    return '<span class="chip" style="margin:2px 3px 0 0">W' + w.w + ' ' + esc(w.start_d) + ' ' + c + '</span>';
+  }).join('');
+  return '<div class="fphase">' + head + goal + focus + note
+    + '<div style="margin-top:7px">' + (chips || '<span class="chip">не детализировано</span>') + '</div>'
+    + '</div>';
 }).join('');
 
 // TT
-const ttRows = D.tts.map(t => {
-  const target = t.target_sec ? Math.floor(t.target_sec/60)+':'+String(t.target_sec%60).padStart(2,'0') : '—';
-  const types = {pace:'темповый', max:'max effort', sim:'симуляция', metric:'замер'};
-  return '<tr><td class="wn">W'+t.w+'</td>'
-    + '<td class="wd">' + (t.test_type ? (types[t.test_type]||t.test_type) : 'замер') + '</td>'
-    + '<td class="wg"><b>' + esc(t.what) + '</b><span>' + esc(t.session_goal||'') + '</span></td>'
-    + '<td class="num">' + target + '</td>'
-    + '<td class="num mk">' + (t.pace ? t.pace + '/км' : '—') + '</td></tr>';
-}).join('');
-document.getElementById('tts').innerHTML = '<div class="phase"><table class="wk"><thead><tr>'
+const types = {pace:'темповый', max:'max effort', sim:'симуляция', metric:'замер'};
+document.getElementById('tts').innerHTML = '<table class="tt-tbl"><thead><tr>'
   + '<th>W</th><th>Тип</th><th>Что и зачем</th><th class="num">Цель</th><th class="num">Темп</th>'
-  + '</tr></thead><tbody>' + ttRows + '</tbody></table></div>';
-
-// Гонки
-const raceHtml = D.races.map(r => '<div class="peak" style="margin-bottom:8px">'
-  + '<div class="pl">W' + r.w + ' · ' + esc(r.weekday) + '</div>'
-  + '<div class="pv" style="font-size:13px">' + esc(r.name) + '</div>'
-  + '<div class="pd">' + esc(r.date) + (r.start ? ' · старт ' + esc(r.start) : '') + '</div></div>').join('');
-document.getElementById('tts').innerHTML += '<div class="phase">' + raceHtml + '</div>';
-
-// Пояснения
-document.getElementById('notes').innerHTML =
-  '<b>Недельная раскладка есть только у ' + D.detailed_weeks + ' недель.</b> '
-  + 'Остальные недели сезона заданы фазой (вектор развития и объём), '
-  + 'конкретика по ним не расписана — она появится при планировании.<br><br>'
-  + '<b>Колонка Σ ч — сумма компонентов</b> (бег + вел + плав + ОФП), '
-  + '<b>Total — колонка из макро-плана</b>. Они не сходятся: разрыв растёт с объёмом. '
-  + 'Фактические недели ближе к Total, чем к сумме — отсюда вопрос, что считать целью.<br><br>'
-  + '<b>Бег переведён в часы</b> по среднему темпу 5.7 мин/км (Z2 и интервалы смешаны) — это оценка.';
+  + '</tr></thead><tbody>'
+  + D.tts.map(t => {
+      const target = t.target_sec ? Math.floor(t.target_sec/60)+':'+String(t.target_sec%60).padStart(2,'0') : '—';
+      return '<tr><td class="n">W'+t.w+'</td>'
+        + '<td class="sm">' + (types[t.test_type]||t.test_type) + '</td>'
+        + '<td><b>' + esc(t.what) + '</b><div class="sm">' + esc(t.session_goal||'') + '</div></td>'
+        + '<td class="num">' + target + '</td>'
+        + '<td class="num sm">' + (t.pace ? t.pace+'/км' : '—') + '</td></tr>';
+    }).join('')
+  + '</tbody></table>'
+  + '<div style="margin-top:10px">' + D.races.map(r =>
+      '<div class="race"><span class="rw">W'+r.w+' · '+esc(r.weekday)+'</span>'
+      + '<span><span class="rn">'+esc(r.name)+'</span>'
+      + '<span class="rd"> · '+esc(r.date)+(r.start?' · старт '+esc(r.start):'')+'</span></span></div>').join('')
+  + '</div>';
 </script>
 </body></html>
