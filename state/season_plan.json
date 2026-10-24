@@ -49,35 +49,45 @@
       "goal_id": "g_run_spring",
       "start": "2026-10-11",
       "end": "2027-01-02",
-      "hours_per_week_target": 5
+      "hours_per_week_target": 5,
+      "goal": "Поднимаем базовый объём",
+      "focus": "Аэробная база: растёт общий объём бега, интенсивность ниже порога. Фундамент под всё остальное."
     },
     {
       "id": "run_build",
       "goal_id": "g_run_spring",
       "start": "2027-01-03",
       "end": "2027-02-20",
-      "hours_per_week_target": 7
+      "hours_per_week_target": 7,
+      "goal": "Поднимаем threshold pace",
+      "focus": "Порог аэробного обмена: темп на LTH растёт, появляются длинные интервалы 2К."
     },
     {
       "id": "run_specific",
       "goal_id": "g_run_spring",
       "start": "2027-02-21",
       "end": "2027-04-03",
-      "hours_per_week_target": 8
+      "hours_per_week_target": 8,
+      "goal": "Поднимаем race pace",
+      "focus": "Специфика под гонку: темп на соревновательной скорости, race-pace отрезки в ключевой работе."
     },
     {
       "id": "run_taper",
       "goal_id": "g_run_spring",
       "start": "2027-04-04",
       "end": "2027-04-16",
-      "hours_per_week_target": 4
+      "hours_per_week_target": 4,
+      "goal": "Сохраняем качество, снижаем объём",
+      "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей."
     },
     {
       "id": "race_run",
       "goal_id": "g_run_spring",
       "start": "2027-04-17",
       "end": "2027-04-17",
-      "event": true
+      "event": true,
+      "goal": "Гонка",
+      "focus": "S25 Berlin 10K — главная цель сезона."
     },
     {
       "id": "transition",
@@ -85,42 +95,54 @@
       "start": "2027-04-18",
       "end": "2027-05-08",
       "hours_per_week_target": 5,
-      "notes": "снижение бега, вход в плавание/вело"
+      "notes": "снижение бега, вход в плавание/вело",
+      "goal": "Переключаемся на вел и плав",
+      "focus": "Бег уходит на второй план, вел и плавание набирают объём."
     },
     {
       "id": "tri_base",
       "goal_id": "g_tri_autumn",
       "start": "2027-05-09",
       "end": "2027-06-19",
-      "hours_per_week_target": 6
+      "hours_per_week_target": 6,
+      "goal": "Поднимаем базу триатлона",
+      "focus": "Объёмная база трёх видов спорта под олимпийскую дистанцию."
     },
     {
       "id": "tri_build",
       "goal_id": "g_tri_autumn",
       "start": "2027-06-20",
       "end": "2027-08-07",
-      "hours_per_week_target": 8
+      "hours_per_week_target": 8,
+      "goal": "Поднимаем bricks и race-sim",
+      "focus": "Связки и симуляции соревновательного темпа под нагрузкой."
     },
     {
       "id": "tri_specific",
       "goal_id": "g_tri_autumn",
       "start": "2027-08-08",
       "end": "2027-09-04",
-      "hours_per_week_target": 10
+      "hours_per_week_target": 10,
+      "goal": "Поднимаем специфику триатлона",
+      "focus": "Гонка-темп, переходы, длинные отрезки под усталостью."
     },
     {
       "id": "tri_taper",
       "goal_id": "g_tri_autumn",
       "start": "2027-09-05",
       "end": "2027-09-10",
-      "hours_per_week_target": 5
+      "hours_per_week_target": 5,
+      "goal": "Сохраняем качество, снижаем объём",
+      "focus": "Тапер к олимпийскому триатлону."
     },
     {
       "id": "race_tri",
       "goal_id": "g_tri_autumn",
       "start": "2027-09-11",
       "end": "2027-09-11",
-      "event": true
+      "event": true,
+      "goal": "Гонка",
+      "focus": "Олимпийский триатлон — второй пик сезона."
     }
   ],
   "control_points": [
@@ -138,7 +160,22 @@
       "target_value": 840,
       "season_week": 4,
       "quality_goal": "time_trial",
-      "kind": "quality"
+      "kind": "quality",
+      "session": {
+        "test_type": "pace",
+        "distance_m": 3000,
+        "target_sec": 840,
+        "session_goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.",
+        "measures": [
+          "threshold_pace",
+          "hr_drift"
+        ],
+        "protocol": "разминка 15мин Z1 → 3К на 4:40/км (контроль темпа по 200м, сплит-обратный) → заминка 12мин Z1",
+        "pass_criteria": "Держать 4:40/км без просадки на последней 1К. Дрейф ≤ 5 с/км. HR держится в Z3–Z4 (до 160), без выхода в Z5.",
+        "fail_action": "Не дтянул → задерживаем Phase 1 на +1 неделю (правило макро). Объём следующей недели не растёт.",
+        "pace_min_per_km": "4:40",
+        "pace_sec_per_km": 280.0
+      }
     },
     {
       "id": "cp_5k_w8",
@@ -154,7 +191,22 @@
       "target_value": 1350,
       "season_week": 8,
       "quality_goal": "time_trial",
-      "kind": "quality"
+      "kind": "quality",
+      "session": {
+        "test_type": "max",
+        "distance_m": 5000,
+        "target_sec": 1350,
+        "session_goal": "Максимальная скорость на 5К — меряем VO2max и способность держать темп на усталости.",
+        "measures": [
+          "vo2max",
+          "threshold_pace"
+        ],
+        "protocol": "разминка 15мин Z1 → 5К all-out (не тянуть на старте, но держать максимум со 2-го километра) → заминка 12мин Z1",
+        "pass_criteria": "Финиш ≤ 22:30. Темп на последней 1К не хуже первой более чем на 10 с/км. HR держится в Z5, без провала.",
+        "fail_action": "Не дотянул → объём не наращиваем, W9–W10 остаются Z2/tempo. Пересмотр через W12 (следующая 3К TT).",
+        "pace_min_per_km": "4:30",
+        "pace_sec_per_km": 270.0
+      }
     },
     {
       "id": "cp_3k_w12",
@@ -169,7 +221,22 @@
       "target_value": 780,
       "season_week": 12,
       "quality_goal": "time_trial",
-      "kind": "quality"
+      "kind": "quality",
+      "session": {
+        "test_type": "max",
+        "distance_m": 3000,
+        "target_sec": 780,
+        "session_goal": "Максимальная скорость на 3К — основной тест VO2max в середине сезона.",
+        "measures": [
+          "top_end_speed",
+          "vo2max"
+        ],
+        "protocol": "разминка 15мин Z1 → 3К all-out → заминка 12мин Z1",
+        "pass_criteria": "Финиш ≤ 13:30 — план жив. > 13:30 — риск, пересмотр фазы.",
+        "fail_action": "> 13:30 → риск для плана, откат объёма на 1–2 недели.",
+        "pace_min_per_km": "4:20",
+        "pace_sec_per_km": 260.0
+      }
     },
     {
       "id": "cp_2_3k_w16",
@@ -184,7 +251,21 @@
       "target_value": 810,
       "season_week": 15,
       "quality_goal": "time_trial",
-      "kind": "quality"
+      "kind": "quality",
+      "session": {
+        "test_type": "max",
+        "distance_m": 3000,
+        "target_sec": 810,
+        "session_goal": "Средняя скорость на 3К в серии — меряем способность удерживать темп между повторами.",
+        "measures": [
+          "threshold_pace"
+        ],
+        "protocol": "разминка 15мин Z1 → 3×3К, среднее время по трём отрезкам → заминка 12мин Z1",
+        "pass_criteria": "Среднее ≤ 13:30 (810 с). Разброс между отрезками ≤ 5 с/км. Три 3К подряд на одном темпе.",
+        "fail_action": "Среднее > 13:30 → переход на 2-месцевый бонусный блок (по правилу макро для W16).",
+        "pace_min_per_km": "4:30",
+        "pace_sec_per_km": 270.0
+      }
     },
     {
       "id": "cp_5k_w23",
@@ -199,7 +280,21 @@
       "target_value": 1320,
       "season_week": 23,
       "quality_goal": "time_trial",
-      "kind": "quality"
+      "kind": "quality",
+      "session": {
+        "test_type": "pace",
+        "distance_m": 5000,
+        "target_sec": 1320,
+        "session_goal": "Гонка-темп 4:25/км на 5К — проверяем готовность к апрельской гонке.",
+        "measures": [
+          "race_readiness"
+        ],
+        "protocol": "разминка 15мин Z1 → 5К на 4:25/км → заминка 12мин Z1",
+        "pass_criteria": "Финиш ≤ 22:00. < 21:45 — PB в апреле в кармане.",
+        "fail_action": "≥ 22:00 — пересмотреть тапер и объём.",
+        "pace_min_per_km": "4:24",
+        "pace_sec_per_km": 264.0
+      }
     },
     {
       "id": "cp_olympic_sim_w32",
@@ -215,7 +310,20 @@
       "target_value": 10200,
       "season_week": 42,
       "quality_goal": null,
-      "kind": "metric"
+      "kind": "metric",
+      "session": {
+        "test_type": "sim",
+        "distance_m": 0,
+        "target_sec": 10200,
+        "session_goal": "Симуляция олимпийского триатлона — эффективность переходов и темп под усталостью.",
+        "measures": [
+          "transition_efficiency",
+          "race_pace_under_fatigue"
+        ],
+        "protocol": "1.5К плав → 40К вел → 10К бег, максимально близко к боевому темпу",
+        "pass_criteria": "Суммарно ≤ 2:50. Потери на переходах ≤ 4 мин.",
+        "fail_action": "Пересмотреть приоритеты триатлона."
+      }
     },
     {
       "id": "cp_general_hr_drift",
@@ -229,7 +337,19 @@
       "target_value": 0.5,
       "season_week": 10,
       "quality_goal": null,
-      "kind": "metric"
+      "kind": "metric",
+      "session": {
+        "test_type": "metric",
+        "distance_m": 0,
+        "target_sec": 0,
+        "session_goal": "Замер HR-дрейфа на длинном беге — контроль аэробной базы, не отдельная сессия.",
+        "measures": [
+          "hr_drift"
+        ],
+        "protocol": "Берётся из длинного Z2 недели — отдельная сессия не нужна.",
+        "pass_criteria": "Дрейф ≤ 0.5 уд/мин за КМ.",
+        "fail_action": "Дрейф выше → снизить интенсивность easy-сессий."
+      }
     }
   ],
   "races": [
@@ -265,8 +385,8 @@
   "season_end_date": "2027-09-12",
   "_season_week_notes": "W1=12.10.2026. season_week не зависит от ISO недели — это ordinal. Конвертация через lib/season_week.py.",
   "last_replan": {
-    "reason": "CP без конкретных дат и без weekday: привязка только к season_week. Цель качественной сессии недели берётся из weekly_macro[].quality.goal, а CP переопределяет её через quality_goal (TT-недели) либо остаётся информационным замером (kind=metric). Фаза каждой недели прописана явно (weekly_macro[].phase) — план строится от фазы, а не от даты.",
-    "at": "2026-10-24T15:17:40+00:00"
+    "reason": "Исправлены fail_action/pass_criteria у CP: cp_2_3k_w16 — это 3К-среднее (13:30), а fail_action был про 5К 22:30 из строки W16 макро; cp_5k_w8 — конкретика вместо ссылки «см. ниже».",
+    "at": "2026-10-24T16:19:50+00:00"
   },
   "weekly_macro": [
     {
@@ -277,7 +397,10 @@
         "goal": "progression",
         "scale": "light",
         "_legacy_structure": "Easy 8К с прогрессией 4:30 на 3К",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем базовый объём",
+        "scale_text": "объёмная работа",
+        "develops": "Аэробная база + способность держать темп под нагрузкой"
       },
       "core": "2×25м",
       "bike": "1×45м",
@@ -293,7 +416,10 @@
         "goal": "threshold_speed",
         "scale": "light",
         "_legacy_structure": "4×1К @ 4:30 (Z3)",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем threshold pace",
+        "scale_text": "объёмная работа",
+        "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К"
       },
       "core": "2×25м",
       "bike": "1×45м",
@@ -309,7 +435,10 @@
         "goal": "vo2max",
         "scale": "light",
         "_legacy_structure": "6×400 @ 4:00 (Z4), отдых 2м jog",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем VO2max",
+        "scale_text": "объёмная работа",
+        "develops": "Аэробная мощность — верхняя граница аэробной системы"
       },
       "core": "2×25м",
       "bike": "1×60м",
@@ -325,7 +454,10 @@
         "goal": "time_trial",
         "scale": "light",
         "_legacy_structure": "3К TT (пт 06.11): цель 14:00",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Проверяем форму на контрольной точке",
+        "scale_text": "объёмная работа",
+        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции"
       },
       "core": "2×25м",
       "bike": "1×60м",
@@ -341,7 +473,10 @@
         "goal": "mixed",
         "scale": "medium",
         "_legacy_structure": "3×1К @ 4:25 + 2×800 @ 4:00",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем threshold pace и VO2max",
+        "scale_text": "средняя интенсивность",
+        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости"
       },
       "core": "2×25м",
       "bike": "1×60м",
@@ -357,7 +492,10 @@
         "goal": "pyramid",
         "scale": "medium",
         "_legacy_structure": "1К @ 4:25 → 800 @ 4:00 → 400 @ 3:45",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем переключение зон",
+        "scale_text": "средняя интенсивность",
+        "develops": "Переход от аэробной работы к пороговой и выше — навык смены интенсивности"
       },
       "core": "2×25м",
       "bike": "1×60м",
@@ -373,7 +511,10 @@
         "goal": "tempo",
         "scale": "medium",
         "_legacy_structure": "5К tempo @ 4:30",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем аэробную мощность",
+        "scale_text": "средняя интенсивность",
+        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность"
       },
       "core": "2×30м",
       "bike": "1×60м",
@@ -389,7 +530,10 @@
         "goal": "time_trial",
         "scale": "medium",
         "_legacy_structure": "5К TT (пт 04.12): цель 22:30",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Проверяем форму на контрольной точке",
+        "scale_text": "средняя интенсивность",
+        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции"
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -405,7 +549,10 @@
         "goal": "threshold_speed",
         "scale": "medium",
         "_legacy_structure": "4×1К @ 4:20 (Z3-Z4)",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем threshold pace",
+        "scale_text": "средняя интенсивность",
+        "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К"
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -421,7 +568,10 @@
         "goal": "vo2max",
         "scale": "medium",
         "_legacy_structure": "8×400 @ 3:50 (Z5)",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем VO2max",
+        "scale_text": "средняя интенсивность",
+        "develops": "Аэробная мощность — верхняя граница аэробной системы"
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -437,7 +587,10 @@
         "goal": "fartlek",
         "scale": "medium",
         "_legacy_structure": "Фартлек 200@5:20 + 800@4:00, 6 циклов",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем общую аэробную мощность",
+        "scale_text": "средняя интенсивность",
+        "develops": "Игровая стимуляция: чередование лёгкого и быстрого без жёсткой структуры"
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -453,7 +606,10 @@
         "goal": "time_trial",
         "scale": "light",
         "_legacy_structure": "3К TT (пт 01.01.2027): цель 13:00",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Проверяем форму на контрольной точке",
+        "scale_text": "объёмная работа",
+        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции"
       },
       "core": "2×25м",
       "bike": "1×60м",
@@ -469,7 +625,10 @@
         "goal": "threshold_power",
         "scale": "light",
         "_legacy_structure": "3×2К @ 4:20 (Z4) ⚡ первый длинный",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем способность держать threshold pace",
+        "scale_text": "объёмная работа",
+        "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH"
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -485,7 +644,10 @@
         "goal": "threshold_speed",
         "scale": "heavy",
         "_legacy_structure": "6×800 @ 4:00 (Z4) отдых 90с",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем threshold pace",
+        "scale_text": "высокая интенсивность",
+        "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К"
       },
       "core": "2×30м",
       "bike": "2×75м",
@@ -501,7 +663,10 @@
         "goal": "mixed",
         "scale": "heavy",
         "_legacy_structure": "5К tempo @ 4:25 + 4×400 @ 3:50",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем threshold pace и VO2max",
+        "scale_text": "высокая интенсивность",
+        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости"
       },
       "core": "2×30м",
       "bike": "2×75м",
@@ -517,7 +682,10 @@
         "goal": "time_trial",
         "scale": "medium",
         "_legacy_structure": "5К TT @ max (пт 22.01): цель 22:00",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Проверяем форму на контрольной точке",
+        "scale_text": "средняя интенсивность",
+        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции"
       },
       "core": "2×30м",
       "bike": "2×75м",
@@ -533,7 +701,10 @@
         "goal": "threshold_power",
         "scale": "medium",
         "_legacy_structure": "4×2К @ 4:20, отдых 3м",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем способность держать threshold pace",
+        "scale_text": "средняя интенсивность",
+        "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH"
       },
       "core": "2×30м",
       "bike": "2×75м",
@@ -549,7 +720,10 @@
         "goal": "tempo",
         "scale": "heavy",
         "_legacy_structure": "8К long tempo @ 4:25",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем аэробную мощность",
+        "scale_text": "высокая интенсивность",
+        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность"
       },
       "core": "2×30м",
       "bike": "2×90м",
@@ -565,7 +739,10 @@
         "goal": "tempo",
         "scale": "heavy",
         "_legacy_structure": "5К tempo @ 4:18 (Z3-Z4)",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем аэробную мощность",
+        "scale_text": "высокая интенсивность",
+        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность"
       },
       "core": "2×30м",
       "bike": "2×90м",
@@ -581,7 +758,10 @@
         "goal": "vo2max",
         "scale": "heavy",
         "_legacy_structure": "5×2К @ 4:10 (Z4) ⚡ race-pace touch",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем VO2max",
+        "scale_text": "высокая интенсивность",
+        "develops": "Аэробная мощность — верхняя граница аэробной системы"
       },
       "core": "2×30м",
       "bike": "2×90м",
@@ -597,7 +777,10 @@
         "goal": "tempo",
         "scale": "peak",
         "_legacy_structure": "12К long tempo @ 4:18",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем аэробную мощность",
+        "scale_text": "пиковая работа",
+        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность"
       },
       "core": "2×30м",
       "bike": "2×90м",
@@ -613,7 +796,10 @@
         "goal": "threshold_power",
         "scale": "heavy",
         "_legacy_structure": "4×2К @ 4:05, отдых 3м",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем способность держать threshold pace",
+        "scale_text": "высокая интенсивность",
+        "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH"
       },
       "core": "2×30м",
       "bike": "2×90м",
@@ -629,7 +815,10 @@
         "goal": "time_trial",
         "scale": "heavy",
         "_legacy_structure": "5К TT @ race pace (пт 19.03): цель 22:00",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Проверяем форму на контрольной точке",
+        "scale_text": "высокая интенсивность",
+        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции"
       },
       "core": "2×25м",
       "bike": "2×60м",
@@ -645,7 +834,10 @@
         "goal": "mixed",
         "scale": "light",
         "_legacy_structure": "2×2К @ 4:00, отдых 4м + 1×800 @ 3:50",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем threshold pace и VO2max",
+        "scale_text": "объёмная работа",
+        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости"
       },
       "core": "2×25м",
       "bike": "2×60м",
@@ -661,7 +853,10 @@
         "goal": "mixed",
         "scale": "light",
         "_legacy_structure": "1×1К @ 4:00, 1×800 @ 3:55, 1×400 @ 3:45",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма."
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Поднимаем threshold pace и VO2max",
+        "scale_text": "объёмная работа",
+        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости"
       },
       "core": "2×25м",
       "bike": "1×45м",

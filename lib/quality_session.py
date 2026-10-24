@@ -83,7 +83,8 @@ def choose_quality(goal: str,
                    history: list[dict] | None = None,
                    templates: dict | None = None,
                    variant_id: str | None = None,
-                   plan_context_work_m: int | None = None) -> dict:
+                   plan_context_work_m: int | None = None,
+                   test_type: str | None = None) -> dict:
     """
     Возвращает dict: {goal, scale, variant, work_m, guarded, warning, rationale}.
 
@@ -108,12 +109,19 @@ def choose_quality(goal: str,
     tpl = templates[goal]
     variants = tpl.get("variants", [])
 
-    # Точный выбор варианта (из override) — приоритетнее масштаба
+    # Точный выбор варианта (из override) — приоритетнее всего
     if variant_id:
         exact = next((v for v in variants if v.get("id") == variant_id), None)
         if exact:
             chosen = exact
             in_scale = [exact]
+        else:
+            in_scale = [v for v in variants if v.get("scale") == scale]
+    elif test_type:
+        # Выбор по типу теста (CP задаёт: pace / max / sim)
+        by_type = [v for v in variants if v.get("test_type") == test_type]
+        if by_type:
+            in_scale = by_type
         else:
             in_scale = [v for v in variants if v.get("scale") == scale]
     else:
@@ -206,7 +214,9 @@ def choose_quality(goal: str,
 
 def build_structure_from_variant(variant: dict,
                                  warmup_min: int = 15,
-                                 cooldown_min: int = 12) -> list[dict]:
+                                 cooldown_min: int = 12,
+                                 pace_override: str | None = None,
+                                 distance_override: int | None = None) -> list[dict]:
     """
     Превращает вариант шаблона в structure[] — формат slot.structure пайплайна.
 
@@ -287,19 +297,30 @@ def build_structure_from_variant(variant: dict,
                 ],
             })
 
-        elif btype == "tt":
-            # all-out: длительность оценивается по pace, если он задан
+        elif btype in ("tt_pace", "tt_max"):
+            # Темповый тест (tt_pace) или тест на максимум (tt_max).
+            # Дистанция — из цели CP (distance_override): шаблон задаёт лишь форму.
+            # Темп: для pace — заданный темп CP, для max — all-out.
+            dist = distance_override or block["distance_m"]
             pace = block.get("pace", "all-out")
-            mins = _distance_minutes(block["distance_m"], pace) if pace != "all-out" \
-                else _distance_minutes(block["distance_m"], "4:20")
+            if pace == "по цели CP" or not pace:
+                pace = pace_override or "4:30"
+            is_max = btype == "tt_max" or pace == "all-out"
+            if is_max:
+                pace_label = "all-out"
+                eff_pace = pace_override or "4:20"
+                mins = _distance_minutes(dist, eff_pace)
+            else:
+                pace_label = pace
+                mins = _distance_minutes(dist, pace)
             steps.append({
                 "phase": "work",
                 "basis": "distance",
-                "distance_m": block["distance_m"],
+                "distance_m": dist,
                 "duration_min": mins,
                 "zone": block.get("zone", "Z7"),
                 "hr_target": block.get("hr_target"),
-                "pace_min_per_km": pace,
+                "pace_min_per_km": pace_label,
             })
 
         elif btype == "progression":

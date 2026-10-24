@@ -346,12 +346,26 @@ def _select_quality_for_week(season_plan: dict, season_week: int,
         plan_context = prev_q.get("work_m")
 
     from .quality_session import choose_quality
+    tt = (cp or {}).get("session", {}).get("test_type")
     sel = choose_quality(goal, scale or "medium", variant_id=variant_id,
-                         plan_context_work_m=plan_context)
+                         plan_context_work_m=plan_context, test_type=tt)
     if cp and cp.get("quality_goal"):
         sel["is_cp"] = True
         sel["cp_id"] = cp.get("id")
         sel["cp_target"] = cp.get("target_value")
+        sel["session"] = cp.get("session", {})
+        # Цель сессии — часть выбора, чтобы попала и в rationale, и в карточку
+        sess = cp.get("session", {})
+        if sess.get("session_goal"):
+            sel["session_goal"] = sess["session_goal"]
+        if sess.get("pass_criteria"):
+            sel["pass_criteria"] = sess["pass_criteria"]
+        if sess.get("fail_action"):
+            sel["fail_action"] = sess["fail_action"]
+        if sess.get("protocol"):
+            sel["protocol"] = sess["protocol"]
+        if sess.get("pace_min_per_km"):
+            sel["pace_min_per_km"] = sess["pace_min_per_km"]
     return sel
 
 
@@ -484,7 +498,10 @@ def _build_cp_structure(cp: dict, win: dict,
     """
     if quality_selection and quality_selection.get("is_cp"):
         from .quality_session import build_structure_from_variant
-        return build_structure_from_variant(quality_selection.get("variant") or {})
+        return build_structure_from_variant(
+            quality_selection.get("variant") or {},
+            pace_override=quality_selection.get("pace_min_per_km"),
+            distance_override=(quality_selection.get("session") or {}).get("distance_m"))
 
     dur = win.get("duration_min", 60)
     warmup = 15
@@ -522,7 +539,10 @@ def _build_slot_from_spec(spec: dict, quality_selection: dict | None = None) -> 
     elif spec.get("subkind") == "quality" and quality_selection:
         # Слот качественной сессии: структура из выбранного шаблона
         from .quality_session import build_structure_from_variant
-        slot["structure"] = build_structure_from_variant(quality_selection.get("variant") or {})
+        slot["structure"] = build_structure_from_variant(
+            quality_selection.get("variant") or {},
+            pace_override=quality_selection.get("pace_min_per_km"),
+            distance_override=(quality_selection.get("session") or {}).get("distance_m"))
         slot["quality_goal"] = quality_selection.get("goal")
         slot["quality_scale"] = quality_selection.get("scale")
         slot["quality_variant"] = quality_selection.get("variant", {}).get("id")
@@ -685,6 +705,9 @@ def generate(season_week: int | str,
         if quality_selection and quality_selection.get("is_cp"):
             cp_slots[-1]["subkind"] = "quality"
             cp_slots[-1]["quality_selection"] = quality_selection
+            # Цель тестовой сессии — в сам слот, чтобы рендерить в карточке
+            cp_slots[-1]["session"] = cp.get("session", {})
+            cp_slots[-1]["goal"] = cp.get("session", {}).get("session_goal", "")
             cp_slots[-1]["quality_goal"] = quality_selection.get("goal")
             cp_slots[-1]["quality_variant"] = quality_selection.get("variant", {}).get("id")
             cp_slots[-1]["quality_work_m"] = quality_selection.get("work_m")
@@ -722,10 +745,31 @@ def generate(season_week: int | str,
     total_planned_h = round(total_planned_min / 60.0, 1)
     target_h = current_phase.get("hours_per_week_target", 0) if current_phase else 0
 
+    # Цели: фаза → неделя → сессия. Три уровня, все явные.
+    week_entry = next((w for w in (sp.get("weekly_macro") or [])
+                       if w.get("season_week") == sw), None)
+    week_goal = None
+    week_goal_detail = None
+    if week_entry:
+        q = week_entry.get("quality") or {}
+        week_goal = q.get("goal_text") or q.get("goal")
+        detail_bits = []
+        if q.get("scale_text"):
+            detail_bits.append("масштаб: " + q["scale_text"])
+        if q.get("develops"):
+            detail_bits.append(q["develops"])
+        if detail_bits:
+            week_goal_detail = " · ".join(detail_bits)
+
+    phase_goal = (current_phase or {}).get("goal")
+    phase_focus = (current_phase or {}).get("focus")
+
     return {
         "$schema": "./plan.schema.md",
         "version": 2,
         "title": f"W{sw} · {week_start.isoformat()}..{week_end.isoformat()} · Берлин",
+        "week_goal": week_goal,
+        "week_goal_detail": week_goal_detail,
         "season_week": sw,
         "iso_week": iso,
         "weekIso": iso,

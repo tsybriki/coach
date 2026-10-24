@@ -81,6 +81,8 @@ def build_data(season_plan_path: Path, athlete_path: Path) -> dict:
     start = sp.get("season_start_date", "2026-10-11")
     templates = json.loads((REPO / "state/workout_templates.json").read_text(encoding="utf-8")).get("templates", {})
 
+    phase_goal_map = {p["id"]: p.get("goal", "") for p in sp.get("phases", []) if p.get("goal")}
+
     weeks = []
     for entry in sp.get("weekly_macro", []):
         w = entry["season_week"]
@@ -104,9 +106,11 @@ def build_data(season_plan_path: Path, athlete_path: Path) -> dict:
             "run_km": run_km,
             "long_km": entry.get("long_km", 0),
             "phase": entry.get("phase", ""),
+            "phase_goal": phase_goal_map.get(entry.get("phase", ""), ""),
             "goal": goal,
             "goal_label": tpl.get("label", goal),
-            "goal_text": tpl.get("goal", ""),
+            "goal_text": q.get("goal_text") or tpl.get("goal", ""),
+            "scale_text": q.get("scale_text", ""),
             "scale": scale,
             "work_zone": tpl.get("work_zone", ""),
             "develops": tpl.get("develops", ""),
@@ -256,7 +260,7 @@ footer{margin-top:20px;text-align:center;font-size:11px;color:var(--muted)}
   <table>
     <thead><tr>
       <th>W</th><th>Даты</th><th class="num">Бег</th><th class="num">Long</th>
-      <th>Цель (адаптация)</th><th class="num">Бег ч</th><th class="num">Вел</th>
+      <th>Цель недели</th><th class="num">Бег ч</th><th class="num">Вел</th>
       <th class="num">Плав</th><th class="num">ОФП</th><th class="num">Σ ч</th>
       <th class="num">Total</th><th class="num">Δ</th>
     </tr></thead>
@@ -328,8 +332,8 @@ document.getElementById('wtbody').innerHTML = WEEK.map(w=>{
     + '<td class="date">'+esc(w.start.slice(8))+'.'+esc(w.start.slice(5,7))+' – '+esc(w.end.slice(8))+'.'+esc(w.end.slice(5,7))+'</td>'
     + '<td class="num">'+w.run_km+'К</td>'
     + '<td class="num">'+w.long_km+'К</td>'
-    + '<td style="font-size:10.5px"><b>'+esc(w.goal_label||w.goal)+'</b> '
-    + '<span style="color:var(--muted)">'+esc(w.scale)+'</span>'
+    + '<td style="font-size:10.5px"><b>'+esc(w.goal_text||w.goal||w.goal_label)+'</b>'
+    + (w.phase_goal ? '<div style="color:var(--muted);font-size:9.5px;margin-top:2px">фаза: '+esc(w.phase_goal)+'</div>' : '')
     + (w.variants && w.variants.length
        ? '<div style="color:var(--muted);font-size:9.5px;margin-top:2px">'
          + esc(w.variants.map(v=>v.label+' ('+v.work_m+'м)').join(' · ')) + '</div>'

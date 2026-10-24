@@ -231,6 +231,10 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
         },
         "control_points_in_range": plan.get("control_points_in_range", []),
         "load_context": plan.get("load_context"),
+        "phase_goal": (plan.get("phase") or {}).get("goal"),
+        "phase_focus": (plan.get("phase") or {}).get("focus"),
+        "week_goal": plan.get("week_goal"),
+        "week_goal_detail": plan.get("week_goal_detail"),
         "slots": [
             {
                 "id": s.get("id"),
@@ -245,6 +249,11 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
                 "location": s.get("location"),
                 "workout_pending": s.get("workout_pending", False),
                 "rationale": s.get("rationale"),
+                "goal": s.get("goal"),
+                "session": s.get("session"),
+                "quality_goal": s.get("quality_goal"),
+                "quality_scale": s.get("quality_scale"),
+                "quality_variant": s.get("quality_variant"),
                 "structure": s.get("structure", []),
                 "inventory": _inventory_for(s),
             }
@@ -310,6 +319,11 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .phase-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:8px}
 .phase-card h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 3px}
 .phase-card p{font-size:11.5px;color:var(--text);margin:0;line-height:1.4}
+.goal-card{background:linear-gradient(135deg,rgba(92,214,192,.08),rgba(122,162,255,.06));border:1px solid rgba(92,214,192,.3);border-radius:12px;padding:11px 14px;margin-bottom:10px}
+.goal-card .goal-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:3px}
+.goal-card .goal-main{font-size:15px;font-weight:600;color:var(--accent2);line-height:1.3}
+.goal-card .goal-sub{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.4}
+.goal-card .goal-phase{font-size:11px;color:var(--accent);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
 .load-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:8px}
 .load-card h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 6px}
 .load-list{margin:0;padding-left:17px;font-size:11.5px;line-height:1.5;color:var(--text)}
@@ -377,6 +391,12 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .actual-notes{margin-top:5px;font-size:12px;color:var(--muted);font-style:italic;line-height:1.4}
 .rationale{background:rgba(122,162,255,.06);border:1px solid rgba(122,162,255,.25);border-radius:8px;padding:9px 12px;margin:0 0 12px;font-size:12.5px;color:var(--text);line-height:1.45}
 .rationale-title{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);font-weight:600;margin-bottom:4px}
+.goal-block{background:rgba(92,214,192,.07);border:1px solid rgba(92,214,192,.3);border-radius:8px;padding:9px 12px;margin:0 0 12px;font-size:12.5px;line-height:1.45}
+.goal-block .goal-title{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--accent2);font-weight:600;margin-bottom:5px}
+.goal-block .goal-row{margin-top:5px;padding-top:5px;border-top:1px solid rgba(92,214,192,.2)}
+.goal-block .goal-label{color:var(--muted);font-size:11px;display:block}
+.goal-block .goal-pass{color:var(--good);font-size:11.5px}
+.goal-block .goal-fail{color:var(--warn);font-size:11.5px}
 .inv-item{display:flex;gap:8px;align-items:center;padding:2px 0}
 .inv-icon{color:var(--warn);font-size:14px;width:18px;text-align:center}
 
@@ -583,6 +603,39 @@ function renderCard(slot) {
       + '</div>';
   }
 
+  // v41: цель сессии — что именно развиваем/мерим и по какому критерию
+  let goalHtml = '';
+  const sess = slot.session;
+  if (sess && (sess.session_goal || sess.pass_criteria)) {
+    let g = '<div class="goal-block"><div class="goal-title">Цель сессии</div>';
+    if (sess.session_goal) g += '<div>' + escapeHtml(sess.session_goal) + '</div>';
+    if (sess.test_type) {
+      const ttNames = {pace:'темповый тест', max:'тест на максимум', sim:'симуляция', metric:'замер метрики'};
+      g += '<div class="goal-row"><span class="goal-label">Тип</span>'
+         + escapeHtml(ttNames[sess.test_type] || sess.test_type);
+      if (sess.distance_m) g += ' · ' + sess.distance_m + ' м';
+      if (sess.target_sec) g += ' · цель ' + Math.floor(sess.target_sec/60) + ':' + String(sess.target_sec%60).padStart(2,'0');
+      if (sess.pace_min_per_km) g += ' · темп ' + escapeHtml(sess.pace_min_per_km) + '/км';
+      g += '</div>';
+    }
+    if (sess.protocol) {
+      g += '<div class="goal-row"><span class="goal-label">Протокол</span>' + escapeHtml(sess.protocol) + '</div>';
+    }
+    if (sess.measures && sess.measures.length) {
+      g += '<div class="goal-row"><span class="goal-label">Меряем</span>' + escapeHtml(sess.measures.join(', ')) + '</div>';
+    }
+    if (sess.pass_criteria) {
+      g += '<div class="goal-row"><span class="goal-label">Критерий прохождения</span>'
+         + '<span class="goal-pass">' + escapeHtml(sess.pass_criteria) + '</span></div>';
+    }
+    if (sess.fail_action) {
+      g += '<div class="goal-row"><span class="goal-label">Если не дотянул</span>'
+         + '<span class="goal-fail">' + escapeHtml(sess.fail_action) + '</span></div>';
+    }
+    g += '</div>';
+    goalHtml = g;
+  }
+
   // v29: actual-блок (если есть в slot.actual) — показывается зелёным
   let actualHtml = '';
   if (slot.actual && (slot.actual.distance_km || slot.actual.time_sec || slot.actual.notes)) {
@@ -616,6 +669,7 @@ function renderCard(slot) {
     + escapeHtml(String(slot.duration_min)) + ' мин</div>'
     + (metaHtml ? '<div class="card-meta-row">' + metaHtml + '</div>' : '')
     + actualHtml
+    + goalHtml
     + rationaleHtml
     + invHtml
     + '<h3>Структура тренировки</h3>'
@@ -660,6 +714,25 @@ function buildPicker(plan) {
     html += '</div>';
   }
   html += '</div>';
+
+  // Цель недели + цель фазы — главное, ради чего неделя существует
+  if (plan.week_goal || plan.phase_goal) {
+    html += '<div class="goal-card">';
+    if (plan.week_goal) {
+      html += '<div class="goal-label">Цель недели</div>';
+      html += '<div class="goal-main">' + escapeHtml(plan.week_goal) + '</div>';
+      if (plan.week_goal_detail) {
+        html += '<div class="goal-sub">' + escapeHtml(plan.week_goal_detail) + '</div>';
+      }
+    }
+    if (plan.phase_goal) {
+      html += '<div class="goal-phase">Фаза · ' + escapeHtml(plan.phase.id || '') + ': '
+           + escapeHtml(plan.phase_goal);
+      if (plan.phase_focus) html += '<br>' + escapeHtml(plan.phase_focus);
+      html += '</div>';
+    }
+    html += '</div>';
+  }
 
   // Phase
   if (plan.phase && plan.phase.id && plan.phase.id !== '—') {

@@ -2,6 +2,8 @@
   "$schema": "./plan.schema.md",
   "version": 2,
   "title": "W4 · 2026-11-01..2026-11-07 · Берлин",
+  "week_goal": "Проверяем форму на контрольной точке",
+  "week_goal_detail": "масштаб: объёмная работа · Максимальная аэробная и анаэробная мощность на измеримой дистанции",
   "season_week": 4,
   "iso_week": "2026-W45",
   "weekIso": "2026-W45",
@@ -12,6 +14,8 @@
     "start": "2026-10-11",
     "end": "2027-01-02",
     "hours_per_week_target": 5,
+    "goal": "Поднимаем базовый объём",
+    "focus": "Аэробная база: растёт общий объём бега, интенсивность ниже порога. Фундамент под всё остальное.",
     "_season_week_start": 1,
     "_season_week_end": 12
   },
@@ -48,17 +52,17 @@
   },
   "slots": [
     {
-      "id": "пн-key_run",
-      "day": "ПН",
-      "time": "18:45",
-      "duration_min": 60,
-      "name": "Easy 5К + прогрессия 3К",
-      "kind": "run",
-      "subkind": "easy_progression",
+      "id": "вс-bike",
+      "day": "ВС",
+      "time": "11:00",
+      "duration_min": 90,
+      "name": "Длинный вел Z2 90мин",
+      "kind": "bike",
+      "subkind": "long_z2",
       "focus": "Z2",
-      "location": "stadium",
-      "priority": 80,
-      "category": "key_run",
+      "location": "long_ride_or_station",
+      "priority": 70,
+      "category": "bike",
       "workout_ref": null,
       "structure": [
         {
@@ -68,36 +72,143 @@
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
-          "notes": "Разминка."
+          "notes": ""
         },
         {
           "phase": "work",
-          "duration_min": 25,
+          "duration_min": 70,
           "zone": "Z2",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
-          "notes": "Easy 5К. HR ~135, темп 5:30-5:00/км."
-        },
-        {
-          "phase": "work",
-          "duration_min": 3,
-          "zone": "Z3",
-          "pace_min_per_km": null,
-          "reps": null,
-          "set_repeats": null,
-          "notes": "Прогрессия 1К: 5:00 → 4:30/км."
+          "notes": "Длинный вел Z2 70мин. Zwift watch-сессия."
         },
         {
           "phase": "cooldown",
-          "duration_min": 15,
+          "duration_min": 10,
           "zone": "Z1",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
           "notes": ""
         }
-      ]
+      ],
+      "workout_pending": true
+    },
+    {
+      "id": "cp-cp_3k_w4",
+      "day": "ПН",
+      "time": "18:45",
+      "duration_min": 41,
+      "name": "CONTROL: 3K time trial",
+      "kind": "control_point",
+      "control_point_id": "cp_3k_w4",
+      "metric_target": "time_sec",
+      "target_value": 840,
+      "location": "stadium",
+      "structure": [
+        {
+          "phase": "warmup",
+          "basis": "time",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        },
+        {
+          "phase": "work",
+          "basis": "distance",
+          "distance_m": 3000,
+          "duration_min": 14,
+          "zone": "Z4",
+          "hr_target": 158,
+          "pace_min_per_km": "4:40"
+        },
+        {
+          "phase": "cooldown",
+          "basis": "time",
+          "duration_min": 12,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        }
+      ],
+      "subkind": "quality",
+      "quality_selection": {
+        "goal": "time_trial",
+        "scale": "light",
+        "variant": {
+          "id": "tt_pace",
+          "label": "Темповый тест",
+          "scale": "light",
+          "work_m": 3000,
+          "test_type": "pace",
+          "blocks": [
+            {
+              "type": "tt_pace",
+              "distance_m": 3000,
+              "pace": "по цели CP",
+              "zone": "Z4",
+              "hr_target": 158
+            }
+          ],
+          "note": "Держим заданный темп, контроль сплитов по 200м. Темп и время — из цели CP."
+        },
+        "work_m": 3000,
+        "guarded": true,
+        "warning": "",
+        "rationale": "Цель: Проверяем форму на контрольной точке. Масштаб недели: light. Вариант: Темповый тест — работа 3000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 3200 м. ",
+        "template_meta": {
+          "label": "Time trial",
+          "develops": "Замер: держим заданный темп (pace) или максимальная скорость (max) — тип задаёт контрольная точка",
+          "work_zone": "Z4",
+          "hr_target": 158,
+          "pace": "по цели CP",
+          "indicators": "Время на дистанции, темп по 200м, HR-дрейф"
+        },
+        "is_cp": true,
+        "cp_id": "cp_3k_w4",
+        "cp_target": 840,
+        "session": {
+          "test_type": "pace",
+          "distance_m": 3000,
+          "target_sec": 840,
+          "session_goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.",
+          "measures": [
+            "threshold_pace",
+            "hr_drift"
+          ],
+          "protocol": "разминка 15мин Z1 → 3К на 4:40/км (контроль темпа по 200м, сплит-обратный) → заминка 12мин Z1",
+          "pass_criteria": "Держать 4:40/км без просадки на последней 1К. Дрейф ≤ 5 с/км. HR держится в Z3–Z4 (до 160), без выхода в Z5.",
+          "fail_action": "Не дотянул → задерживаем Phase 1 на +1 неделю.",
+          "pace_min_per_km": "4:40",
+          "pace_sec_per_km": 280.0
+        },
+        "session_goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.",
+        "pass_criteria": "Держать 4:40/км без просадки на последней 1К. Дрейф ≤ 5 с/км. HR держится в Z3–Z4 (до 160), без выхода в Z5.",
+        "fail_action": "Не дотянул → задерживаем Phase 1 на +1 неделю.",
+        "protocol": "разминка 15мин Z1 → 3К на 4:40/км (контроль темпа по 200м, сплит-обратный) → заминка 12мин Z1",
+        "pace_min_per_km": "4:40"
+      },
+      "session": {
+        "test_type": "pace",
+        "distance_m": 3000,
+        "target_sec": 840,
+        "session_goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.",
+        "measures": [
+          "threshold_pace",
+          "hr_drift"
+        ],
+        "protocol": "разминка 15мин Z1 → 3К на 4:40/км (контроль темпа по 200м, сплит-обратный) → заминка 12мин Z1",
+        "pass_criteria": "Держать 4:40/км без просадки на последней 1К. Дрейф ≤ 5 с/км. HR держится в Z3–Z4 (до 160), без выхода в Z5.",
+        "fail_action": "Не дотянул → задерживаем Phase 1 на +1 неделю.",
+        "pace_min_per_km": "4:40",
+        "pace_sec_per_km": 280.0
+      },
+      "goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.",
+      "quality_goal": "time_trial",
+      "quality_variant": "tt_pace",
+      "quality_work_m": 3000,
+      "focus": "Z4",
+      "rationale": "Цель: Проверяем форму на контрольной точке. Масштаб недели: light. Вариант: Темповый тест — работа 3000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 3200 м. "
     },
     {
       "id": "вт-easy_runs",
@@ -129,10 +240,10 @@
       "day": "ВТ",
       "time": "18:30",
       "duration_min": 60,
-      "name": "Ключевая: Интервалы 60мин Z3",
+      "name": "Easy бег 60мин Z2",
       "kind": "run",
-      "subkind": "key_intervals",
-      "focus": "Z3",
+      "subkind": "easy",
+      "focus": "Z2",
       "location": "asphalt_commuter",
       "priority": 80,
       "category": "key_run",
@@ -140,40 +251,21 @@
       "structure": [
         {
           "phase": "warmup",
-          "duration_min": 12,
+          "duration_min": 5,
           "zone": "Z1",
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
-          "notes": "Разминка с ускорениями 2×100м str."
+          "notes": "Разминка."
         },
         {
-          "phase": "set",
-          "duration_min": 30,
-          "zone": null,
+          "phase": "work",
+          "duration_min": 45,
+          "zone": "Z2",
           "pace_min_per_km": null,
-          "reps": 5,
-          "set_repeats": [
-            {
-              "phase": "work",
-              "duration_min": 4,
-              "zone": "Z3",
-              "pace_min_per_km": null,
-              "reps": null,
-              "set_repeats": null,
-              "notes": "400м @ 4:00/км (~1:36)."
-            },
-            {
-              "phase": "recovery",
-              "duration_min": 2,
-              "zone": "Z1",
-              "pace_min_per_km": null,
-              "reps": null,
-              "set_repeats": null,
-              "notes": "Jog 200м. Восстановить дыхание."
-            }
-          ],
-          "notes": "Интервалы Z3. Источник: spring-10k-2027-v2.md."
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Основная часть. Носовое дыхание."
         },
         {
           "phase": "cooldown",
@@ -182,7 +274,7 @@
           "pace_min_per_km": null,
           "reps": null,
           "set_repeats": null,
-          "notes": ""
+          "notes": "Заминка."
         }
       ]
     },
@@ -272,18 +364,6 @@
         }
       ],
       "workout_pending": true
-    },
-    {
-      "id": "cp-cp_3k_w4",
-      "day": "ПТ",
-      "time": "18:00",
-      "duration_min": 60,
-      "name": "CONTROL: 3K time trial",
-      "kind": "control_point",
-      "control_point_id": "cp_3k_w4",
-      "metric_target": "time_sec",
-      "target_value": 840,
-      "location": "pool_or_asphalt"
     },
     {
       "id": "пт-swim",
@@ -390,67 +470,127 @@
           "notes": "Spring-10k-2027-v2.md core program."
         }
       ]
-    },
-    {
-      "id": "вс-bike",
-      "day": "ВС",
-      "time": "11:00",
-      "duration_min": 90,
-      "name": "Длинный вел Z2 90мин",
-      "kind": "bike",
-      "subkind": "long_z2",
-      "focus": "Z2",
-      "location": "long_ride_or_station",
-      "priority": 70,
-      "category": "bike",
-      "workout_ref": null,
-      "structure": [
-        {
-          "phase": "warmup",
-          "duration_min": 10,
-          "zone": "Z1",
-          "pace_min_per_km": null,
-          "reps": null,
-          "set_repeats": null,
-          "notes": ""
-        },
-        {
-          "phase": "work",
-          "duration_min": 70,
-          "zone": "Z2",
-          "pace_min_per_km": null,
-          "reps": null,
-          "set_repeats": null,
-          "notes": "Длинный вел Z2 70мин. Zwift watch-сессия."
-        },
-        {
-          "phase": "cooldown",
-          "duration_min": 10,
-          "zone": "Z1",
-          "pace_min_per_km": null,
-          "reps": null,
-          "set_repeats": null,
-          "notes": ""
-        }
-      ],
-      "workout_pending": true
     }
   ],
+  "load_context": null,
   "control_points_in_range": [
     "cp_3k_w4"
   ],
   "control_point_slots": [
     {
       "id": "cp-cp_3k_w4",
-      "day": "ПТ",
-      "time": "18:00",
-      "duration_min": 60,
+      "day": "ПН",
+      "time": "18:45",
+      "duration_min": 41,
       "name": "CONTROL: 3K time trial",
       "kind": "control_point",
       "control_point_id": "cp_3k_w4",
       "metric_target": "time_sec",
       "target_value": 840,
-      "location": "pool_or_asphalt"
+      "location": "stadium",
+      "structure": [
+        {
+          "phase": "warmup",
+          "basis": "time",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        },
+        {
+          "phase": "work",
+          "basis": "distance",
+          "distance_m": 3000,
+          "duration_min": 14,
+          "zone": "Z4",
+          "hr_target": 158,
+          "pace_min_per_km": "4:40"
+        },
+        {
+          "phase": "cooldown",
+          "basis": "time",
+          "duration_min": 12,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        }
+      ],
+      "subkind": "quality",
+      "quality_selection": {
+        "goal": "time_trial",
+        "scale": "light",
+        "variant": {
+          "id": "tt_pace",
+          "label": "Темповый тест",
+          "scale": "light",
+          "work_m": 3000,
+          "test_type": "pace",
+          "blocks": [
+            {
+              "type": "tt_pace",
+              "distance_m": 3000,
+              "pace": "по цели CP",
+              "zone": "Z4",
+              "hr_target": 158
+            }
+          ],
+          "note": "Держим заданный темп, контроль сплитов по 200м. Темп и время — из цели CP."
+        },
+        "work_m": 3000,
+        "guarded": true,
+        "warning": "",
+        "rationale": "Цель: Проверяем форму на контрольной точке. Масштаб недели: light. Вариант: Темповый тест — работа 3000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 3200 м. ",
+        "template_meta": {
+          "label": "Time trial",
+          "develops": "Замер: держим заданный темп (pace) или максимальная скорость (max) — тип задаёт контрольная точка",
+          "work_zone": "Z4",
+          "hr_target": 158,
+          "pace": "по цели CP",
+          "indicators": "Время на дистанции, темп по 200м, HR-дрейф"
+        },
+        "is_cp": true,
+        "cp_id": "cp_3k_w4",
+        "cp_target": 840,
+        "session": {
+          "test_type": "pace",
+          "distance_m": 3000,
+          "target_sec": 840,
+          "session_goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.",
+          "measures": [
+            "threshold_pace",
+            "hr_drift"
+          ],
+          "protocol": "разминка 15мин Z1 → 3К на 4:40/км (контроль темпа по 200м, сплит-обратный) → заминка 12мин Z1",
+          "pass_criteria": "Держать 4:40/км без просадки на последней 1К. Дрейф ≤ 5 с/км. HR держится в Z3–Z4 (до 160), без выхода в Z5.",
+          "fail_action": "Не дотянул → задерживаем Phase 1 на +1 неделю.",
+          "pace_min_per_km": "4:40",
+          "pace_sec_per_km": 280.0
+        },
+        "session_goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.",
+        "pass_criteria": "Держать 4:40/км без просадки на последней 1К. Дрейф ≤ 5 с/км. HR держится в Z3–Z4 (до 160), без выхода в Z5.",
+        "fail_action": "Не дотянул → задерживаем Phase 1 на +1 неделю.",
+        "protocol": "разминка 15мин Z1 → 3К на 4:40/км (контроль темпа по 200м, сплит-обратный) → заминка 12мин Z1",
+        "pace_min_per_km": "4:40"
+      },
+      "session": {
+        "test_type": "pace",
+        "distance_m": 3000,
+        "target_sec": 840,
+        "session_goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.",
+        "measures": [
+          "threshold_pace",
+          "hr_drift"
+        ],
+        "protocol": "разминка 15мин Z1 → 3К на 4:40/км (контроль темпа по 200м, сплит-обратный) → заминка 12мин Z1",
+        "pass_criteria": "Держать 4:40/км без просадки на последней 1К. Дрейф ≤ 5 с/км. HR держится в Z3–Z4 (до 160), без выхода в Z5.",
+        "fail_action": "Не дотянул → задерживаем Phase 1 на +1 неделю.",
+        "pace_min_per_km": "4:40",
+        "pace_sec_per_km": 280.0
+      },
+      "goal": "Держим заданный темп 4:40/км на 3К — проверяем пороговую скорость и отсутствие дрейфа.",
+      "quality_goal": "time_trial",
+      "quality_variant": "tt_pace",
+      "quality_work_m": 3000,
+      "focus": "Z4",
+      "rationale": "Цель: Проверяем форму на контрольной точке. Масштаб недели: light. Вариант: Темповый тест — работа 3000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 3200 м. "
     }
   ],
   "overrides_applied": [],
@@ -464,10 +604,10 @@
     "suggestion": null
   },
   "totals": {
-    "planned_hours": 8.7,
+    "planned_hours": 7.3,
     "target_hours": 5,
-    "delta_hours": -3.7,
-    "slots_count": 9
+    "delta_hours": -2.3,
+    "slots_count": 8
   },
   "_generated_by": "lib.plan_generate (Phase 2.5: real layout v18)"
 }
