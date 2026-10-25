@@ -145,6 +145,7 @@ def build(plan: dict) -> dict:
         "zones": ((plan.get("rules") or {}).get("hr_zones") or {}).get("zones", {}),
         "hr_max": ((plan.get("rules") or {}).get("hr_zones") or {}).get("hr_max"),
         "rhr": ((plan.get("rules") or {}).get("hr_zones") or {}).get("rhr"),
+        "vdot": plan.get("vdot"),
         "planned_h": round(planned, 1),
         "target_h": round(target, 1),
         "delta_h": round(planned - target, 1),
@@ -184,6 +185,8 @@ h2{font-size:13px;margin:18px 0 8px;color:var(--accent);text-transform:uppercase
 .goal-card .sub2{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.4}
 .goal-card .phase{font-size:11px;color:var(--accent);margin-top:6px;padding-top:6px;border-top:1px solid var(--border)}
 
+.vdot-note{margin:9px 0 11px;padding:7px 11px;border-radius:9px;font-size:11px;
+  color:var(--muted);background:var(--panel2);border:1px solid var(--border)}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
 .kpi{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:7px 4px;text-align:center}
 .kpi .v{font-size:15px;font-weight:600;color:var(--accent2);font-family:ui-monospace,monospace}
@@ -241,6 +244,7 @@ footer{margin-top:18px;text-align:center;font-size:11px;color:var(--muted)}
 <div id="goalcard"></div>
 
 <div class="kpis" id="kpis"></div>
+<div class="vdot-note" id="vdotnote" style="display:none"></div>
 <div class="zones" id="zones"></div>
 
 <h2>Расписание по дням</h2>
@@ -266,6 +270,16 @@ if (D.week_goal || D.phase_goal) {
     g += '</div>';
   }
   document.getElementById('goalcard').innerHTML = g + '</div>';
+}
+
+// VDOT — по какой форме считались темпы
+if (D.vdot) {
+  const vn = document.getElementById('vdotnote');
+  if (vn) {
+    vn.textContent = 'Темпы тренировки — по таблице Дэниэлса, VDOT ' + D.vdot
+      + ' (текущая форма). Целевые темпы сезона — в карточке цели.';
+    if (vn.style) vn.style.display = 'block';
+  }
 }
 
 // KPI

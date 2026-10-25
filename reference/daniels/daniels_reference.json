@@ -1,0 +1,100 @@
+{
+  "_source": "Daniels' Running Formula — скан из книги, прислано Кириллом 24.10.2026",
+  "_saved": "2026-10-24",
+  "_files": {
+    "raw_training_paces": "reference/daniels/raw_training_paces.txt",
+    "raw_race_times": "reference/daniels/raw_vdot_race_times.txt",
+    "parsed": "reference/daniels/daniels_tables.json",
+    "module": "lib/daniels.py"
+  },
+  "_column_map_training_paces": {
+    "0": "VDOT",
+    "1,2": "JL Easy — миля, км",
+    "3,4": "M Marathon — миля, км",
+    "5,6,7": "П Threshold — 400м, 1000м, миля",
+    "8": "И Interval — VDOT интервального темпа",
+    "9,10,11": "И — 400м, 1000м, 1200м",
+    "12": "Пв Repetition — миля",
+    "13,14,15": "Пв — 200м, 400м, 800м"
+  },
+  "_daniels_intensity_pct_vo2max": {
+    "JL_easy": [
+      0.6,
+      0.74
+    ],
+    "M_marathon": [
+      0.79,
+      0.85
+    ],
+    "П_threshold": [
+      0.88,
+      0.92
+    ],
+    "И_interval": [
+      0.95,
+      1.0
+    ],
+    "Пв_repetition": [
+      1.0,
+      1.06
+    ]
+  },
+  "zone_bridge": {
+    "_note": "Зоны Дэниэлса (%VO2max) → %HRmax → зоны Кирилла (HRmax=182)",
+    "JL_easy": {
+      "pct_vo2max": [
+        0.6,
+        0.74
+      ],
+      "hr": [
+        109,
+        135
+      ],
+      "kirill_zones": "Z1-Z2"
+    },
+    "M_marathon": {
+      "pct_vo2max": [
+        0.79,
+        0.85
+      ],
+      "hr": [
+        144,
+        155
+      ],
+      "kirill_zones": "Z3-Z4"
+    },
+    "П_threshold": {
+      "pct_vo2max": [
+        0.88,
+        0.92
+      ],
+      "hr": [
+        160,
+        167
+      ],
+      "kirill_zones": "Z5"
+    },
+    "И_interval": {
+      "pct_vo2max": [
+        0.95,
+        1.0
+      ],
+      "hr": [
+        173,
+        182
+      ],
+      "kirill_zones": "Z7"
+    },
+    "Пв_repetition": {
+      "pct_vo2max": [
+        1.0,
+        1.06
+      ],
+      "hr": [
+        182,
+        193
+      ],
+      "kirill_zones": "выше HRmax"
+    }
+  }
+}

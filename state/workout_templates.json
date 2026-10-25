@@ -39,11 +39,13 @@
               "type": "reps",
               "reps": 6,
               "distance_m": 400,
-              "pace": "4:00",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 2,
-              "rest_distance_m": 250
+              "rest_distance_m": 250,
+              "pace_legacy": "4:00",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -3
             }
           ],
           "note": "Стартовый объём в теме: 2400 м на Z6"
@@ -58,11 +60,13 @@
               "type": "reps",
               "reps": 8,
               "distance_m": 400,
-              "pace": "3:55",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 1.5,
-              "rest_distance_m": 200
+              "rest_distance_m": 200,
+              "pace_legacy": "3:55",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -8
             }
           ],
           "note": "Плотнее 6×400: ~3200 м на Z6, отдых короче"
@@ -77,11 +81,13 @@
               "type": "reps",
               "reps": 10,
               "distance_m": 200,
-              "pace": "3:35",
               "zone": "Z6",
               "hr_target": 170,
               "rest_min": 1,
-              "rest_distance_m": 200
+              "rest_distance_m": 200,
+              "pace_legacy": "3:35",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -28
             }
           ],
           "note": "Высокая плотность, короткий объём — нервно-мышечная работа"
@@ -96,11 +102,13 @@
               "type": "reps",
               "reps": 5,
               "distance_m": 800,
-              "pace": "4:00",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 3,
-              "rest_distance_m": 400
+              "rest_distance_m": 400,
+              "pace_legacy": "4:00",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -3
             }
           ],
           "note": "Длиннее в VO2-темпе, объём ×1.7 от 400м"
@@ -115,21 +123,25 @@
               "type": "reps",
               "reps": 2,
               "distance_m": 2000,
-              "pace": "4:00",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 4,
-              "rest_distance_m": 400
+              "rest_distance_m": 400,
+              "pace_legacy": "4:00",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -3
             },
             {
               "type": "reps",
               "reps": 1,
               "distance_m": 800,
-              "pace": "3:50",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 0,
-              "rest_distance_m": 0
+              "rest_distance_m": 0,
+              "pace_legacy": "3:50",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -13
             }
           ],
           "note": "Сокращённая версия — в тапер-неделю"
@@ -144,11 +156,13 @@
               "type": "reps",
               "reps": 4,
               "distance_m": 2000,
-              "pace": "4:05",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 3,
-              "rest_distance_m": 400
+              "rest_distance_m": 400,
+              "pace_legacy": "4:05",
+              "daniels_zone": "interval",
+              "pace_offset_sec": 2
             }
           ],
           "note": "Длинные отрезки в VO2-темпе — большая аэробная мощность · race-pace touch: 2К по 4:05 — верх аэробной зоны, не порог"
@@ -163,11 +177,13 @@
               "type": "reps",
               "reps": 5,
               "distance_m": 2000,
-              "pace": "4:10",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 3,
-              "rest_distance_m": 400
+              "rest_distance_m": 400,
+              "pace_legacy": "4:10",
+              "daniels_zone": "interval",
+              "pace_offset_sec": 7
             }
           ],
           "note": "Максимальный объём VO2-работы в сезоне"
@@ -182,11 +198,13 @@
               "type": "reps",
               "reps": 8,
               "distance_m": 1000,
-              "pace": "3:50",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 2,
-              "rest_distance_m": 300
+              "rest_distance_m": 300,
+              "pace_legacy": "3:50",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -13
             }
           ],
           "note": "Плотный объём на скорости — пиковая работа"
@@ -206,21 +224,33 @@
                 "4:00",
                 "3:50"
               ],
-              "pace": "4:15",
               "zone": "Z5",
               "hr_target": 164,
               "rest_min": 2,
-              "rest_distance_m": 250
+              "rest_distance_m": 250,
+              "daniels_zones": [
+                "threshold",
+                "interval",
+                "repetition"
+              ],
+              "pace_offsets_sec": [
+                -9,
+                -3,
+                5
+              ],
+              "pace_legacy": "4:15 / 4:00 / 3:50"
             },
             {
               "type": "reps",
               "reps": 4,
               "distance_m": 200,
-              "pace": "3:45",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 1,
-              "rest_distance_m": 200
+              "rest_distance_m": 200,
+              "pace_legacy": "3:45",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -18
             }
           ],
           "note": "Прогрессия темпа внутри серии: пульс доходит до Z6, объём работы 3200 м"
@@ -254,11 +284,13 @@
               "type": "reps",
               "reps": 4,
               "distance_m": 1000,
-              "pace": "4:35",
               "zone": "Z5",
               "hr_target": 162,
               "rest_min": 2,
-              "rest_distance_m": 300
+              "rest_distance_m": 300,
+              "pace_legacy": "4:35",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": 11
             }
           ],
           "note": "Порог, но с запасом — вход в тему"
@@ -273,11 +305,13 @@
               "type": "reps",
               "reps": 4,
               "distance_m": 1000,
-              "pace": "4:25",
               "zone": "Z5",
               "hr_target": 164,
               "rest_min": 2,
-              "rest_distance_m": 300
+              "rest_distance_m": 300,
+              "pace_legacy": "4:25",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": 1
             }
           ],
           "note": "Рабочая комбинация LTH: 4 повтора по 1К на 4:25"
@@ -292,11 +326,13 @@
               "type": "reps",
               "reps": 5,
               "distance_m": 1000,
-              "pace": "4:25",
               "zone": "Z5",
               "hr_target": 164,
               "rest_min": 2,
-              "rest_distance_m": 300
+              "rest_distance_m": 300,
+              "pace_legacy": "4:25",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": 1
             }
           ],
           "note": "Больше повторов на том же пороге"
@@ -311,11 +347,13 @@
               "type": "reps",
               "reps": 6,
               "distance_m": 800,
-              "pace": "4:20",
               "zone": "Z5",
               "hr_target": 165,
               "rest_min": 2,
-              "rest_distance_m": 300
+              "rest_distance_m": 300,
+              "pace_legacy": "4:20",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": -4
             }
           ],
           "note": "Компактнее по времени, тот же объём"
@@ -330,11 +368,13 @@
               "type": "reps",
               "reps": 8,
               "distance_m": 800,
-              "pace": "4:15",
               "zone": "Z5",
               "hr_target": 165,
               "rest_min": 1.5,
-              "rest_distance_m": 250
+              "rest_distance_m": 250,
+              "pace_legacy": "4:15",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": -9
             }
           ],
           "note": "Пиковое число повторов на пороге"
@@ -367,11 +407,13 @@
               "type": "reps",
               "reps": 2,
               "distance_m": 2000,
-              "pace": "4:30",
               "zone": "Z5",
               "hr_target": 162,
               "rest_min": 4,
-              "rest_distance_m": 400
+              "rest_distance_m": 400,
+              "pace_legacy": "4:30",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": 6
             }
           ],
           "note": "Первый длинный интервал — 2 отрезка, объём скромный"
@@ -386,11 +428,13 @@
               "type": "reps",
               "reps": 3,
               "distance_m": 2000,
-              "pace": "4:25",
               "zone": "Z5",
               "hr_target": 164,
               "rest_min": 3,
-              "rest_distance_m": 400
+              "rest_distance_m": 400,
+              "pace_legacy": "4:25",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": 1
             }
           ],
           "note": "Классические 3×2К на пороге"
@@ -405,11 +449,13 @@
               "type": "reps",
               "reps": 4,
               "distance_m": 2000,
-              "pace": "4:20",
               "zone": "Z5",
               "hr_target": 165,
               "rest_min": 3,
-              "rest_distance_m": 400
+              "rest_distance_m": 400,
+              "pace_legacy": "4:20",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": -4
             }
           ],
           "note": "Пик объёма на пороге"
@@ -424,11 +470,13 @@
               "type": "reps",
               "reps": 2,
               "distance_m": 3000,
-              "pace": "4:25",
               "zone": "Z5",
               "hr_target": 164,
               "rest_min": 4,
-              "rest_distance_m": 500
+              "rest_distance_m": 500,
+              "pace_legacy": "4:25",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": 1
             }
           ],
           "note": "Меньше повторов, но длиннее — другой стимул на пороге"
@@ -461,9 +509,11 @@
             {
               "type": "continuous",
               "distance_m": 4000,
-              "pace": "4:30",
               "zone": "Z4",
-              "hr_target": 156
+              "hr_target": 156,
+              "pace_legacy": "4:30",
+              "daniels_zone": "marathon",
+              "pace_offset_sec": -11
             }
           ],
           "note": "Вход в темп — 4:30, к концу фазы ниже"
@@ -477,9 +527,11 @@
             {
               "type": "continuous",
               "distance_m": 5000,
-              "pace": "4:20",
               "zone": "Z4",
-              "hr_target": 157
+              "hr_target": 157,
+              "pace_legacy": "4:20",
+              "daniels_zone": "marathon",
+              "pace_offset_sec": -21
             }
           ],
           "note": "Темповая работа на 4:20"
@@ -493,9 +545,11 @@
             {
               "type": "continuous",
               "distance_m": 6000,
-              "pace": "4:08",
               "zone": "Z4",
-              "hr_target": 159
+              "hr_target": 159,
+              "pace_legacy": "4:08",
+              "daniels_zone": "marathon",
+              "pace_offset_sec": -33
             }
           ],
           "note": "Темп подходит к гонка-темпу"
@@ -509,9 +563,11 @@
             {
               "type": "continuous",
               "distance_m": 8000,
-              "pace": "4:12",
               "zone": "Z4",
-              "hr_target": 159
+              "hr_target": 159,
+              "pace_legacy": "4:12",
+              "daniels_zone": "marathon",
+              "pace_offset_sec": -29
             }
           ],
           "note": "Длинная темповая — 8К на 4:12"
@@ -525,9 +581,11 @@
             {
               "type": "continuous",
               "distance_m": 10000,
-              "pace": "4:05",
               "zone": "Z4",
-              "hr_target": 160
+              "hr_target": 160,
+              "pace_legacy": "4:05",
+              "daniels_zone": "marathon",
+              "pace_offset_sec": -36
             }
           ],
           "note": "Пиковая темповая работа — 10К на 4:05"
@@ -541,9 +599,11 @@
             {
               "type": "continuous",
               "distance_m": 12000,
-              "pace": "4:00",
               "zone": "Z4",
-              "hr_target": 161
+              "hr_target": 161,
+              "pace_legacy": "4:00",
+              "daniels_zone": "marathon",
+              "pace_offset_sec": -41
             }
           ],
           "note": "Максимальная темповая работа на гонка-темпе"
@@ -576,21 +636,25 @@
               "type": "reps",
               "reps": 3,
               "distance_m": 1000,
-              "pace": "4:30",
               "zone": "Z5",
               "hr_target": 162,
               "rest_min": 2,
-              "rest_distance_m": 300
+              "rest_distance_m": 300,
+              "pace_legacy": "4:30",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": 6
             },
             {
               "type": "reps",
               "reps": 2,
               "distance_m": 400,
-              "pace": "3:50",
               "zone": "Z6",
               "hr_target": 170,
               "rest_min": 2,
-              "rest_distance_m": 250
+              "rest_distance_m": 250,
+              "pace_legacy": "3:50",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -13
             }
           ],
           "note": "Пороговая часть + скоростной хвост"
@@ -605,21 +669,25 @@
               "type": "reps",
               "reps": 3,
               "distance_m": 1000,
-              "pace": "4:25",
               "zone": "Z5",
               "hr_target": 164,
               "rest_min": 2,
-              "rest_distance_m": 300
+              "rest_distance_m": 300,
+              "pace_legacy": "4:25",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": 1
             },
             {
               "type": "reps",
               "reps": 2,
               "distance_m": 800,
-              "pace": "3:55",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 3,
-              "rest_distance_m": 300
+              "rest_distance_m": 300,
+              "pace_legacy": "3:55",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -8
             }
           ],
           "note": "Рабочая комбинация макро"
@@ -633,19 +701,23 @@
             {
               "type": "continuous",
               "distance_m": 5000,
-              "pace": "4:45",
               "zone": "Z4",
-              "hr_target": 158
+              "hr_target": 158,
+              "pace_legacy": "4:45",
+              "daniels_zone": "marathon",
+              "pace_offset_sec": 4
             },
             {
               "type": "reps",
               "reps": 4,
               "distance_m": 400,
-              "pace": "3:50",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 2,
-              "rest_distance_m": 250
+              "rest_distance_m": 250,
+              "pace_legacy": "3:50",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -13
             }
           ],
           "note": "Длинный tempo-блок + скоростной финал"
@@ -678,21 +750,27 @@
               "steps": [
                 {
                   "distance_m": 800,
-                  "pace": "4:30",
                   "zone": "Z4",
-                  "hr_target": 155
+                  "hr_target": 155,
+                  "pace_legacy": "4:30",
+                  "daniels_zone": "marathon",
+                  "pace_offset_sec": -11
                 },
                 {
                   "distance_m": 600,
-                  "pace": "4:10",
                   "zone": "Z5",
-                  "hr_target": 163
+                  "hr_target": 163,
+                  "pace_legacy": "4:10",
+                  "daniels_zone": "threshold",
+                  "pace_offset_sec": -14
                 },
                 {
                   "distance_m": 400,
-                  "pace": "3:45",
                   "zone": "Z6",
-                  "hr_target": 170
+                  "hr_target": 170,
+                  "pace_legacy": "3:45",
+                  "daniels_zone": "interval",
+                  "pace_offset_sec": -18
                 }
               ],
               "rest_min": 2,
@@ -712,21 +790,27 @@
               "steps": [
                 {
                   "distance_m": 1000,
-                  "pace": "4:30",
                   "zone": "Z4",
-                  "hr_target": 155
+                  "hr_target": 155,
+                  "pace_legacy": "4:30",
+                  "daniels_zone": "marathon",
+                  "pace_offset_sec": -11
                 },
                 {
                   "distance_m": 800,
-                  "pace": "4:10",
                   "zone": "Z5",
-                  "hr_target": 163
+                  "hr_target": 163,
+                  "pace_legacy": "4:10",
+                  "daniels_zone": "threshold",
+                  "pace_offset_sec": -14
                 },
                 {
                   "distance_m": 400,
-                  "pace": "3:45",
                   "zone": "Z6",
-                  "hr_target": 170
+                  "hr_target": 170,
+                  "pace_legacy": "3:45",
+                  "daniels_zone": "interval",
+                  "pace_offset_sec": -18
                 }
               ],
               "rest_min": 2,
@@ -746,27 +830,35 @@
               "steps": [
                 {
                   "distance_m": 1200,
-                  "pace": "4:35",
                   "zone": "Z4",
-                  "hr_target": 155
+                  "hr_target": 155,
+                  "pace_legacy": "4:35",
+                  "daniels_zone": "marathon",
+                  "pace_offset_sec": -6
                 },
                 {
                   "distance_m": 800,
-                  "pace": "4:15",
                   "zone": "Z5",
-                  "hr_target": 163
+                  "hr_target": 163,
+                  "pace_legacy": "4:15",
+                  "daniels_zone": "threshold",
+                  "pace_offset_sec": -9
                 },
                 {
                   "distance_m": 600,
-                  "pace": "3:55",
                   "zone": "Z5",
-                  "hr_target": 166
+                  "hr_target": 166,
+                  "pace_legacy": "3:55",
+                  "daniels_zone": "threshold",
+                  "pace_offset_sec": -29
                 },
                 {
                   "distance_m": 400,
-                  "pace": "3:40",
                   "zone": "Z6",
-                  "hr_target": 170
+                  "hr_target": 170,
+                  "pace_legacy": "3:40",
+                  "daniels_zone": "interval",
+                  "pace_offset_sec": -23
                 }
               ],
               "rest_min": 2,
@@ -803,11 +895,15 @@
               "type": "fartlek",
               "cycles": 4,
               "easy_distance_m": 200,
-              "easy_pace": "5:20",
               "hard_distance_m": 800,
-              "hard_pace": "4:00",
               "hard_zone": "Z5",
-              "hr_target": 164
+              "hr_target": 164,
+              "pace_legacy_easy_pace": "5:20",
+              "daniels_zone_easy": "easy",
+              "pace_offset_sec_easy": -8,
+              "pace_legacy_hard_pace": "4:00",
+              "daniels_zone_hard": "threshold",
+              "pace_offset_sec_hard": -24
             }
           ],
           "note": "4 цикла"
@@ -822,11 +918,15 @@
               "type": "fartlek",
               "cycles": 6,
               "easy_distance_m": 200,
-              "easy_pace": "5:20",
               "hard_distance_m": 800,
-              "hard_pace": "4:00",
               "hard_zone": "Z5",
-              "hr_target": 164
+              "hr_target": 164,
+              "pace_legacy_easy_pace": "5:20",
+              "daniels_zone_easy": "easy",
+              "pace_offset_sec_easy": -8,
+              "pace_legacy_hard_pace": "4:00",
+              "daniels_zone_hard": "threshold",
+              "pace_offset_sec_hard": -24
             }
           ],
           "note": "6 циклов — рабочий объём"
@@ -841,11 +941,15 @@
               "type": "fartlek",
               "cycles": 8,
               "easy_distance_m": 200,
-              "easy_pace": "5:20",
               "hard_distance_m": 800,
-              "hard_pace": "4:00",
               "hard_zone": "Z5",
-              "hr_target": 166
+              "hr_target": 166,
+              "pace_legacy_easy_pace": "5:20",
+              "daniels_zone_easy": "easy",
+              "pace_offset_sec_easy": -8,
+              "pace_legacy_hard_pace": "4:00",
+              "daniels_zone_hard": "threshold",
+              "pace_offset_sec_hard": -24
             }
           ],
           "note": "8 циклов — максимум"
@@ -880,10 +984,14 @@
               "type": "progression",
               "easy_distance_m": 5000,
               "progression_distance_m": 3000,
-              "from_pace": "5:00",
-              "to_pace": "4:30",
               "zone": "Z3",
-              "hr_target": 146
+              "hr_target": 146,
+              "pace_legacy_from_pace": "5:00",
+              "daniels_zone_from": "easy",
+              "pace_offset_sec_from": -28,
+              "pace_legacy_to_pace": "4:30",
+              "daniels_zone_to": "easy",
+              "pace_offset_sec_to": -58
             }
           ],
           "note": "5К Z2 + 3К с набором темпа"
@@ -898,10 +1006,14 @@
               "type": "progression",
               "easy_distance_m": 5000,
               "progression_distance_m": 5000,
-              "from_pace": "5:00",
-              "to_pace": "4:30",
               "zone": "Z3",
-              "hr_target": 146
+              "hr_target": 146,
+              "pace_legacy_from_pace": "5:00",
+              "daniels_zone_from": "easy",
+              "pace_offset_sec_from": -28,
+              "pace_legacy_to_pace": "4:30",
+              "daniels_zone_to": "easy",
+              "pace_offset_sec_to": -58
             }
           ],
           "note": "Ровная база + длинная прогрессия"
@@ -916,10 +1028,14 @@
               "type": "progression",
               "easy_distance_m": 7000,
               "progression_distance_m": 5000,
-              "from_pace": "5:05",
-              "to_pace": "4:35",
               "zone": "Z3",
-              "hr_target": 148
+              "hr_target": 148,
+              "pace_legacy_from_pace": "5:05",
+              "daniels_zone_from": "easy",
+              "pace_offset_sec_from": -23,
+              "pace_legacy_to_pace": "4:35",
+              "daniels_zone_to": "easy",
+              "pace_offset_sec_to": -53
             }
           ],
           "note": "Объёмная база с длинным финишем"
@@ -1036,21 +1152,25 @@
               "type": "reps",
               "reps": 1,
               "distance_m": 1000,
-              "pace": "4:00",
               "zone": "Z5",
               "hr_target": 164,
               "rest_min": 0,
-              "rest_distance_m": 0
+              "rest_distance_m": 0,
+              "pace_legacy": "4:00",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": -24
             },
             {
               "type": "reps",
               "reps": 6,
               "distance_m": 200,
-              "pace": "3:45",
               "zone": "Z6",
               "hr_target": 170,
               "rest_min": 1,
-              "rest_distance_m": 200
+              "rest_distance_m": 200,
+              "pace_legacy": "3:45",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -18
             }
           ],
           "note": "Вход в гонку-темп без набора объёма"
@@ -1065,11 +1185,13 @@
               "type": "reps",
               "reps": 6,
               "distance_m": 400,
-              "pace": "3:50",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 1.5,
-              "rest_distance_m": 200
+              "rest_distance_m": 200,
+              "pace_legacy": "3:50",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -13
             }
           ],
           "note": "Короткая частота — ноги помнят темп"
@@ -1084,11 +1206,13 @@
               "type": "reps",
               "reps": 2,
               "distance_m": 1000,
-              "pace": "4:00",
               "zone": "Z5",
               "hr_target": 164,
               "rest_min": 1,
-              "rest_distance_m": 300
+              "rest_distance_m": 300,
+              "pace_legacy": "4:00",
+              "daniels_zone": "threshold",
+              "pace_offset_sec": -24
             }
           ],
           "note": "Гонка-темп в последней паре отрезков"
@@ -1096,5 +1220,17 @@
       ]
     }
   },
-  "_goal_note": "Темпы пересчитаны под цель сезона: 10К за 40:00 = 4:00/км. Порог (LTH 164) = 4:10–4:20, VO2max < 4:00, race pace = 4:00."
+  "_goal_note": "Темпы пересчитаны под цель сезона: 10К за 40:00 = 4:00/км. Порог (LTH 164) = 4:10–4:20, VO2max < 4:00, race pace = 4:00.",
+  "_daniels_binding": {
+    "_note": "Каталог привязан к зонам Дэниэлса. Темп в блоке = темп зоны для ТЕКУЩЕГО VDOT атлета + pace_offset_sec. zone_summary/zone_pace_sec — в lib/daniels.py.",
+    "reference_vdot": 48,
+    "zones": {
+      "easy": "5:28",
+      "marathon": "4:41",
+      "threshold": "4:24",
+      "interval": "4:03",
+      "repetition": "3:45"
+    },
+    "rebase_script": "scripts/rebase_templates_to_vdot.py"
+  }
 }

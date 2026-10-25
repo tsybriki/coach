@@ -18,6 +18,7 @@
     ],
     "_source": "Кирилл, 2026-10-24: «План должен штурмовать 40.00 в апреле на S25»"
   },
+  "vdot": 48,
   "gates": [
     {
       "id": "gate_cp_cp_3k_w4",
@@ -167,7 +168,8 @@
           "duration_min": 30,
           "zone": "Z1",
           "hr_target": 130,
-          "pace_min_per_km": "6:00-6:30"
+          "pace_min_per_km": "6:00",
+          "pace_vdot": 48
         }
       ],
       "rationale": "Первый бег за 9 дней. Лёгкая пятёрка 30мин, HR ≤130: цель — разбудить ноги после горной недели (983 м набора), а не набрать объём. Если ноги болят или рейс задержится — пропустить, это опциональная сессия."
@@ -410,21 +412,38 @@
                 "4:00",
                 "3:50"
               ],
-              "pace": "4:15",
               "zone": "Z5",
               "hr_target": 164,
               "rest_min": 2,
-              "rest_distance_m": 250
+              "rest_distance_m": 250,
+              "daniels_zones": [
+                "threshold",
+                "interval",
+                "repetition"
+              ],
+              "pace_offsets_sec": [
+                -9,
+                -3,
+                5
+              ],
+              "pace_legacy": "4:15 / 4:00 / 3:50"
             },
             {
               "type": "reps",
               "reps": 4,
               "distance_m": 200,
-              "pace": "3:45",
               "zone": "Z6",
               "hr_target": 172,
               "rest_min": 1,
-              "rest_distance_m": 200
+              "rest_distance_m": 200,
+              "pace_legacy": "3:45",
+              "daniels_zone": "interval",
+              "pace_offset_sec": -18,
+              "pace": "3:45",
+              "from_pace": "3:45",
+              "to_pace": "3:45",
+              "easy_pace": "3:45",
+              "hard_pace": "3:45"
             }
           ],
           "note": "Прогрессия темпа внутри серии: пульс доходит до Z6, объём работы 3200 м"
@@ -441,7 +460,9 @@
           "pace": "< 4:00",
           "indicators": "Время в Z6/Z7, темп на 800м, падение скорости в последних 200м"
         },
-        "variant_source": "override"
+        "variant_source": "override",
+        "vdot": 48,
+        "pace_note": "темпы по таблице Дэниэлса для VDOT 48"
       },
       "session": {
         "work_m": 3200,
@@ -472,7 +493,8 @@
           "duration_min": 30,
           "zone": "Z2",
           "hr_target": 135,
-          "pace_min_per_km": "5:40-5:50"
+          "pace_min_per_km": "5:28",
+          "pace_vdot": 48
         }
       ],
       "rationale": "Второй бег после качественной сессии. Только Z2 (118–135), HR главный, темп 5:40–5:50 ориентиром. Если ноги болят или HR выше 135 — закончить на 20 минутах."
@@ -496,7 +518,8 @@
           "basis": "time",
           "duration_min": 8,
           "zone": "Z1",
-          "pace_min_per_km": "5:50-6:10"
+          "pace_min_per_km": "5:40",
+          "pace_vdot": 48
         },
         {
           "phase": "work",
@@ -504,14 +527,16 @@
           "duration_min": 26,
           "zone": "Z2",
           "hr_target": 135,
-          "pace_min_per_km": "5:40-5:50"
+          "pace_min_per_km": "5:28",
+          "pace_vdot": 48
         },
         {
           "phase": "cooldown",
           "basis": "time",
           "duration_min": 6,
           "zone": "Z1",
-          "pace_min_per_km": "5:50"
+          "pace_min_per_km": "5:50",
+          "pace_vdot": 48
         }
       ],
       "rationale": "Объём без интенсивности. Интенсивность в W3 одна сессия (Пн). HR 118–135, темп 5:40–5:50. Накрывает недобор бега, не добавляя нагрузки."
@@ -535,7 +560,8 @@
           "basis": "time",
           "duration_min": 10,
           "zone": "Z1",
-          "pace_min_per_km": "5:50-6:10"
+          "pace_min_per_km": "5:50",
+          "pace_vdot": 48
         },
         {
           "phase": "work",
@@ -543,14 +569,16 @@
           "duration_min": 65,
           "zone": "Z2",
           "hr_target": 135,
-          "pace_min_per_km": "5:50-6:00"
+          "pace_min_per_km": "5:35",
+          "pace_vdot": 48
         },
         {
           "phase": "cooldown",
           "basis": "time",
           "duration_min": 15,
           "zone": "Z1",
-          "pace_min_per_km": "6:00"
+          "pace_min_per_km": "6:00",
+          "pace_vdot": 48
         }
       ],
       "rationale": "Якорь недели по макро W3 — long Z2 14К в окно Ср 17:00–19:00. HR ≤135, без набора скорости: после горной недели это аэробная база, а не проверка на прочность. Интенсивных в Ср по макро запрещено."
@@ -574,7 +602,8 @@
           "basis": "time",
           "duration_min": 8,
           "zone": "Z1",
-          "pace_min_per_km": null
+          "pace_min_per_km": "5:40",
+          "pace_vdot": 48
         },
         {
           "phase": "work",
@@ -582,14 +611,16 @@
           "duration_min": 28,
           "zone": "Z2",
           "hr_target": 135,
-          "pace_min_per_km": null
+          "pace_min_per_km": "5:28",
+          "pace_vdot": 48
         },
         {
           "phase": "cooldown",
           "basis": "time",
           "duration_min": 9,
           "zone": "Z1",
-          "pace_min_per_km": null
+          "pace_min_per_km": "5:50",
+          "pace_vdot": 48
         }
       ],
       "rationale": "Макро W3 просит 1×60мин вел, но факт W2 — 90 км / 5.1 ч / 48.5% жёсткого времени. Вел-часть недели закрыта: 45мин (это и есть окно Чт 10:30–11:15) в Z1–Z2, чтобы сохранить ритм и не нагружать ноги перед Сб."
@@ -613,7 +644,8 @@
           "basis": "time",
           "duration_min": 8,
           "zone": "Z1",
-          "pace_min_per_km": null
+          "pace_min_per_km": "5:40",
+          "pace_vdot": 48
         },
         {
           "phase": "work",
@@ -621,14 +653,16 @@
           "duration_min": 29,
           "zone": "Z2",
           "hr_target": 135,
-          "pace_min_per_km": null
+          "pace_min_per_km": "5:28",
+          "pace_vdot": 48
         },
         {
           "phase": "cooldown",
           "basis": "time",
           "duration_min": 8,
           "zone": "Z1",
-          "pace_min_per_km": null
+          "pace_min_per_km": "5:50",
+          "pace_vdot": 48
         }
       ],
       "rationale": "Плавки не было с 16.10 (10 дней). Ставлю 45мин: единственная модальность без удара по ногам в неделю, где бега не было. Носовое дыхание 6–8 гребков, без форсирования. Утром 08:30 рентген — плавка только вечером."
@@ -719,10 +753,10 @@
   },
   "load_compare": {
     "status": "ok",
-    "target_h": 6.22,
+    "target_h": 6.24,
     "actual_h": 6.5,
-    "delta_h": 0.28,
-    "delta_pct": 4.5,
+    "delta_h": 0.26,
+    "delta_pct": 4.2,
     "tol_pct": 10.0,
     "source": "weekly_macro[].total_h (вычисляется из структуры)"
   },

@@ -2,7 +2,7 @@
   "title": "Макро-план сезона",
   "season_start": "2026-10-11",
   "total_weeks": 49,
-  "detailed_weeks": 27,
+  "detailed_weeks": 28,
   "phases": [
     {
       "id": "run_base",
@@ -40,14 +40,11 @@
             }
           ],
           "comp_h": 4.7,
-          "total_h": 4.96,
+          "total_h": 4.99,
           "variant_id": "8k+3k",
           "quality_label": "8К + прогрессия 3К",
           "quality_work_m": 8000,
-          "quality_paces": [
-            "5:00",
-            "4:30"
-          ],
+          "quality_paces": [],
           "run_km_long": 12.0,
           "run_km_quality": 8.0,
           "run_km_easy": 7.0,
@@ -89,13 +86,11 @@
             }
           ],
           "comp_h": 5.0,
-          "total_h": 5.47,
+          "total_h": 5.51,
           "variant_id": "4x1k_easy",
           "quality_label": "4×1К @ 4:20",
           "quality_work_m": 4000,
-          "quality_paces": [
-            "4:35"
-          ],
+          "quality_paces": [],
           "run_km_long": 13.0,
           "run_km_quality": 4.0,
           "run_km_easy": 13.0,
@@ -149,16 +144,11 @@
             }
           ],
           "comp_h": 5.6,
-          "total_h": 6.22,
+          "total_h": 6.24,
           "variant_id": "3x800prog+4x200",
           "quality_label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
           "quality_work_m": 3200,
-          "quality_paces": [
-            "4:15",
-            "4:00",
-            "3:50",
-            "3:45"
-          ],
+          "quality_paces": [],
           "run_km_long": 14.0,
           "run_km_quality": 3.2,
           "run_km_easy": 17.8,
@@ -198,9 +188,7 @@
           "variant_id": "tt_pace",
           "quality_label": "Темповый тест",
           "quality_work_m": 3000,
-          "quality_paces": [
-            "по цели CP"
-          ],
+          "quality_paces": [],
           "run_km_long": 14.0,
           "run_km_quality": 3.0,
           "run_km_easy": 21.0,
@@ -233,14 +221,11 @@
             }
           ],
           "comp_h": 6.3,
-          "total_h": 6.83,
+          "total_h": 6.88,
           "variant_id": "3x1k+2x800",
           "quality_label": "3×1К @ 4:12 + 2×800 @ 3:50",
           "quality_work_m": 4600,
-          "quality_paces": [
-            "4:25",
-            "3:55"
-          ],
+          "quality_paces": [],
           "run_km_long": 16.0,
           "run_km_quality": 4.6,
           "run_km_easy": 19.4,
@@ -272,15 +257,11 @@
             }
           ],
           "comp_h": 6.5,
-          "total_h": 6.98,
+          "total_h": 7.01,
           "variant_id": "1k-800-400",
           "quality_label": "1К @ 4:20 → 800 @ 3:55 → 400 @ 3:45",
           "quality_work_m": 2200,
-          "quality_paces": [
-            "4:30",
-            "4:10",
-            "3:45"
-          ],
+          "quality_paces": [],
           "run_km_long": 16.0,
           "run_km_quality": 2.2,
           "run_km_easy": 23.8,
@@ -316,13 +297,11 @@
             }
           ],
           "comp_h": 7.0,
-          "total_h": 7.26,
+          "total_h": 7.31,
           "variant_id": "5k",
           "quality_label": "5К tempo @ 4:20",
           "quality_work_m": 5000,
-          "quality_paces": [
-            "4:20"
-          ],
+          "quality_paces": [],
           "run_km_long": 18.0,
           "run_km_quality": 5.0,
           "run_km_easy": 22.0,
@@ -358,9 +337,7 @@
           "variant_id": "tt_max",
           "quality_label": "Тест на максимум",
           "quality_work_m": 5000,
-          "quality_paces": [
-            "all-out"
-          ],
+          "quality_paces": [],
           "run_km_long": 14.0,
           "run_km_quality": 5.0,
           "run_km_easy": 29.0,
@@ -397,13 +374,11 @@
             }
           ],
           "comp_h": 8.5,
-          "total_h": 8.94,
+          "total_h": 8.98,
           "variant_id": "4x1k",
           "quality_label": "4×1К @ 4:15",
           "quality_work_m": 4000,
-          "quality_paces": [
-            "4:25"
-          ],
+          "quality_paces": [],
           "run_km_long": 16.0,
           "run_km_quality": 4.0,
           "run_km_easy": 30.0,
@@ -447,13 +422,11 @@
             }
           ],
           "comp_h": 9.1,
-          "total_h": 9.74,
+          "total_h": 9.81,
           "variant_id": "5x800",
           "quality_label": "5×800 @ 3:55",
           "quality_work_m": 4000,
-          "quality_paces": [
-            "4:00"
-          ],
+          "quality_paces": [],
           "run_km_long": 18.0,
           "run_km_quality": 4.0,
           "run_km_easy": 28.0,
@@ -489,9 +462,7 @@
           "variant_id": "200-800 x6",
           "quality_label": "6 циклов: 200@5:10 + 800@3:50",
           "quality_work_m": 6000,
-          "quality_paces": [
-            "4:00"
-          ],
+          "quality_paces": [],
           "run_km_long": 16.0,
           "run_km_quality": 6.0,
           "run_km_easy": 28.0,
@@ -531,9 +502,7 @@
           "variant_id": "tt_max_3k",
           "quality_label": "3К на максимум",
           "quality_work_m": 3000,
-          "quality_paces": [
-            "всеми силами"
-          ],
+          "quality_paces": [],
           "run_km_long": 12.0,
           "run_km_quality": 3.0,
           "run_km_easy": 30.0,
@@ -581,13 +550,11 @@
             }
           ],
           "comp_h": 9.3,
-          "total_h": 9.69,
+          "total_h": 9.73,
           "variant_id": "2x2k",
           "quality_label": "2×2К @ 4:15",
           "quality_work_m": 4000,
-          "quality_paces": [
-            "4:30"
-          ],
+          "quality_paces": [],
           "run_km_long": 16.0,
           "run_km_quality": 4.0,
           "run_km_easy": 30.0,
@@ -619,13 +586,11 @@
             }
           ],
           "comp_h": 10.2,
-          "total_h": 10.84,
+          "total_h": 10.91,
           "variant_id": "6x800",
           "quality_label": "6×800 @ 4:10",
           "quality_work_m": 4800,
-          "quality_paces": [
-            "4:20"
-          ],
+          "quality_paces": [],
           "run_km_long": 18.0,
           "run_km_quality": 4.8,
           "run_km_easy": 32.2,
@@ -657,14 +622,11 @@
             }
           ],
           "comp_h": 10.2,
-          "total_h": 10.69,
+          "total_h": 10.74,
           "variant_id": "5k+4x400",
           "quality_label": "5К tempo @ 4:10 + 4×400 @ 3:45",
           "quality_work_m": 6600,
-          "quality_paces": [
-            "4:45",
-            "3:50"
-          ],
+          "quality_paces": [],
           "run_km_long": 18.0,
           "run_km_quality": 6.6,
           "run_km_easy": 30.4,
@@ -700,9 +662,7 @@
           "variant_id": "tt_max",
           "quality_label": "Тест на максимум",
           "quality_work_m": 5000,
-          "quality_paces": [
-            "all-out"
-          ],
+          "quality_paces": [],
           "run_km_long": 16.0,
           "run_km_quality": 5.0,
           "run_km_easy": 34.0,
@@ -735,13 +695,11 @@
             }
           ],
           "comp_h": 10.2,
-          "total_h": 10.69,
+          "total_h": 10.76,
           "variant_id": "3x2k",
           "quality_label": "3×2К @ 4:12",
           "quality_work_m": 6000,
-          "quality_paces": [
-            "4:25"
-          ],
+          "quality_paces": [],
           "run_km_long": 18.0,
           "run_km_quality": 6.0,
           "run_km_easy": 31.0,
@@ -773,13 +731,11 @@
             }
           ],
           "comp_h": 11.2,
-          "total_h": 11.43,
+          "total_h": 11.53,
           "variant_id": "8k",
           "quality_label": "8К long tempo @ 4:12",
           "quality_work_m": 8000,
-          "quality_paces": [
-            "4:12"
-          ],
+          "quality_paces": [],
           "run_km_long": 20.0,
           "run_km_quality": 8.0,
           "run_km_easy": 32.0,
@@ -815,13 +771,11 @@
             }
           ],
           "comp_h": 11.7,
-          "total_h": 11.94,
+          "total_h": 12.02,
           "variant_id": "6k",
           "quality_label": "6К tempo @ 4:08",
           "quality_work_m": 6000,
-          "quality_paces": [
-            "4:08"
-          ],
+          "quality_paces": [],
           "run_km_long": 22.0,
           "run_km_quality": 6.0,
           "run_km_easy": 37.0,
@@ -872,13 +826,11 @@
             }
           ],
           "comp_h": 11.7,
-          "total_h": 12.13,
+          "total_h": 12.27,
           "variant_id": "4x2k_vo2",
           "quality_label": "4×2К @ 4:10",
           "quality_work_m": 8000,
-          "quality_paces": [
-            "4:05"
-          ],
+          "quality_paces": [],
           "run_km_long": 22.0,
           "run_km_quality": 8.0,
           "run_km_easy": 35.0,
@@ -914,13 +866,11 @@
             }
           ],
           "comp_h": 12.2,
-          "total_h": 12.3,
+          "total_h": 12.45,
           "variant_id": "10k",
           "quality_label": "10К long tempo @ 4:05",
           "quality_work_m": 10000,
-          "quality_paces": [
-            "4:05"
-          ],
+          "quality_paces": [],
           "run_km_long": 22.0,
           "run_km_quality": 10.0,
           "run_km_easy": 38.0,
@@ -956,13 +906,11 @@
             }
           ],
           "comp_h": 12.2,
-          "total_h": 12.64,
+          "total_h": 12.74,
           "variant_id": "4x2k",
           "quality_label": "4×2К @ 4:10",
           "quality_work_m": 8000,
-          "quality_paces": [
-            "4:20"
-          ],
+          "quality_paces": [],
           "run_km_long": 24.0,
           "run_km_quality": 8.0,
           "run_km_easy": 38.0,
@@ -998,9 +946,7 @@
           "variant_id": "tt_race",
           "quality_label": "Гонка-темп",
           "quality_work_m": 5000,
-          "quality_paces": [
-            "по цели CP"
-          ],
+          "quality_paces": [],
           "run_km_long": 14.0,
           "run_km_quality": 5.0,
           "run_km_easy": 36.0,
@@ -1048,14 +994,11 @@
             }
           ],
           "comp_h": 5.4,
-          "total_h": 5.88,
+          "total_h": 5.93,
           "variant_id": "3x1k+2x400",
           "quality_label": "3×1К @ 4:15 + 2×400 @ 3:45",
           "quality_work_m": 3800,
-          "quality_paces": [
-            "4:30",
-            "3:50"
-          ],
+          "quality_paces": [],
           "run_km_long": 10.0,
           "run_km_quality": 3.8,
           "run_km_easy": 24.2,
@@ -1087,14 +1030,11 @@
             }
           ],
           "comp_h": 4.5,
-          "total_h": 4.98,
+          "total_h": 5.03,
           "variant_id": "taper_1k",
           "quality_label": "1×1К @ 4:00 + 6×200 @ 3:45",
           "quality_work_m": 2200,
-          "quality_paces": [
-            "4:00",
-            "3:45"
-          ],
+          "quality_paces": [],
           "run_km_long": 8.0,
           "run_km_quality": 2.2,
           "run_km_easy": 19.8,
@@ -1126,14 +1066,11 @@
             }
           ],
           "comp_h": 3.5,
-          "total_h": 4.08,
+          "total_h": 4.13,
           "variant_id": "taper_1k",
           "quality_label": "1×1К @ 4:00 + 6×200 @ 3:45",
           "quality_work_m": 2200,
-          "quality_paces": [
-            "4:00",
-            "3:45"
-          ],
+          "quality_paces": [],
           "run_km_long": 6.0,
           "run_km_quality": 2.2,
           "run_km_easy": 15.8,
@@ -1165,13 +1102,11 @@
             }
           ],
           "comp_h": 2.4,
-          "total_h": 3.1,
+          "total_h": 3.15,
           "variant_id": "taper_400",
           "quality_label": "6×400 @ 3:50, отдых 90с",
           "quality_work_m": 2400,
-          "quality_paces": [
-            "3:50"
-          ],
+          "quality_paces": [],
           "run_km_long": 4.0,
           "run_km_quality": 2.4,
           "run_km_easy": 9.6,
@@ -1218,13 +1153,11 @@
             }
           ],
           "comp_h": 2.4,
-          "total_h": 3.1,
+          "total_h": 3.15,
           "variant_id": "taper_400",
           "quality_label": "6×400 @ 3:50, отдых 90с",
           "quality_work_m": 2400,
-          "quality_paces": [
-            "3:50"
-          ],
+          "quality_paces": [],
           "run_km_long": 4.0,
           "run_km_quality": 2.4,
           "run_km_easy": 9.6,
@@ -1246,7 +1179,48 @@
       "target_h": 5,
       "is_event": false,
       "notes": "снижение бега, вход в плавание/вело",
-      "detailed": [],
+      "detailed": [
+        {
+          "w": 28,
+          "start": "2027-04-18",
+          "end": "2027-04-24",
+          "start_d": "18–24 апр",
+          "detailed": true,
+          "is_now": false,
+          "is_next": false,
+          "run_km": 8,
+          "long_km": 0,
+          "run_h": 0.8,
+          "bike_h": 0.0,
+          "swim_h": 0.0,
+          "ofp_h": 0.2,
+          "goal_text": "Гонка",
+          "phase": "run_taper",
+          "color": "cp",
+          "variants": [
+            {
+              "label": "Темповый тест",
+              "work_m": 3000
+            },
+            {
+              "label": "3К на максимум",
+              "work_m": 3000
+            }
+          ],
+          "comp_h": 1.0,
+          "total_h": 1.4,
+          "variant_id": "tt_race",
+          "quality_label": "10К @ race pace 4:00 — гонка",
+          "quality_work_m": 5000,
+          "quality_paces": [],
+          "run_km_long": 0.0,
+          "run_km_quality": 5.0,
+          "run_km_easy": 3.0,
+          "intensity_pct": 62.5,
+          "deload": null,
+          "sessions_target": null
+        }
+      ],
       "has_actual": false
     },
     {
@@ -1345,14 +1319,11 @@
         }
       ],
       "comp_h": 4.7,
-      "total_h": 4.96,
+      "total_h": 4.99,
       "variant_id": "8k+3k",
       "quality_label": "8К + прогрессия 3К",
       "quality_work_m": 8000,
-      "quality_paces": [
-        "5:00",
-        "4:30"
-      ],
+      "quality_paces": [],
       "run_km_long": 12.0,
       "run_km_quality": 8.0,
       "run_km_easy": 7.0,
@@ -1394,13 +1365,11 @@
         }
       ],
       "comp_h": 5.0,
-      "total_h": 5.47,
+      "total_h": 5.51,
       "variant_id": "4x1k_easy",
       "quality_label": "4×1К @ 4:20",
       "quality_work_m": 4000,
-      "quality_paces": [
-        "4:35"
-      ],
+      "quality_paces": [],
       "run_km_long": 13.0,
       "run_km_quality": 4.0,
       "run_km_easy": 13.0,
@@ -1454,16 +1423,11 @@
         }
       ],
       "comp_h": 5.6,
-      "total_h": 6.22,
+      "total_h": 6.24,
       "variant_id": "3x800prog+4x200",
       "quality_label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
       "quality_work_m": 3200,
-      "quality_paces": [
-        "4:15",
-        "4:00",
-        "3:50",
-        "3:45"
-      ],
+      "quality_paces": [],
       "run_km_long": 14.0,
       "run_km_quality": 3.2,
       "run_km_easy": 17.8,
@@ -1503,9 +1467,7 @@
       "variant_id": "tt_pace",
       "quality_label": "Темповый тест",
       "quality_work_m": 3000,
-      "quality_paces": [
-        "по цели CP"
-      ],
+      "quality_paces": [],
       "run_km_long": 14.0,
       "run_km_quality": 3.0,
       "run_km_easy": 21.0,
@@ -1538,14 +1500,11 @@
         }
       ],
       "comp_h": 6.3,
-      "total_h": 6.83,
+      "total_h": 6.88,
       "variant_id": "3x1k+2x800",
       "quality_label": "3×1К @ 4:12 + 2×800 @ 3:50",
       "quality_work_m": 4600,
-      "quality_paces": [
-        "4:25",
-        "3:55"
-      ],
+      "quality_paces": [],
       "run_km_long": 16.0,
       "run_km_quality": 4.6,
       "run_km_easy": 19.4,
@@ -1577,15 +1536,11 @@
         }
       ],
       "comp_h": 6.5,
-      "total_h": 6.98,
+      "total_h": 7.01,
       "variant_id": "1k-800-400",
       "quality_label": "1К @ 4:20 → 800 @ 3:55 → 400 @ 3:45",
       "quality_work_m": 2200,
-      "quality_paces": [
-        "4:30",
-        "4:10",
-        "3:45"
-      ],
+      "quality_paces": [],
       "run_km_long": 16.0,
       "run_km_quality": 2.2,
       "run_km_easy": 23.8,
@@ -1621,13 +1576,11 @@
         }
       ],
       "comp_h": 7.0,
-      "total_h": 7.26,
+      "total_h": 7.31,
       "variant_id": "5k",
       "quality_label": "5К tempo @ 4:20",
       "quality_work_m": 5000,
-      "quality_paces": [
-        "4:20"
-      ],
+      "quality_paces": [],
       "run_km_long": 18.0,
       "run_km_quality": 5.0,
       "run_km_easy": 22.0,
@@ -1663,9 +1616,7 @@
       "variant_id": "tt_max",
       "quality_label": "Тест на максимум",
       "quality_work_m": 5000,
-      "quality_paces": [
-        "all-out"
-      ],
+      "quality_paces": [],
       "run_km_long": 14.0,
       "run_km_quality": 5.0,
       "run_km_easy": 29.0,
@@ -1702,13 +1653,11 @@
         }
       ],
       "comp_h": 8.5,
-      "total_h": 8.94,
+      "total_h": 8.98,
       "variant_id": "4x1k",
       "quality_label": "4×1К @ 4:15",
       "quality_work_m": 4000,
-      "quality_paces": [
-        "4:25"
-      ],
+      "quality_paces": [],
       "run_km_long": 16.0,
       "run_km_quality": 4.0,
       "run_km_easy": 30.0,
@@ -1752,13 +1701,11 @@
         }
       ],
       "comp_h": 9.1,
-      "total_h": 9.74,
+      "total_h": 9.81,
       "variant_id": "5x800",
       "quality_label": "5×800 @ 3:55",
       "quality_work_m": 4000,
-      "quality_paces": [
-        "4:00"
-      ],
+      "quality_paces": [],
       "run_km_long": 18.0,
       "run_km_quality": 4.0,
       "run_km_easy": 28.0,
@@ -1794,9 +1741,7 @@
       "variant_id": "200-800 x6",
       "quality_label": "6 циклов: 200@5:10 + 800@3:50",
       "quality_work_m": 6000,
-      "quality_paces": [
-        "4:00"
-      ],
+      "quality_paces": [],
       "run_km_long": 16.0,
       "run_km_quality": 6.0,
       "run_km_easy": 28.0,
@@ -1836,9 +1781,7 @@
       "variant_id": "tt_max_3k",
       "quality_label": "3К на максимум",
       "quality_work_m": 3000,
-      "quality_paces": [
-        "всеми силами"
-      ],
+      "quality_paces": [],
       "run_km_long": 12.0,
       "run_km_quality": 3.0,
       "run_km_easy": 30.0,
@@ -1871,13 +1814,11 @@
         }
       ],
       "comp_h": 9.3,
-      "total_h": 9.69,
+      "total_h": 9.73,
       "variant_id": "2x2k",
       "quality_label": "2×2К @ 4:15",
       "quality_work_m": 4000,
-      "quality_paces": [
-        "4:30"
-      ],
+      "quality_paces": [],
       "run_km_long": 16.0,
       "run_km_quality": 4.0,
       "run_km_easy": 30.0,
@@ -1909,13 +1850,11 @@
         }
       ],
       "comp_h": 10.2,
-      "total_h": 10.84,
+      "total_h": 10.91,
       "variant_id": "6x800",
       "quality_label": "6×800 @ 4:10",
       "quality_work_m": 4800,
-      "quality_paces": [
-        "4:20"
-      ],
+      "quality_paces": [],
       "run_km_long": 18.0,
       "run_km_quality": 4.8,
       "run_km_easy": 32.2,
@@ -1947,14 +1886,11 @@
         }
       ],
       "comp_h": 10.2,
-      "total_h": 10.69,
+      "total_h": 10.74,
       "variant_id": "5k+4x400",
       "quality_label": "5К tempo @ 4:10 + 4×400 @ 3:45",
       "quality_work_m": 6600,
-      "quality_paces": [
-        "4:45",
-        "3:50"
-      ],
+      "quality_paces": [],
       "run_km_long": 18.0,
       "run_km_quality": 6.6,
       "run_km_easy": 30.4,
@@ -1990,9 +1926,7 @@
       "variant_id": "tt_max",
       "quality_label": "Тест на максимум",
       "quality_work_m": 5000,
-      "quality_paces": [
-        "all-out"
-      ],
+      "quality_paces": [],
       "run_km_long": 16.0,
       "run_km_quality": 5.0,
       "run_km_easy": 34.0,
@@ -2025,13 +1959,11 @@
         }
       ],
       "comp_h": 10.2,
-      "total_h": 10.69,
+      "total_h": 10.76,
       "variant_id": "3x2k",
       "quality_label": "3×2К @ 4:12",
       "quality_work_m": 6000,
-      "quality_paces": [
-        "4:25"
-      ],
+      "quality_paces": [],
       "run_km_long": 18.0,
       "run_km_quality": 6.0,
       "run_km_easy": 31.0,
@@ -2063,13 +1995,11 @@
         }
       ],
       "comp_h": 11.2,
-      "total_h": 11.43,
+      "total_h": 11.53,
       "variant_id": "8k",
       "quality_label": "8К long tempo @ 4:12",
       "quality_work_m": 8000,
-      "quality_paces": [
-        "4:12"
-      ],
+      "quality_paces": [],
       "run_km_long": 20.0,
       "run_km_quality": 8.0,
       "run_km_easy": 32.0,
@@ -2105,13 +2035,11 @@
         }
       ],
       "comp_h": 11.7,
-      "total_h": 11.94,
+      "total_h": 12.02,
       "variant_id": "6k",
       "quality_label": "6К tempo @ 4:08",
       "quality_work_m": 6000,
-      "quality_paces": [
-        "4:08"
-      ],
+      "quality_paces": [],
       "run_km_long": 22.0,
       "run_km_quality": 6.0,
       "run_km_easy": 37.0,
@@ -2147,13 +2075,11 @@
         }
       ],
       "comp_h": 11.7,
-      "total_h": 12.13,
+      "total_h": 12.27,
       "variant_id": "4x2k_vo2",
       "quality_label": "4×2К @ 4:10",
       "quality_work_m": 8000,
-      "quality_paces": [
-        "4:05"
-      ],
+      "quality_paces": [],
       "run_km_long": 22.0,
       "run_km_quality": 8.0,
       "run_km_easy": 35.0,
@@ -2189,13 +2115,11 @@
         }
       ],
       "comp_h": 12.2,
-      "total_h": 12.3,
+      "total_h": 12.45,
       "variant_id": "10k",
       "quality_label": "10К long tempo @ 4:05",
       "quality_work_m": 10000,
-      "quality_paces": [
-        "4:05"
-      ],
+      "quality_paces": [],
       "run_km_long": 22.0,
       "run_km_quality": 10.0,
       "run_km_easy": 38.0,
@@ -2231,13 +2155,11 @@
         }
       ],
       "comp_h": 12.2,
-      "total_h": 12.64,
+      "total_h": 12.74,
       "variant_id": "4x2k",
       "quality_label": "4×2К @ 4:10",
       "quality_work_m": 8000,
-      "quality_paces": [
-        "4:20"
-      ],
+      "quality_paces": [],
       "run_km_long": 24.0,
       "run_km_quality": 8.0,
       "run_km_easy": 38.0,
@@ -2273,9 +2195,7 @@
       "variant_id": "tt_race",
       "quality_label": "Гонка-темп",
       "quality_work_m": 5000,
-      "quality_paces": [
-        "по цели CP"
-      ],
+      "quality_paces": [],
       "run_km_long": 14.0,
       "run_km_quality": 5.0,
       "run_km_easy": 36.0,
@@ -2308,14 +2228,11 @@
         }
       ],
       "comp_h": 5.4,
-      "total_h": 5.88,
+      "total_h": 5.93,
       "variant_id": "3x1k+2x400",
       "quality_label": "3×1К @ 4:15 + 2×400 @ 3:45",
       "quality_work_m": 3800,
-      "quality_paces": [
-        "4:30",
-        "3:50"
-      ],
+      "quality_paces": [],
       "run_km_long": 10.0,
       "run_km_quality": 3.8,
       "run_km_easy": 24.2,
@@ -2347,14 +2264,11 @@
         }
       ],
       "comp_h": 4.5,
-      "total_h": 4.98,
+      "total_h": 5.03,
       "variant_id": "taper_1k",
       "quality_label": "1×1К @ 4:00 + 6×200 @ 3:45",
       "quality_work_m": 2200,
-      "quality_paces": [
-        "4:00",
-        "3:45"
-      ],
+      "quality_paces": [],
       "run_km_long": 8.0,
       "run_km_quality": 2.2,
       "run_km_easy": 19.8,
@@ -2386,14 +2300,11 @@
         }
       ],
       "comp_h": 3.5,
-      "total_h": 4.08,
+      "total_h": 4.13,
       "variant_id": "taper_1k",
       "quality_label": "1×1К @ 4:00 + 6×200 @ 3:45",
       "quality_work_m": 2200,
-      "quality_paces": [
-        "4:00",
-        "3:45"
-      ],
+      "quality_paces": [],
       "run_km_long": 6.0,
       "run_km_quality": 2.2,
       "run_km_easy": 15.8,
@@ -2425,13 +2336,11 @@
         }
       ],
       "comp_h": 2.4,
-      "total_h": 3.1,
+      "total_h": 3.15,
       "variant_id": "taper_400",
       "quality_label": "6×400 @ 3:50, отдых 90с",
       "quality_work_m": 2400,
-      "quality_paces": [
-        "3:50"
-      ],
+      "quality_paces": [],
       "run_km_long": 4.0,
       "run_km_quality": 2.4,
       "run_km_easy": 9.6,
@@ -2444,10 +2353,40 @@
       "start": "2027-04-18",
       "end": "2027-04-24",
       "start_d": "18–24 апр",
-      "detailed": false,
+      "detailed": true,
       "is_now": false,
       "is_next": false,
-      "color": "gray"
+      "run_km": 8,
+      "long_km": 0,
+      "run_h": 0.8,
+      "bike_h": 0.0,
+      "swim_h": 0.0,
+      "ofp_h": 0.2,
+      "goal_text": "Гонка",
+      "phase": "run_taper",
+      "color": "cp",
+      "variants": [
+        {
+          "label": "Темповый тест",
+          "work_m": 3000
+        },
+        {
+          "label": "3К на максимум",
+          "work_m": 3000
+        }
+      ],
+      "comp_h": 1.0,
+      "total_h": 1.4,
+      "variant_id": "tt_race",
+      "quality_label": "10К @ race pace 4:00 — гонка",
+      "quality_work_m": 5000,
+      "quality_paces": [],
+      "run_km_long": 0.0,
+      "run_km_quality": 5.0,
+      "run_km_easy": 3.0,
+      "intensity_pct": 62.5,
+      "deload": null,
+      "sessions_target": null
     },
     {
       "w": 29,
@@ -2738,7 +2677,7 @@
   ],
   "peak_week": 21,
   "peak_km": 70,
-  "max_week_h": 12.64,
+  "max_week_h": 12.74,
   "actual_weeks": 2,
   "actual_run_km": 51.2,
   "actual_h": 11.4,
@@ -3518,5 +3457,5 @@
     }
   ],
   "current_week": 3,
-  "generated_at": "25.10.2026 05:47"
+  "generated_at": "25.10.2026 11:07"
 }

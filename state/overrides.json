@@ -44,7 +44,8 @@
               "duration_min": 30,
               "zone": "Z1",
               "hr_target": 130,
-              "pace_min_per_km": "6:00-6:30"
+              "pace_min_per_km": "6:00",
+              "pace_vdot": 48
             }
           ]
         },
@@ -142,7 +143,8 @@
               "duration_min": 30,
               "zone": "Z2",
               "hr_target": 135,
-              "pace_min_per_km": "5:40-5:50"
+              "pace_min_per_km": "5:28",
+              "pace_vdot": 48
             }
           ]
         },
@@ -164,7 +166,8 @@
               "basis": "time",
               "duration_min": 8,
               "zone": "Z1",
-              "pace_min_per_km": "5:50-6:10"
+              "pace_min_per_km": "5:40",
+              "pace_vdot": 48
             },
             {
               "phase": "work",
@@ -172,14 +175,16 @@
               "duration_min": 26,
               "zone": "Z2",
               "hr_target": 135,
-              "pace_min_per_km": "5:40-5:50"
+              "pace_min_per_km": "5:28",
+              "pace_vdot": 48
             },
             {
               "phase": "cooldown",
               "basis": "time",
               "duration_min": 6,
               "zone": "Z1",
-              "pace_min_per_km": "5:50"
+              "pace_min_per_km": "5:50",
+              "pace_vdot": 48
             }
           ]
         },
@@ -201,7 +206,8 @@
               "basis": "time",
               "duration_min": 10,
               "zone": "Z1",
-              "pace_min_per_km": "5:50-6:10"
+              "pace_min_per_km": "5:50",
+              "pace_vdot": 48
             },
             {
               "phase": "work",
@@ -209,14 +215,16 @@
               "duration_min": 65,
               "zone": "Z2",
               "hr_target": 135,
-              "pace_min_per_km": "5:50-6:00"
+              "pace_min_per_km": "5:35",
+              "pace_vdot": 48
             },
             {
               "phase": "cooldown",
               "basis": "time",
               "duration_min": 15,
               "zone": "Z1",
-              "pace_min_per_km": "6:00"
+              "pace_min_per_km": "6:00",
+              "pace_vdot": 48
             }
           ]
         },
@@ -238,7 +246,8 @@
               "basis": "time",
               "duration_min": 8,
               "zone": "Z1",
-              "pace_min_per_km": null
+              "pace_min_per_km": "5:40",
+              "pace_vdot": 48
             },
             {
               "phase": "work",
@@ -246,14 +255,16 @@
               "duration_min": 28,
               "zone": "Z2",
               "hr_target": 135,
-              "pace_min_per_km": null
+              "pace_min_per_km": "5:28",
+              "pace_vdot": 48
             },
             {
               "phase": "cooldown",
               "basis": "time",
               "duration_min": 9,
               "zone": "Z1",
-              "pace_min_per_km": null
+              "pace_min_per_km": "5:50",
+              "pace_vdot": 48
             }
           ]
         },
@@ -275,7 +286,8 @@
               "basis": "time",
               "duration_min": 8,
               "zone": "Z1",
-              "pace_min_per_km": null
+              "pace_min_per_km": "5:40",
+              "pace_vdot": 48
             },
             {
               "phase": "work",
@@ -283,14 +295,16 @@
               "duration_min": 29,
               "zone": "Z2",
               "hr_target": 135,
-              "pace_min_per_km": null
+              "pace_min_per_km": "5:28",
+              "pace_vdot": 48
             },
             {
               "phase": "cooldown",
               "basis": "time",
               "duration_min": 8,
               "zone": "Z1",
-              "pace_min_per_km": null
+              "pace_min_per_km": "5:50",
+              "pace_vdot": 48
             }
           ]
         },

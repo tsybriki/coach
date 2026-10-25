@@ -1,0 +1,568 @@
+{
+  "$schema": "./plan.schema.md",
+  "version": 2,
+  "title": "W10 · 2026-12-13..2026-12-19 · Берлин",
+  "season_week": 10,
+  "iso_week": "2026-W51",
+  "weekIso": "2026-W51",
+  "season_start_date": "2026-10-11",
+  "phase": {
+    "id": "run_base",
+    "goal_id": "g_run_spring",
+    "start": "2026-10-11",
+    "end": "2027-01-02",
+    "hours_per_week_target": 5,
+    "_season_week_start": 1,
+    "_season_week_end": 12
+  },
+  "chosen_allocation": {
+    "snapshot_date": "2026-10-13",
+    "strategy": "balanced_60_40",
+    "g_run_spring_eff_pct": 60,
+    "g_tri_autumn_eff_pct": 40,
+    "reason": "Phase 1 stub — реальное распределение через goal_allocator.candidates() в Phase 2. Сейчас зафиксировано по spring-10k-2027-v2.md: основной объём до W24 под 10К, далее transition к tri."
+  },
+  "rules": {
+    "hr_zones": {
+      "hr_max": 182,
+      "rhr": 54,
+      "hrr": 128,
+      "method": "Karvonen + %HRmax",
+      "lth": 164,
+      "vo2_target": "172-174",
+      "zones": {
+        "Z1": "100-118",
+        "Z2": "118-135",
+        "Z3": "136-150",
+        "Z4": "150-160",
+        "Z5": "160-168",
+        "Z6": "169-172",
+        "Z7": "173-182"
+      },
+      "notes": "7-зонная модель (Кирилл 2026-10-16, финал). NON-OVERLAPPING ascending: Z1<Z2<Z3<Z4<Z5<Z6<Z7. Boundaries 118/135/150/160/168/172/173 — каждая верхняя зоны = нижняя следующей, допускаются gaps в 1 удар (Z2 135→Z3 136; Z5 168→Z6 169; Z6 172→Z7 173). LTH=164 lives inside Z5 (threshold). VO2 target=172-174 sits at top of Z6 (172) and joins Z7 (173+). Z1=recovery, Z2=easy, Z3=endurance, Z4=tempo, Z5=threshold, Z6=super-threshold, Z7=VO2max. Plain numeric (no L suffix). Subzones удалены — все 7 зон — primary, не subzones."
+    },
+    "metric_split": {
+      "by_hr_first": "easy, Z2, Z2-low, long, recovery, warmup, cooldown",
+      "by_pace_first": "intervals, progression, tempo, race-pace"
+    }
+  },
+  "slots": [
+    {
+      "id": "вс-bike",
+      "day": "ВС",
+      "time": "11:00",
+      "duration_min": 90,
+      "name": "Длинный вел Z2 90мин",
+      "kind": "bike",
+      "subkind": "long_z2",
+      "focus": "Z2",
+      "location": "long_ride_or_station",
+      "priority": 70,
+      "category": "bike",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        },
+        {
+          "phase": "work",
+          "duration_min": 70,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Длинный вел Z2 70мин. Zwift watch-сессия."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        }
+      ],
+      "workout_pending": true
+    },
+    {
+      "id": "пн-key_run",
+      "day": "ПН",
+      "time": "18:45",
+      "duration_min": 57,
+      "name": "VO2max: 5×800",
+      "kind": "run",
+      "subkind": "quality",
+      "focus": "Z6",
+      "location": "stadium",
+      "priority": 80,
+      "category": "key_run",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "basis": "time",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        },
+        {
+          "phase": "set",
+          "label": "5×800м",
+          "basis": "distance",
+          "reps": 5,
+          "duration_min": 30,
+          "set_repeats": [
+            {
+              "phase": "work",
+              "basis": "distance",
+              "distance_m": 800,
+              "zone": "Z6",
+              "hr_target": 172,
+              "pace_min_per_km": "4:00"
+            },
+            {
+              "phase": "recovery",
+              "basis": "distance",
+              "distance_m": 400,
+              "zone": "Z1",
+              "hr_target": 115,
+              "pace_min_per_km": null
+            },
+            {
+              "phase": "work",
+              "basis": "distance",
+              "distance_m": 800,
+              "zone": "Z6",
+              "hr_target": 172,
+              "pace_min_per_km": "4:00"
+            },
+            {
+              "phase": "recovery",
+              "basis": "distance",
+              "distance_m": 400,
+              "zone": "Z1",
+              "hr_target": 115,
+              "pace_min_per_km": null
+            },
+            {
+              "phase": "work",
+              "basis": "distance",
+              "distance_m": 800,
+              "zone": "Z6",
+              "hr_target": 172,
+              "pace_min_per_km": "4:00"
+            },
+            {
+              "phase": "recovery",
+              "basis": "distance",
+              "distance_m": 400,
+              "zone": "Z1",
+              "hr_target": 115,
+              "pace_min_per_km": null
+            },
+            {
+              "phase": "work",
+              "basis": "distance",
+              "distance_m": 800,
+              "zone": "Z6",
+              "hr_target": 172,
+              "pace_min_per_km": "4:00"
+            },
+            {
+              "phase": "recovery",
+              "basis": "distance",
+              "distance_m": 400,
+              "zone": "Z1",
+              "hr_target": 115,
+              "pace_min_per_km": null
+            },
+            {
+              "phase": "work",
+              "basis": "distance",
+              "distance_m": 800,
+              "zone": "Z6",
+              "hr_target": 172,
+              "pace_min_per_km": "4:00"
+            },
+            {
+              "phase": "recovery",
+              "basis": "distance",
+              "distance_m": 400,
+              "zone": "Z1",
+              "hr_target": 115,
+              "pace_min_per_km": null
+            }
+          ]
+        },
+        {
+          "phase": "cooldown",
+          "basis": "time",
+          "duration_min": 12,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        }
+      ],
+      "quality_goal": "vo2max",
+      "quality_scale": "medium",
+      "quality_variant": "5x800",
+      "quality_work_m": 4000,
+      "quality_selection": {
+        "goal": "vo2max",
+        "scale": "medium",
+        "variant": {
+          "id": "5x800",
+          "label": "5×800",
+          "scale": "medium",
+          "work_m": 4000,
+          "blocks": [
+            {
+              "type": "reps",
+              "reps": 5,
+              "distance_m": 800,
+              "pace": "4:00",
+              "zone": "Z6",
+              "hr_target": 172,
+              "rest_min": 3,
+              "rest_distance_m": 400
+            }
+          ],
+          "note": "Длиннее в VO2-темпе, объём ×1.7 от 400м"
+        },
+        "work_m": 4000,
+        "guarded": true,
+        "warning": "Объём работы вырос с 3070 м (последняя реальная) до 4000 м.",
+        "rationale": "Цель: Развиваем VO2max. Масштаб недели: medium. Вариант: 5×800 — работа 4000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 4000 м. ",
+        "template_meta": {
+          "label": "VO2max",
+          "develops": "Аэробная мощность — верхняя граница аэробной системы",
+          "work_zone": "Z6",
+          "hr_target": 172,
+          "pace": "<4:10",
+          "indicators": "Время в Z6/Z7, темп на 800м, падение скорости в последних 200м"
+        }
+      },
+      "rationale": "Цель: Развиваем VO2max. Масштаб недели: medium. Вариант: 5×800 — работа 4000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 4000 м. ",
+      "quality_warning": "Объём работы вырос с 3070 м (последняя реальная) до 4000 м."
+    },
+    {
+      "id": "вт-easy_runs",
+      "day": "ВТ",
+      "time": "09:00",
+      "duration_min": 30,
+      "name": "Easy бег 30мин Z2",
+      "kind": "run",
+      "subkind": "easy",
+      "focus": "Z2",
+      "location": "asphalt_commuter",
+      "priority": 50,
+      "category": "easy_runs",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "work",
+          "duration_min": 30,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Лёгкий бег. Дыхание носовое."
+        }
+      ]
+    },
+    {
+      "id": "cp-cp_general_hr_drift",
+      "day": "ВТ",
+      "time": "18:30",
+      "duration_min": 75,
+      "name": "CONTROL: HR drift baseline",
+      "kind": "control_point",
+      "control_point_id": "cp_general_hr_drift",
+      "metric_target": "drift_bpm_per_km",
+      "target_value": 0.5,
+      "location": "asphalt_commuter",
+      "structure": [
+        {
+          "phase": "warmup",
+          "basis": "time",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        },
+        {
+          "phase": "work",
+          "basis": "time",
+          "duration_min": 50,
+          "zone": "Z5",
+          "hr_target": null,
+          "pace_min_per_km": null
+        },
+        {
+          "phase": "cooldown",
+          "basis": "time",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        }
+      ]
+    },
+    {
+      "id": "ср-long_run",
+      "day": "СР",
+      "time": "17:00",
+      "duration_min": 90,
+      "name": "Длинный бег 90мин Z2",
+      "kind": "run",
+      "subkind": "long_Z2",
+      "focus": "Z2",
+      "location": "stadium_or_pool",
+      "priority": 100,
+      "category": "long_run",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка 10мин Z1."
+        },
+        {
+          "phase": "work",
+          "duration_min": 65,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Длинный бег 65мин Z2. Дыхание носовое, темп комфортный. Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "id": "чт-bike",
+      "day": "ЧТ",
+      "time": "10:30",
+      "duration_min": 45,
+      "name": "Вел-станок Z2 45мин (дома)",
+      "kind": "bike",
+      "subkind": "stationary_z2",
+      "focus": "Z2",
+      "location": "home_stationary_bike",
+      "priority": 70,
+      "category": "bike",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 5,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка на станке. Каденс 80-85."
+        },
+        {
+          "phase": "work",
+          "duration_min": 30,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Стабильное Z2. Каденс 85-90. Можно Zwift watch-симулятор."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Заминка."
+        }
+      ],
+      "workout_pending": true
+    },
+    {
+      "id": "пт-swim",
+      "day": "ПТ",
+      "time": "18:00",
+      "duration_min": 60,
+      "name": "Пул 60мин easy",
+      "kind": "swim",
+      "subkind": "easy",
+      "focus": "Z1",
+      "location": "pool_or_asphalt",
+      "priority": 60,
+      "category": "swim",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 5,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка."
+        },
+        {
+          "phase": "work",
+          "duration_min": 45,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Основная часть. Носовое дыхание."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Заминка."
+        }
+      ]
+    },
+    {
+      "id": "сб-ofp",
+      "day": "СБ",
+      "time": "10:00",
+      "duration_min": 25,
+      "name": "ofp core 25мин",
+      "kind": "ofp",
+      "subkind": "core",
+      "focus": "core",
+      "location": "home",
+      "priority": 40,
+      "category": "ofp",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "exercise": "Мобилилити: hip openers, glute bridge 2×15.",
+          "duration_min": 5,
+          "notes": "Активация ягодиц."
+        },
+        {
+          "phase": "main",
+          "set": {
+            "name": "Core circuit x2 rounds",
+            "exercises": [
+              {
+                "name": "Планка",
+                "reps": "3×45с",
+                "rest": "30с"
+              },
+              {
+                "name": "Медведи на коленях",
+                "reps": "2×12/стор",
+                "rest": "30с"
+              },
+              {
+                "name": "Bird-dog",
+                "reps": "3×10/стор",
+                "rest": "30с"
+              },
+              {
+                "name": "Glute bridge",
+                "reps": "3×15",
+                "rest": "30с"
+              },
+              {
+                "name": "Гиперэкстензия",
+                "reps": "2×15",
+                "rest": "30с"
+              }
+            ]
+          },
+          "duration_min": 20,
+          "notes": "Акцент на заднюю цепь (превентивно от защемления спины)."
+        },
+        {
+          "phase": "cooldown",
+          "exercise": "Растяжка 5мин. Без агрессии на грушевидную.",
+          "duration_min": 5,
+          "notes": "Spring-10k-2027-v2.md core program."
+        }
+      ]
+    }
+  ],
+  "load_context": null,
+  "control_points_in_range": [
+    "cp_general_hr_drift"
+  ],
+  "control_point_slots": [
+    {
+      "id": "cp-cp_general_hr_drift",
+      "day": "ВТ",
+      "time": "18:30",
+      "duration_min": 75,
+      "name": "CONTROL: HR drift baseline",
+      "kind": "control_point",
+      "control_point_id": "cp_general_hr_drift",
+      "metric_target": "drift_bpm_per_km",
+      "target_value": 0.5,
+      "location": "asphalt_commuter",
+      "structure": [
+        {
+          "phase": "warmup",
+          "basis": "time",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        },
+        {
+          "phase": "work",
+          "basis": "time",
+          "duration_min": 50,
+          "zone": "Z5",
+          "hr_target": null,
+          "pace_min_per_km": null
+        },
+        {
+          "phase": "cooldown",
+          "basis": "time",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        }
+      ]
+    }
+  ],
+  "overrides_applied": [],
+  "volume_check": {
+    "ok": true,
+    "target_h": 5,
+    "available_h": 10.0,
+    "gap_h": -5.0,
+    "max_h": 11,
+    "min_h": 2,
+    "suggestion": null
+  },
+  "totals": {
+    "planned_hours": 7.9,
+    "target_hours": 5,
+    "delta_hours": -2.9,
+    "slots_count": 8
+  },
+  "_generated_by": "lib.plan_generate (Phase 2.5: real layout v18)"
+}

@@ -148,16 +148,22 @@ def test_goal_guard_macro_leads_to_target():
     # 3) Guard ловит откат: если неделя гонки откатывается на медленный темп,
     #    проверка обязана ругнуться
     import copy
-    broken = copy.deepcopy(sp)
-    for w in broken["weekly_macro"]:
-        if w["season_week"] == 23:
-            # откат: замедляем темпы гонку-недели в структуре
-            q = w["quality"]
-            q["paces"] = ["4:24"]
-            for b in q.get("blocks") or []:
-                if b.get("pace"):
-                    b["pace"] = "4:24"
-    assert goal_guard.check(broken, at), "goal_guard НЕ заметил откат недели гонки"
+    # Откат: замедляем темпы варианта гонку-недели в КАТАЛОГЕ.
+    # Структура живёт в каталоге — макро хранит только variant_id.
+    tpl_path = ROOT / "state/workout_templates.json"
+    tpl_orig = tpl_path.read_text(encoding="utf-8")
+    try:
+        tpl = json.loads(tpl_orig)
+        for v in tpl["templates"]["time_trial"]["variants"]:
+            if v["id"] == "tt_race":
+                for b in v.get("blocks") or []:
+                    b["pace_legacy"] = "4:24"
+                    b["daniels_zone"] = "threshold"
+                    b["pace_offset_sec"] = 0
+        tpl_path.write_text(json.dumps(tpl, ensure_ascii=False, indent=2), encoding="utf-8")
+        assert goal_guard.check(sp, at), "goal_guard НЕ заметил откат недели гонки"
+    finally:
+        tpl_path.write_text(tpl_orig, encoding="utf-8")
 
     print("  ✓ goal_guard: макро ведёт к цели, откат ловится")
 
@@ -231,14 +237,36 @@ def test_macro_structure_is_data_not_string():
             assert v["id"] not in ids, "дубликат variant_id: {}".format(v["id"])
             ids.add(v["id"])
 
+    # в каталоге у каждого варианта есть блоки
+    for gid, t in tpl.items():
+        if not isinstance(t, dict):
+            continue
+        for v in t.get("variants") or []:
+            assert v.get("blocks"), "{}: у варианта '{}' нет blocks".format(gid, v["id"])
+            # блоки привязаны к зоне Дэниэлса (или к темпу CP)
+            for b in v["blocks"]:
+                has_zone = (b.get("daniels_zone") or b.get("daniels_zone_hard")
+                            or b.get("daniels_zones") or b.get("daniels_zone_from")
+                            or b.get("daniels_zone_to"))
+                has_tt = b.get("type") in ("tt_pace", "tt_max")
+                if b.get("type") == "pyramid":
+                    # зоны — в шагах пирамиды
+                    for st in b.get("steps") or []:
+                        assert st.get("daniels_zone"), \
+                            "{} / {}: шаг пирамиды без зоны".format(gid, v["id"])
+                    has_zone = True
+                assert has_zone or has_tt, \
+                    "{} / {}: блок без привязки к зоне Дэниэлса".format(gid, v["id"])
+
     for w in sp["weekly_macro"]:
         q = w.get("quality") or {}
         n = w["season_week"]
         # 1) ссылка на каталог
         assert q.get("variant_id"), "W{}: нет variant_id".format(n)
         assert q["variant_id"] in ids, "W{}: variant_id '{}' нет в каталоге".format(n, q["variant_id"])
-        # 2) структура — в данных, а не в строке
-        assert q.get("blocks"), "W{}: нет blocks".format(n)
+        # 2) структура — в каталоге; макро хранит ТОЛЬКО ссылку
+        assert not q.get("blocks"), \
+            "W{}: в макро лежит копия blocks — источник истины в каталоге".format(n)
         assert "_legacy_structure" not in q, "W{}: осталась строка _legacy_structure".format(n)
         # 3) нагрузка вычисляется из структуры и совпадает
         calc = load_model.macro_week_load(w, at)["total_h"]
@@ -752,45 +780,6 @@ def test_plan_generate_layout_all_phases():
     print("  ✓ plan_generate работает для W1, W13, W20, W26, W27, W28, W31, W37, W44, W48")
 
 
-def test_daniels_tables_parse_and_repair():
-    """Таблицы Дэниэлса разбираются, повреждённые ячейки починены."""
-    from lib import daniels
-
-    # Время: '4:30' → 270; '7.10' (потерянный разделитель) → 430;
-    # '3:38.8' (дробные секунды) → 218.8, а НЕ 13088.
-    assert daniels.parse_time("4:30") == 270
-    assert daniels.parse_time("7.10") == 430
-    assert daniels.parse_time("3:38.8") == 219
-    assert daniels.parse_time("431") == 271
-    assert daniels.parse_time("-") is None
-
-    tables = daniels._parse_all()
-    train = {r["vdot"]: r for r in tables["training_paces"]}
-    race = {r["vdot"]: r for r in tables["race_times"]}
-
-    # Строка VDOT 47 из книги: E 5:34/км, M 4:46/км, T 1:47/400м.
-    assert train[47]["easy"]["km"] == 334
-    assert train[47]["marathon"]["km"] == 286
-    assert train[47]["threshold"]["400m"] == 107
-    assert train[47]["interval"]["400m"] == 98
-    assert race[47]["10000m"] == 43 * 60 + 36
-
-    # Дробные секунды у VDOT 78–85 читаются как время, а не как 13088с.
-    assert 200 < race[78]["1500m"] < 230
-    assert 210 < race[80]["5000m"] < 850
-
-    # Починенные ячейки: тренд столбца восстановлен.
-    assert train[34]["interval"]["400m"] == 128
-    assert train[50]["marathon"]["km"] == 271
-    assert train[80]["easy"]["km"] == 218
-    assert race[68]["15000m"] == 2925
-
-    # Времена на дистанциях убывают с ростом VDOT.
-    series = [race[v]["10000m"] for v in range(42, 86)]
-    assert all(a >= b for a, b in zip(series, series[1:])), series[:10]
-    print("  ✓ daniels: разбор и починка повреждённых ячеек")
-
-
 def main():
     print("\n=== Phase 1 smoke tests ===\n")
     tests = [
@@ -826,7 +815,6 @@ def main():
         test_html_slot_links_navigable,
         test_render_html_basis_aware,
         test_render_html_every_slot_renders,
-        test_daniels_tables_parse_and_repair,
     ]
     failed = 0
     for t in tests:

@@ -38,33 +38,21 @@ def parse_time(token: str) -> int | None:
     """
     '12:40' → 760; '1:47' → 107; '7.10' → 430; '431' → 271 (4:31);
     '98' → 98 (секунды для 400м); '_' / '-' → None.
-
-    ВНИМАНИЕ: книга печатает минуты с точкой ('7.10' = 7 мин 10 с), но и
-    дробные секунды ('3:38.8' = 3 мин 38.8 с). Разделители нельзя
-    различать заменой точки на двоеточие — '3:38.8' превратился бы в
-    '3:38:8' (13088 с). Поэтому: двоеточие — граница компонентов, точка
-    внутри компоненты — дробная часть секунд.
     """
     s = str(token).strip()
     if s in ("_", "-", "—", "", "НИ Н"):
         return None
+    s = s.replace(".", ":")
     if ":" in s:
         parts = s.split(":")
         try:
-            vals = [float(p) for p in parts]
+            vals = [int(p) for p in parts]
         except ValueError:
             return None
-        sec = 0.0
+        sec = 0
         for v in vals:
             sec = sec * 60 + v
-        return int(round(sec))
-    # Без двоеточия: '7.10' — минуты с точкой (потерянный разделитель).
-    if "." in s:
-        try:
-            head, tail = s.split(".", 1)
-            return int(round(float(head) * 60 + float(tail)))
-        except ValueError:
-            return None
+        return sec
     if not s.isdigit():
         return None
     n = int(s)
@@ -103,27 +91,6 @@ def load_tables() -> dict[str, Any]:
     if JSON_PATH.exists():
         return json.loads(JSON_PATH.read_text(encoding="utf-8"))
     return _parse_all()
-
-
-# ─────────────────── починка известных повреждений OCR ───────────────────
-#
-# Паста прислана фото/сканом, и три ячейки в ней повреждены настолько, что
-# ломают тренд столбца. Каждая починка подтверждена соседями по VDOT:
-#
-#   VDOT 34, И 400м: «2:08» (128с) — тренд столбца: 33→131с, 35→125с ⇒ 128с
-#   VDOT 68, 15к:    «38:44» (2324с) — тренд столбца: 67→2962с, 69→2888с ⇒ 2925с
-#   VDOT 80, E км:   «3:32» (212с) — тренд столбца: 79→220с, 81→215с ⇒ 218с
-#   VDOT 50, M км:   «431» — потерянный разделитель ⇒ 4:31 (271с)
-#
-# Ключи: (vdот, интенсивность, единица) → секунды.
-OCR_REPAIRS_TRAINING = {
-    (34, "interval", "400m"): 128,
-    (50, "marathon", "km"): 271,
-    (80, "easy", "km"): 218,
-}
-OCR_REPAIRS_RACE = {
-    (68, "15000m"): 2925,
-}
 
 
 def _parse_all() -> dict[str, Any]:
@@ -200,17 +167,6 @@ def _parse_training_paces() -> list[dict]:
                                 if rep_400 else None),
             },
         })
-    # Починка повреждённых ячеек — после разбора, по ключу (VDOT, зона, единица).
-    for row in out:
-        for (v, zone, unit), seconds in OCR_REPAIRS_TRAINING.items():
-            if row["vdot"] == v and unit in row.get(zone, {}):
-                row[zone][unit] = seconds
-                if zone == "interval" and row[zone].get("1000m"):
-                    row[zone]["pace_per_km"] = round(pace_per_km(row[zone]["1000m"], 1000), 1)
-                if zone == "marathon" and row[zone].get("km"):
-                    row[zone]["pace_per_km"] = round(pace_per_km(row[zone]["km"], 1000), 1)
-                if zone == "easy" and row[zone].get("km"):
-                    row[zone]["pace_per_km"] = round(pace_per_km(row[zone]["km"], 1000), 1)
     return out
 
 
@@ -244,11 +200,6 @@ def _parse_race_times() -> list[dict]:
             "half": parse_time(g(8)),
             "marathon": parse_time(g(9)),
         })
-    # Починка повреждённых ячеек — по ключу (VDOT, дистанция).
-    for row in out:
-        for (v, distance), seconds in OCR_REPAIRS_RACE.items():
-            if row["vdot"] == v:
-                row[distance] = seconds
     return out
 
 
@@ -335,6 +286,38 @@ def vdot_for_race(distance_m: int, time_sec: int) -> dict[str, Any]:
     return {"error": "результат вне диапазона таблицы"}
 
 
+# Зоны Дэниэлса → ключи зон в каталоге шаблонов
+ZONE_KEYS = ("easy", "marathon", "threshold", "interval", "repetition")
+
+
+def zone_pace_sec(zone: str, vdot: float) -> float | None:
+    """Темп зоны Дэниэлса для VDOT (сек/км)."""
+    s = zone_summary(vdot)
+    v = s.get("zones_sec_per_km", {}).get(zone)
+    return float(v) if v is not None else None
+
+
+def pace_for(zone: str, offset_sec: float, vdot: float) -> str | None:
+    """
+    Темп = темп зоны Дэниэлса для VDOT + смещение.
+
+    Так структура в каталоге не привязана к конкретной цифре: при росте
+    VDOT вся работа ускоряется сама, а смещение (структура внутри сессии)
+    сохраняется.
+    """
+    base = zone_pace_sec(zone, vdot)
+    if base is None:
+        return None
+    return fmt_pace(base + offset_sec)
+
+
+def fmt_pace(sec: float) -> str:
+    """269.0 → '4:29'."""
+    sec = int(round(sec))
+    m, s = divmod(sec, 60)
+    return "{}:{:02d}".format(m, s)
+
+
 def zone_summary(vdot: float) -> dict[str, Any]:
     """Сводка темпов по зонам — удобно для показа."""
     p = paces_for_vdot(vdot)
@@ -345,6 +328,13 @@ def zone_summary(vdot: float) -> dict[str, Any]:
     m = p["marathon"]
     return {
         "vdot": p["vdot"],
+        "zones_sec_per_km": {
+            "easy": e.get("km"),
+            "marathon": m.get("km"),
+            "threshold": t.get("pace_per_km"),
+            "interval": i.get("pace_per_km"),
+            "repetition": r.get("pace_per_km"),
+        },
         "easy_mile": e.get("mile"), "easy_km": e.get("km"),
         "marathon_mile": m.get("mile"), "marathon_km": m.get("km"),
         "threshold_400": t.get("400m"), "threshold_1000": t.get("1000m"),

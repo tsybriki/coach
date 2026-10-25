@@ -24,11 +24,11 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 
 
-def pace_sec(s: str) -> float:
-    """'4:00' → 240.0 секунд на км."""
+def pace_sec(s: str) -> float | None:
+    """'4:00' → 240.0 секунд на км. Не-темп (напр. 'по цели CP') → None."""
     m = re.fullmatch(r"\s*(\d+):(\d{2})\s*", str(s))
     if not m:
-        raise ValueError("не разобрать темп {!r}".format(s))
+        return None
     return int(m.group(1)) * 60 + int(m.group(2))
 
 
@@ -42,6 +42,72 @@ def fmt(sec: float) -> str:
     return "{}:{:02d}".format(m, s)
 
 
+def daniels_profile_vdot() -> float | None:
+    """Текущий VDOT из state/daniels_profile.json."""
+    try:
+        p = REPO / "state/daniels_profile.json"
+        if not p.exists():
+            return None
+        v = json.loads(p.read_text(encoding="utf-8")).get("vdot")
+        return float(v) if v is not None else None
+    except Exception:
+        return None
+
+
+def _week_paces(week: dict) -> list[str]:
+    """
+    Темпы недели — из каталога шаблонов по variant_id.
+
+    Макро-неделя хранит ТОЛЬКО variant_id (темпы не дублируются), а темпы
+    в каталоге привязаны к зонам Дэниэлса и вычисляются под текущий VDOT.
+    Здесь для проверок берём зашитые значения каталога.
+    """
+    vid = (week.get("quality") or {}).get("variant_id")
+    if not vid:
+        return []
+    try:
+        tpl = json.loads((REPO / "state/workout_templates.json")
+                         .read_text(encoding="utf-8")).get("templates", {})
+    except Exception:
+        return []
+    for t in tpl.values():
+        if not isinstance(t, dict):
+            continue
+        for v in t.get("variants") or []:
+            if v.get("id") == vid:
+                out = []
+                for b in (v.get("blocks") or []):
+                    # конкретные темпы (если есть) + legacy (после rebase
+                    # ключ pace удалён — остаётся zone+offset и legacy)
+                    for key in ("pace", "from_pace", "to_pace",
+                                "easy_pace", "hard_pace"):
+                        if b.get(key):
+                            out.append(b[key])
+                    for pc in (b.get("paces") or []):
+                        out.append(pc)
+                    leg = b.get("pace_legacy")
+                    if leg:
+                        out.extend(str(leg).split(" / "))
+                    # вычисленные по VDOT — точнее
+                    try:
+                        from lib import daniels
+                        from lib.quality_session import variant_with_paces
+                        vdot = daniels_profile_vdot()
+                        if vdot:
+                            vv = variant_with_paces(vid, vdot)
+                            for bb in (vv or {}).get("blocks") or []:
+                                for key in ("pace", "from_pace", "to_pace",
+                                            "easy_pace", "hard_pace"):
+                                    if bb.get(key):
+                                        out.append(bb[key])
+                                for pc in (bb.get("paces") or []):
+                                    out.append(pc)
+                    except Exception:
+                        pass
+                return out
+    return []
+
+
 def check(sp: dict, at: dict) -> list[str]:
     problems: list[str] = []
     sg = sp.get("season_goal") or {}
@@ -52,6 +118,8 @@ def check(sp: dict, at: dict) -> list[str]:
     if not target_pace:
         return ["season_goal.race_pace_min_per_km не задан"]
     tp = pace_sec(target_pace)
+    if tp is None:
+        return ["season_goal.race_pace_min_per_km не разобран: {}".format(target_pace)]
 
     # 1) цель в goals совпадает с season_goal
     prim = next((g for g in sp.get("goals", []) if g.get("primary")), None)
@@ -86,11 +154,10 @@ def check(sp: dict, at: dict) -> list[str]:
                      if race_wk - 6 <= w["season_week"] <= race_wk]
             best = None
             for w in block:
-                # темпы — из СТРУКТУРЫ недели (quality.paces), не из строки
-                for ps in (w.get("quality") or {}).get("paces") or []:
-                    try:
-                        v = pace_sec(ps)
-                    except ValueError:
+                # темпы — из каталога по variant_id (макро их не хранит)
+                for ps in _week_paces(w):
+                    v = pace_sec(ps)
+                    if v is None:
                         continue
                     if best is None or v < best:
                         best = v
@@ -147,32 +214,32 @@ def check(sp: dict, at: dict) -> list[str]:
         w = wm.get(c["season_week"])
         if not w:
             continue
-        q = w.get("quality") or {}
-        # темпы недельной работы — из СТРУКТУРЫ (quality.paces), не из строки
+            # темпы недельной работы — из каталога по variant_id
         leg_paces = []
-        for ps in q.get("paces") or []:
-            try:
-                leg_paces.append(pace_sec(ps))
-            except ValueError:
-                pass
+        for ps in _week_paces(w):
+            v = pace_sec(ps)
+            if v is not None:
+                leg_paces.append(v)
         if not leg_paces:
             continue
         cp_pace = pace_sec(s["pace_min_per_km"])
+        if cp_pace is None:
+            continue
         # Для TT-сессии темп задаёт контрольная точка — сверяем именно с ней
         if all(abs(v - cp_pace) > 1.0 for v in leg_paces):
             problems.append(
                 "W{}: контрольная точка '{}' требует темп {}, а недельная структура '{}' — расхождение".format(
                     c["season_week"], c.get("id"), s["pace_min_per_km"],
-                    q.get("label") or q.get("variant_id", "")))
+                    (w.get("quality") or {}).get("label")
+                    or (w.get("quality") or {}).get("variant_id", "")))
 
     # 4c) Неделя гонки: темп должен быть ≤ цели
     if race_wk and race_wk in wm:
         vals = []
-        for ps in (wm[race_wk].get("quality") or {}).get("paces") or []:
-            try:
-                vals.append(pace_sec(ps))
-            except ValueError:
-                pass
+        for ps in _week_paces(wm[race_wk]):
+            v = pace_sec(ps)
+            if v is not None:
+                vals.append(v)
         if vals and min(vals) > tp + 0.5:
             problems.append(
                 "неделя гонки W{}: лучший темп {} ({:.0f} с/км) медленнее цели {} ({:.0f} с/км)".format(
@@ -242,13 +309,19 @@ def check(sp: dict, at: dict) -> list[str]:
                 continue
             if vid not in index:
                 problems.append("W{}: variant_id '{}' нет в workout_templates".format(n, vid))
-            if not q.get("blocks"):
-                problems.append("W{}: у варианта '{}' нет blocks".format(n, vid))
             if q.get("_legacy_structure"):
                 problems.append(
                     "W{}: осталась строка _legacy_structure — структура должна быть в blocks".format(n))
+            if q.get("blocks"):
+                problems.append(
+                    "W{}: в макро лежит копия blocks — источник истины в каталоге, "
+                    "макро хранит только variant_id".format(n))
             if not w.get("total_h"):
                 problems.append("W{}: нет total_h — нагрузка не посчитана".format(n))
+            if not q.get("variant_id"):
+                problems.append("W{}: нет variant_id — структура не задана".format(n))
+            elif vid not in index:
+                problems.append("W{}: variant_id '{}' нет в workout_templates".format(n, vid))
 
         # нагрузка должна сходиться с пересчётом (страховка от ручных правок)
         try:

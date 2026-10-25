@@ -306,7 +306,8 @@ def _build_slot_structure(spec: dict) -> list[dict]:
     if qsel and kind == "run":
         from .quality_session import build_structure_from_variant
         variant = qsel.get("variant") or {}
-        steps = build_structure_from_variant(variant)
+        steps = build_structure_from_variant(
+            variant, vdot=(qsel or {}).get("vdot"))
         spec["_structure_override"] = steps
         return steps
 
@@ -363,12 +364,38 @@ def _select_quality_for_week(season_plan: dict, season_week: int,
     macro_variant = q.get("variant_id")
     chosen_variant = variant_id or (None if cp and cp.get("quality_goal") else macro_variant)
 
+    # VDOT атлета — из профиля (state/daniels_profile.json). Темпы структуры
+    # считаются по таблице ДэниЭлса для ЭТОГО VDOT.
+    vdot = None
+    try:
+        from pathlib import Path as _P
+        _prof = _P(__file__).resolve().parent.parent / "state" / "daniels_profile.json"
+        if _prof.exists():
+            import json as _json
+            vdot = (_json.loads(_prof.read_text(encoding="utf-8")) or {}).get("vdot")
+    except Exception:
+        vdot = None
+
     variant_source = ("override" if variant_id else
                       "макро" if chosen_variant else "каталог по scale")
     sel = choose_quality(goal, scale or "medium", variant_id=chosen_variant,
                          plan_context_work_m=plan_context, test_type=tt,
                          variant_source=variant_source)
     sel["variant_source"] = variant_source
+    sel["vdot"] = vdot
+
+    # Темпы вычисляются по VDOT атлета: структура — из каталога,
+    # темп — таблица ДэниЭлса для текущего VDOT.
+    if vdot is not None:
+        try:
+            from .quality_session import variant_with_paces
+            vv = variant_with_paces((sel.get("variant") or {}).get("id", ""), vdot)
+            if vv:
+                sel["variant"] = vv
+                sel["work_m"] = vv.get("work_m", sel.get("work_m"))
+                sel["pace_note"] = ("темпы по таблице Дэниэлса для VDOT {}".format(vdot))
+        except Exception:
+            pass
     if cp and cp.get("quality_goal"):
         sel["is_cp"] = True
         sel["cp_id"] = cp.get("id")
@@ -521,7 +548,8 @@ def _build_cp_structure(cp: dict, win: dict,
         return build_structure_from_variant(
             quality_selection.get("variant") or {},
             pace_override=quality_selection.get("pace_min_per_km"),
-            distance_override=(quality_selection.get("session") or {}).get("distance_m"))
+            distance_override=(quality_selection.get("session") or {}).get("distance_m"),
+            vdot=quality_selection.get("vdot"))
 
     dur = win.get("duration_min", 60)
     warmup = 15
@@ -562,7 +590,8 @@ def _build_slot_from_spec(spec: dict, quality_selection: dict | None = None) -> 
         slot["structure"] = build_structure_from_variant(
             quality_selection.get("variant") or {},
             pace_override=quality_selection.get("pace_min_per_km"),
-            distance_override=(quality_selection.get("session") or {}).get("distance_m"))
+            distance_override=(quality_selection.get("session") or {}).get("distance_m"),
+            vdot=quality_selection.get("vdot"))
         slot["quality_goal"] = quality_selection.get("goal")
         slot["quality_scale"] = quality_selection.get("scale")
         slot["quality_variant"] = quality_selection.get("variant", {}).get("id")
@@ -858,6 +887,7 @@ def generate(season_week: int | str,
         "week_goal": week_goal,
         "week_goal_detail": week_goal_detail,
         "season_goal": sp.get("season_goal"),
+        "vdot": (quality_selection or {}).get("vdot"),
         "gates": _gates_for_week(sp, sw),
         "season_week": sw,
         "iso_week": iso,

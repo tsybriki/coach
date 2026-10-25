@@ -237,6 +237,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
         "week_goal": plan.get("week_goal"),
         "week_goal_detail": plan.get("week_goal_detail"),
         "season_goal": plan.get("season_goal"),
+        "vdot": plan.get("vdot"),
         "gates": plan.get("gates") or [],
         "slots": [
             {
@@ -377,6 +378,8 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .gdec.fail{border-color:rgba(255,107,90,.55)} .gdec.fail b{color:#ff6b5a}
 .glever{font-size:11px;margin-top:7px;padding-top:6px;border-top:1px dashed var(--border)}
 .glever b{color:var(--accent)}
+.vdot-note{margin:8px 0 4px;padding:7px 11px;border-radius:9px;font-size:11px;
+  color:var(--muted);background:var(--panel2);border:1px solid var(--border)}
 .load-cmp{margin:9px 0 4px;padding:9px 12px;border-radius:10px;
   border:1px solid var(--border);background:var(--panel)}
 .lc-hd{font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;
@@ -815,6 +818,11 @@ function buildPicker(plan) {
   }
   // GATES — точки принятия решения, относящиеся к этой неделе
   html += buildGates(plan.gates || []);
+  // VDOT — по какой форме считались темпы
+  if (plan.vdot) {
+    html += '<div class="vdot-note">Темпы тренировки — по таблице Дэниэлса, '
+         + 'VDOT ' + plan.vdot + ' (текущая форма). Целевые темпы сезона — в карточке цели.</div>';
+  }
   // СВЕРКА С МАКРО: план недели vs заложенная нагрузка
   html += buildLoadCompare(plan.load_compare);
   if (plan.subtitle) html += '<div class="week">' + escapeHtml(plan.subtitle) + '</div>';

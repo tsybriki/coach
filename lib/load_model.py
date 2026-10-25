@@ -76,8 +76,21 @@ def _run_time_for(km: float, pace: float) -> float:
     return km * pace / 60.0
 
 
+def current_vdot(default: float | None = None) -> float | None:
+    """Текущий VDOT атлета — из state/daniels_profile.json."""
+    p = REPO / "state" / "daniels_profile.json"
+    if not p.exists():
+        return default
+    try:
+        v = json.loads(p.read_text(encoding="utf-8")).get("vdot")
+        return float(v) if v is not None else default
+    except (json.JSONDecodeError, OSError, ValueError):
+        return default
+
+
 def macro_week_load(week: dict[str, Any], at: dict[str, Any],
-                    quality_min: int | None = None) -> dict[str, Any]:
+                    quality_min: int | None = None,
+                    vdot: float | None = None) -> dict[str, Any]:
     """
     Нагрузка недели по макро.
 
@@ -100,13 +113,16 @@ def macro_week_load(week: dict[str, Any], at: dict[str, Any],
     q_work_km = _quality_work_km(week)
     # темпы для расчёта времени работы — из блоков, с fallback на шкалу зон
     paces: dict[str, float] = {}
-    for pc in ((week.get("quality") or {}).get("paces") or []):
+    # Темпы берём из структуры (уже вычисленной под VDOT в каталоге)
+    for pc in _week_paces(week):
         v = pace_sec(pc)
         if v:
             paces[pc] = v
     paces.setdefault("__easy__", z2)
 
-    q_min = quality_min if quality_min is not None else _quality_minutes(week, paces)
+    if vdot is None:
+        vdot = current_vdot()
+    q_min = quality_min if quality_min is not None else _quality_minutes(week, paces, vdot)
     q_h = (q_min or 0) / 60.0
 
     # 3) остальной объём — по Z2
@@ -137,6 +153,30 @@ def macro_week_load(week: dict[str, Any], at: dict[str, Any],
     }
 
 
+def _week_paces(week: dict[str, Any]) -> list[str]:
+    """Все темпы недели: из макро (если есть) или из каталога по variant_id."""
+    q = week.get("quality") or {}
+    pl = q.get("paces") or []
+    if pl:
+        return list(pl)
+    vid = q.get("variant_id")
+    if not vid:
+        return []
+    try:
+        from .quality_session import get_variant
+        v = get_variant(vid)
+    except Exception:
+        return []
+    out: list[str] = []
+    for b in ((v or {}).get("blocks") or []):
+        for key in ("pace", "from_pace", "to_pace", "easy_pace", "hard_pace"):
+            if b.get(key):
+                out.append(b[key])
+        for pc in (b.get("paces") or []):
+            out.append(pc)
+    return out
+
+
 def _quality_work_km(week: dict[str, Any]) -> float:
     """
     Объём работы качественной сессии в км.
@@ -147,6 +187,16 @@ def _quality_work_km(week: dict[str, Any]) -> float:
     """
     q = week.get("quality") or {}
     blocks = q.get("blocks")
+    if not blocks:
+        # Структуры в макро нет — она в каталоге (variant_id).
+        vid = q.get("variant_id")
+        if vid:
+            try:
+                from .quality_session import get_variant
+                v = get_variant(vid)
+                blocks = (v or {}).get("blocks")
+            except Exception:
+                blocks = None
     if not blocks:
         wm = q.get("work_m")
         return round(wm / 1000.0, 3) if wm else 0.0
@@ -173,13 +223,22 @@ def _quality_work_km(week: dict[str, Any]) -> float:
     return round(total_m / 1000.0, 3)
 
 
-def _quality_minutes(week: dict[str, Any], paces: dict[str, float]) -> int:
+def _quality_minutes(week: dict[str, Any], paces: dict[str, float],
+                     vdot: float | None = None) -> int:
     """
     Длительность качественной сессии по блокам:
       время работы (по темпу блока) + отдых + разминка 15 + заминка 12.
     """
     q = week.get("quality") or {}
     blocks = q.get("blocks") or []
+    vid = q.get("variant_id")
+    if not blocks and vid:
+        try:
+            from .quality_session import variant_with_paces
+            v = variant_with_paces(vid, vdot)
+            blocks = (v or {}).get("blocks") or []
+        except Exception:
+            blocks = []
     if not blocks:
         return 0
 

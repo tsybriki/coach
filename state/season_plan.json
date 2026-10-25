@@ -126,7 +126,7 @@
       "goal": "Сохраняем качество, снижаем объём",
       "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей.",
       "_season_week_start": 24,
-      "_season_week_end": 27,
+      "_season_week_end": 28,
       "load_range_h": [
         3.1,
         5.88
@@ -471,28 +471,13 @@
         "scale_text": "лёгкая работа",
         "develops": "Аэробная база + способность держать темп под нагрузкой",
         "variant_id": "8k+3k",
-        "blocks": [
-          {
-            "type": "progression",
-            "easy_distance_m": 5000,
-            "progression_distance_m": 3000,
-            "from_pace": "5:00",
-            "to_pace": "4:30",
-            "zone": "Z3",
-            "hr_target": 146
-          }
-        ],
         "work_m": 8000,
-        "label": "8К + прогрессия 3К",
-        "paces": [
-          "5:00",
-          "4:30"
-        ]
+        "label": "8К + прогрессия 3К"
       },
       "core": "2×25м",
       "bike": "1×45м",
       "swim": "1×30м",
-      "total_h": 4.96,
+      "total_h": 4.99,
       "phase": "run_base",
       "_total_h_model": {
         "run_h": 2.51,
@@ -509,16 +494,17 @@
       "deload_pct": 0.0,
       "sessions_target": 6,
       "_load_breakdown": {
-        "run_h": 2.88,
+        "run_h": 2.91,
         "run_long_h": 1.13,
         "run_easy_h": 0.66,
-        "run_quality_h": 1.08,
+        "run_quality_h": 1.12,
         "bike_h": 0.75,
         "swim_h": 0.5,
         "ofp_h": 0.83,
-        "quality_min": 65
+        "quality_min": 67,
+        "vdot": 48.0
       },
-      "target_h": 4.96
+      "target_h": 4.99
     },
     {
       "season_week": 2,
@@ -532,28 +518,13 @@
         "scale_text": "лёгкая работа",
         "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
         "variant_id": "4x1k_easy",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 4,
-            "distance_m": 1000,
-            "pace": "4:35",
-            "zone": "Z5",
-            "hr_target": 162,
-            "rest_min": 2,
-            "rest_distance_m": 300
-          }
-        ],
         "work_m": 4000,
-        "label": "4×1К @ 4:20",
-        "paces": [
-          "4:35"
-        ]
+        "label": "4×1К @ 4:20"
       },
       "core": "2×25м",
       "bike": "1×45м",
       "swim": "1×30м",
-      "total_h": 5.47,
+      "total_h": 5.51,
       "phase": "run_base",
       "_total_h_model": {
         "run_h": 3.01,
@@ -570,16 +541,17 @@
       "deload_pct": 11.1,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 3.39,
+        "run_h": 3.42,
         "run_long_h": 1.23,
         "run_easy_h": 1.23,
-        "run_quality_h": 0.93,
+        "run_quality_h": 0.97,
         "bike_h": 0.75,
         "swim_h": 0.5,
         "ofp_h": 0.83,
-        "quality_min": 56
+        "quality_min": 58,
+        "vdot": 48.0
       },
-      "target_h": 5.47
+      "target_h": 5.51
     },
     {
       "season_week": 3,
@@ -593,46 +565,13 @@
         "scale_text": "средняя интенсивность",
         "develops": "Аэробная мощность — верхняя граница аэробной системы",
         "variant_id": "3x800prog+4x200",
-        "blocks": [
-          {
-            "type": "reps_progression",
-            "reps": 3,
-            "distance_m": 800,
-            "paces": [
-              "4:15",
-              "4:00",
-              "3:50"
-            ],
-            "pace": "4:15",
-            "zone": "Z5",
-            "hr_target": 164,
-            "rest_min": 2,
-            "rest_distance_m": 250
-          },
-          {
-            "type": "reps",
-            "reps": 4,
-            "distance_m": 200,
-            "pace": "3:45",
-            "zone": "Z6",
-            "hr_target": 172,
-            "rest_min": 1,
-            "rest_distance_m": 200
-          }
-        ],
         "work_m": 3200,
-        "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
-        "paces": [
-          "4:15",
-          "4:00",
-          "3:50",
-          "3:45"
-        ]
+        "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45"
       },
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×30м",
-      "total_h": 6.22,
+      "total_h": 6.24,
       "phase": "run_base",
       "_total_h_model": {
         "run_h": 3.08,
@@ -649,16 +588,17 @@
       "deload_pct": 16.7,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 3.89,
+        "run_h": 3.9,
         "run_long_h": 1.32,
         "run_easy_h": 1.68,
-        "run_quality_h": 0.88,
+        "run_quality_h": 0.9,
         "bike_h": 1.0,
         "swim_h": 0.5,
         "ofp_h": 0.83,
-        "quality_min": 53
+        "quality_min": 54,
+        "vdot": 48.0
       },
-      "target_h": 6.22
+      "target_h": 6.24
     },
     {
       "season_week": 4,
@@ -672,20 +612,8 @@
         "scale_text": "лёгкая работа",
         "develops": "Замер: держим заданный темп (pace) или максимальная скорость (max) — тип задаёт контрольная точка",
         "variant_id": "tt_pace",
-        "blocks": [
-          {
-            "type": "tt_pace",
-            "distance_m": 3000,
-            "pace": "по цели CP",
-            "zone": "Z4",
-            "hr_target": 158
-          }
-        ],
         "work_m": 3000,
-        "label": "Темповый тест",
-        "paces": [
-          "по цели CP"
-        ]
+        "label": "Темповый тест"
       },
       "core": "2×25м",
       "bike": "1×60м",
@@ -714,7 +642,8 @@
         "bike_h": 1.0,
         "swim_h": 0.5,
         "ofp_h": 0.83,
-        "quality_min": 42
+        "quality_min": 42,
+        "vdot": 48.0
       },
       "target_h": 6.34
     },
@@ -730,39 +659,13 @@
         "scale_text": "средняя интенсивность",
         "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
         "variant_id": "3x1k+2x800",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 3,
-            "distance_m": 1000,
-            "pace": "4:25",
-            "zone": "Z5",
-            "hr_target": 164,
-            "rest_min": 2,
-            "rest_distance_m": 300
-          },
-          {
-            "type": "reps",
-            "reps": 2,
-            "distance_m": 800,
-            "pace": "3:55",
-            "zone": "Z6",
-            "hr_target": 172,
-            "rest_min": 3,
-            "rest_distance_m": 300
-          }
-        ],
         "work_m": 4600,
-        "label": "3×1К @ 4:12 + 2×800 @ 3:50",
-        "paces": [
-          "4:25",
-          "3:55"
-        ]
+        "label": "3×1К @ 4:12 + 2×800 @ 3:50"
       },
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 6.83,
+      "total_h": 6.88,
       "phase": "run_base",
       "_total_h_model": {
         "run_h": 3.86,
@@ -779,16 +682,17 @@
       "deload_pct": 5.3,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 4.33,
+        "run_h": 4.38,
         "run_long_h": 1.51,
         "run_easy_h": 1.83,
-        "run_quality_h": 0.98,
+        "run_quality_h": 1.03,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 0.83,
-        "quality_min": 59
+        "quality_min": 62,
+        "vdot": 48.0
       },
-      "target_h": 6.83
+      "target_h": 6.88
     },
     {
       "season_week": 6,
@@ -802,45 +706,13 @@
         "scale_text": "средняя интенсивность",
         "develops": "Переход от аэробной работы к пороговой и выше — навык смены интенсивности",
         "variant_id": "1k-800-400",
-        "blocks": [
-          {
-            "type": "pyramid",
-            "steps": [
-              {
-                "distance_m": 1000,
-                "pace": "4:30",
-                "zone": "Z4",
-                "hr_target": 155
-              },
-              {
-                "distance_m": 800,
-                "pace": "4:10",
-                "zone": "Z5",
-                "hr_target": 163
-              },
-              {
-                "distance_m": 400,
-                "pace": "3:45",
-                "zone": "Z6",
-                "hr_target": 170
-              }
-            ],
-            "rest_min": 2,
-            "rest_distance_m": 250
-          }
-        ],
         "work_m": 2200,
-        "label": "1К @ 4:20 → 800 @ 3:55 → 400 @ 3:45",
-        "paces": [
-          "4:30",
-          "4:10",
-          "3:45"
-        ]
+        "label": "1К @ 4:20 → 800 @ 3:55 → 400 @ 3:45"
       },
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 6.98,
+      "total_h": 7.01,
       "phase": "run_base",
       "_total_h_model": {
         "run_h": 4.28,
@@ -857,16 +729,17 @@
       "deload_pct": 5.0,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 4.48,
+        "run_h": 4.51,
         "run_long_h": 1.51,
         "run_easy_h": 2.25,
-        "run_quality_h": 0.72,
+        "run_quality_h": 0.75,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 0.83,
-        "quality_min": 43
+        "quality_min": 45,
+        "vdot": 48.0
       },
-      "target_h": 6.98
+      "target_h": 7.01
     },
     {
       "season_week": 7,
@@ -880,25 +753,13 @@
         "scale_text": "средняя интенсивность",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
         "variant_id": "5k",
-        "blocks": [
-          {
-            "type": "continuous",
-            "distance_m": 5000,
-            "pace": "4:20",
-            "zone": "Z4",
-            "hr_target": 157
-          }
-        ],
         "work_m": 5000,
-        "label": "5К tempo @ 4:20",
-        "paces": [
-          "4:20"
-        ]
+        "label": "5К tempo @ 4:20"
       },
       "core": "2×30м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 7.26,
+      "total_h": 7.31,
       "phase": "run_base",
       "_total_h_model": {
         "run_h": 4.56,
@@ -915,16 +776,17 @@
       "deload_pct": 7.1,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 4.59,
+        "run_h": 4.64,
         "run_long_h": 1.7,
         "run_easy_h": 2.08,
-        "run_quality_h": 0.82,
+        "run_quality_h": 0.87,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 1.0,
-        "quality_min": 49
+        "quality_min": 52,
+        "vdot": 48.0
       },
-      "target_h": 7.26
+      "target_h": 7.31
     },
     {
       "season_week": 8,
@@ -938,20 +800,8 @@
         "scale_text": "средняя интенсивность",
         "develops": "Замер: держим заданный темп (pace) или максимальная скорость (max) — тип задаёт контрольная точка",
         "variant_id": "tt_max",
-        "blocks": [
-          {
-            "type": "tt_max",
-            "distance_m": 5000,
-            "pace": "all-out",
-            "zone": "Z7",
-            "hr_target": 182
-          }
-        ],
         "work_m": 5000,
-        "label": "Тест на максимум",
-        "paces": [
-          "all-out"
-        ]
+        "label": "Тест на максимум"
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -980,7 +830,8 @@
         "bike_h": 2.0,
         "swim_h": 0.67,
         "ofp_h": 1.0,
-        "quality_min": 52
+        "quality_min": 52,
+        "vdot": 48.0
       },
       "target_h": 8.59
     },
@@ -996,28 +847,13 @@
         "scale_text": "средняя интенсивность",
         "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
         "variant_id": "4x1k",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 4,
-            "distance_m": 1000,
-            "pace": "4:25",
-            "zone": "Z5",
-            "hr_target": 164,
-            "rest_min": 2,
-            "rest_distance_m": 300
-          }
-        ],
         "work_m": 4000,
-        "label": "4×1К @ 4:15",
-        "paces": [
-          "4:25"
-        ]
+        "label": "4×1К @ 4:15"
       },
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "1×40м",
-      "total_h": 8.94,
+      "total_h": 8.98,
       "phase": "run_base",
       "_total_h_model": {
         "run_h": 4.89,
@@ -1034,16 +870,17 @@
       "deload_pct": 4.2,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.28,
+        "run_h": 5.31,
         "run_long_h": 1.51,
         "run_easy_h": 2.83,
-        "run_quality_h": 0.93,
+        "run_quality_h": 0.97,
         "bike_h": 2.0,
         "swim_h": 0.67,
         "ofp_h": 1.0,
-        "quality_min": 56
+        "quality_min": 58,
+        "vdot": 48.0
       },
-      "target_h": 8.94
+      "target_h": 8.98
     },
     {
       "season_week": 10,
@@ -1057,28 +894,13 @@
         "scale_text": "средняя интенсивность",
         "develops": "Аэробная мощность — верхняя граница аэробной системы",
         "variant_id": "5x800",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 5,
-            "distance_m": 800,
-            "pace": "4:00",
-            "zone": "Z6",
-            "hr_target": 172,
-            "rest_min": 3,
-            "rest_distance_m": 400
-          }
-        ],
         "work_m": 4000,
-        "label": "5×800 @ 3:55",
-        "paces": [
-          "4:00"
-        ]
+        "label": "5×800 @ 3:55"
       },
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "2×40м",
-      "total_h": 9.74,
+      "total_h": 9.81,
       "phase": "run_base",
       "_total_h_model": {
         "run_h": 4.42,
@@ -1095,16 +917,17 @@
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.41,
+        "run_h": 5.48,
         "run_long_h": 1.7,
         "run_easy_h": 2.64,
-        "run_quality_h": 1.07,
+        "run_quality_h": 1.13,
         "bike_h": 2.0,
         "swim_h": 1.33,
         "ofp_h": 1.0,
-        "quality_min": 64
+        "quality_min": 68,
+        "vdot": 48.0
       },
-      "target_h": 9.74
+      "target_h": 9.81
     },
     {
       "season_week": 11,
@@ -1118,23 +941,8 @@
         "scale_text": "средняя интенсивность",
         "develops": "Игровая стимуляция: чередование лёгкого и быстрого без жёсткой структуры",
         "variant_id": "200-800 x6",
-        "blocks": [
-          {
-            "type": "fartlek",
-            "cycles": 6,
-            "easy_distance_m": 200,
-            "easy_pace": "5:20",
-            "hard_distance_m": 800,
-            "hard_pace": "4:00",
-            "hard_zone": "Z5",
-            "hr_target": 164
-          }
-        ],
         "work_m": 6000,
-        "label": "6 циклов: 200@5:10 + 800@3:50",
-        "paces": [
-          "4:00"
-        ]
+        "label": "6 циклов: 200@5:10 + 800@3:50"
       },
       "core": "2×30м",
       "bike": "2×60м",
@@ -1163,7 +971,8 @@
         "bike_h": 2.0,
         "swim_h": 1.33,
         "ofp_h": 1.0,
-        "quality_min": 53
+        "quality_min": 53,
+        "vdot": 48.0
       },
       "target_h": 9.37
     },
@@ -1179,20 +988,8 @@
         "scale_text": "лёгкая работа",
         "develops": "Замер: держим заданный темп (pace) или максимальная скорость (max) — тип задаёт контрольная точка",
         "variant_id": "tt_max_3k",
-        "blocks": [
-          {
-            "type": "tt_max",
-            "distance_m": 3000,
-            "pace": "всеми силами",
-            "zone": "Z6",
-            "hr_target": 172
-          }
-        ],
         "work_m": 3000,
-        "label": "3К на максимум",
-        "paces": [
-          "всеми силами"
-        ]
+        "label": "3К на максимум"
       },
       "core": "2×25м",
       "bike": "1×60м",
@@ -1221,7 +1018,8 @@
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 0.83,
-        "quality_min": 42
+        "quality_min": 42,
+        "vdot": 48.0
       },
       "target_h": 7.17
     },
@@ -1237,28 +1035,13 @@
         "scale_text": "лёгкая работа",
         "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
         "variant_id": "2x2k",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 2,
-            "distance_m": 2000,
-            "pace": "4:30",
-            "zone": "Z5",
-            "hr_target": 162,
-            "rest_min": 4,
-            "rest_distance_m": 400
-          }
-        ],
         "work_m": 4000,
-        "label": "2×2К @ 4:15",
-        "paces": [
-          "4:30"
-        ]
+        "label": "2×2К @ 4:15"
       },
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "2×45м",
-      "total_h": 9.69,
+      "total_h": 9.73,
       "phase": "run_build",
       "_total_h_model": {
         "run_h": 4.67,
@@ -1275,16 +1058,17 @@
       "deload_pct": 11.1,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.19,
+        "run_h": 5.23,
         "run_long_h": 1.51,
         "run_easy_h": 2.83,
-        "run_quality_h": 0.85,
+        "run_quality_h": 0.88,
         "bike_h": 2.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 51
+        "quality_min": 53,
+        "vdot": 48.0
       },
-      "target_h": 9.69
+      "target_h": 9.73
     },
     {
       "season_week": 14,
@@ -1298,28 +1082,13 @@
         "scale_text": "высокая интенсивность",
         "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
         "variant_id": "6x800",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 6,
-            "distance_m": 800,
-            "pace": "4:20",
-            "zone": "Z5",
-            "hr_target": 165,
-            "rest_min": 2,
-            "rest_distance_m": 300
-          }
-        ],
         "work_m": 4800,
-        "label": "6×800 @ 4:10",
-        "paces": [
-          "4:20"
-        ]
+        "label": "6×800 @ 4:10"
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 10.84,
+      "total_h": 10.91,
       "phase": "run_build",
       "_total_h_model": {
         "run_h": 4.74,
@@ -1336,16 +1105,17 @@
       "deload_pct": 10.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.84,
+        "run_h": 5.91,
         "run_long_h": 1.7,
         "run_easy_h": 3.04,
-        "run_quality_h": 1.1,
+        "run_quality_h": 1.17,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 66
+        "quality_min": 70,
+        "vdot": 48.0
       },
-      "target_h": 10.84
+      "target_h": 10.91
     },
     {
       "season_week": 15,
@@ -1359,36 +1129,13 @@
         "scale_text": "высокая интенсивность",
         "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
         "variant_id": "5k+4x400",
-        "blocks": [
-          {
-            "type": "continuous",
-            "distance_m": 5000,
-            "pace": "4:45",
-            "zone": "Z4",
-            "hr_target": 158
-          },
-          {
-            "type": "reps",
-            "reps": 4,
-            "distance_m": 400,
-            "pace": "3:50",
-            "zone": "Z6",
-            "hr_target": 172,
-            "rest_min": 2,
-            "rest_distance_m": 250
-          }
-        ],
         "work_m": 6600,
-        "label": "5К tempo @ 4:10 + 4×400 @ 3:45",
-        "paces": [
-          "4:45",
-          "3:50"
-        ]
+        "label": "5К tempo @ 4:10 + 4×400 @ 3:45"
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 10.69,
+      "total_h": 10.74,
       "phase": "run_build",
       "_total_h_model": {
         "run_h": 5.35,
@@ -1405,16 +1152,17 @@
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.69,
+        "run_h": 5.74,
         "run_long_h": 1.7,
         "run_easy_h": 2.87,
-        "run_quality_h": 1.12,
+        "run_quality_h": 1.17,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 67
+        "quality_min": 70,
+        "vdot": 48.0
       },
-      "target_h": 10.69
+      "target_h": 10.74
     },
     {
       "season_week": 16,
@@ -1428,20 +1176,8 @@
         "scale_text": "средняя интенсивность",
         "develops": "Замер: держим заданный темп (pace) или максимальная скорость (max) — тип задаёт контрольная точка",
         "variant_id": "tt_max",
-        "blocks": [
-          {
-            "type": "tt_max",
-            "distance_m": 5000,
-            "pace": "all-out",
-            "zone": "Z7",
-            "hr_target": 182
-          }
-        ],
         "work_m": 5000,
-        "label": "Тест на максимум",
-        "paces": [
-          "all-out"
-        ]
+        "label": "Тест на максимум"
       },
       "core": "2×30м",
       "bike": "2×75м",
@@ -1470,7 +1206,8 @@
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 52
+        "quality_min": 52,
+        "vdot": 48.0
       },
       "target_h": 10.59
     },
@@ -1486,28 +1223,13 @@
         "scale_text": "средняя интенсивность",
         "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
         "variant_id": "3x2k",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 3,
-            "distance_m": 2000,
-            "pace": "4:25",
-            "zone": "Z5",
-            "hr_target": 164,
-            "rest_min": 3,
-            "rest_distance_m": 400
-          }
-        ],
         "work_m": 6000,
-        "label": "3×2К @ 4:12",
-        "paces": [
-          "4:25"
-        ]
+        "label": "3×2К @ 4:12"
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 10.69,
+      "total_h": 10.76,
       "phase": "run_build",
       "_total_h_model": {
         "run_h": 4.99,
@@ -1524,16 +1246,17 @@
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.69,
+        "run_h": 5.76,
         "run_long_h": 1.7,
         "run_easy_h": 2.93,
-        "run_quality_h": 1.07,
+        "run_quality_h": 1.13,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 64
+        "quality_min": 68,
+        "vdot": 48.0
       },
-      "target_h": 10.69
+      "target_h": 10.76
     },
     {
       "season_week": 18,
@@ -1547,25 +1270,13 @@
         "scale_text": "высокая интенсивность",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
         "variant_id": "8k",
-        "blocks": [
-          {
-            "type": "continuous",
-            "distance_m": 8000,
-            "pace": "4:12",
-            "zone": "Z4",
-            "hr_target": 159
-          }
-        ],
         "work_m": 8000,
-        "label": "8К long tempo @ 4:12",
-        "paces": [
-          "4:12"
-        ]
+        "label": "8К long tempo @ 4:12"
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 11.43,
+      "total_h": 11.53,
       "phase": "run_build",
       "_total_h_model": {
         "run_h": 5.91,
@@ -1582,16 +1293,17 @@
       "deload_pct": 9.1,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.93,
+        "run_h": 6.03,
         "run_long_h": 1.89,
         "run_easy_h": 3.02,
-        "run_quality_h": 1.02,
+        "run_quality_h": 1.12,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 61
+        "quality_min": 67,
+        "vdot": 48.0
       },
-      "target_h": 11.43
+      "target_h": 11.53
     },
     {
       "season_week": 19,
@@ -1605,25 +1317,13 @@
         "scale_text": "средняя интенсивность",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
         "variant_id": "6k",
-        "blocks": [
-          {
-            "type": "continuous",
-            "distance_m": 6000,
-            "pace": "4:08",
-            "zone": "Z4",
-            "hr_target": 159
-          }
-        ],
         "work_m": 6000,
-        "label": "6К tempo @ 4:08",
-        "paces": [
-          "4:08"
-        ]
+        "label": "6К tempo @ 4:08"
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 11.94,
+      "total_h": 12.02,
       "phase": "run_build",
       "_total_h_model": {
         "run_h": 6.44,
@@ -1640,16 +1340,17 @@
       "deload_pct": 8.3,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 6.44,
+        "run_h": 6.52,
         "run_long_h": 2.08,
         "run_easy_h": 3.49,
-        "run_quality_h": 0.87,
+        "run_quality_h": 0.95,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 52
+        "quality_min": 57,
+        "vdot": 48.0
       },
-      "target_h": 11.94
+      "target_h": 12.02
     },
     {
       "season_week": 20,
@@ -1663,28 +1364,13 @@
         "scale_text": "высокая интенсивность",
         "develops": "Аэробная мощность — верхняя граница аэробной системы",
         "variant_id": "4x2k_vo2",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 4,
-            "distance_m": 2000,
-            "pace": "4:05",
-            "zone": "Z6",
-            "hr_target": 172,
-            "rest_min": 3,
-            "rest_distance_m": 400
-          }
-        ],
         "work_m": 8000,
-        "label": "4×2К @ 4:10",
-        "paces": [
-          "4:05"
-        ]
+        "label": "4×2К @ 4:10"
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 12.13,
+      "total_h": 12.27,
       "phase": "run_specific",
       "_total_h_model": {
         "run_h": 5.78,
@@ -1701,16 +1387,17 @@
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 6.63,
+        "run_h": 6.77,
         "run_long_h": 2.08,
         "run_easy_h": 3.31,
-        "run_quality_h": 1.25,
+        "run_quality_h": 1.38,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 75
+        "quality_min": 83,
+        "vdot": 48.0
       },
-      "target_h": 12.13
+      "target_h": 12.27
     },
     {
       "season_week": 21,
@@ -1724,25 +1411,13 @@
         "scale_text": "максимальная",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
         "variant_id": "10k",
-        "blocks": [
-          {
-            "type": "continuous",
-            "distance_m": 10000,
-            "pace": "4:05",
-            "zone": "Z4",
-            "hr_target": 160
-          }
-        ],
         "work_m": 10000,
-        "label": "10К long tempo @ 4:05",
-        "paces": [
-          "4:05"
-        ]
+        "label": "10К long tempo @ 4:05"
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 12.3,
+      "total_h": 12.45,
       "phase": "run_specific",
       "_total_h_model": {
         "run_h": 6.8,
@@ -1759,16 +1434,17 @@
       "deload_pct": 7.7,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 6.8,
+        "run_h": 6.95,
         "run_long_h": 2.08,
         "run_easy_h": 3.59,
-        "run_quality_h": 1.13,
+        "run_quality_h": 1.28,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 68
+        "quality_min": 77,
+        "vdot": 48.0
       },
-      "target_h": 12.3
+      "target_h": 12.45
     },
     {
       "season_week": 22,
@@ -1782,28 +1458,13 @@
         "scale_text": "высокая интенсивность",
         "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
         "variant_id": "4x2k",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 4,
-            "distance_m": 2000,
-            "pace": "4:20",
-            "zone": "Z5",
-            "hr_target": 165,
-            "rest_min": 3,
-            "rest_distance_m": 400
-          }
-        ],
         "work_m": 8000,
-        "label": "4×2К @ 4:10",
-        "paces": [
-          "4:20"
-        ]
+        "label": "4×2К @ 4:10"
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 12.64,
+      "total_h": 12.74,
       "phase": "run_specific",
       "_total_h_model": {
         "run_h": 6.41,
@@ -1820,16 +1481,17 @@
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 7.14,
+        "run_h": 7.24,
         "run_long_h": 2.27,
         "run_easy_h": 3.59,
-        "run_quality_h": 1.28,
+        "run_quality_h": 1.38,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 77
+        "quality_min": 83,
+        "vdot": 48.0
       },
-      "target_h": 12.64
+      "target_h": 12.74
     },
     {
       "season_week": 23,
@@ -1843,20 +1505,8 @@
         "scale_text": "высокая интенсивность",
         "develops": "Замер: держим заданный темп (pace) или максимальная скорость (max) — тип задаёт контрольная точка",
         "variant_id": "tt_race",
-        "blocks": [
-          {
-            "type": "tt_pace",
-            "distance_m": 5000,
-            "pace": "по цели CP",
-            "zone": "Z4",
-            "hr_target": 164
-          }
-        ],
         "work_m": 5000,
-        "label": "Гонка-темп",
-        "paces": [
-          "по цели CP"
-        ]
+        "label": "Гонка-темп"
       },
       "core": "1×25м",
       "bike": "1×45м",
@@ -1885,7 +1535,8 @@
         "bike_h": 0.75,
         "swim_h": 0.58,
         "ofp_h": 0.42,
-        "quality_min": 52
+        "quality_min": 52,
+        "vdot": 48.0
       },
       "target_h": 7.34
     },
@@ -1901,39 +1552,13 @@
         "scale_text": "лёгкая работа",
         "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
         "variant_id": "3x1k+2x400",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 3,
-            "distance_m": 1000,
-            "pace": "4:30",
-            "zone": "Z5",
-            "hr_target": 162,
-            "rest_min": 2,
-            "rest_distance_m": 300
-          },
-          {
-            "type": "reps",
-            "reps": 2,
-            "distance_m": 400,
-            "pace": "3:50",
-            "zone": "Z6",
-            "hr_target": 170,
-            "rest_min": 2,
-            "rest_distance_m": 250
-          }
-        ],
         "work_m": 3800,
-        "label": "3×1К @ 4:15 + 2×400 @ 3:45",
-        "paces": [
-          "4:30",
-          "3:50"
-        ]
+        "label": "3×1К @ 4:15 + 2×400 @ 3:45"
       },
       "core": "1×25м",
       "bike": "1×45м",
       "swim": "1×35м",
-      "total_h": 5.88,
+      "total_h": 5.93,
       "phase": "run_taper",
       "_total_h_model": {
         "run_h": 3.62,
@@ -1950,16 +1575,17 @@
       "deload_pct": -30.9,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 4.13,
+        "run_h": 4.18,
         "run_long_h": 0.94,
         "run_easy_h": 2.29,
-        "run_quality_h": 0.9,
+        "run_quality_h": 0.95,
         "bike_h": 0.75,
         "swim_h": 0.58,
         "ofp_h": 0.42,
-        "quality_min": 54
+        "quality_min": 57,
+        "vdot": 48.0
       },
-      "target_h": 5.88
+      "target_h": 5.93
     },
     {
       "season_week": 25,
@@ -1973,39 +1599,13 @@
         "scale_text": "лёгкая работа",
         "develops": "Частота и свежесть — гонка-темп остаётся в ногах, объём уходит",
         "variant_id": "taper_1k",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 1,
-            "distance_m": 1000,
-            "pace": "4:00",
-            "zone": "Z5",
-            "hr_target": 164,
-            "rest_min": 0,
-            "rest_distance_m": 0
-          },
-          {
-            "type": "reps",
-            "reps": 6,
-            "distance_m": 200,
-            "pace": "3:45",
-            "zone": "Z6",
-            "hr_target": 170,
-            "rest_min": 1,
-            "rest_distance_m": 200
-          }
-        ],
         "work_m": 2200,
-        "label": "1×1К @ 4:00 + 6×200 @ 3:45",
-        "paces": [
-          "4:00",
-          "3:45"
-        ]
+        "label": "1×1К @ 4:00 + 6×200 @ 3:45"
       },
       "core": "1×25м",
       "bike": "1×40м",
       "swim": "1×30м",
-      "total_h": 4.98,
+      "total_h": 5.03,
       "phase": "run_taper",
       "_total_h_model": {
         "run_h": 2.96,
@@ -2022,16 +1622,17 @@
       "deload_pct": -21.1,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 3.39,
+        "run_h": 3.44,
         "run_long_h": 0.76,
         "run_easy_h": 1.87,
-        "run_quality_h": 0.77,
+        "run_quality_h": 0.82,
         "bike_h": 0.67,
         "swim_h": 0.5,
         "ofp_h": 0.42,
-        "quality_min": 46
+        "quality_min": 49,
+        "vdot": 48.0
       },
-      "target_h": 4.98
+      "target_h": 5.03
     },
     {
       "season_week": 26,
@@ -2045,40 +1646,14 @@
         "develops": "Частота и свежесть — гонка-темп остаётся в ногах, объём уходит",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "variant_id": "taper_1k",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 1,
-            "distance_m": 1000,
-            "pace": "4:00",
-            "zone": "Z5",
-            "hr_target": 164,
-            "rest_min": 0,
-            "rest_distance_m": 0
-          },
-          {
-            "type": "reps",
-            "reps": 6,
-            "distance_m": 200,
-            "pace": "3:45",
-            "zone": "Z6",
-            "hr_target": 170,
-            "rest_min": 1,
-            "rest_distance_m": 200
-          }
-        ],
         "work_m": 2200,
-        "label": "1×1К @ 4:00 + 6×200 @ 3:45",
-        "paces": [
-          "4:00",
-          "3:45"
-        ]
+        "label": "1×1К @ 4:00 + 6×200 @ 3:45"
       },
       "core": "1×20м",
       "bike": "1×30м",
       "swim": "1×25м",
       "phase": "run_taper",
-      "total_h": 4.08,
+      "total_h": 4.13,
       "_total_h_model": {
         "run_h": 2.49,
         "bike_h": 0.5,
@@ -2094,16 +1669,17 @@
       "deload_pct": -20.0,
       "sessions_target": 6,
       "_load_breakdown": {
-        "run_h": 2.83,
+        "run_h": 2.88,
         "run_long_h": 0.57,
         "run_easy_h": 1.49,
-        "run_quality_h": 0.77,
+        "run_quality_h": 0.82,
         "bike_h": 0.5,
         "swim_h": 0.42,
         "ofp_h": 0.33,
-        "quality_min": 46
+        "quality_min": 49,
+        "vdot": 48.0
       },
-      "target_h": 4.08
+      "target_h": 4.13
     },
     {
       "season_week": 27,
@@ -2117,29 +1693,14 @@
         "develops": "Частота и свежесть — гонка-темп остаётся в ногах, объём уходит",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "variant_id": "taper_400",
-        "blocks": [
-          {
-            "type": "reps",
-            "reps": 6,
-            "distance_m": 400,
-            "pace": "3:50",
-            "zone": "Z6",
-            "hr_target": 172,
-            "rest_min": 1.5,
-            "rest_distance_m": 200
-          }
-        ],
         "work_m": 2400,
-        "label": "6×400 @ 3:50, отдых 90с",
-        "paces": [
-          "3:50"
-        ]
+        "label": "6×400 @ 3:50, отдых 90с"
       },
       "core": "1×15м",
       "bike": "1×25м",
       "swim": "1×20м",
       "phase": "run_taper",
-      "total_h": 3.1,
+      "total_h": 3.15,
       "_total_h_model": {
         "run_h": 1.4,
         "bike_h": 0.42,
@@ -2155,16 +1716,53 @@
       "deload_pct": -33.3,
       "sessions_target": 6,
       "_load_breakdown": {
-        "run_h": 2.1,
+        "run_h": 2.15,
         "run_long_h": 0.38,
         "run_easy_h": 0.91,
-        "run_quality_h": 0.82,
+        "run_quality_h": 0.87,
         "bike_h": 0.42,
         "swim_h": 0.33,
         "ofp_h": 0.25,
-        "quality_min": 49
+        "quality_min": 52,
+        "vdot": 48.0
       },
-      "target_h": 3.1
+      "target_h": 3.15
+    },
+    {
+      "season_week": 28,
+      "run_km": 8,
+      "long_km": 0,
+      "quality": {
+        "goal": "time_trial",
+        "scale": "light",
+        "goal_text": "Гонка",
+        "scale_text": "всё или ничего",
+        "develops": "Гонка S25 Berlin 10K — главная цель сезона",
+        "variant_id": "tt_race",
+        "work_m": 5000,
+        "label": "10К @ race pace 4:00 — гонка"
+      },
+      "core": "1×15м",
+      "bike": "0",
+      "swim": "0",
+      "phase": "run_taper",
+      "total_h": 1.4,
+      "target_h": 1.4,
+      "run_km_long": 0.0,
+      "run_km_quality": 5.0,
+      "run_km_easy": 3.0,
+      "intensity_pct": 62.5,
+      "_load_breakdown": {
+        "run_h": 1.15,
+        "run_long_h": 0.0,
+        "run_easy_h": 0.28,
+        "run_quality_h": 0.87,
+        "bike_h": 0.0,
+        "swim_h": 0.0,
+        "ofp_h": 0.25,
+        "quality_min": 52,
+        "vdot": 48.0
+      }
     }
   ],
   "season_goal": {

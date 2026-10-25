@@ -94,85 +94,14 @@
     "gap_from_now": "24 с/км от текущих 4:24/км",
     "_source": "Кирилл 2026-10-24"
   },
-  "daniels": {
-    "_source": "Daniels' Running Formula, таблицы из книги (Кирилл, 24.10.2026)",
-    "_local": "coach/reference/daniels/ + lib/daniels.py",
+  "daniels_ref": {
+    "_note": "Таблицы Дэниэлса — справочник, не профиль. Лежат в reference/daniels/ (модуль lib/daniels.py). Профиль атлета по ним — в state/daniels_profile.json.",
     "vdot": 47,
     "vdot_measured": {
       "10k_44_06": 46.4,
       "note": "по таблице Дэниэлса 10К 44:06 = VDOT 46.4; VDOT 47 — заявленный"
     },
     "target_vdot_10k_40_00": 52,
-    "zones_sec_per_km": {
-      "easy": 334,
-      "marathon": 286,
-      "threshold": 269.0,
-      "interval": 247.0,
-      "repetition": 230.0
-    },
-    "zones_pace": {
-      "easy": "5:34",
-      "marathon": "4:46",
-      "threshold": "4:29",
-      "interval": "4:07",
-      "repetition": "3:50"
-    },
-    "interval_vdot": 47,
-    "race_times": {
-      "1500m": "5:42",
-      "mile": "6:10",
-      "3000m": "12:12",
-      "2_miles": "13:10",
-      "5000m": "21:02",
-      "10000m": "43:36",
-      "15000m": "1:07:06",
-      "half": "1:36:38",
-      "marathon": "3:21:00"
-    },
-    "intensity_pct_vo2max": {
-      "easy": [
-        0.6,
-        0.74
-      ],
-      "marathon": [
-        0.79,
-        0.85
-      ],
-      "threshold": [
-        0.88,
-        0.92
-      ],
-      "interval": [
-        0.95,
-        1.0
-      ],
-      "repetition": [
-        1.0,
-        1.06
-      ]
-    },
-    "hr_bridge": {
-      "easy": [
-        109,
-        134
-      ],
-      "marathon": [
-        143,
-        154
-      ],
-      "threshold": [
-        160,
-        167
-      ],
-      "interval": [
-        172,
-        182
-      ],
-      "repetition": [
-        182,
-        192
-      ]
-    },
-    "_note": "Ключи zones_pace — темпы ПО ТАБЛИЦЕ ДЭНИЭЛСА для текущего VDOT. Не путать с current_form.training_paces — там ЦЕЛЕВЫЕ темпы под сезон."
+    "target_vdot_source": "10К 40:00 = VDOT 52 по таблице Дэниэлса"
   }
 }

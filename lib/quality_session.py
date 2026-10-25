@@ -53,6 +53,94 @@ FALLBACK_VARIANT = {
 SCALE_ORDER = ["light", "medium", "heavy", "peak"]
 
 
+def get_variant(variant_id: str,
+                templates: dict | None = None) -> dict[str, Any] | None:
+    """
+    Вариант из каталога по id.
+
+    Единственный источник структуры: макро-неделя хранит ТОЛЬКО variant_id,
+    а блоки/темпы берутся отсюда. Поэтому правка каталога сразу меняет все
+    недели, а макро не расходится с каталогом.
+    """
+    templates = templates if templates is not None else load_templates()
+    for t in templates.values():
+        if not isinstance(t, dict):
+            continue
+        for v in t.get("variants") or []:
+            if v.get("id") == variant_id:
+                return v
+    return None
+
+
+def variant_with_paces(variant_id: str,
+                        vdot: float | None = None,
+                        templates: dict | None = None) -> dict[str, Any] | None:
+    """
+    Вариант из каталога с ВЫЧИСЛЕННЫМИ темпами для VDOT.
+
+    Темпа в каталоге нет — там зона Дэниэлса + смещение. Здесь они
+    превращаются в конкретные '4:15' по текущему VDOT атлета.
+    """
+    v = get_variant(variant_id, templates)
+    if not v:
+        return None
+    out = dict(v)
+    out["blocks"] = [_resolve_block(b, vdot) for b in (v.get("blocks") or [])]
+    return out
+
+
+def _resolve_block(block: dict, vdot: float | None) -> dict:
+    """Копия блока с вычисленными темпами."""
+    b = dict(block)
+    if vdot is None:
+        return b
+    default_zone = b.get("daniels_zone")
+    for key in _PACE_KEYS:
+        suffix = {"pace": "", "from_pace": "_from", "to_pace": "_to",
+                  "easy_pace": "_easy", "hard_pace": "_hard"}[key]
+        # Ключ может отсутствовать — после rebase он удалён, но зона и
+        # смещение есть, значит темп восстанавливается.
+        zone = b.get("daniels_zone" + suffix) or default_zone
+        if not zone:
+            if key not in b:
+                continue
+        off = b.get("pace_offset_sec" + suffix)
+        if off is None:
+            off = b.get("pace_offset_sec")
+        resolved = None
+        if zone:
+            try:
+                from .daniels import pace_for
+                resolved = pace_for(zone, float(off or 0), vdot)
+            except Exception:
+                resolved = None
+        legacy = b.get("pace_legacy") or b.get("pace_legacy_" + key)
+        if resolved:
+            b[key] = resolved
+        elif key in b:
+            b[key] = legacy or b[key]
+        elif legacy:
+            b[key] = legacy
+    # прогрессия — список темпов
+    if b.get("paces"):
+        zones = b.get("daniels_zones") or []
+        offs = b.get("pace_offsets_sec") or []
+        plist = []
+        for i, pc in enumerate(b["paces"]):
+            zn = zones[i] if i < len(zones) else None
+            of = offs[i] if i < len(offs) else 0
+            if zn:
+                try:
+                    from .daniels import pace_for
+                    plist.append(pace_for(zn, float(of or 0), vdot) or pc)
+                except Exception:
+                    plist.append(pc)
+            else:
+                plist.append(pc)
+        b["paces"] = plist
+    return b
+
+
 def load_templates(path: str | Path | None = None) -> dict[str, Any]:
     p = Path(path) if path else TEMPLATES_PATH
     if not p.exists():
@@ -233,15 +321,100 @@ def choose_quality(goal: str,
     }
 
 
+# Какие ключи блока содержат темп
+_PACE_KEYS = ("pace", "from_pace", "to_pace", "easy_pace", "hard_pace")
+
+
+def _with_pace(block: dict, vdot: float | None) -> dict:
+    """
+    Копия блока с вычисленными темпами.
+
+    Ключ 'pace' — основной. 'from_pace'/'to_pace'/'easy_pace'/'hard_pace' —
+    отдельные роли (прогрессия, фартлек). Для них зона берётся из
+    'daniels_zone_from' / 'daniels_zone_to' / 'daniels_zone_easy' /
+    'daniels_zone_hard', иначе — из 'daniels_zone'.
+    """
+    b = dict(block)
+    default_zone = b.get("daniels_zone")
+    for key in _PACE_KEYS:
+        if key not in b:
+            continue
+        suffix = {"pace": "", "from_pace": "_from", "to_pace": "_to",
+                  "easy_pace": "_easy", "hard_pace": "_hard"}[key]
+        zone = b.get("daniels_zone" + suffix) or default_zone
+        off = b.get("pace_offset_sec" + suffix)
+        if off is None:
+            off = b.get("pace_offset_sec")
+        resolved = None
+        if vdot is not None and zone:
+            try:
+                from .daniels import pace_for
+                resolved = pace_for(zone, float(off or 0), vdot)
+            except Exception:
+                resolved = None
+        b[key] = resolved or b.get("pace_legacy") or b[key]
+    return b
+
+
+def _resolve_pace(block: dict, vdot: float | None, key: str = "pace") -> str | None:
+    """
+    Темп блока.
+
+    Каталог хранит ЗОНУ ДэниЭЛСА (daniels_zone) + смещение (pace_offset_sec).
+    Конкретный темп = темп этой зоны для текущего VDOT + смещение.
+    Если VDOT не задан — берём pace_legacy (зашитое значение).
+    """
+    legacy = block.get("pace_legacy")
+    zone = block.get("daniels_zone")
+    off = block.get("pace_offset_sec")
+    if vdot is None or not zone:
+        return legacy
+    try:
+        from .daniels import pace_for
+        v = pace_for(zone, float(off or 0), vdot)
+        return v or legacy
+    except Exception:
+        return legacy
+
+
+def _resolve_paces(block: dict, vdot: float | None) -> list[str] | None:
+    """Список темпов прогрессии (для reps_progression)."""
+    plist = block.get("paces")
+    if not plist:
+        return None
+    if vdot is None:
+        return plist
+    zones = block.get("daniels_zones") or []
+    offs = block.get("pace_offsets_sec") or []
+    out = []
+    for i, pc in enumerate(plist):
+        zn = zones[i] if i < len(zones) else None
+        of = offs[i] if i < len(offs) else 0
+        if not zn:
+            out.append(pc)
+            continue
+        try:
+            from .daniels import pace_for
+            out.append(pace_for(zn, float(of or 0), vdot) or pc)
+        except Exception:
+            out.append(pc)
+    return out
+
+
 def build_structure_from_variant(variant: dict,
                                  warmup_min: int = 15,
                                  cooldown_min: int = 12,
                                  pace_override: str | None = None,
-                                 distance_override: int | None = None) -> list[dict]:
+                                 distance_override: int | None = None,
+                                 vdot: float | None = None) -> list[dict]:
     """
     Превращает вариант шаблона в structure[] — формат slot.structure пайплайна.
 
-    Поддерживаемые типы блоков: reps, continuous, pyramid, fartlek, tt, progression.
+    Поддерживаемые типы блоков: reps, reps_progression, continuous, pyramid,
+    fartlek, tt, progression.
+
+    vdot — текущий VDOT атлета. Темпы берутся из зон ДэниЭлса для этого VDOT
+    (см. _resolve_pace). Без vdot — зашитые pace_legacy.
     """
     steps: list[dict] = [{
         "phase": "warmup",
@@ -255,20 +428,21 @@ def build_structure_from_variant(variant: dict,
         btype = block.get("type")
 
         if btype == "reps":
+            b = _with_pace(block, vdot)
             steps.append({
                 "phase": "set",
-                "label": _reps_label(block),
+                "label": _reps_label(b),
                 "basis": "distance",
-                "reps": block.get("reps"),
-                "duration_min": _reps_minutes(block),
-                "set_repeats": _reps_substeps(block),
+                "reps": b.get("reps"),
+                "duration_min": _reps_minutes(b),
+                "set_repeats": _reps_substeps(b),
             })
 
         elif btype == "reps_progression":
             # Повторы с прогрессией темпа внутри серии:
             # '3×800 с 4:15 → 3:50' — каждый следующий повтор быстрее.
             reps = int(block.get("reps", 0))
-            paces = block.get("paces") or []
+            paces = _resolve_paces(block, vdot) or []
             dist = int(block.get("distance_m", 0))
             subs = []
             for i in range(reps):
@@ -290,12 +464,14 @@ def build_structure_from_variant(variant: dict,
                         "hr_target": 115,
                         "pace_min_per_km": None,
                     })
+            block = dict(block)
+            block["_resolved_paces"] = paces
             steps.append({
                 "phase": "set",
                 "label": "{}×{}м с прогрессией {} → {}".format(
                     reps, dist,
-                    paces[0] if paces else block.get("pace", "—"),
-                    paces[-1] if paces else block.get("pace", "—")),
+                    paces[0] if paces else "—",
+                    paces[-1] if paces else "—"),
                 "basis": "distance",
                 "reps": reps,
                 "duration_min": _reps_progression_minutes(block, subs),
@@ -303,15 +479,16 @@ def build_structure_from_variant(variant: dict,
             })
 
         elif btype == "continuous":
-            mins = _distance_minutes(block["distance_m"], block.get("pace", "5:00"))
+            b = _with_pace(block, vdot)
+            mins = _distance_minutes(b["distance_m"], b.get("pace", "5:00"))
             steps.append({
                 "phase": "work",
                 "basis": "distance",
-                "distance_m": block["distance_m"],
+                "distance_m": b["distance_m"],
                 "duration_min": mins,
-                "zone": block.get("zone", "Z4"),
-                "hr_target": block.get("hr_target"),
-                "pace_min_per_km": block.get("pace"),
+                "zone": b.get("zone", "Z4"),
+                "hr_target": b.get("hr_target"),
+                "pace_min_per_km": b.get("pace"),
             })
 
         elif btype == "pyramid":
@@ -333,6 +510,7 @@ def build_structure_from_variant(variant: dict,
             })
 
         elif btype == "fartlek":
+            block = _with_pace(block, vdot)
             cycles = block.get("cycles", 1)
             steps.append({
                 "phase": "set",
@@ -383,6 +561,7 @@ def build_structure_from_variant(variant: dict,
             })
 
         elif btype == "progression":
+            block = _with_pace(block, vdot)
             steps.append({
                 "phase": "work",
                 "basis": "time",
@@ -454,7 +633,7 @@ def _reps_substeps(block: dict) -> list[dict]:
 def _reps_progression_minutes(block: dict, subs: list[dict]) -> int:
     """Время сета с прогрессией: работа по темпу каждого повтора + отдых."""
     total = 0.0
-    paces = block.get("paces") or [block.get("pace", "4:00")]
+    paces = block.get("_resolved_paces") or block.get("paces") or [block.get("pace", "4:00")]
     dist = int(block.get("distance_m", 0))
     rest_min = float(block.get("rest_min", 0))
     rest_dist = int(block.get("rest_distance_m", 0))
