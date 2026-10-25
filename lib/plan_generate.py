@@ -253,6 +253,14 @@ def _layout_slots(phase_focus: dict, constraints: dict,
                 slot["quality_variant"] = quality_selection.get("variant", {}).get("id")
                 slot["quality_work_m"] = quality_selection.get("work_m")
                 slot["quality_selection"] = quality_selection
+                # метаданные сессии: объём работы, вариант, цель
+                sess = dict(slot.get("session") or {})
+                sess["work_m"] = quality_selection.get("work_m")
+                sess["variant_id"] = slot["quality_variant"]
+                sess["variant_source"] = quality_selection.get("variant_source")
+                sess["session_goal"] = quality_selection.get("session_goal") or sess.get("session_goal")
+                sess["label"] = quality_selection.get("variant", {}).get("label")
+                slot["session"] = sess
                 slot["structure"] = spec.get("_structure_override") or slot["structure"]
                 slot["name"] = _quality_slot_name(quality_selection)
                 # Длительность слота = фактическая длительность выбранной структуры
@@ -347,8 +355,20 @@ def _select_quality_for_week(season_plan: dict, season_week: int,
 
     from .quality_session import choose_quality
     tt = (cp or {}).get("session", {}).get("test_type")
-    sel = choose_quality(goal, scale or "medium", variant_id=variant_id,
-                         plan_context_work_m=plan_context, test_type=tt)
+
+    # Приоритет выбора структуры:
+    #   1) variant_id из override — явное решение на эту неделю
+    #   2) variant_id из МАКРО — неделя уже зафиксирована структурой
+    #   3) scale-подбор в каталоге + guard объёма
+    macro_variant = q.get("variant_id")
+    chosen_variant = variant_id or (None if cp and cp.get("quality_goal") else macro_variant)
+
+    variant_source = ("override" if variant_id else
+                      "макро" if chosen_variant else "каталог по scale")
+    sel = choose_quality(goal, scale or "medium", variant_id=chosen_variant,
+                         plan_context_work_m=plan_context, test_type=tt,
+                         variant_source=variant_source)
+    sel["variant_source"] = variant_source
     if cp and cp.get("quality_goal"):
         sel["is_cp"] = True
         sel["cp_id"] = cp.get("id")
@@ -550,6 +570,14 @@ def _build_slot_from_spec(spec: dict, quality_selection: dict | None = None) -> 
         slot["quality_selection"] = quality_selection
         slot["focus"] = quality_selection.get("template_meta", {}).get("work_zone", slot["focus"])
         slot["duration_min"] = sum(st.get("duration_min") or 0 for st in slot["structure"])
+        # метаданные сессии: объём работы, вариант, цель
+        slot["session"] = {
+            "work_m": quality_selection.get("work_m"),
+            "variant_id": slot["quality_variant"],
+            "variant_source": quality_selection.get("variant_source"),
+            "session_goal": quality_selection.get("session_goal"),
+            "label": (quality_selection.get("variant") or {}).get("label"),
+        }
     else:
         slot["structure"] = _build_slot_structure({
             "kind": slot["kind"],
@@ -744,6 +772,8 @@ def generate(season_week: int | str,
             cp_slots[-1]["quality_goal"] = quality_selection.get("goal")
             cp_slots[-1]["quality_variant"] = quality_selection.get("variant", {}).get("id")
             cp_slots[-1]["quality_work_m"] = quality_selection.get("work_m")
+            cp_slots[-1]["session"]["work_m"] = quality_selection.get("work_m")
+            cp_slots[-1]["session"]["variant_id"] = cp_slots[-1]["quality_variant"]
             cp_slots[-1]["focus"] = quality_selection.get("template_meta", {}).get("work_zone", "")
             cp_slots[-1]["duration_min"] = sum(st.get("duration_min") or 0
                                                for st in cp_slots[-1]["structure"])

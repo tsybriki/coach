@@ -156,6 +156,8 @@ def _quality_work_km(week: dict[str, Any]) -> float:
         btype = b.get("type")
         if btype == "reps":
             total_m += int(b.get("reps", 0)) * int(b.get("distance_m", 0))
+        elif btype == "reps_progression":
+            total_m += int(b.get("reps", 0)) * int(b.get("distance_m", 0))
         elif btype in ("continuous", "tt_pace", "tt_max"):
             total_m += int(b.get("distance_m", 0))
         elif btype == "pyramid":
@@ -194,6 +196,17 @@ def _quality_minutes(week: dict[str, Any], paces: dict[str, float]) -> int:
                 rest_pace = paces.get("__easy__", 340.0)
                 total_min += (reps - 1) * (
                     rest + int(b.get("rest_distance_m", 0)) / 1000.0 * rest_pace / 60.0)
+        elif btype == "reps_progression":
+            reps = int(b.get("reps", 0))
+            plist = b.get("paces") or [b.get("pace", "4:00")]
+            dist = int(b.get("distance_m", 0))
+            for i in range(reps):
+                pc = plist[min(i, len(plist) - 1)]
+                total_min += dist / 1000.0 * paces.get(pc, 300.0) / 60.0
+                if i < reps - 1:
+                    rest = float(b.get("rest_min", 0))
+                    rest_pace = paces.get("__easy__", 340.0)
+                    total_min += (rest + int(b.get("rest_distance_m", 0)) / 1000.0 * rest_pace / 60.0)
         elif btype in ("continuous", "tt_pace", "tt_max"):
             pace = paces.get(b.get("pace", ""), 300.0)
             total_min += int(b.get("distance_m", 0)) / 1000.0 * pace / 60.0

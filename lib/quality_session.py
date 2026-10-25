@@ -84,7 +84,8 @@ def choose_quality(goal: str,
                    templates: dict | None = None,
                    variant_id: str | None = None,
                    plan_context_work_m: int | None = None,
-                   test_type: str | None = None) -> dict:
+                   test_type: str | None = None,
+                   variant_source: str | None = None) -> dict:
     """
     Возвращает dict: {goal, scale, variant, work_m, guarded, warning, rationale}.
 
@@ -186,16 +187,36 @@ def choose_quality(goal: str,
 
     warning = " ".join(warnings)
 
+    src_note = {"override": "выбрана override'ом недели",
+                "макро": "задана макро-планом",
+                "каталог по scale": "подобрана каталогом по масштабу"}.get(
+        variant_source, "подобрана каталогом")
     rationale = (f"Цель: {tpl.get('goal', goal)}. Масштаб недели: {scale}. "
-                 f"Вариант: {chosen.get('label')} — работа {chosen.get('work_m')} м. "
+                 f"Структура {src_note}: {chosen.get('label')} — работа {chosen.get('work_m')} м. "
                  + (f"Опора (реальная сессия): {recent} м, порог {guard_floor} м. "
                     if recent else "Реальных сессий в журнале нет. ")
-                 + (f"Контекст макро (пред. неделя): {plan_context_work_m} м. "
+                 + (f"Объём работы предыдущей недели макро: {plan_context_work_m} м. "
                     if plan_context_work_m else ""))
+
+    # Цель сессии: из шаблона (что развивает) + что измеряем
+    session_goal = None
+    tpl_goal = (templates.get(goal) or {}).get("goal")
+    tpl_dev = (templates.get(goal) or {}).get("develops")
+    ind = (templates.get(goal) or {}).get("indicators")
+    bits = []
+    if tpl_goal:
+        bits.append(tpl_goal)
+    if tpl_dev:
+        bits.append(tpl_dev)
+    if ind:
+        bits.append("проверяем: " + ind)
+    if bits:
+        session_goal = " · ".join(bits)
 
     return {
         "goal": goal,
         "scale": scale,
+        "session_goal": session_goal,
         "variant": chosen,
         "work_m": chosen.get("work_m", 0),
         "guarded": guarded,
@@ -241,6 +262,44 @@ def build_structure_from_variant(variant: dict,
                 "reps": block.get("reps"),
                 "duration_min": _reps_minutes(block),
                 "set_repeats": _reps_substeps(block),
+            })
+
+        elif btype == "reps_progression":
+            # Повторы с прогрессией темпа внутри серии:
+            # '3×800 с 4:15 → 3:50' — каждый следующий повтор быстрее.
+            reps = int(block.get("reps", 0))
+            paces = block.get("paces") or []
+            dist = int(block.get("distance_m", 0))
+            subs = []
+            for i in range(reps):
+                pc = paces[min(i, len(paces) - 1)] if paces else block.get("pace", "4:00")
+                subs.append({
+                    "phase": "work",
+                    "basis": "distance",
+                    "distance_m": dist,
+                    "zone": block.get("zone", "Z6"),
+                    "hr_target": block.get("hr_target"),
+                    "pace_min_per_km": pc,
+                })
+                if i < reps - 1:
+                    subs.append({
+                        "phase": "recovery",
+                        "basis": "distance",
+                        "distance_m": int(block.get("rest_distance_m", 200)),
+                        "zone": "Z1",
+                        "hr_target": 115,
+                        "pace_min_per_km": None,
+                    })
+            steps.append({
+                "phase": "set",
+                "label": "{}×{}м с прогрессией {} → {}".format(
+                    reps, dist,
+                    paces[0] if paces else block.get("pace", "—"),
+                    paces[-1] if paces else block.get("pace", "—")),
+                "basis": "distance",
+                "reps": reps,
+                "duration_min": _reps_progression_minutes(block, subs),
+                "set_repeats": subs,
             })
 
         elif btype == "continuous":
@@ -390,6 +449,33 @@ def _reps_substeps(block: dict) -> list[dict]:
                 sub[-1]["basis"] = "time"
                 sub[-1]["duration_min"] = rest_m
     return sub
+
+
+def _reps_progression_minutes(block: dict, subs: list[dict]) -> int:
+    """Время сета с прогрессией: работа по темпу каждого повтора + отдых."""
+    total = 0.0
+    paces = block.get("paces") or [block.get("pace", "4:00")]
+    dist = int(block.get("distance_m", 0))
+    rest_min = float(block.get("rest_min", 0))
+    rest_dist = int(block.get("rest_distance_m", 0))
+    reps = int(block.get("reps", 0))
+    for i in range(reps):
+        pc = paces[min(i, len(paces) - 1)]
+        psec = _pace_to_sec(pc)
+        total += dist / 1000.0 * psec / 60.0
+        if i < reps - 1:
+            total += rest_min
+            if rest_dist:
+                total += rest_dist / 1000.0 * _pace_to_sec("5:40") / 60.0
+    return int(round(total))
+
+
+def _pace_to_sec(p: str) -> float:
+    try:
+        mm, ss = str(p).split(":")
+        return int(mm) * 60 + int(ss)
+    except (ValueError, AttributeError):
+        return 300.0
 
 
 def _reps_minutes(block: dict) -> int:

@@ -190,6 +190,40 @@
             }
           ],
           "note": "Плотный объём на скорости — пиковая работа"
+        },
+        {
+          "id": "3x800prog+4x200",
+          "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
+          "scale": "medium",
+          "work_m": 3200,
+          "blocks": [
+            {
+              "type": "reps_progression",
+              "reps": 3,
+              "distance_m": 800,
+              "paces": [
+                "4:15",
+                "4:00",
+                "3:50"
+              ],
+              "pace": "4:15",
+              "zone": "Z5",
+              "hr_target": 164,
+              "rest_min": 2,
+              "rest_distance_m": 250
+            },
+            {
+              "type": "reps",
+              "reps": 4,
+              "distance_m": 200,
+              "pace": "3:45",
+              "zone": "Z6",
+              "hr_target": 172,
+              "rest_min": 1,
+              "rest_distance_m": 200
+            }
+          ],
+          "note": "Прогрессия темпа внутри серии: пульс доходит до Z6, объём работы 3200 м"
         }
       ]
     },

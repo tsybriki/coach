@@ -2,8 +2,8 @@
   "$schema": "./plan.schema.md",
   "version": 2,
   "title": "W3 · 2026-10-25..2026-10-31 · Берлин",
-  "week_goal": "Поднимаем VO2max",
-  "week_goal_detail": "масштаб: объёмная работа · Аэробная мощность — верхняя граница аэробной системы",
+  "week_goal": "Развиваем VO2max",
+  "week_goal_detail": "масштаб: средняя интенсивность · Аэробная мощность — верхняя граница аэробной системы",
   "season_goal": {
     "headline": "10К за 40:00 (4:00/км) на S25 Berlin, 18.04.2027",
     "race_pace_min_per_km": "4:00",
@@ -240,7 +240,7 @@
       "id": "пн-quality",
       "day": "ПН",
       "time": "18:45",
-      "duration_min": 57,
+      "duration_min": 51,
       "name": "Качественная: VO2max",
       "kind": "run",
       "subkind": "quality",
@@ -259,23 +259,23 @@
         },
         {
           "phase": "set",
-          "label": "5×800м",
+          "label": "3×800м с прогрессией 4:15 → 3:50",
           "basis": "distance",
-          "reps": 5,
-          "duration_min": 30,
+          "reps": 3,
+          "duration_min": 16,
           "set_repeats": [
             {
               "phase": "work",
               "basis": "distance",
               "distance_m": 800,
-              "zone": "Z6",
-              "hr_target": 172,
-              "pace_min_per_km": "4:00"
+              "zone": "Z5",
+              "hr_target": 164,
+              "pace_min_per_km": "4:15"
             },
             {
               "phase": "recovery",
               "basis": "distance",
-              "distance_m": 400,
+              "distance_m": 250,
               "zone": "Z1",
               "hr_target": 115,
               "pace_min_per_km": null
@@ -284,14 +284,14 @@
               "phase": "work",
               "basis": "distance",
               "distance_m": 800,
-              "zone": "Z6",
-              "hr_target": 172,
+              "zone": "Z5",
+              "hr_target": 164,
               "pace_min_per_km": "4:00"
             },
             {
               "phase": "recovery",
               "basis": "distance",
-              "distance_m": 400,
+              "distance_m": 250,
               "zone": "Z1",
               "hr_target": 115,
               "pace_min_per_km": null
@@ -300,14 +300,31 @@
               "phase": "work",
               "basis": "distance",
               "distance_m": 800,
+              "zone": "Z5",
+              "hr_target": 164,
+              "pace_min_per_km": "3:50"
+            }
+          ]
+        },
+        {
+          "phase": "set",
+          "label": "4×200м",
+          "basis": "distance",
+          "reps": 4,
+          "duration_min": 8,
+          "set_repeats": [
+            {
+              "phase": "work",
+              "basis": "distance",
+              "distance_m": 200,
               "zone": "Z6",
               "hr_target": 172,
-              "pace_min_per_km": "4:00"
+              "pace_min_per_km": "3:45"
             },
             {
               "phase": "recovery",
               "basis": "distance",
-              "distance_m": 400,
+              "distance_m": 200,
               "zone": "Z1",
               "hr_target": 115,
               "pace_min_per_km": null
@@ -315,15 +332,15 @@
             {
               "phase": "work",
               "basis": "distance",
-              "distance_m": 800,
+              "distance_m": 200,
               "zone": "Z6",
               "hr_target": 172,
-              "pace_min_per_km": "4:00"
+              "pace_min_per_km": "3:45"
             },
             {
               "phase": "recovery",
               "basis": "distance",
-              "distance_m": 400,
+              "distance_m": 200,
               "zone": "Z1",
               "hr_target": 115,
               "pace_min_per_km": null
@@ -331,15 +348,31 @@
             {
               "phase": "work",
               "basis": "distance",
-              "distance_m": 800,
+              "distance_m": 200,
               "zone": "Z6",
               "hr_target": 172,
-              "pace_min_per_km": "4:00"
+              "pace_min_per_km": "3:45"
             },
             {
               "phase": "recovery",
               "basis": "distance",
-              "distance_m": 400,
+              "distance_m": 200,
+              "zone": "Z1",
+              "hr_target": 115,
+              "pace_min_per_km": null
+            },
+            {
+              "phase": "work",
+              "basis": "distance",
+              "distance_m": 200,
+              "zone": "Z6",
+              "hr_target": 172,
+              "pace_min_per_km": "3:45"
+            },
+            {
+              "phase": "recovery",
+              "basis": "distance",
+              "distance_m": 200,
               "zone": "Z1",
               "hr_target": 115,
               "pace_min_per_km": null
@@ -355,35 +388,51 @@
         }
       ],
       "quality_goal": "vo2max",
-      "quality_scale": "light",
-      "quality_variant": "5x800",
-      "quality_work_m": 4000,
+      "quality_scale": "medium",
+      "quality_variant": "3x800prog+4x200",
+      "quality_work_m": 3200,
       "quality_selection": {
         "goal": "vo2max",
-        "scale": "light",
+        "scale": "medium",
+        "session_goal": "Развиваем VO2max · Аэробная мощность — верхняя граница аэробной системы · проверяем: Время в Z6/Z7, темп на 800м, падение скорости в последних 200м",
         "variant": {
-          "id": "5x800",
-          "label": "5×800 @ 3:55",
+          "id": "3x800prog+4x200",
+          "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
           "scale": "medium",
-          "work_m": 4000,
+          "work_m": 3200,
           "blocks": [
             {
-              "type": "reps",
-              "reps": 5,
+              "type": "reps_progression",
+              "reps": 3,
               "distance_m": 800,
-              "pace": "4:00",
+              "paces": [
+                "4:15",
+                "4:00",
+                "3:50"
+              ],
+              "pace": "4:15",
+              "zone": "Z5",
+              "hr_target": 164,
+              "rest_min": 2,
+              "rest_distance_m": 250
+            },
+            {
+              "type": "reps",
+              "reps": 4,
+              "distance_m": 200,
+              "pace": "3:45",
               "zone": "Z6",
               "hr_target": 172,
-              "rest_min": 3,
-              "rest_distance_m": 400
+              "rest_min": 1,
+              "rest_distance_m": 200
             }
           ],
-          "note": "Длиннее в VO2-темпе, объём ×1.7 от 400м"
+          "note": "Прогрессия темпа внутри серии: пульс доходит до Z6, объём работы 3200 м"
         },
-        "work_m": 4000,
+        "work_m": 3200,
         "guarded": true,
-        "warning": "Объём работы вырос с 3070 м (последняя реальная) до 4000 м.",
-        "rationale": "Цель: Развиваем VO2max. Масштаб недели: light. Вариант: 5×800 @ 3:55 — работа 4000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 4000 м. ",
+        "warning": "",
+        "rationale": "Цель: Развиваем VO2max. Масштаб недели: medium. Структура выбрана override'ом недели: 3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45 — работа 3200 м. Опора (реальная сессия): 3070 м, порог 2763 м. Объём работы предыдущей недели макро: 4000 м. ",
         "template_meta": {
           "label": "VO2max",
           "develops": "Аэробная мощность — верхняя граница аэробной системы",
@@ -391,10 +440,17 @@
           "hr_target": 172,
           "pace": "< 4:00",
           "indicators": "Время в Z6/Z7, темп на 800м, падение скорости в последних 200м"
-        }
+        },
+        "variant_source": "override"
       },
-      "rationale": "Качественная сессия недели. Цель — vo2max (из макро-плана), конкретная структура выбрана шаблоном: 5×800 @ 4:00 на Z6, работа 4000 м. Макро-план задаёт только цель, структуру подбирает шаблон — см. блок «Зачем». Цель: Развиваем VO2max. Масштаб недели: light. Вариант: 5×800 @ 3:55 — работа 4000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 4000 м.",
-      "quality_warning": "Объём работы вырос с 3070 м (последняя реальная) до 4000 м."
+      "session": {
+        "work_m": 3200,
+        "variant_id": "3x800prog+4x200",
+        "variant_source": "override",
+        "session_goal": "Развиваем VO2max · Аэробная мощность — верхняя граница аэробной системы · проверяем: Время в Z6/Z7, темп на 800м, падение скорости в последних 200м",
+        "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45"
+      },
+      "rationale": "Возврат в бег после travel-недели W2 (100% вел, 90 км, 48.5% времени в 80-100% HRmax, бега 0). Объём — по макро W3: 35К бега, long Z2 14К. Структуру задаёт макро — см. блок «Зачем». Цель: Развиваем VO2max. Масштаб недели: medium. Структура выбрана override'ом недели: 3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45 — работа 3200 м. Опора (реальная сессия): 3070 м, порог 2763 м. Объём работы предыдущей недели макро: 4000 м."
     },
     {
       "id": "вт-easy_run",
@@ -663,10 +719,10 @@
   },
   "load_compare": {
     "status": "ok",
-    "target_h": 6.31,
-    "actual_h": 6.6,
-    "delta_h": 0.29,
-    "delta_pct": 4.6,
+    "target_h": 6.22,
+    "actual_h": 6.5,
+    "delta_h": 0.28,
+    "delta_pct": 4.5,
     "tol_pct": 10.0,
     "source": "weekly_macro[].total_h (вычисляется из структуры)"
   },
@@ -676,7 +732,7 @@
     {
       "ov": "replace_slots",
       "applied": true,
-      "reason": "Возврат в бег после travel-недели W2 (100% вел, 90 км, 48.5% времени в 80-100% HRmax, бега 0). Объём бега по макро W3 (35К, long Z2 14К), структура — по календарю (рейс 25.10, день в Берлине с 26.10). Ключевая сессия вместо 6×400 @ 4:00 — работа с прогрессией темпа и объёмом: 13.10 ты уже отработал 3070 м @ 4:45/км при HR 152-164, то есть 6×400 = 2400 м — это на 22% меньше работы при более быстром темпе, пульс не поднимется. Ставлю 3×800 с прогрессией 4:15→3:50 и 4×200м в финале.",
+      "reason": "Возврат в бег после travel-недели W2 (100% вел, 90 км, 48.5% времени в 80-100% HRmax, бега 0). Объём бега — по макро W3 (35К, long Z2 14К), структура качественной — по обновлённому макро: 3×800 с прогрессией темпа 4:15→3:50 + 4×200 в финале (3200 м работы). Обоснование: 13.10 отработано 3070 м @ 4:45→4:30 при HR 152-164. Прежний 6×400 @ 4:00 давал бы 2400 м — на 18% меньше работы при более быстром темпе, пульс не поднялся бы выше Z4. Новая работа 3200 м идёт по 4:15 с прогрессией до 3:50 — пульс доходит до Z5→Z6, объём выше последней реальной сессии, скачка нет (guard-порог 2763 м). Календарь: рейс 25.10, с 26.10 в Берлине.",
       "slots_before": 8,
       "slots_after": 9
     }
@@ -691,9 +747,9 @@
     "suggestion": null
   },
   "totals": {
-    "planned_hours": 6.6,
+    "planned_hours": 6.5,
     "target_hours": 7.3,
-    "delta_hours": 0.7,
+    "delta_hours": 0.8,
     "slots_count": 9
   },
   "_generated_by": "lib.plan_generate (Phase 2.5: real layout v18)"

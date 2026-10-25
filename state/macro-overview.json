@@ -30,7 +30,7 @@
           "bike_h": 0.8,
           "swim_h": 0.5,
           "ofp_h": 0.8,
-          "goal_text": "Поднимаем базовый объём",
+          "goal_text": "Развиваем базу: поднимаем темп в конце сессии",
           "phase": "run_base",
           "color": "teal",
           "variants": [
@@ -79,7 +79,7 @@
           "bike_h": 0.8,
           "swim_h": 0.5,
           "ofp_h": 0.8,
-          "goal_text": "Поднимаем threshold pace",
+          "goal_text": "Развиваем threshold pace",
           "phase": "run_base",
           "color": "orange",
           "variants": [
@@ -127,31 +127,42 @@
           "bike_h": 1.0,
           "swim_h": 0.5,
           "ofp_h": 0.8,
-          "goal_text": "Поднимаем VO2max",
+          "goal_text": "Развиваем VO2max",
           "phase": "run_base",
           "color": "red",
           "variants": [
             {
-              "label": "6×400 @ 3:55",
-              "work_m": 2400
+              "label": "10×200 @ 3:40",
+              "work_m": 2000
             },
             {
-              "label": "8×400 @ 3:45",
+              "label": "5×800 @ 3:55",
+              "work_m": 4000
+            },
+            {
+              "label": "2×2К @ 4:05 + 1×800 @ 3:50",
+              "work_m": 4800
+            },
+            {
+              "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
               "work_m": 3200
             }
           ],
           "comp_h": 5.6,
-          "total_h": 6.31,
-          "variant_id": "6x400",
-          "quality_label": "6×400 @ 3:55",
-          "quality_work_m": 2400,
+          "total_h": 6.22,
+          "variant_id": "3x800prog+4x200",
+          "quality_label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
+          "quality_work_m": 3200,
           "quality_paces": [
-            "4:00"
+            "4:15",
+            "4:00",
+            "3:50",
+            "3:45"
           ],
           "run_km_long": 14.0,
-          "run_km_quality": 2.4,
-          "run_km_easy": 18.6,
-          "intensity_pct": 6.9,
+          "run_km_quality": 3.2,
+          "run_km_easy": 17.8,
+          "intensity_pct": 9.1,
           "deload": false,
           "sessions_target": 7
         },
@@ -212,7 +223,7 @@
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 0.8,
-          "goal_text": "Поднимаем threshold pace и VO2max",
+          "goal_text": "Развиваем порог и VO2max в одной сессии",
           "phase": "run_base",
           "color": "ember",
           "variants": [
@@ -251,7 +262,7 @@
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 0.8,
-          "goal_text": "Поднимаем переключение зон",
+          "goal_text": "Развиваем переключение зон",
           "phase": "run_base",
           "color": "violet",
           "variants": [
@@ -291,7 +302,7 @@
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем аэробную мощность",
+          "goal_text": "Развиваем аэробную мощность",
           "phase": "run_base",
           "color": "orange",
           "variants": [
@@ -372,7 +383,7 @@
           "bike_h": 2.0,
           "swim_h": 0.7,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем threshold pace",
+          "goal_text": "Развиваем threshold pace",
           "phase": "run_base",
           "color": "orange",
           "variants": [
@@ -414,7 +425,7 @@
           "bike_h": 2.0,
           "swim_h": 1.3,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем VO2max",
+          "goal_text": "Развиваем VO2max",
           "phase": "run_base",
           "color": "red",
           "variants": [
@@ -429,6 +440,10 @@
             {
               "label": "2×2К @ 4:05 + 1×800 @ 3:50",
               "work_m": 4800
+            },
+            {
+              "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
+              "work_m": 3200
             }
           ],
           "comp_h": 9.1,
@@ -460,7 +475,7 @@
           "bike_h": 2.0,
           "swim_h": 1.3,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем общую аэробную мощность",
+          "goal_text": "Развиваем общую аэробную мощность",
           "phase": "run_base",
           "color": "violet",
           "variants": [
@@ -556,7 +571,7 @@
           "bike_h": 2.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем способность держать threshold pace",
+          "goal_text": "Развиваем способность держать threshold pace",
           "phase": "run_build",
           "color": "orange",
           "variants": [
@@ -594,7 +609,7 @@
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем threshold pace",
+          "goal_text": "Развиваем threshold pace",
           "phase": "run_build",
           "color": "orange",
           "variants": [
@@ -632,7 +647,7 @@
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем threshold pace и VO2max",
+          "goal_text": "Развиваем порог и VO2max в одной сессии",
           "phase": "run_build",
           "color": "ember",
           "variants": [
@@ -710,7 +725,7 @@
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем способность держать threshold pace",
+          "goal_text": "Развиваем способность держать threshold pace",
           "phase": "run_build",
           "color": "orange",
           "variants": [
@@ -748,7 +763,7 @@
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем аэробную мощность",
+          "goal_text": "Развиваем аэробную мощность",
           "phase": "run_build",
           "color": "orange",
           "variants": [
@@ -786,7 +801,7 @@
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем аэробную мощность",
+          "goal_text": "Развиваем аэробную мощность",
           "phase": "run_build",
           "color": "orange",
           "variants": [
@@ -843,7 +858,7 @@
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем VO2max",
+          "goal_text": "Развиваем VO2max",
           "phase": "run_specific",
           "color": "red",
           "variants": [
@@ -885,7 +900,7 @@
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем аэробную мощность",
+          "goal_text": "Развиваем аэробную мощность",
           "phase": "run_specific",
           "color": "orange",
           "variants": [
@@ -927,7 +942,7 @@
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Поднимаем способность держать threshold pace",
+          "goal_text": "Развиваем способность держать threshold pace",
           "phase": "run_specific",
           "color": "orange",
           "variants": [
@@ -1023,7 +1038,7 @@
           "bike_h": 0.8,
           "swim_h": 0.6,
           "ofp_h": 0.4,
-          "goal_text": "Поднимаем threshold pace и VO2max",
+          "goal_text": "Развиваем порог и VO2max в одной сессии",
           "phase": "run_taper",
           "color": "ember",
           "variants": [
@@ -1062,7 +1077,7 @@
           "bike_h": 0.7,
           "swim_h": 0.5,
           "ofp_h": 0.4,
-          "goal_text": "Сохраняем качество, снижаем объём",
+          "goal_text": "Сохраняем гонка-темп, снимая объём",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -1101,7 +1116,7 @@
           "bike_h": 0.5,
           "swim_h": 0.4,
           "ofp_h": 0.3,
-          "goal_text": "Сохраняем качество, снижаем объём",
+          "goal_text": "Сохраняем гонка-темп, снимая объём",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -1140,7 +1155,7 @@
           "bike_h": 0.4,
           "swim_h": 0.3,
           "ofp_h": 0.2,
-          "goal_text": "Сохраняем качество, снижаем объём",
+          "goal_text": "Сохраняем гонка-темп, снимая объём",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -1193,7 +1208,7 @@
           "bike_h": 0.4,
           "swim_h": 0.3,
           "ofp_h": 0.2,
-          "goal_text": "Сохраняем качество, снижаем объём",
+          "goal_text": "Сохраняем гонка-темп, снимая объём",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -1320,7 +1335,7 @@
       "bike_h": 0.8,
       "swim_h": 0.5,
       "ofp_h": 0.8,
-      "goal_text": "Поднимаем базовый объём",
+      "goal_text": "Развиваем базу: поднимаем темп в конце сессии",
       "phase": "run_base",
       "color": "teal",
       "variants": [
@@ -1369,7 +1384,7 @@
       "bike_h": 0.8,
       "swim_h": 0.5,
       "ofp_h": 0.8,
-      "goal_text": "Поднимаем threshold pace",
+      "goal_text": "Развиваем threshold pace",
       "phase": "run_base",
       "color": "orange",
       "variants": [
@@ -1417,31 +1432,42 @@
       "bike_h": 1.0,
       "swim_h": 0.5,
       "ofp_h": 0.8,
-      "goal_text": "Поднимаем VO2max",
+      "goal_text": "Развиваем VO2max",
       "phase": "run_base",
       "color": "red",
       "variants": [
         {
-          "label": "6×400 @ 3:55",
-          "work_m": 2400
+          "label": "10×200 @ 3:40",
+          "work_m": 2000
         },
         {
-          "label": "8×400 @ 3:45",
+          "label": "5×800 @ 3:55",
+          "work_m": 4000
+        },
+        {
+          "label": "2×2К @ 4:05 + 1×800 @ 3:50",
+          "work_m": 4800
+        },
+        {
+          "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
           "work_m": 3200
         }
       ],
       "comp_h": 5.6,
-      "total_h": 6.31,
-      "variant_id": "6x400",
-      "quality_label": "6×400 @ 3:55",
-      "quality_work_m": 2400,
+      "total_h": 6.22,
+      "variant_id": "3x800prog+4x200",
+      "quality_label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
+      "quality_work_m": 3200,
       "quality_paces": [
-        "4:00"
+        "4:15",
+        "4:00",
+        "3:50",
+        "3:45"
       ],
       "run_km_long": 14.0,
-      "run_km_quality": 2.4,
-      "run_km_easy": 18.6,
-      "intensity_pct": 6.9,
+      "run_km_quality": 3.2,
+      "run_km_easy": 17.8,
+      "intensity_pct": 9.1,
       "deload": false,
       "sessions_target": 7
     },
@@ -1502,7 +1528,7 @@
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 0.8,
-      "goal_text": "Поднимаем threshold pace и VO2max",
+      "goal_text": "Развиваем порог и VO2max в одной сессии",
       "phase": "run_base",
       "color": "ember",
       "variants": [
@@ -1541,7 +1567,7 @@
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 0.8,
-      "goal_text": "Поднимаем переключение зон",
+      "goal_text": "Развиваем переключение зон",
       "phase": "run_base",
       "color": "violet",
       "variants": [
@@ -1581,7 +1607,7 @@
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем аэробную мощность",
+      "goal_text": "Развиваем аэробную мощность",
       "phase": "run_base",
       "color": "orange",
       "variants": [
@@ -1662,7 +1688,7 @@
       "bike_h": 2.0,
       "swim_h": 0.7,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем threshold pace",
+      "goal_text": "Развиваем threshold pace",
       "phase": "run_base",
       "color": "orange",
       "variants": [
@@ -1704,7 +1730,7 @@
       "bike_h": 2.0,
       "swim_h": 1.3,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем VO2max",
+      "goal_text": "Развиваем VO2max",
       "phase": "run_base",
       "color": "red",
       "variants": [
@@ -1719,6 +1745,10 @@
         {
           "label": "2×2К @ 4:05 + 1×800 @ 3:50",
           "work_m": 4800
+        },
+        {
+          "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
+          "work_m": 3200
         }
       ],
       "comp_h": 9.1,
@@ -1750,7 +1780,7 @@
       "bike_h": 2.0,
       "swim_h": 1.3,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем общую аэробную мощность",
+      "goal_text": "Развиваем общую аэробную мощность",
       "phase": "run_base",
       "color": "violet",
       "variants": [
@@ -1831,7 +1861,7 @@
       "bike_h": 2.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем способность держать threshold pace",
+      "goal_text": "Развиваем способность держать threshold pace",
       "phase": "run_build",
       "color": "orange",
       "variants": [
@@ -1869,7 +1899,7 @@
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем threshold pace",
+      "goal_text": "Развиваем threshold pace",
       "phase": "run_build",
       "color": "orange",
       "variants": [
@@ -1907,7 +1937,7 @@
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем threshold pace и VO2max",
+      "goal_text": "Развиваем порог и VO2max в одной сессии",
       "phase": "run_build",
       "color": "ember",
       "variants": [
@@ -1985,7 +2015,7 @@
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем способность держать threshold pace",
+      "goal_text": "Развиваем способность держать threshold pace",
       "phase": "run_build",
       "color": "orange",
       "variants": [
@@ -2023,7 +2053,7 @@
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем аэробную мощность",
+      "goal_text": "Развиваем аэробную мощность",
       "phase": "run_build",
       "color": "orange",
       "variants": [
@@ -2061,7 +2091,7 @@
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем аэробную мощность",
+      "goal_text": "Развиваем аэробную мощность",
       "phase": "run_build",
       "color": "orange",
       "variants": [
@@ -2103,7 +2133,7 @@
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем VO2max",
+      "goal_text": "Развиваем VO2max",
       "phase": "run_specific",
       "color": "red",
       "variants": [
@@ -2145,7 +2175,7 @@
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем аэробную мощность",
+      "goal_text": "Развиваем аэробную мощность",
       "phase": "run_specific",
       "color": "orange",
       "variants": [
@@ -2187,7 +2217,7 @@
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Поднимаем способность держать threshold pace",
+      "goal_text": "Развиваем способность держать threshold pace",
       "phase": "run_specific",
       "color": "orange",
       "variants": [
@@ -2268,7 +2298,7 @@
       "bike_h": 0.8,
       "swim_h": 0.6,
       "ofp_h": 0.4,
-      "goal_text": "Поднимаем threshold pace и VO2max",
+      "goal_text": "Развиваем порог и VO2max в одной сессии",
       "phase": "run_taper",
       "color": "ember",
       "variants": [
@@ -2307,7 +2337,7 @@
       "bike_h": 0.7,
       "swim_h": 0.5,
       "ofp_h": 0.4,
-      "goal_text": "Сохраняем качество, снижаем объём",
+      "goal_text": "Сохраняем гонка-темп, снимая объём",
       "phase": "run_taper",
       "color": "gray",
       "variants": [
@@ -2346,7 +2376,7 @@
       "bike_h": 0.5,
       "swim_h": 0.4,
       "ofp_h": 0.3,
-      "goal_text": "Сохраняем качество, снижаем объём",
+      "goal_text": "Сохраняем гонка-темп, снимая объём",
       "phase": "run_taper",
       "color": "gray",
       "variants": [
@@ -2385,7 +2415,7 @@
       "bike_h": 0.4,
       "swim_h": 0.3,
       "ofp_h": 0.2,
-      "goal_text": "Сохраняем качество, снижаем объём",
+      "goal_text": "Сохраняем гонка-темп, снимая объём",
       "phase": "run_taper",
       "color": "gray",
       "variants": [
@@ -3488,5 +3518,5 @@
     }
   ],
   "current_week": 3,
-  "generated_at": "25.10.2026 05:34"
+  "generated_at": "25.10.2026 05:47"
 }

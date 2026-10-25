@@ -130,7 +130,10 @@ def build(plan: dict) -> dict:
         days.append({"day": d, "day_full": DAY_FULL.get(d, d), "items": items})
 
     planned = sum(s.get("duration_min", 0) for s in slots) / 60
-    target = (plan.get("phase") or {}).get("hours_per_week_target", 0)
+    # Цель недели — из макро (weekly_macro[].total_h), а не среднее по фазе:
+    # фаза даёт ориентир, а целиться надо в конкретную неделю.
+    lc = plan.get("load_compare") or {}
+    target = lc.get("target_h") or (plan.get("phase") or {}).get("hours_per_week_target", 0)
     return {
         "title": plan.get("title", "План недели"),
         "iso_week": plan.get("iso_week", ""),
@@ -143,8 +146,11 @@ def build(plan: dict) -> dict:
         "hr_max": ((plan.get("rules") or {}).get("hr_zones") or {}).get("hr_max"),
         "rhr": ((plan.get("rules") or {}).get("hr_zones") or {}).get("rhr"),
         "planned_h": round(planned, 1),
-        "target_h": target,
+        "target_h": round(target, 1),
         "delta_h": round(planned - target, 1),
+        "delta_pct": lc.get("delta_pct"),
+        "load_status": lc.get("status"),
+        "load_hint": lc.get("hint"),
         "slots_count": len(slots),
         "days": days,
     }
@@ -185,6 +191,10 @@ h2{font-size:13px;margin:18px 0 8px;color:var(--accent);text-transform:uppercase
 .kpi .v.pos{color:var(--good)} .kpi .v.neg{color:var(--warn)}
 
 .zones{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;font-size:10.5px;margin-bottom:14px}
+.lc-note{margin:7px 0 11px;padding:8px 11px;border-radius:9px;font-size:11.5px;
+  line-height:1.45;border:1px solid var(--border)}
+.lc-note.over{background:rgba(240,180,87,.09);border-color:rgba(240,180,87,.4);color:#e8d5b0}
+.lc-note.under{background:rgba(255,107,90,.09);border-color:rgba(255,107,90,.4);color:#f2c9c2}
 .zone{background:var(--panel2);padding:4px 8px;border-radius:6px;border:1px solid var(--border);color:var(--muted)}
 .zone b{color:var(--accent);font-family:ui-monospace,monospace;font-size:10.5px;margin-right:3px}
 
@@ -262,11 +272,22 @@ if (D.week_goal || D.phase_goal) {
 const dcls = D.delta_h >= 0 ? 'pos' : 'neg';
 document.getElementById('kpis').innerHTML = [
   [D.planned_h + 'ч', 'planned'],
-  [D.target_h + 'ч', 'expected'],
+  [D.target_h + 'ч', 'цель макро'],
   [(D.delta_h >= 0 ? '+' : '') + D.delta_h + 'ч', 'delta', dcls],
   [D.slots_count, 'sessions'],
 ].map(([v,l,c]) => '<div class="kpi"><div class="v ' + (c||'') + '">' + esc(v)
   + '</div><div class="l">' + esc(l) + '</div></div>').join('');
+
+// Отклонение по нагрузке (план против цели макро недели)
+if (D.load_status && D.load_status !== 'ok' && D.load_hint) {
+  const k = document.getElementById('kpis');
+  if (k) {
+    const d = document.createElement('div');
+    d.className = 'lc-note ' + D.load_status;
+    d.innerHTML = 'НАГРУЗКА: ' + esc(D.load_hint);
+    k.parentNode.insertBefore(d, k.nextSibling);
+  }
+}
 
 // Зоны
 document.getElementById('zones').innerHTML = Object.entries(D.zones||{})
