@@ -97,7 +97,7 @@ def build(sp, at):
     # ---------- НЕДЕЛИ ----------
     L.append("## Недели")
     L.append("")
-    L.append("| W | Дата | Бег | Long Z2 | Цель (адаптация) | Структура | Core | Вел | Плав | Total ч/нед |")
+    L.append("| W | Дата | Бег | Long | Качеств. | Инт.% | Цель (адаптация) | Структура | Сессий | Нагрузка |")
     L.append("|---|---|---|---|---|---|---|---|---|---|")
     for w in sp["weekly_macro"]:
         n = w["season_week"]
@@ -105,10 +105,13 @@ def build(sp, at):
         ds = "{:02d}.{:02d}".format(d.day, d.month)
         q = w["quality"]
         cell = "{} ({})".format(q.get("goal", ""), q.get("scale", ""))
-        L.append("| W{} | {} | {}К | {}К | {} | `{}` | {} | {} | {} | {}ч |".format(
-            n, ds, w.get("run_km", ""), w.get("long_km", ""),
-            esc(cell), esc(q.get("_legacy_structure", "—")),
-            w.get("core", ""), w.get("bike", ""), w.get("swim", ""), w.get("total_h", "")))
+        # структура — из каталога (label + variant_id), не разобранная строка
+        struct = "{} [{}]".format(q.get("label", "—"), q.get("variant_id", "—"))
+        L.append("| W{} | {} | {}К | {}К | {}К | {}% | {} | `{}` | {} | {}ч |".format(
+            n, ds, w.get("run_km", ""), w.get("run_km_long", ""),
+            w.get("run_km_quality", ""), w.get("intensity_pct", ""),
+            esc(cell), esc(struct),
+            w.get("sessions_target", ""), w.get("total_h", "")))
     L.append("")
 
     # ---------- TT ----------

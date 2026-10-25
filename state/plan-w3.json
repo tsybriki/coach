@@ -96,11 +96,24 @@
     "goal_id": "g_run_spring",
     "start": "2026-10-11",
     "end": "2027-01-02",
-    "hours_per_week_target": 5,
+    "hours_per_week_target": 7.3,
     "goal": "Поднимаем базовый объём",
     "focus": "Аэробная база: растёт общий объём бега, интенсивность ниже порога. Фундамент под всё остальное.",
     "_season_week_start": 1,
-    "_season_week_end": 12
+    "_season_week_end": 12,
+    "load_range_h": [
+      4.96,
+      9.74
+    ],
+    "run_km_range": [
+      27,
+      50
+    ],
+    "sessions_target": 6,
+    "intensity_pct_mean": 10.9,
+    "deload_weeks": [
+      12
+    ]
   },
   "chosen_allocation": {
     "snapshot_date": "2026-10-13",
@@ -648,6 +661,15 @@
     ],
     "source": "Garmin Connect: 5 bike-сессии 18–24.10, W1 51.2 км бега, интервалы 13.10 ( laps 858/886/918/408 м) · макро-план spring-10k-2027-v2.md (W3, недельная структура, запреты) · Google Calendar (рейс 25.10, Пн 26.10, рентген Пт 30.10) · season_plan.json (фаза run_base, target 5ч/нед)"
   },
+  "load_compare": {
+    "status": "ok",
+    "target_h": 6.31,
+    "actual_h": 6.6,
+    "delta_h": 0.29,
+    "delta_pct": 4.6,
+    "tol_pct": 10.0,
+    "source": "weekly_macro[].total_h (вычисляется из структуры)"
+  },
   "control_points_in_range": [],
   "control_point_slots": [],
   "overrides_applied": [
@@ -661,17 +683,17 @@
   ],
   "volume_check": {
     "ok": true,
-    "target_h": 5,
+    "target_h": 7.3,
     "available_h": 10.0,
-    "gap_h": -5.0,
+    "gap_h": -2.7,
     "max_h": 11,
     "min_h": 2,
     "suggestion": null
   },
   "totals": {
     "planned_hours": 6.6,
-    "target_hours": 5,
-    "delta_hours": -1.6,
+    "target_hours": 7.3,
+    "delta_hours": 0.7,
     "slots_count": 9
   },
   "_generated_by": "lib.plan_generate (Phase 2.5: real layout v18)"

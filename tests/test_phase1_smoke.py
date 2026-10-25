@@ -151,7 +151,12 @@ def test_goal_guard_macro_leads_to_target():
     broken = copy.deepcopy(sp)
     for w in broken["weekly_macro"]:
         if w["season_week"] == 23:
-            w["quality"]["_legacy_structure"] = "5К TT @ race pace: цель 22:00"
+            # откат: замедляем темпы гонку-недели в структуре
+            q = w["quality"]
+            q["paces"] = ["4:24"]
+            for b in q.get("blocks") or []:
+                if b.get("pace"):
+                    b["pace"] = "4:24"
     assert goal_guard.check(broken, at), "goal_guard НЕ заметил откат недели гонки"
 
     print("  ✓ goal_guard: макро ведёт к цели, откат ловится")
@@ -207,6 +212,45 @@ def test_review_gates_built_and_persisted():
         tmp_prog.write_text(original, encoding="utf-8")
 
     print("  ✓ review_gates: gates после фаз и CP, решения сохраняются")
+
+
+def test_macro_structure_is_data_not_string():
+    """Макро ссылается на каталог, структура в blocks, нагрузка вычисляется."""
+    sys.path.insert(0, str(ROOT / "lib"))
+    from lib import load_model
+
+    sp = json.loads((ROOT / "state/season_plan.json").read_text(encoding="utf-8"))
+    at = json.loads((ROOT / "state/athlete.json").read_text(encoding="utf-8"))
+    tpl = json.loads((ROOT / "state/workout_templates.json").read_text(encoding="utf-8"))["templates"]
+
+    ids = set()
+    for gid, t in tpl.items():
+        if not isinstance(t, dict):
+            continue
+        for v in t.get("variants") or []:
+            assert v["id"] not in ids, "дубликат variant_id: {}".format(v["id"])
+            ids.add(v["id"])
+
+    for w in sp["weekly_macro"]:
+        q = w.get("quality") or {}
+        n = w["season_week"]
+        # 1) ссылка на каталог
+        assert q.get("variant_id"), "W{}: нет variant_id".format(n)
+        assert q["variant_id"] in ids, "W{}: variant_id '{}' нет в каталоге".format(n, q["variant_id"])
+        # 2) структура — в данных, а не в строке
+        assert q.get("blocks"), "W{}: нет blocks".format(n)
+        assert "_legacy_structure" not in q, "W{}: осталась строка _legacy_structure".format(n)
+        # 3) нагрузка вычисляется из структуры и совпадает
+        calc = load_model.macro_week_load(w, at)["total_h"]
+        assert abs(calc - float(w.get("total_h", 0))) <= 0.05, \
+            "W{}: total_h={} != пересчёт {}".format(n, w.get("total_h"), calc)
+        # 4) разбивка бега сходится
+        parts = (w.get("run_km_long", 0) + w.get("run_km_quality", 0)
+                 + w.get("run_km_easy", 0))
+        assert abs(parts - w["run_km"]) <= 0.2, \
+            "W{}: long+качеств+лёгк = {} != run_km {}".format(n, round(parts, 1), w["run_km"])
+
+    print("  ✓ макро: структура в данных, нагрузка вычисляется, разбивка сходится")
 
 
 def test_fit_retention_no_op_when_empty():
@@ -720,6 +764,7 @@ def main():
         test_season_replan_archive,
         test_goal_guard_macro_leads_to_target,
         test_review_gates_built_and_persisted,
+        test_macro_structure_is_data_not_string,
         test_fit_retention_no_op_when_empty,
         test_fit_ingest_writes_to_store,
         test_garmin_weight_manual,

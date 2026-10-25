@@ -231,6 +231,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
         },
         "control_points_in_range": plan.get("control_points_in_range", []),
         "load_context": plan.get("load_context"),
+        "load_compare": plan.get("load_compare"),
         "phase_goal": (plan.get("phase") or {}).get("goal"),
         "phase_focus": (plan.get("phase") or {}).get("focus"),
         "week_goal": plan.get("week_goal"),
@@ -376,6 +377,16 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .gdec.fail{border-color:rgba(255,107,90,.55)} .gdec.fail b{color:#ff6b5a}
 .glever{font-size:11px;margin-top:7px;padding-top:6px;border-top:1px dashed var(--border)}
 .glever b{color:var(--accent)}
+.load-cmp{margin:9px 0 4px;padding:9px 12px;border-radius:10px;
+  border:1px solid var(--border);background:var(--panel)}
+.lc-hd{font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;font-weight:700;
+  color:var(--muted);margin-bottom:5px}
+.lc-row{display:flex;gap:8px;align-items:baseline;font-size:12px;margin:2px 0}
+.lc-v{font-family:ui-monospace,monospace;font-weight:600}
+.lc-bar{height:6px;border-radius:3px;background:var(--panel2);overflow:hidden;flex:1;margin:5px 0 3px}
+.lc-bar i{display:block;height:100%}
+.lc-ok .lc-v{color:var(--good)} .lc-over .lc-v{color:#f0b457} .lc-under .lc-v{color:#ff6b5a}
+.lc-hint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:4px}
 .season-goal-box{margin:10px 0 4px;padding:10px 12px;border-radius:10px;
   background:linear-gradient(135deg,rgba(255,107,90,.12),rgba(122,162,255,.06));
   border:1px solid rgba(255,107,90,.32)}
@@ -714,6 +725,27 @@ function renderCard(slot) {
     + '</div>';
 }
 
+function buildLoadCompare(lc) {
+  if (!lc || !lc.target_h) return '';
+  const st = lc.status;
+  const col = st === 'ok' ? 'var(--good)' : st === 'over' ? '#f0b457' : '#ff6b5a';
+  const max = Math.max(lc.target_h, lc.actual_h) * 1.15;
+  const tW = (lc.target_h / max * 100).toFixed(0);
+  const aW = (lc.actual_h / max * 100).toFixed(0);
+  const sign = lc.delta_h > 0 ? '+' : '';
+  let h = '<div class="load-cmp lc-' + st + '">';
+  h += '<div class="lc-hd">Нагрузка недели · план против макро</div>';
+  h += '<div class="lc-row"><span class="lc-v">' + lc.actual_h + 'ч</span>'
+     + '<span style="color:var(--muted)">план · цель макро ' + lc.target_h + 'ч · '
+     + sign + lc.delta_h + 'ч (' + sign + lc.delta_pct + '%)</span></div>';
+  h += '<div class="lc-bar"><i style="width:' + aW + '%;background:' + col + '"></i></div>';
+  h += '<div class="lc-row" style="font-size:10.5px;color:var(--muted)">'
+     + 'допуск ±' + lc.tol_pct + '% · ' + (lc.source || '') + '</div>';
+  if (lc.hint) h += '<div class="lc-hint">' + escapeHtml(lc.hint) + '</div>';
+  h += '</div>';
+  return h;
+}
+
 function buildGates(gates) {
   if (!gates || !gates.length) return '';
   const ICON = {pass:'✓', warn:'!', fail:'✗', pending:'·'};
@@ -783,6 +815,8 @@ function buildPicker(plan) {
   }
   // GATES — точки принятия решения, относящиеся к этой неделе
   html += buildGates(plan.gates || []);
+  // СВЕРКА С МАКРО: план недели vs заложенная нагрузка
+  html += buildLoadCompare(plan.load_compare);
   if (plan.subtitle) html += '<div class="week">' + escapeHtml(plan.subtitle) + '</div>';
   if (isActual) html += '<div class="actual-badge">✅ Фактический лог</div>';
   html += '</div>';

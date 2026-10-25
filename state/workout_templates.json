@@ -135,7 +135,7 @@
           "note": "Сокращённая версия — в тапер-неделю"
         },
         {
-          "id": "4x2k",
+          "id": "4x2k_vo2",
           "label": "4×2К @ 4:10",
           "scale": "heavy",
           "work_m": 8000,
@@ -151,7 +151,7 @@
               "rest_distance_m": 400
             }
           ],
-          "note": "Длинные отрезки в VO2-темпе — большая аэробная мощность"
+          "note": "Длинные отрезки в VO2-темпе — большая аэробная мощность · race-pace touch: 2К по 4:05 — верх аэробной зоны, не порог"
         },
         {
           "id": "5x2k",
@@ -409,7 +409,7 @@
       "method": "hr_or_pace",
       "work_zone": "Z4",
       "hr_target": 158,
-      "pace": "4:20-4:45",
+      "pace": "4:00-4:30",
       "rest_zone": "Z1",
       "indicators": "Ровный HR в Z4, отсутствие завала, длина непрерывного отрезка",
       "phases": [
@@ -420,67 +420,99 @@
       "variants": [
         {
           "id": "4k",
-          "label": "4К tempo",
+          "label": "4К tempo @ 4:30",
           "scale": "light",
           "work_m": 4000,
           "blocks": [
             {
               "type": "continuous",
               "distance_m": 4000,
-              "pace": "5:00",
+              "pace": "4:30",
               "zone": "Z4",
-              "hr_target": 155
+              "hr_target": 156
             }
           ],
-          "note": "Короткий непрерывный отрезок"
+          "note": "Вход в темп — 4:30, к концу фазы ниже"
         },
         {
           "id": "5k",
-          "label": "5К tempo",
+          "label": "5К tempo @ 4:20",
           "scale": "medium",
           "work_m": 5000,
           "blocks": [
             {
               "type": "continuous",
               "distance_m": 5000,
-              "pace": "4:55",
+              "pace": "4:20",
               "zone": "Z4",
-              "hr_target": 158
+              "hr_target": 157
             }
           ],
-          "note": "Рабочая длина tempo"
+          "note": "Темповая работа на 4:20"
+        },
+        {
+          "id": "6k",
+          "label": "6К tempo @ 4:08",
+          "scale": "medium",
+          "work_m": 6000,
+          "blocks": [
+            {
+              "type": "continuous",
+              "distance_m": 6000,
+              "pace": "4:08",
+              "zone": "Z4",
+              "hr_target": 159
+            }
+          ],
+          "note": "Темп подходит к гонка-темпу"
         },
         {
           "id": "8k",
-          "label": "8К tempo",
+          "label": "8К long tempo @ 4:12",
           "scale": "heavy",
           "work_m": 8000,
           "blocks": [
             {
               "type": "continuous",
               "distance_m": 8000,
-              "pace": "4:45",
+              "pace": "4:12",
               "zone": "Z4",
-              "hr_target": 158
+              "hr_target": 159
             }
           ],
-          "note": "Длинный непрерывный отрезок на Z4"
+          "note": "Длинная темповая — 8К на 4:12"
+        },
+        {
+          "id": "10k",
+          "label": "10К long tempo @ 4:05",
+          "scale": "peak",
+          "work_m": 10000,
+          "blocks": [
+            {
+              "type": "continuous",
+              "distance_m": 10000,
+              "pace": "4:05",
+              "zone": "Z4",
+              "hr_target": 160
+            }
+          ],
+          "note": "Пиковая темповая работа — 10К на 4:05"
         },
         {
           "id": "12k",
-          "label": "12К long tempo",
+          "label": "12К long tempo @ 4:00",
           "scale": "peak",
           "work_m": 12000,
           "blocks": [
             {
               "type": "continuous",
               "distance_m": 12000,
-              "pace": "4:35",
+              "pace": "4:00",
               "zone": "Z4",
-              "hr_target": 160
+              "hr_target": 161
             }
           ],
-          "note": "Пиковая длина — 12К непрерывно"
+          "note": "Максимальная темповая работа на гонка-темпе"
         }
       ]
     },
@@ -910,6 +942,122 @@
             }
           ],
           "note": "Максимальная скорость на дистанции. Не тянуть на старте — иначе дрейф."
+        },
+        {
+          "id": "tt_race",
+          "label": "Гонка-темп",
+          "scale": "heavy",
+          "work_m": 5000,
+          "blocks": [
+            {
+              "type": "tt_pace",
+              "distance_m": 5000,
+              "pace": "по цели CP",
+              "zone": "Z4",
+              "hr_target": 164
+            }
+          ],
+          "note": "Контроль гонку-темпа — темп задаёт контрольная точка"
+        },
+        {
+          "id": "tt_max_3k",
+          "label": "3К на максимум",
+          "scale": "light",
+          "work_m": 3000,
+          "blocks": [
+            {
+              "type": "tt_max",
+              "distance_m": 3000,
+              "pace": "всеми силами",
+              "zone": "Z6",
+              "hr_target": 172
+            }
+          ],
+          "note": "Максимум на 3К — короткая дистанция, полный отказ"
+        }
+      ]
+    },
+    "taper_race_pace": {
+      "id": "taper_race_pace",
+      "label": "Тапер · гонка-темп",
+      "goal": "Сохраняем гонка-темп, снимая объём",
+      "develops": "Частота и свежесть — гонка-темп остаётся в ногах, объём уходит",
+      "method": "pace_with_hr_cap",
+      "work_zone": "Z4",
+      "hr_target": 164,
+      "pace": "4:00-4:05",
+      "rest_zone": "Z1",
+      "indicators": "Темп на 1К без просадки, HR держится в Z4, сон и самочувствие",
+      "phases": [
+        "run_taper"
+      ],
+      "variants": [
+        {
+          "id": "taper_1k",
+          "label": "1×1К @ 4:00 + 6×200 @ 3:45",
+          "scale": "light",
+          "work_m": 2200,
+          "blocks": [
+            {
+              "type": "reps",
+              "reps": 1,
+              "distance_m": 1000,
+              "pace": "4:00",
+              "zone": "Z5",
+              "hr_target": 164,
+              "rest_min": 0,
+              "rest_distance_m": 0
+            },
+            {
+              "type": "reps",
+              "reps": 6,
+              "distance_m": 200,
+              "pace": "3:45",
+              "zone": "Z6",
+              "hr_target": 170,
+              "rest_min": 1,
+              "rest_distance_m": 200
+            }
+          ],
+          "note": "Вход в гонку-темп без набора объёма"
+        },
+        {
+          "id": "taper_400",
+          "label": "6×400 @ 3:50, отдых 90с",
+          "scale": "medium",
+          "work_m": 2400,
+          "blocks": [
+            {
+              "type": "reps",
+              "reps": 6,
+              "distance_m": 400,
+              "pace": "3:50",
+              "zone": "Z6",
+              "hr_target": 172,
+              "rest_min": 1.5,
+              "rest_distance_m": 200
+            }
+          ],
+          "note": "Короткая частота — ноги помнят темп"
+        },
+        {
+          "id": "taper_2x1k",
+          "label": "2×1К @ 4:00, отдых 60с",
+          "scale": "heavy",
+          "work_m": 2000,
+          "blocks": [
+            {
+              "type": "reps",
+              "reps": 2,
+              "distance_m": 1000,
+              "pace": "4:00",
+              "zone": "Z5",
+              "hr_target": 164,
+              "rest_min": 1,
+              "rest_distance_m": 300
+            }
+          ],
+          "note": "Гонка-темп в последней паре отрезков"
         }
       ]
     }

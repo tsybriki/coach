@@ -52,36 +52,97 @@
       "goal_id": "g_run_spring",
       "start": "2026-10-11",
       "end": "2027-01-02",
-      "hours_per_week_target": 5,
+      "hours_per_week_target": 7.3,
       "goal": "Поднимаем базовый объём",
-      "focus": "Аэробная база: растёт общий объём бега, интенсивность ниже порога. Фундамент под всё остальное."
+      "focus": "Аэробная база: растёт общий объём бега, интенсивность ниже порога. Фундамент под всё остальное.",
+      "_season_week_start": 1,
+      "_season_week_end": 12,
+      "load_range_h": [
+        4.96,
+        9.74
+      ],
+      "run_km_range": [
+        27,
+        50
+      ],
+      "sessions_target": 6,
+      "intensity_pct_mean": 10.9,
+      "deload_weeks": [
+        12
+      ]
     },
     {
       "id": "run_build",
       "goal_id": "g_run_spring",
       "start": "2027-01-03",
       "end": "2027-02-20",
-      "hours_per_week_target": 7,
+      "hours_per_week_target": 10.8,
       "goal": "Поднимаем threshold pace",
-      "focus": "Порог аэробного обмена: темп на LTH растёт, появляются длинные интервалы 2К."
+      "focus": "Порог аэробного обмена: темп на LTH растёт, появляются длинные интервалы 2К.",
+      "_season_week_start": 13,
+      "_season_week_end": 19,
+      "load_range_h": [
+        9.69,
+        11.94
+      ],
+      "run_km_range": [
+        50,
+        65
+      ],
+      "sessions_target": 8,
+      "intensity_pct_mean": 10.2,
+      "deload_weeks": []
     },
     {
       "id": "run_specific",
       "goal_id": "g_run_spring",
       "start": "2027-02-21",
-      "end": "2027-04-03",
-      "hours_per_week_target": 8,
+      "end": "2027-03-20",
+      "hours_per_week_target": 11.1,
       "goal": "Поднимаем race pace",
-      "focus": "Специфика под гонку: темп на соревновательной скорости, race-pace отрезки в ключевой работе."
+      "focus": "Специфика под гонку: темп на соревновательной скорости, race-pace отрезки в ключевой работе.",
+      "_season_week_start": 20,
+      "_season_week_end": 23,
+      "load_range_h": [
+        7.34,
+        12.64
+      ],
+      "run_km_range": [
+        55,
+        70
+      ],
+      "sessions_target": 8,
+      "intensity_pct_mean": 11.8,
+      "deload_weeks": [
+        23
+      ]
     },
     {
       "id": "run_taper",
       "goal_id": "g_run_spring",
-      "start": "2027-04-04",
-      "end": "2027-04-16",
-      "hours_per_week_target": 4,
+      "start": "2027-03-21",
+      "end": "2027-04-17",
+      "hours_per_week_target": 4.5,
       "goal": "Сохраняем качество, снижаем объём",
-      "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей."
+      "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей.",
+      "_season_week_start": 24,
+      "_season_week_end": 27,
+      "load_range_h": [
+        3.1,
+        5.88
+      ],
+      "run_km_range": [
+        16,
+        38
+      ],
+      "sessions_target": 7,
+      "intensity_pct_mean": 10.4,
+      "deload_weeks": [
+        24,
+        25,
+        26,
+        27
+      ]
     },
     {
       "id": "race_run",
@@ -405,17 +466,60 @@
       "quality": {
         "goal": "progression",
         "scale": "light",
-        "_legacy_structure": "Easy 8К с прогрессией 4:30 на 3К",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем базовый объём",
         "scale_text": "объёмная работа",
-        "develops": "Аэробная база + способность держать темп под нагрузкой"
+        "develops": "Аэробная база + способность держать темп под нагрузкой",
+        "variant_id": "8k+3k",
+        "blocks": [
+          {
+            "type": "progression",
+            "easy_distance_m": 5000,
+            "progression_distance_m": 3000,
+            "from_pace": "5:00",
+            "to_pace": "4:30",
+            "zone": "Z3",
+            "hr_target": 146
+          }
+        ],
+        "work_m": 8000,
+        "label": "8К + прогрессия 3К",
+        "paces": [
+          "5:00",
+          "4:30"
+        ]
       },
       "core": "2×25м",
       "bike": "1×45м",
       "swim": "1×30м",
-      "total_h": 6.5,
-      "phase": "run_base"
+      "total_h": 4.96,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 2.51,
+        "bike_h": 0.75,
+        "swim_h": 0.5,
+        "ofp_h": 0.83,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 12.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 7.0,
+      "intensity_pct": 29.6,
+      "deload": false,
+      "deload_pct": 0.0,
+      "sessions_target": 6,
+      "_load_breakdown": {
+        "run_h": 2.88,
+        "run_long_h": 1.13,
+        "run_easy_h": 0.66,
+        "run_quality_h": 1.08,
+        "bike_h": 0.75,
+        "swim_h": 0.5,
+        "ofp_h": 0.83,
+        "quality_min": 65,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 4.96
     },
     {
       "season_week": 2,
@@ -424,18 +528,61 @@
       "quality": {
         "goal": "threshold_speed",
         "scale": "light",
-        "_legacy_structure": "4×1К @ 4:25 (Z3)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace",
         "scale_text": "объёмная работа",
         "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "4x1k_easy",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 4,
+            "distance_m": 1000,
+            "pace": "4:35",
+            "zone": "Z5",
+            "hr_target": 162,
+            "rest_min": 2,
+            "rest_distance_m": 300
+          }
+        ],
+        "work_m": 4000,
+        "label": "4×1К @ 4:20",
+        "paces": [
+          "4:35"
+        ]
       },
       "core": "2×25м",
       "bike": "1×45м",
       "swim": "1×30м",
-      "total_h": 7.0,
-      "phase": "run_base"
+      "total_h": 5.47,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 3.01,
+        "bike_h": 0.75,
+        "swim_h": 0.5,
+        "ofp_h": 0.83,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 13.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 13.0,
+      "intensity_pct": 13.3,
+      "deload": false,
+      "deload_pct": 11.1,
+      "sessions_target": 7,
+      "_load_breakdown": {
+        "run_h": 3.39,
+        "run_long_h": 1.23,
+        "run_easy_h": 1.23,
+        "run_quality_h": 0.93,
+        "bike_h": 0.75,
+        "swim_h": 0.5,
+        "ofp_h": 0.83,
+        "quality_min": 56,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 5.47
     },
     {
       "season_week": 3,
@@ -444,18 +591,61 @@
       "quality": {
         "goal": "vo2max",
         "scale": "light",
-        "_legacy_structure": "6×400 @ 3:55 (Z4), отдых 2м jog",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем VO2max",
         "scale_text": "объёмная работа",
         "develops": "Аэробная мощность — верхняя граница аэробной системы",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "6x400",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 6,
+            "distance_m": 400,
+            "pace": "4:00",
+            "zone": "Z6",
+            "hr_target": 172,
+            "rest_min": 2,
+            "rest_distance_m": 250
+          }
+        ],
+        "work_m": 2400,
+        "label": "6×400 @ 3:55",
+        "paces": [
+          "4:00"
+        ]
       },
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×30м",
-      "total_h": 7.5,
-      "phase": "run_base"
+      "total_h": 6.31,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 3.08,
+        "bike_h": 1.0,
+        "swim_h": 0.5,
+        "ofp_h": 0.83,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 14.0,
+      "run_km_quality": 2.4,
+      "run_km_easy": 18.6,
+      "intensity_pct": 6.9,
+      "deload": false,
+      "deload_pct": 16.7,
+      "sessions_target": 7,
+      "_load_breakdown": {
+        "run_h": 3.98,
+        "run_long_h": 1.32,
+        "run_easy_h": 1.76,
+        "run_quality_h": 0.9,
+        "bike_h": 1.0,
+        "swim_h": 0.5,
+        "ofp_h": 0.83,
+        "quality_min": 54,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 6.31
     },
     {
       "season_week": 4,
@@ -464,17 +654,57 @@
       "quality": {
         "goal": "time_trial",
         "scale": "light",
-        "_legacy_structure": "3К TT (пт 06.11): цель 14:00",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Проверяем форму на контрольной точке",
         "scale_text": "объёмная работа",
-        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции"
+        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции",
+        "variant_id": "tt_pace",
+        "blocks": [
+          {
+            "type": "tt_pace",
+            "distance_m": 3000,
+            "pace": "по цели CP",
+            "zone": "Z4",
+            "hr_target": 158
+          }
+        ],
+        "work_m": 3000,
+        "label": "Темповый тест",
+        "paces": [
+          "по цели CP"
+        ]
       },
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×30м",
-      "total_h": 8.0,
-      "phase": "run_base"
+      "total_h": 6.34,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 3.96,
+        "bike_h": 1.0,
+        "swim_h": 0.5,
+        "ofp_h": 0.83,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 14.0,
+      "run_km_quality": 3.0,
+      "run_km_easy": 21.0,
+      "intensity_pct": 7.9,
+      "deload": false,
+      "deload_pct": 8.6,
+      "sessions_target": 7,
+      "_load_breakdown": {
+        "run_h": 4.01,
+        "run_long_h": 1.32,
+        "run_easy_h": 1.98,
+        "run_quality_h": 0.7,
+        "bike_h": 1.0,
+        "swim_h": 0.5,
+        "ofp_h": 0.83,
+        "quality_min": 42,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 6.34
     },
     {
       "season_week": 5,
@@ -483,18 +713,72 @@
       "quality": {
         "goal": "mixed",
         "scale": "medium",
-        "_legacy_structure": "3×1К @ 4:20 + 2×800 @ 3:55",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace и VO2max",
         "scale_text": "средняя интенсивность",
         "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "3x1k+2x800",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 3,
+            "distance_m": 1000,
+            "pace": "4:25",
+            "zone": "Z5",
+            "hr_target": 164,
+            "rest_min": 2,
+            "rest_distance_m": 300
+          },
+          {
+            "type": "reps",
+            "reps": 2,
+            "distance_m": 800,
+            "pace": "3:55",
+            "zone": "Z6",
+            "hr_target": 172,
+            "rest_min": 3,
+            "rest_distance_m": 300
+          }
+        ],
+        "work_m": 4600,
+        "label": "3×1К @ 4:12 + 2×800 @ 3:50",
+        "paces": [
+          "4:25",
+          "3:55"
+        ]
       },
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 8.5,
-      "phase": "run_base"
+      "total_h": 6.83,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 3.86,
+        "bike_h": 1.0,
+        "swim_h": 0.67,
+        "ofp_h": 0.83,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 16.0,
+      "run_km_quality": 4.6,
+      "run_km_easy": 19.4,
+      "intensity_pct": 11.5,
+      "deload": false,
+      "deload_pct": 5.3,
+      "sessions_target": 7,
+      "_load_breakdown": {
+        "run_h": 4.33,
+        "run_long_h": 1.51,
+        "run_easy_h": 1.83,
+        "run_quality_h": 0.98,
+        "bike_h": 1.0,
+        "swim_h": 0.67,
+        "ofp_h": 0.83,
+        "quality_min": 59,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 6.83
     },
     {
       "season_week": 6,
@@ -503,18 +787,78 @@
       "quality": {
         "goal": "pyramid",
         "scale": "medium",
-        "_legacy_structure": "1К @ 4:20 → 800 @ 3:55 → 400 @ 3:45",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем переключение зон",
         "scale_text": "средняя интенсивность",
         "develops": "Переход от аэробной работы к пороговой и выше — навык смены интенсивности",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "1k-800-400",
+        "blocks": [
+          {
+            "type": "pyramid",
+            "steps": [
+              {
+                "distance_m": 1000,
+                "pace": "4:30",
+                "zone": "Z4",
+                "hr_target": 155
+              },
+              {
+                "distance_m": 800,
+                "pace": "4:10",
+                "zone": "Z5",
+                "hr_target": 163
+              },
+              {
+                "distance_m": 400,
+                "pace": "3:45",
+                "zone": "Z6",
+                "hr_target": 170
+              }
+            ],
+            "rest_min": 2,
+            "rest_distance_m": 250
+          }
+        ],
+        "work_m": 2200,
+        "label": "1К @ 4:20 → 800 @ 3:55 → 400 @ 3:45",
+        "paces": [
+          "4:30",
+          "4:10",
+          "3:45"
+        ]
       },
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 9.0,
-      "phase": "run_base"
+      "total_h": 6.98,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 4.28,
+        "bike_h": 1.0,
+        "swim_h": 0.67,
+        "ofp_h": 0.83,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 16.0,
+      "run_km_quality": 2.2,
+      "run_km_easy": 23.8,
+      "intensity_pct": 5.2,
+      "deload": false,
+      "deload_pct": 5.0,
+      "sessions_target": 7,
+      "_load_breakdown": {
+        "run_h": 4.48,
+        "run_long_h": 1.51,
+        "run_easy_h": 2.25,
+        "run_quality_h": 0.72,
+        "bike_h": 1.0,
+        "swim_h": 0.67,
+        "ofp_h": 0.83,
+        "quality_min": 43,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 6.98
     },
     {
       "season_week": 7,
@@ -523,18 +867,58 @@
       "quality": {
         "goal": "tempo",
         "scale": "medium",
-        "_legacy_structure": "5К tempo @ 4:20 (Z3-Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем аэробную мощность",
         "scale_text": "средняя интенсивность",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "5k",
+        "blocks": [
+          {
+            "type": "continuous",
+            "distance_m": 5000,
+            "pace": "4:20",
+            "zone": "Z4",
+            "hr_target": 157
+          }
+        ],
+        "work_m": 5000,
+        "label": "5К tempo @ 4:20",
+        "paces": [
+          "4:20"
+        ]
       },
       "core": "2×30м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 9.5,
-      "phase": "run_base"
+      "total_h": 7.26,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 4.56,
+        "bike_h": 1.0,
+        "swim_h": 0.67,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 18.0,
+      "run_km_quality": 5.0,
+      "run_km_easy": 22.0,
+      "intensity_pct": 11.1,
+      "deload": false,
+      "deload_pct": 7.1,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 4.59,
+        "run_long_h": 1.7,
+        "run_easy_h": 2.08,
+        "run_quality_h": 0.82,
+        "bike_h": 1.0,
+        "swim_h": 0.67,
+        "ofp_h": 1.0,
+        "quality_min": 49,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 7.26
     },
     {
       "season_week": 8,
@@ -543,17 +927,57 @@
       "quality": {
         "goal": "time_trial",
         "scale": "medium",
-        "_legacy_structure": "5К TT (пт 04.12): цель 22:30",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Проверяем форму на контрольной точке",
         "scale_text": "средняя интенсивность",
-        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции"
+        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции",
+        "variant_id": "tt_max",
+        "blocks": [
+          {
+            "type": "tt_max",
+            "distance_m": 5000,
+            "pace": "all-out",
+            "zone": "Z7",
+            "hr_target": 182
+          }
+        ],
+        "work_m": 5000,
+        "label": "Тест на максимум",
+        "paces": [
+          "all-out"
+        ]
       },
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "1×40м",
-      "total_h": 10.0,
-      "phase": "run_base"
+      "total_h": 8.59,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 4.84,
+        "bike_h": 2.0,
+        "swim_h": 0.67,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 14.0,
+      "run_km_quality": 5.0,
+      "run_km_easy": 29.0,
+      "intensity_pct": 10.4,
+      "deload": false,
+      "deload_pct": 6.7,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 4.93,
+        "run_long_h": 1.32,
+        "run_easy_h": 2.74,
+        "run_quality_h": 0.87,
+        "bike_h": 2.0,
+        "swim_h": 0.67,
+        "ofp_h": 1.0,
+        "quality_min": 52,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 8.59
     },
     {
       "season_week": 9,
@@ -562,18 +986,61 @@
       "quality": {
         "goal": "threshold_speed",
         "scale": "medium",
-        "_legacy_structure": "4×1К @ 4:15 (Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace",
         "scale_text": "средняя интенсивность",
         "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "4x1k",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 4,
+            "distance_m": 1000,
+            "pace": "4:25",
+            "zone": "Z5",
+            "hr_target": 164,
+            "rest_min": 2,
+            "rest_distance_m": 300
+          }
+        ],
+        "work_m": 4000,
+        "label": "4×1К @ 4:15",
+        "paces": [
+          "4:25"
+        ]
       },
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "1×40м",
-      "total_h": 10.5,
-      "phase": "run_base"
+      "total_h": 8.94,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 4.89,
+        "bike_h": 2.0,
+        "swim_h": 0.67,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 16.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 30.0,
+      "intensity_pct": 8.0,
+      "deload": false,
+      "deload_pct": 4.2,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.28,
+        "run_long_h": 1.51,
+        "run_easy_h": 2.83,
+        "run_quality_h": 0.93,
+        "bike_h": 2.0,
+        "swim_h": 0.67,
+        "ofp_h": 1.0,
+        "quality_min": 56,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 8.94
     },
     {
       "season_week": 10,
@@ -582,18 +1049,61 @@
       "quality": {
         "goal": "vo2max",
         "scale": "medium",
-        "_legacy_structure": "8×400 @ 3:45 (Z5)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем VO2max",
         "scale_text": "средняя интенсивность",
         "develops": "Аэробная мощность — верхняя граница аэробной системы",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "5x800",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 5,
+            "distance_m": 800,
+            "pace": "4:00",
+            "zone": "Z6",
+            "hr_target": 172,
+            "rest_min": 3,
+            "rest_distance_m": 400
+          }
+        ],
+        "work_m": 4000,
+        "label": "5×800 @ 3:55",
+        "paces": [
+          "4:00"
+        ]
       },
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "2×40м",
-      "total_h": 11.0,
-      "phase": "run_base"
+      "total_h": 9.74,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 4.42,
+        "bike_h": 2.0,
+        "swim_h": 1.33,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 18.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 28.0,
+      "intensity_pct": 8.0,
+      "deload": false,
+      "deload_pct": 0.0,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.41,
+        "run_long_h": 1.7,
+        "run_easy_h": 2.64,
+        "run_quality_h": 1.07,
+        "bike_h": 2.0,
+        "swim_h": 1.33,
+        "ofp_h": 1.0,
+        "quality_min": 64,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 9.74
     },
     {
       "season_week": 11,
@@ -602,18 +1112,61 @@
       "quality": {
         "goal": "fartlek",
         "scale": "medium",
-        "_legacy_structure": "Фартлек 200@5:10 + 800@3:50, 6 циклов",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем общую аэробную мощность",
         "scale_text": "средняя интенсивность",
         "develops": "Игровая стимуляция: чередование лёгкого и быстрого без жёсткой структуры",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "200-800 x6",
+        "blocks": [
+          {
+            "type": "fartlek",
+            "cycles": 6,
+            "easy_distance_m": 200,
+            "easy_pace": "5:20",
+            "hard_distance_m": 800,
+            "hard_pace": "4:00",
+            "hard_zone": "Z5",
+            "hr_target": 164
+          }
+        ],
+        "work_m": 6000,
+        "label": "6 циклов: 200@5:10 + 800@3:50",
+        "paces": [
+          "4:00"
+        ]
       },
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "2×40м",
-      "total_h": 11.0,
-      "phase": "run_base"
+      "total_h": 9.37,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 4.16,
+        "bike_h": 2.0,
+        "swim_h": 1.33,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 16.0,
+      "run_km_quality": 6.0,
+      "run_km_easy": 28.0,
+      "intensity_pct": 12.0,
+      "deload": false,
+      "deload_pct": 0.0,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.04,
+        "run_long_h": 1.51,
+        "run_easy_h": 2.64,
+        "run_quality_h": 0.88,
+        "bike_h": 2.0,
+        "swim_h": 1.33,
+        "ofp_h": 1.0,
+        "quality_min": 53,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 9.37
     },
     {
       "season_week": 12,
@@ -622,17 +1175,57 @@
       "quality": {
         "goal": "time_trial",
         "scale": "light",
-        "_legacy_structure": "3К TT @ max (пт 01.01.2027): цель 12:20 · 4:07/км",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Проверяем форму на контрольной точке",
         "scale_text": "объёмная работа",
-        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции"
+        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции",
+        "variant_id": "tt_max_3k",
+        "blocks": [
+          {
+            "type": "tt_max",
+            "distance_m": 3000,
+            "pace": "всеми силами",
+            "zone": "Z6",
+            "hr_target": 172
+          }
+        ],
+        "work_m": 3000,
+        "label": "3К на максимум",
+        "paces": [
+          "всеми силами"
+        ]
       },
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 9.5,
-      "phase": "run_base"
+      "total_h": 7.17,
+      "phase": "run_base",
+      "_total_h_model": {
+        "run_h": 4.62,
+        "bike_h": 1.0,
+        "swim_h": 0.67,
+        "ofp_h": 0.83,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 12.0,
+      "run_km_quality": 3.0,
+      "run_km_easy": 30.0,
+      "intensity_pct": 6.7,
+      "deload": true,
+      "deload_pct": -10.0,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 4.67,
+        "run_long_h": 1.13,
+        "run_easy_h": 2.83,
+        "run_quality_h": 0.7,
+        "bike_h": 1.0,
+        "swim_h": 0.67,
+        "ofp_h": 0.83,
+        "quality_min": 42,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 7.17
     },
     {
       "season_week": 13,
@@ -641,18 +1234,61 @@
       "quality": {
         "goal": "threshold_power",
         "scale": "light",
-        "_legacy_structure": "3×2К @ 4:15 (Z4) ⚡ первый длинный",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем способность держать threshold pace",
         "scale_text": "объёмная работа",
         "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "2x2k",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 2,
+            "distance_m": 2000,
+            "pace": "4:30",
+            "zone": "Z5",
+            "hr_target": 162,
+            "rest_min": 4,
+            "rest_distance_m": 400
+          }
+        ],
+        "work_m": 4000,
+        "label": "2×2К @ 4:15",
+        "paces": [
+          "4:30"
+        ]
       },
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "2×45м",
-      "total_h": 10.5,
-      "phase": "run_build"
+      "total_h": 9.69,
+      "phase": "run_build",
+      "_total_h_model": {
+        "run_h": 4.67,
+        "bike_h": 2.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 16.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 30.0,
+      "intensity_pct": 8.0,
+      "deload": false,
+      "deload_pct": 11.1,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.19,
+        "run_long_h": 1.51,
+        "run_easy_h": 2.83,
+        "run_quality_h": 0.85,
+        "bike_h": 2.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "quality_min": 51,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 9.69
     },
     {
       "season_week": 14,
@@ -661,18 +1297,61 @@
       "quality": {
         "goal": "threshold_speed",
         "scale": "heavy",
-        "_legacy_structure": "6×800 @ 4:10 (Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace",
         "scale_text": "высокая интенсивность",
         "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "6x800",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 6,
+            "distance_m": 800,
+            "pace": "4:20",
+            "zone": "Z5",
+            "hr_target": 165,
+            "rest_min": 2,
+            "rest_distance_m": 300
+          }
+        ],
+        "work_m": 4800,
+        "label": "6×800 @ 4:10",
+        "paces": [
+          "4:20"
+        ]
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 11.5,
-      "phase": "run_build"
+      "total_h": 10.84,
+      "phase": "run_build",
+      "_total_h_model": {
+        "run_h": 4.74,
+        "bike_h": 2.5,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 18.0,
+      "run_km_quality": 4.8,
+      "run_km_easy": 32.2,
+      "intensity_pct": 8.7,
+      "deload": false,
+      "deload_pct": 10.0,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.84,
+        "run_long_h": 1.7,
+        "run_easy_h": 3.04,
+        "run_quality_h": 1.1,
+        "bike_h": 2.5,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "quality_min": 66,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 10.84
     },
     {
       "season_week": 15,
@@ -681,18 +1360,69 @@
       "quality": {
         "goal": "mixed",
         "scale": "heavy",
-        "_legacy_structure": "5К tempo @ 4:15 + 4×400 @ 3:45",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace и VO2max",
         "scale_text": "высокая интенсивность",
         "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "5k+4x400",
+        "blocks": [
+          {
+            "type": "continuous",
+            "distance_m": 5000,
+            "pace": "4:45",
+            "zone": "Z4",
+            "hr_target": 158
+          },
+          {
+            "type": "reps",
+            "reps": 4,
+            "distance_m": 400,
+            "pace": "3:50",
+            "zone": "Z6",
+            "hr_target": 172,
+            "rest_min": 2,
+            "rest_distance_m": 250
+          }
+        ],
+        "work_m": 6600,
+        "label": "5К tempo @ 4:10 + 4×400 @ 3:45",
+        "paces": [
+          "4:45",
+          "3:50"
+        ]
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 11.5,
-      "phase": "run_build"
+      "total_h": 10.69,
+      "phase": "run_build",
+      "_total_h_model": {
+        "run_h": 5.35,
+        "bike_h": 2.5,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 18.0,
+      "run_km_quality": 6.6,
+      "run_km_easy": 30.4,
+      "intensity_pct": 12.0,
+      "deload": false,
+      "deload_pct": 0.0,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.69,
+        "run_long_h": 1.7,
+        "run_easy_h": 2.87,
+        "run_quality_h": 1.12,
+        "bike_h": 2.5,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "quality_min": 67,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 10.69
     },
     {
       "season_week": 16,
@@ -701,17 +1431,57 @@
       "quality": {
         "goal": "time_trial",
         "scale": "medium",
-        "_legacy_structure": "5К TT @ max (пт 22.01): цель 20:30 · 4:06/км",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Проверяем форму на контрольной точке",
         "scale_text": "средняя интенсивность",
-        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции"
+        "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции",
+        "variant_id": "tt_max",
+        "blocks": [
+          {
+            "type": "tt_max",
+            "distance_m": 5000,
+            "pace": "all-out",
+            "zone": "Z7",
+            "hr_target": 182
+          }
+        ],
+        "work_m": 5000,
+        "label": "Тест на максимум",
+        "paces": [
+          "all-out"
+        ]
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 11.5,
-      "phase": "run_build"
+      "total_h": 10.59,
+      "phase": "run_build",
+      "_total_h_model": {
+        "run_h": 5.51,
+        "bike_h": 2.5,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 16.0,
+      "run_km_quality": 5.0,
+      "run_km_easy": 34.0,
+      "intensity_pct": 9.1,
+      "deload": false,
+      "deload_pct": 0.0,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.59,
+        "run_long_h": 1.51,
+        "run_easy_h": 3.21,
+        "run_quality_h": 0.87,
+        "bike_h": 2.5,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "quality_min": 52,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 10.59
     },
     {
       "season_week": 17,
@@ -720,18 +1490,61 @@
       "quality": {
         "goal": "threshold_power",
         "scale": "medium",
-        "_legacy_structure": "4×2К @ 4:12 (Z4), отдых 3м",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем способность держать threshold pace",
         "scale_text": "средняя интенсивность",
         "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "3x2k",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 3,
+            "distance_m": 2000,
+            "pace": "4:25",
+            "zone": "Z5",
+            "hr_target": 164,
+            "rest_min": 3,
+            "rest_distance_m": 400
+          }
+        ],
+        "work_m": 6000,
+        "label": "3×2К @ 4:12",
+        "paces": [
+          "4:25"
+        ]
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 11.5,
-      "phase": "run_build"
+      "total_h": 10.69,
+      "phase": "run_build",
+      "_total_h_model": {
+        "run_h": 4.99,
+        "bike_h": 2.5,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 18.0,
+      "run_km_quality": 6.0,
+      "run_km_easy": 31.0,
+      "intensity_pct": 10.9,
+      "deload": false,
+      "deload_pct": 0.0,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.69,
+        "run_long_h": 1.7,
+        "run_easy_h": 2.93,
+        "run_quality_h": 1.07,
+        "bike_h": 2.5,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "quality_min": 64,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 10.69
     },
     {
       "season_week": 18,
@@ -740,18 +1553,58 @@
       "quality": {
         "goal": "tempo",
         "scale": "heavy",
-        "_legacy_structure": "8К long tempo @ 4:12 (Z3-Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем аэробную мощность",
         "scale_text": "высокая интенсивность",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "8k",
+        "blocks": [
+          {
+            "type": "continuous",
+            "distance_m": 8000,
+            "pace": "4:12",
+            "zone": "Z4",
+            "hr_target": 159
+          }
+        ],
+        "work_m": 8000,
+        "label": "8К long tempo @ 4:12",
+        "paces": [
+          "4:12"
+        ]
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 13.0,
-      "phase": "run_build"
+      "total_h": 11.43,
+      "phase": "run_build",
+      "_total_h_model": {
+        "run_h": 5.91,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 20.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 32.0,
+      "intensity_pct": 13.3,
+      "deload": false,
+      "deload_pct": 9.1,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.93,
+        "run_long_h": 1.89,
+        "run_easy_h": 3.02,
+        "run_quality_h": 1.02,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "quality_min": 61,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 11.43
     },
     {
       "season_week": 19,
@@ -759,19 +1612,59 @@
       "long_km": 22,
       "quality": {
         "goal": "tempo",
-        "scale": "heavy",
-        "_legacy_structure": "6К tempo @ 4:08 (Z4)",
+        "scale": "medium",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем аэробную мощность",
         "scale_text": "высокая интенсивность",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "6k",
+        "blocks": [
+          {
+            "type": "continuous",
+            "distance_m": 6000,
+            "pace": "4:08",
+            "zone": "Z4",
+            "hr_target": 159
+          }
+        ],
+        "work_m": 6000,
+        "label": "6К tempo @ 4:08",
+        "paces": [
+          "4:08"
+        ]
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 13.5,
-      "phase": "run_build"
+      "total_h": 11.94,
+      "phase": "run_build",
+      "_total_h_model": {
+        "run_h": 6.44,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 22.0,
+      "run_km_quality": 6.0,
+      "run_km_easy": 37.0,
+      "intensity_pct": 9.2,
+      "deload": false,
+      "deload_pct": 8.3,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 6.44,
+        "run_long_h": 2.08,
+        "run_easy_h": 3.49,
+        "run_quality_h": 0.87,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "quality_min": 52,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 11.94
     },
     {
       "season_week": 20,
@@ -780,18 +1673,61 @@
       "quality": {
         "goal": "vo2max",
         "scale": "heavy",
-        "_legacy_structure": "5×2К @ 4:05 (Z4-Z5) ⚡ race-pace touch",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем VO2max",
         "scale_text": "высокая интенсивность",
         "develops": "Аэробная мощность — верхняя граница аэробной системы",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "4x2k_vo2",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 4,
+            "distance_m": 2000,
+            "pace": "4:05",
+            "zone": "Z6",
+            "hr_target": 172,
+            "rest_min": 3,
+            "rest_distance_m": 400
+          }
+        ],
+        "work_m": 8000,
+        "label": "4×2К @ 4:10",
+        "paces": [
+          "4:05"
+        ]
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 14.0,
-      "phase": "run_specific"
+      "total_h": 12.13,
+      "phase": "run_specific",
+      "_total_h_model": {
+        "run_h": 5.78,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 22.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 35.0,
+      "intensity_pct": 12.3,
+      "deload": false,
+      "deload_pct": 0.0,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 6.63,
+        "run_long_h": 2.08,
+        "run_easy_h": 3.31,
+        "run_quality_h": 1.25,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "quality_min": 75,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 12.13
     },
     {
       "season_week": 21,
@@ -800,18 +1736,58 @@
       "quality": {
         "goal": "tempo",
         "scale": "peak",
-        "_legacy_structure": "10К long tempo @ 4:05 (Z3-Z4)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем аэробную мощность",
         "scale_text": "пиковая работа",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "10k",
+        "blocks": [
+          {
+            "type": "continuous",
+            "distance_m": 10000,
+            "pace": "4:05",
+            "zone": "Z4",
+            "hr_target": 160
+          }
+        ],
+        "work_m": 10000,
+        "label": "10К long tempo @ 4:05",
+        "paces": [
+          "4:05"
+        ]
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 14.0,
-      "phase": "run_specific"
+      "total_h": 12.3,
+      "phase": "run_specific",
+      "_total_h_model": {
+        "run_h": 6.8,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 22.0,
+      "run_km_quality": 10.0,
+      "run_km_easy": 38.0,
+      "intensity_pct": 14.3,
+      "deload": false,
+      "deload_pct": 7.7,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 6.8,
+        "run_long_h": 2.08,
+        "run_easy_h": 3.59,
+        "run_quality_h": 1.13,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "quality_min": 68,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 12.3
     },
     {
       "season_week": 22,
@@ -820,78 +1796,404 @@
       "quality": {
         "goal": "threshold_power",
         "scale": "heavy",
-        "_legacy_structure": "4×2К @ 4:05 (Z4), отдых 3м",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем способность держать threshold pace",
         "scale_text": "высокая интенсивность",
         "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "4x2k",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 4,
+            "distance_m": 2000,
+            "pace": "4:20",
+            "zone": "Z5",
+            "hr_target": 165,
+            "rest_min": 3,
+            "rest_distance_m": 400
+          }
+        ],
+        "work_m": 8000,
+        "label": "4×2К @ 4:10",
+        "paces": [
+          "4:20"
+        ]
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 14.0,
-      "phase": "run_specific"
+      "total_h": 12.64,
+      "phase": "run_specific",
+      "_total_h_model": {
+        "run_h": 6.41,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 24.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 38.0,
+      "intensity_pct": 11.4,
+      "deload": false,
+      "deload_pct": 0.0,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 7.14,
+        "run_long_h": 2.27,
+        "run_easy_h": 3.59,
+        "run_quality_h": 1.28,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "quality_min": 77,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 12.64
     },
     {
       "season_week": 23,
-      "run_km": 60,
+      "run_km": 55,
       "long_km": 14,
       "quality": {
         "goal": "time_trial",
         "scale": "heavy",
-        "_legacy_structure": "5К @ race pace 4:00 — цель 20:00 (готовим 40:00 на 10К)",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Проверяем форму на контрольной точке",
         "scale_text": "высокая интенсивность",
         "develops": "Максимальная аэробная и анаэробная мощность на измеримой дистанции",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "tt_race",
+        "blocks": [
+          {
+            "type": "tt_pace",
+            "distance_m": 5000,
+            "pace": "по цели CP",
+            "zone": "Z4",
+            "hr_target": 164
+          }
+        ],
+        "work_m": 5000,
+        "label": "Гонка-темп",
+        "paces": [
+          "по цели CP"
+        ]
       },
-      "core": "2×25м",
-      "bike": "2×60м",
-      "swim": "1×45м",
-      "total_h": 11.5,
-      "phase": "run_specific"
+      "core": "1×25м",
+      "bike": "1×45м",
+      "swim": "1×35м",
+      "total_h": 7.34,
+      "phase": "run_specific",
+      "_total_h_model": {
+        "run_h": 5.51,
+        "bike_h": 0.75,
+        "swim_h": 0.58,
+        "ofp_h": 0.42,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 14.0,
+      "run_km_quality": 5.0,
+      "run_km_easy": 36.0,
+      "intensity_pct": 9.1,
+      "deload": true,
+      "deload_pct": -21.4,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.59,
+        "run_long_h": 1.32,
+        "run_easy_h": 3.4,
+        "run_quality_h": 0.87,
+        "bike_h": 0.75,
+        "swim_h": 0.58,
+        "ofp_h": 0.42,
+        "quality_min": 52,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 7.34
     },
     {
       "season_week": 24,
-      "run_km": 45,
+      "run_km": 38,
       "long_km": 10,
       "quality": {
         "goal": "mixed",
         "scale": "light",
-        "_legacy_structure": "2×2К @ 4:02 + 1×800 @ 3:50",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Поднимаем threshold pace и VO2max",
         "scale_text": "объёмная работа",
         "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "3x1k+2x400",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 3,
+            "distance_m": 1000,
+            "pace": "4:30",
+            "zone": "Z5",
+            "hr_target": 162,
+            "rest_min": 2,
+            "rest_distance_m": 300
+          },
+          {
+            "type": "reps",
+            "reps": 2,
+            "distance_m": 400,
+            "pace": "3:50",
+            "zone": "Z6",
+            "hr_target": 170,
+            "rest_min": 2,
+            "rest_distance_m": 250
+          }
+        ],
+        "work_m": 3800,
+        "label": "3×1К @ 4:15 + 2×400 @ 3:45",
+        "paces": [
+          "4:30",
+          "3:50"
+        ]
       },
-      "core": "2×25м",
-      "bike": "2×60м",
-      "swim": "1×45м",
-      "total_h": 9.0,
-      "phase": "run_specific"
+      "core": "1×25м",
+      "bike": "1×45м",
+      "swim": "1×35м",
+      "total_h": 5.88,
+      "phase": "run_taper",
+      "_total_h_model": {
+        "run_h": 3.62,
+        "bike_h": 0.75,
+        "swim_h": 0.58,
+        "ofp_h": 0.42,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 10.0,
+      "run_km_quality": 3.8,
+      "run_km_easy": 24.2,
+      "intensity_pct": 10.0,
+      "deload": true,
+      "deload_pct": -30.9,
+      "sessions_target": 7,
+      "_load_breakdown": {
+        "run_h": 4.13,
+        "run_long_h": 0.94,
+        "run_easy_h": 2.29,
+        "run_quality_h": 0.9,
+        "bike_h": 0.75,
+        "swim_h": 0.58,
+        "ofp_h": 0.42,
+        "quality_min": 54,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 5.88
     },
     {
       "season_week": 25,
-      "run_km": 35,
+      "run_km": 30,
+      "long_km": 8,
+      "quality": {
+        "goal": "taper_race_pace",
+        "scale": "light",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Сохраняем качество, снижаем объём",
+        "scale_text": "максимальная свежесть",
+        "develops": "Частота и свежесть — гонка-темп остаётся в ногах",
+        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км).",
+        "variant_id": "taper_1k",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 1,
+            "distance_m": 1000,
+            "pace": "4:00",
+            "zone": "Z5",
+            "hr_target": 164,
+            "rest_min": 0,
+            "rest_distance_m": 0
+          },
+          {
+            "type": "reps",
+            "reps": 6,
+            "distance_m": 200,
+            "pace": "3:45",
+            "zone": "Z6",
+            "hr_target": 170,
+            "rest_min": 1,
+            "rest_distance_m": 200
+          }
+        ],
+        "work_m": 2200,
+        "label": "1×1К @ 4:00 + 6×200 @ 3:45",
+        "paces": [
+          "4:00",
+          "3:45"
+        ]
+      },
+      "core": "1×25м",
+      "bike": "1×40м",
+      "swim": "1×30м",
+      "total_h": 4.98,
+      "phase": "run_taper",
+      "_total_h_model": {
+        "run_h": 2.96,
+        "bike_h": 0.67,
+        "swim_h": 0.5,
+        "ofp_h": 0.42,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 8.0,
+      "run_km_quality": 2.2,
+      "run_km_easy": 19.8,
+      "intensity_pct": 7.3,
+      "deload": true,
+      "deload_pct": -21.1,
+      "sessions_target": 7,
+      "_load_breakdown": {
+        "run_h": 3.39,
+        "run_long_h": 0.76,
+        "run_easy_h": 1.87,
+        "run_quality_h": 0.77,
+        "bike_h": 0.67,
+        "swim_h": 0.5,
+        "ofp_h": 0.42,
+        "quality_min": 46,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 4.98
+    },
+    {
+      "season_week": 26,
+      "run_km": 24,
       "long_km": 6,
       "quality": {
-        "goal": "mixed",
+        "goal": "taper_race_pace",
         "scale": "light",
-        "_legacy_structure": "1×2К @ 4:00 + 1×1К @ 3:55 + 400 @ 3:45",
+        "goal_text": "Сохраняем качество, снижаем объём",
+        "scale_text": "максимальная свежесть",
+        "develops": "Частота и свежесть — гонка-темп остаётся в ногах",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
-        "goal_text": "Поднимаем threshold pace и VO2max",
-        "scale_text": "объёмная работа",
-        "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
-        "_legacy_structure_note": "Темп пересчитан под цель сезона 40:00 (4:00/км)."
+        "variant_id": "taper_1k",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 1,
+            "distance_m": 1000,
+            "pace": "4:00",
+            "zone": "Z5",
+            "hr_target": 164,
+            "rest_min": 0,
+            "rest_distance_m": 0
+          },
+          {
+            "type": "reps",
+            "reps": 6,
+            "distance_m": 200,
+            "pace": "3:45",
+            "zone": "Z6",
+            "hr_target": 170,
+            "rest_min": 1,
+            "rest_distance_m": 200
+          }
+        ],
+        "work_m": 2200,
+        "label": "1×1К @ 4:00 + 6×200 @ 3:45",
+        "paces": [
+          "4:00",
+          "3:45"
+        ]
       },
-      "core": "2×25м",
-      "bike": "1×45м",
-      "swim": "1×30м",
-      "total_h": 7.0,
-      "phase": "run_specific"
+      "core": "1×20м",
+      "bike": "1×30м",
+      "swim": "1×25м",
+      "phase": "run_taper",
+      "total_h": 4.08,
+      "_total_h_model": {
+        "run_h": 2.49,
+        "bike_h": 0.5,
+        "swim_h": 0.42,
+        "ofp_h": 0.33,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 6.0,
+      "run_km_quality": 2.2,
+      "run_km_easy": 15.8,
+      "intensity_pct": 9.2,
+      "deload": true,
+      "deload_pct": -20.0,
+      "sessions_target": 6,
+      "_load_breakdown": {
+        "run_h": 2.83,
+        "run_long_h": 0.57,
+        "run_easy_h": 1.49,
+        "run_quality_h": 0.77,
+        "bike_h": 0.5,
+        "swim_h": 0.42,
+        "ofp_h": 0.33,
+        "quality_min": 46,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 4.08
+    },
+    {
+      "season_week": 27,
+      "run_km": 16,
+      "long_km": 4,
+      "quality": {
+        "goal": "taper_race_pace",
+        "scale": "medium",
+        "goal_text": "Сохраняем качество, снижаем объём",
+        "scale_text": "максимальная свежесть",
+        "develops": "Частота и свежесть — гонка-темп остаётся в ногах",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "variant_id": "taper_400",
+        "blocks": [
+          {
+            "type": "reps",
+            "reps": 6,
+            "distance_m": 400,
+            "pace": "3:50",
+            "zone": "Z6",
+            "hr_target": 172,
+            "rest_min": 1.5,
+            "rest_distance_m": 200
+          }
+        ],
+        "work_m": 2400,
+        "label": "6×400 @ 3:50, отдых 90с",
+        "paces": [
+          "3:50"
+        ]
+      },
+      "core": "1×15м",
+      "bike": "1×25м",
+      "swim": "1×20м",
+      "phase": "run_taper",
+      "total_h": 3.1,
+      "_total_h_model": {
+        "run_h": 1.4,
+        "bike_h": 0.42,
+        "swim_h": 0.33,
+        "ofp_h": 0.25,
+        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+      },
+      "run_km_long": 4.0,
+      "run_km_quality": 2.4,
+      "run_km_easy": 9.6,
+      "intensity_pct": 15.0,
+      "deload": true,
+      "deload_pct": -33.3,
+      "sessions_target": 6,
+      "_load_breakdown": {
+        "run_h": 2.1,
+        "run_long_h": 0.38,
+        "run_easy_h": 0.91,
+        "run_quality_h": 0.82,
+        "bike_h": 0.42,
+        "swim_h": 0.33,
+        "ofp_h": 0.25,
+        "quality_min": 49,
+        "model": "длинная по Z2 + качественная по темпу блока (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 3.1
     }
   ],
   "season_goal": {

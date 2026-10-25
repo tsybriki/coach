@@ -86,8 +86,8 @@ def check(sp: dict, at: dict) -> list[str]:
                      if race_wk - 6 <= w["season_week"] <= race_wk]
             best = None
             for w in block:
-                leg = (w.get("quality") or {}).get("_legacy_structure", "")
-                for ps in re.findall(r"(\d+:\d{2})", leg):
+                # темпы — из СТРУКТУРЫ недели (quality.paces), не из строки
+                for ps in (w.get("quality") or {}).get("paces") or []:
                     try:
                         v = pace_sec(ps)
                     except ValueError:
@@ -147,34 +147,30 @@ def check(sp: dict, at: dict) -> list[str]:
         w = wm.get(c["season_week"])
         if not w:
             continue
-        leg = (w.get("quality") or {}).get("_legacy_structure", "")
+        q = w.get("quality") or {}
+        # темпы недельной работы — из СТРУКТУРЫ (quality.paces), не из строки
         leg_paces = []
-        for ps in re.findall(r"(\d+):(\d{2})", leg):
+        for ps in q.get("paces") or []:
             try:
-                leg_paces.append(pace_sec("{}:{}".format(ps[0], ps[1])))
+                leg_paces.append(pace_sec(ps))
             except ValueError:
                 pass
         if not leg_paces:
             continue
         cp_pace = pace_sec(s["pace_min_per_km"])
-        # Расхождение считаем только если недельная структура НЕ содержит
-        # времени цели (напр. «цель 14:00») — иначе это одно и то же.
-        target_sec_cp = s.get("target_sec")
-        has_target_time = bool(target_sec_cp) and "{}".format(fmt(target_sec_cp)) in leg
-        if has_target_time:
-            continue
+        # Для TT-сессии темп задаёт контрольная точка — сверяем именно с ней
         if all(abs(v - cp_pace) > 1.0 for v in leg_paces):
             problems.append(
                 "W{}: контрольная точка '{}' требует темп {}, а недельная структура '{}' — расхождение".format(
-                    c["season_week"], c.get("id"), s["pace_min_per_km"], leg[:44]))
+                    c["season_week"], c.get("id"), s["pace_min_per_km"],
+                    q.get("label") or q.get("variant_id", "")))
 
     # 4c) Неделя гонки: темп должен быть ≤ цели
     if race_wk and race_wk in wm:
-        leg = (wm[race_wk].get("quality") or {}).get("_legacy_structure", "")
         vals = []
-        for ps in re.findall(r"(\d+):(\d{2})", leg):
+        for ps in (wm[race_wk].get("quality") or {}).get("paces") or []:
             try:
-                vals.append(pace_sec("{}:{}".format(ps[0], ps[1])))
+                vals.append(pace_sec(ps))
             except ValueError:
                 pass
         if vals and min(vals) > tp + 0.5:
@@ -221,6 +217,52 @@ def check(sp: dict, at: dict) -> list[str]:
                 problems.append(
                     "workout_templates: vo2max pace = {} — VO2max не быстрее гонки-темпа {}".format(
                         pc, target_pace))
+
+    # 7) ЦЕЛОСТНОСТЬ ДАННЫХ: макро ссылается на каталог, всё считается из структуры
+    tpl_path = REPO / "state/workout_templates.json"
+    if tpl_path.exists():
+        tpl = json.loads(tpl_path.read_text(encoding="utf-8")).get("templates", {})
+        index = {}
+        for gid, t in tpl.items():
+            if not isinstance(t, dict):
+                continue
+            for v in t.get("variants") or []:
+                if v["id"] in index:
+                    problems.append(
+                        "workout_templates: дубликат variant_id '{}' (в {} и {})".format(
+                            v["id"], index[v["id"]], gid))
+                index[v["id"]] = gid
+
+        for w in sp.get("weekly_macro", []):
+            q = w.get("quality") or {}
+            vid = q.get("variant_id")
+            n = w["season_week"]
+            if not vid:
+                problems.append("W{}: нет quality.variant_id — структура не задана данными".format(n))
+                continue
+            if vid not in index:
+                problems.append("W{}: variant_id '{}' нет в workout_templates".format(n, vid))
+            if not q.get("blocks"):
+                problems.append("W{}: у варианта '{}' нет blocks".format(n, vid))
+            if q.get("_legacy_structure"):
+                problems.append(
+                    "W{}: осталась строка _legacy_structure — структура должна быть в blocks".format(n))
+            if not w.get("total_h"):
+                problems.append("W{}: нет total_h — нагрузка не посчитана".format(n))
+
+        # нагрузка должна сходиться с пересчётом (страховка от ручных правок)
+        try:
+            sys.path.insert(0, str(REPO))
+            from lib import load_model
+            at = json.loads((REPO / "state/athlete.json").read_text(encoding="utf-8"))
+            for w in sp.get("weekly_macro", []):
+                calc = load_model.macro_week_load(w, at)["total_h"]
+                if abs(calc - float(w.get("total_h", 0))) > 0.05:
+                    problems.append(
+                        "W{}: total_h={} не совпадает с пересчётом из структуры ({})".format(
+                            w["season_week"], w.get("total_h"), calc))
+        except Exception as e:  # noqa: BLE001
+            problems.append("не удалось перепроверить нагрузку: {}".format(e))
 
     return problems
 

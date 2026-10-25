@@ -797,6 +797,30 @@ def generate(season_week: int | str,
     phase_goal = (current_phase or {}).get("goal")
     phase_focus = (current_phase or {}).get("focus")
 
+    # ── СВЕРКА ПЛАНА НЕДЕЛИ С МАКРО ────────────────────────────────────
+    # План недели должен попадать в нагрузку, заложенную макро
+    # (weekly_macro[].total_h). Отклонение подсвечивается, а не молчит.
+    load_target = None
+    if week_entry:
+        load_target = week_entry.get("total_h") or week_entry.get("target_h")
+    load_compare = None
+    if load_target:
+        from .load_model import compare as _cmp_load
+        load_compare = _cmp_load(float(load_target), float(total_planned_h))
+        load_compare["target_h"] = round(float(load_target), 2)
+        load_compare["actual_h"] = round(total_planned_h, 2)
+        load_compare["source"] = "weekly_macro[].total_h (вычисляется из структуры)"
+        if load_compare["status"] == "over":
+            load_compare["hint"] = (
+                "План тяжелее макро на {:.1f}ч ({}%). Либо сократить объём, "
+                "либо принять как осознанное решение и записать в макро.".format(
+                    load_compare["delta_h"], abs(load_compare["delta_pct"])))
+        elif load_compare["status"] == "under":
+            load_compare["hint"] = (
+                "План легче макро на {:.1f}ч ({}%). Добираем объём или фиксируем "
+                "недогрузку как осознанное решение.".format(
+                    -load_compare["delta_h"], abs(load_compare["delta_pct"])))
+
     return {
         "$schema": "./plan.schema.md",
         "version": 2,
@@ -820,6 +844,7 @@ def generate(season_week: int | str,
         },
         "slots": all_slots,
         "load_context": load_context,
+        "load_compare": load_compare,
         "control_points_in_range": [cp["id"] for cp in cp_in_range],
         "control_point_slots": cp_slots,
         "overrides_applied": applied_log,

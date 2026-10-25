@@ -133,7 +133,7 @@ def build_gates(sp: dict) -> list[Gate]:
                 "Пересобрать фазу build: сократить до 6 недель, отдать время race-specific.",
                 "Честно пересмотреть целевое время (41:00 вместо 40:00) — и записать это в season_goal.",
             ],
-            "lever": "weekly_macro[].run_km / long_km / quality._legacy_structure, athlete.json training_paces",
+            "lever": "weekly_macro[].run_km / run_km_long / quality.variant_id, athlete.json training_paces",
         },
         "run_build": {
             "title": "Итог build-фазы: порог vs цель",
@@ -159,7 +159,7 @@ def build_gates(sp: dict) -> list[Gate]:
                 "Снизить интенсивность, добавить 2 недели базы перед build.",
                 "Пересмотреть целевое время в season_goal и не врать себе дальше.",
             ],
-            "lever": "weekly_macro[].quality._legacy_structure, control_points[].session.pace_min_per_km",
+            "lever": "weekly_macro[].quality.variant_id, control_points[].session.pace_min_per_km",
         },
         "run_specific": {
             "title": "Готовность к гонке",
@@ -182,7 +182,7 @@ def build_gates(sp: dict) -> list[Gate]:
                 "5К > 20:15 — гонка-темп не закрыт. Чистый тапер или смена цели.",
                 "Рекомендация: зафиксировать в season_goal новый target (41:00) и ехать на него.",
             ],
-            "lever": "weekly_macro[].quality._legacy_structure, goals[].goal_metric.target",
+            "lever": "weekly_macro[].quality.variant_id, goals[].goal_metric.target",
         },
     }
 
@@ -277,7 +277,7 @@ def build_gates(sp: dict) -> list[Gate]:
                 "Гонка без подтверждённого гонку-темпа — лотерея.",
                 "После этого gate план не меняется: только тапер.",
             ],
-            lever="weekly_macro[].quality._legacy_structure",
+            lever="weekly_macro[].quality.variant_id",
             decisions={
                 PASS: ["Гонку-темп закрыт — едем с целью {}.".format(
                     (sp.get("season_goal") or {}).get("target_time", "—"))],

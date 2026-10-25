@@ -150,6 +150,18 @@ def build_data(season_plan_path: Path, athlete_path: Path,
             })
             w["comp_h"] = round(w["run_h"] + w["bike_h"] + w["swim_h"] + w["ofp_h"], 1)
             w["total_h"] = entry.get("total_h", 0)
+            # структурированные данные недели (из каталога, не из строки)
+            q = entry.get("quality") or {}
+            w["variant_id"] = q.get("variant_id")
+            w["quality_label"] = q.get("label")
+            w["quality_work_m"] = q.get("work_m")
+            w["quality_paces"] = q.get("paces") or []
+            w["run_km_long"] = entry.get("run_km_long")
+            w["run_km_quality"] = entry.get("run_km_quality")
+            w["run_km_easy"] = entry.get("run_km_easy")
+            w["intensity_pct"] = entry.get("intensity_pct")
+            w["deload"] = entry.get("deload")
+            w["sessions_target"] = entry.get("sessions_target")
             # TT-неделя: цель = конкретный тест
             tt = tt_by_week.get(n)
             if tt:
@@ -418,6 +430,11 @@ h2 .hint{font-size:11px;color:var(--muted);font-weight:400}
 .cmp .cbar i{display:block;height:100%}
 .cmp .cl{color:var(--muted);font-family:ui-monospace,monospace;white-space:nowrap}
 .phase-note{font-size:11px;color:var(--warn);margin-top:6px}
+.wk-load{margin:6px 0 2px;padding:6px 8px;background:var(--panel2);border-radius:7px}
+.wl-row{display:flex;gap:8px;font-size:10.5px;color:var(--muted);padding:1.5px 0}
+.wl-row span:first-child{color:var(--muted);flex-shrink:0;width:88px}
+.wl-row span:last-child{flex:1;color:var(--text)}
+.wl-id{font-family:ui-monospace,monospace;font-size:9.5px;color:var(--muted)}
 
 .fphase{background:var(--panel);border:1px solid var(--border);border-radius:12px;
   padding:10px 13px;margin-bottom:8px}
@@ -616,9 +633,29 @@ document.getElementById('weeks').innerHTML = D.weeks.map(w => {
     body += '<div class="wk-grid">'
       + '<div class="mt plan"><div class="ml">план · бег</div><div class="mv">'+w.run_km+'К</div></div>'
       + '<div class="mt plan"><div class="ml">long Z2</div><div class="mv">'+w.long_km+'К</div></div>'
-      + '<div class="mt plan"><div class="ml">план · Σ</div><div class="mv">'+w.comp_h+'ч</div></div>'
-      + '<div class="mt plan"><div class="ml">total макро</div><div class="mv">'+w.total_h+'ч</div></div>'
+      + '<div class="mt plan"><div class="ml">нагрузка</div><div class="mv">'+w.total_h+'ч</div></div>'
+      + '<div class="mt plan"><div class="ml">сессий</div><div class="mv">'+(w.sessions_target||'—')+'</div></div>'
       + '</div>';
+    // разбивка нагрузки и структура
+    let ld = '<div class="wk-load">';
+    if (w.run_km_long != null) {
+      ld += '<div class="wl-row"><span>бег</span><span>'
+         + w.run_km + 'К = long ' + w.run_km_long + 'К + качеств. '
+         + w.run_km_quality + 'К + лёгк. ' + w.run_km_easy + 'К</span></div>';
+    }
+    if (w.intensity_pct != null) {
+      ld += '<div class="wl-row"><span>интенсивность</span><span>'
+         + w.intensity_pct + '% объёма в Z3+</span></div>';
+    }
+    if (w.quality_label) {
+      ld += '<div class="wl-row"><span>структура</span><span>'
+         + esc(w.quality_label) + ' <span class="wl-id">' + esc(w.variant_id||'') + '</span></span></div>';
+    }
+    if (w.deload) {
+      ld += '<div class="wl-row"><span>деload</span><span>объём снижен</span></div>';
+    }
+    ld += '</div>';
+    body += ld;
   }
   if (a) {
     body += '<div class="wk-grid">'

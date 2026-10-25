@@ -208,7 +208,7 @@
           "id": "volume_hours",
           "label": "Тренировочных часов за фазу",
           "metric": "hours_mean",
-          "threshold": "≥ 5 ч/нед",
+          "threshold": "≥ 7 ч/нед",
           "op": "ge",
           "unit": "ч/нед",
           "severity": "soft",
@@ -237,7 +237,7 @@
           "Честно пересмотреть целевое время (41:00 вместо 40:00) — и записать это в season_goal."
         ]
       },
-      "lever": "weekly_macro[].run_km / long_km / quality._legacy_structure, athlete.json training_paces",
+      "lever": "weekly_macro[].run_km / run_km_long / quality.variant_id, athlete.json training_paces",
       "decided_at": "",
       "decision": ""
     },
@@ -423,7 +423,7 @@
           "id": "volume_hours",
           "label": "Тренировочных часов за фазу",
           "metric": "hours_mean",
-          "threshold": "≥ 7 ч/нед",
+          "threshold": "≥ 11 ч/нед",
           "op": "ge",
           "unit": "ч/нед",
           "severity": "soft",
@@ -452,7 +452,89 @@
           "Пересмотреть целевое время в season_goal и не врать себе дальше."
         ]
       },
-      "lever": "weekly_macro[].quality._legacy_structure, control_points[].session.pace_min_per_km",
+      "lever": "weekly_macro[].quality.variant_id, control_points[].session.pace_min_per_km",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_phase_run_specific",
+      "season_week": 23,
+      "kind": "phase",
+      "title": "Готовность к гонке · Поднимаем race pace",
+      "question": "Закрыт ли гонку-темп 4:00/км и держится ли объём?",
+      "checks": [
+        {
+          "id": "run_km",
+          "label": "Объём бега за фазу (К/нед)",
+          "metric": "run_km_mean",
+          "threshold": "45–70 К",
+          "op": "between",
+          "unit": "К/нед",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "sessions",
+          "label": "Сессий в неделю",
+          "metric": "sessions_mean",
+          "threshold": "≥ 7",
+          "op": "ge",
+          "unit": "сессий",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "threshold_pace",
+          "label": "Фактический порог (темп @ LTH)",
+          "metric": "threshold_pace",
+          "threshold": "4:15",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "volume_hours",
+          "label": "Тренировочных часов за фазу",
+          "metric": "hours_mean",
+          "threshold": "≥ 11 ч/нед",
+          "op": "ge",
+          "unit": "ч/нед",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "Это последняя точка принятия решения перед гонкой. После неё — только тапер.",
+        "Гонка 18.04.2027 — через 2 недели после конца фазы."
+      ],
+      "decisions": {
+        "pass": [
+          "5К на гонку-темпе ≤ 20:00 — цель 40:00 подтверждена.",
+          "Объём 50+ К/нед и длинный темп 10К @ 4:05 — форма на месте."
+        ],
+        "warn": [
+          "5К 20:00–20:15 — тапер сдвинуть на 2 дня, объём W24–W25 урезать на 20%.",
+          "Длинный темп хуже 4:10 — W24 целиком tempo на 4:08, без объёма."
+        ],
+        "fail": [
+          "5К > 20:15 — гонка-темп не закрыт. Чистый тапер или смена цели.",
+          "Рекомендация: зафиксировать в season_goal новый target (41:00) и ехать на него."
+        ]
+      },
+      "lever": "weekly_macro[].quality.variant_id, goals[].goal_metric.target",
       "decided_at": "",
       "decision": ""
     },
@@ -523,88 +605,6 @@
       "decision": ""
     },
     {
-      "id": "gate_phase_run_specific",
-      "season_week": 25,
-      "kind": "phase",
-      "title": "Готовность к гонке · Поднимаем race pace",
-      "question": "Закрыт ли гонку-темп 4:00/км и держится ли объём?",
-      "checks": [
-        {
-          "id": "run_km",
-          "label": "Объём бега за фазу (К/нед)",
-          "metric": "run_km_mean",
-          "threshold": "45–70 К",
-          "op": "between",
-          "unit": "К/нед",
-          "severity": "hard",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "sessions",
-          "label": "Сессий в неделю",
-          "metric": "sessions_mean",
-          "threshold": "≥ 7",
-          "op": "ge",
-          "unit": "сессий",
-          "severity": "soft",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "threshold_pace",
-          "label": "Фактический порог (темп @ LTH)",
-          "metric": "threshold_pace",
-          "threshold": "4:15",
-          "op": "pace_le",
-          "unit": "/км",
-          "severity": "hard",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "volume_hours",
-          "label": "Тренировочных часов за фазу",
-          "metric": "hours_mean",
-          "threshold": "≥ 8 ч/нед",
-          "op": "ge",
-          "unit": "ч/нед",
-          "severity": "soft",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        }
-      ],
-      "warnings": [
-        "Это последняя точка принятия решения перед гонкой. После неё — только тапер.",
-        "Гонка 18.04.2027 — через 2 недели после конца фазы."
-      ],
-      "decisions": {
-        "pass": [
-          "5К на гонку-темпе ≤ 20:00 — цель 40:00 подтверждена.",
-          "Объём 50+ К/нед и длинный темп 10К @ 4:05 — форма на месте."
-        ],
-        "warn": [
-          "5К 20:00–20:15 — тапер сдвинуть на 2 дня, объём W24–W25 урезать на 20%.",
-          "Длинный темп хуже 4:10 — W24 целиком tempo на 4:08, без объёма."
-        ],
-        "fail": [
-          "5К > 20:15 — гонка-темп не закрыт. Чистый тапер или смена цели.",
-          "Рекомендация: зафиксировать в season_goal новый target (41:00) и ехать на него."
-        ]
-      },
-      "lever": "weekly_macro[].quality._legacy_structure, goals[].goal_metric.target",
-      "decided_at": "",
-      "decision": ""
-    },
-    {
       "id": "gate_race_28",
       "season_week": 28,
       "kind": "race",
@@ -653,7 +653,7 @@
           "Гонку-темп не закрыт вовсе — записать новую цель в season_goal и ехать на неё. Не импровизировать в апреле."
         ]
       },
-      "lever": "weekly_macro[].quality._legacy_structure",
+      "lever": "weekly_macro[].quality.variant_id",
       "decided_at": "",
       "decision": ""
     },
@@ -772,7 +772,7 @@
           "Гонку-темп не закрыт вовсе — записать новую цель в season_goal и ехать на неё. Не импровизировать в апреле."
         ]
       },
-      "lever": "weekly_macro[].quality._legacy_structure",
+      "lever": "weekly_macro[].quality.variant_id",
       "decided_at": "",
       "decision": ""
     }
