@@ -1,0 +1,75 @@
+{
+  "_source": "Daniels' Running Formula — скан из книги, прислано Кириллом 24.10.2026",
+  "_saved": "2026-10-24",
+  "_files": {
+    "raw_training_paces": "reference/daniels/raw_training_paces.txt",
+    "raw_race_times": "reference/daniels/raw_vdot_race_times.txt",
+    "parsed": "reference/daniels/daniels_tables.json",
+    "module": "lib/daniels.py"
+  },
+  "_column_map_training_paces": {
+    "0": "VDOT",
+    "1,2": "JL Easy — миля, км",
+    "3,4": "M Marathon — миля, км",
+    "5,6,7": "П Threshold — 400м, 1000м, миля",
+    "8": "И Interval — VDOT интервального темпа",
+    "9,10,11": "И — 400м, 1000м, 1200м",
+    "12": "Пв Repetition — миля",
+    "13,14,15": "Пв — 200м, 400м, 800м"
+  },
+  "_daniels_intensity_pct_vo2max": {
+    "JL_easy": [0.60, 0.74],
+    "M_marathon": [0.79, 0.85],
+    "П_threshold": [0.88, 0.92],
+    "И_interval": [0.95, 1.00],
+    "Пв_repetition": [1.00, 1.06]
+  },
+  "athlete": {
+    "vdot": 47,
+    "vdot_source": "по таблице Дэниэлса (указан Кириллом)",
+    "hr_max": 182,
+    "rhr": 54,
+    "lth": 164,
+    "garmin_vo2max": 51,
+    "pace_estimate_10k": "44:06 (11.10.2026) → VDOT 46.4 по таблице Дэниэлса",
+    "pb_10k": "40:04 при 100 кг",
+    "weight_now": 101.7,
+    "target_weight": 96
+  },
+  "paces_at_vdot_47": {
+    "JL_easy": {"mile": "8:58", "km": "5:34", "sec_per_km": 334},
+    "M_marathon": {"mile": "7:40", "km": "4:46", "sec_per_km": 286},
+    "П_threshold": {"400m": "1:47", "1000m": "4:29", "mile": "7:10", "sec_per_km": 269},
+    "И_interval": {"vdot": 47, "400m": "1:38", "1000m": "4:07", "1200m": "4:54", "sec_per_km": 247},
+    "Пв_repetition": {"200m": "0:45", "400m": "1:32", "sec_per_km": 230}
+  },
+  "race_times_at_vdot_47": {
+    "1500m": "5:42",
+    "mile": "6:10",
+    "3000m": "12:12",
+    "2_miles": "13:10",
+    "5000m": "21:02",
+    "10000m": "43:36",
+    "15000m": "1:07:06",
+    "half": "1:36:38",
+    "marathon": "3:21:00"
+  },
+  "target_vdots": {
+    "10k_40_00": {"vdot": 52, "marathon": "3:04:36"},
+    "10k_41_30": {"vdot": 49.8, "marathon": "3:14:06"},
+    "10k_44_06_current": {"vdot": 46.4, "marathon": "3:24:39"}
+  },
+  "zone_bridge": {
+    "_note": "Зоны Дэниэлса (%VO2max) → %HRmax → зоны Кирилла (HRmax=182)",
+    "JL_easy": {"pct_vo2max": [0.60, 0.74], "hr": [109, 135], "kirill_zones": "Z1-Z2"},
+    "M_marathon": {"pct_vo2max": [0.79, 0.85], "hr": [144, 155], "kirill_zones": "Z3-Z4"},
+    "П_threshold": {"pct_vo2max": [0.88, 0.92], "hr": [160, 167], "kirill_zones": "Z5"},
+    "И_interval": {"pct_vo2max": [0.95, 1.00], "hr": [173, 182], "kirill_zones": "Z7"},
+    "Пв_repetition": {"pct_vo2max": [1.00, 1.06], "hr": [182, 193], "kirill_zones": "выше HRmax"}
+  },
+  "gaps_found": [
+    "Порог: план требует 4:10-4:20, но фактический по FIT 13.10 — 4:30-4:39 при HR 163-164. Дэниэлс V47 даёт 4:29. То есть план ставит порог на уровне VDOT ~52, а форма сейчас VDOT ~47.",
+    "Easy: план 5:40-5:50, Дэниэлс V47 — 5:34 (медленнее на 6 с/км = легче)",
+    "VO2max: план <4:00, Дэниэлс V47 даёт 4:07 (интервальный темп)"
+  ]
+}
