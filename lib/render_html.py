@@ -236,6 +236,7 @@ def render_plan_wN(plan: dict[str, Any], out_path: str | Path) -> Path:
         "week_goal": plan.get("week_goal"),
         "week_goal_detail": plan.get("week_goal_detail"),
         "season_goal": plan.get("season_goal"),
+        "gates": plan.get("gates") or [],
         "slots": [
             {
                 "id": s.get("id"),
@@ -346,6 +347,35 @@ h3{font-size:13px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.5px;co
 .summary-totals{margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:var(--accent2);font-weight:600;text-align:center;font-family:ui-monospace,SFMono-Regular,monospace}
 
 .plan-title{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:4px}
+.gate-box{margin:9px 0 4px;border:1px solid var(--border);border-radius:10px;
+  background:var(--panel);overflow:hidden}
+.gate-hd{display:flex;align-items:center;gap:8px;padding:9px 11px;cursor:pointer;
+  user-select:none;flex-wrap:wrap}
+.gate-ico{width:19px;height:19px;border-radius:5px;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.g-pending{background:#2a3140;color:#9aa3b2}
+.g-pass{background:rgba(92,214,192,.18);color:#5cd6c0}
+.g-warn{background:rgba(240,180,87,.18);color:#f0b457}
+.g-fail{background:rgba(255,107,90,.18);color:#ff6b5a}
+.gate-ttl{font-size:12px;font-weight:600;color:var(--text);flex:1;min-width:0}
+.gate-kind{font-size:9px;text-transform:uppercase;letter-spacing:.5px;
+  padding:2px 6px;border-radius:4px;background:var(--panel2);color:var(--muted)}
+.gate-body{padding:0 11px 11px;font-size:11.5px;color:var(--muted)}
+.gate-body.hidden{display:none}
+.gq{color:var(--text);font-weight:600;margin:9px 0 6px;font-size:11.5px}
+.gcheck{display:flex;gap:7px;align-items:baseline;padding:2px 0}
+.gcheck .gc-v{font-family:ui-monospace,monospace;flex-shrink:0;min-width:56px}
+.gcheck .gc-t{flex:1}
+.gwarn{background:rgba(240,180,87,.09);border-left:2px solid rgba(240,180,87,.55);
+  padding:6px 9px;margin:5px 0;border-radius:0 6px 6px 0;line-height:1.45;color:#e8d5b0}
+.gdec{border-left:2px solid var(--border);padding:5px 0 5px 9px;margin:4px 0;line-height:1.45}
+.gdec b{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--muted);margin-bottom:2px}
+.gdec.pass{border-color:rgba(92,214,192,.55)} .gdec.pass b{color:#5cd6c0}
+.gdec.warn{border-color:rgba(240,180,87,.55)} .gdec.warn b{color:#f0b457}
+.gdec.fail{border-color:rgba(255,107,90,.55)} .gdec.fail b{color:#ff6b5a}
+.glever{font-size:11px;margin-top:7px;padding-top:6px;border-top:1px dashed var(--border)}
+.glever b{color:var(--accent)}
 .season-goal-box{margin:10px 0 4px;padding:10px 12px;border-radius:10px;
   background:linear-gradient(135deg,rgba(255,107,90,.12),rgba(122,162,255,.06));
   border:1px solid rgba(255,107,90,.32)}
@@ -684,6 +714,58 @@ function renderCard(slot) {
     + '</div>';
 }
 
+function buildGates(gates) {
+  if (!gates || !gates.length) return '';
+  const ICON = {pass:'✓', warn:'!', fail:'✗', pending:'·'};
+  const KIND = {phase:'фаза', quality:'контрольная', metric:'замер', race:'гонка'};
+  function st(g) {
+    const s = (g.checks||[]).map(c => c.status);
+    if (s.includes('fail')) return 'fail';
+    if (s.includes('warn')) return 'warn';
+    if (s.includes('pass')) return 'pass';
+    return 'pending';
+  }
+  let h = '<div class="gates-wrap">';
+  gates.forEach((g, i) => {
+    const s = st(g);
+    const body = 'gbody' + i;
+    h += '<div class="gate-box">';
+    h += '<div class="gate-hd" data-gate-toggle="' + body + '">';
+    h += '<span class="gate-ico g-' + s + '">' + (ICON[s]||'·') + '</span>';
+    h += '<span class="gate-ttl">' + escapeHtml(g.title) + '</span>';
+    h += '<span class="gate-kind">' + (KIND[g.kind] || g.kind) + '</span>';
+    h += '</div>';
+    h += '<div class="gate-body hidden" id="' + body + '">';
+    h += '<div class="gq">' + escapeHtml(g.question) + '</div>';
+    (g.checks||[]).forEach(c => {
+      let v = (c.value === null || c.value === undefined) ? '—'
+            : (typeof c.value === 'number' ? (Math.round(c.value*10)/10) : c.value);
+      if ((c.metric === 'threshold_pace' || c.metric === 'tt_pace')
+          && typeof v === 'number' && v > 60) {
+        v = Math.floor(v/60) + ':' + String(Math.round(v%60)).padStart(2,'0');
+      }
+      const col = c.status==='fail' ? '#ff6b5a' : c.status==='warn' ? '#f0b457'
+                : c.status==='pass' ? '#5cd6c0' : '#9aa3b2';
+      const m = ICON[c.status] || '·';
+      h += '<div class="gcheck"><span class="gc-v" style="color:' + col + '">' + m + ' ' + escapeHtml(v)
+         + '</span><span class="gc-t">' + escapeHtml(c.label) + ' — порог ' + escapeHtml(c.threshold) + '</span></div>';
+    });
+    (g.warnings||[]).forEach(w => { h += '<div class="gwarn">⚠ ' + escapeHtml(w) + '</div>'; });
+    const D = g.decisions || {};
+    ['pass','warn','fail'].forEach(k => {
+      if (D[k] && D[k].length) {
+        h += '<div class="gdec ' + k + '"><b>' + ({pass:'Если прошли', warn:'Если на грани', fail:'Если провалили'})[k] + '</b>';
+        D[k].forEach(x => { h += '• ' + escapeHtml(x) + '<br>'; });
+        h += '</div>';
+      }
+    });
+    if (g.lever) h += '<div class="glever"><b>Рычаг:</b> ' + escapeHtml(g.lever) + '</div>';
+    h += '</div></div>';
+  });
+  h += '</div>';
+  return h;
+}
+
 function buildPicker(plan) {
   ACTIVE_WEEK_KEY = plan.weekIso || plan.season_week || null;
   const isActual = !!plan.is_actual_log;
@@ -699,6 +781,8 @@ function buildPicker(plan) {
          + '<div class="sg-gap">' + escapeHtml((SG.current_form || '') + ' · разрыв ' + (SG.gap || '')) + '</div>'
          + '</div>';
   }
+  // GATES — точки принятия решения, относящиеся к этой неделе
+  html += buildGates(plan.gates || []);
   if (plan.subtitle) html += '<div class="week">' + escapeHtml(plan.subtitle) + '</div>';
   if (isActual) html += '<div class="actual-badge">✅ Фактический лог</div>';
   html += '</div>';
@@ -865,6 +949,14 @@ document.getElementById('backBtn').addEventListener('click', () => {
 
 // Init
 function init() {
+  // раскрытие gates (делегирование)
+  document.addEventListener('click', function(e) {
+    const t = e.target;
+    const hd = t && t.closest ? t.closest('[data-gate-toggle]') : null;
+    if (!hd) return;
+    const body = document.getElementById(hd.getAttribute('data-gate-toggle'));
+    if (body) body.classList.toggle('hidden');
+  });
   PLAN = loadPlan();
   if (!PLAN) {
     document.getElementById('picker').innerHTML = '<div class="card">Не удалось загрузить план.</div>';

@@ -125,6 +125,90 @@ def test_season_replan_archive():
     print("  ✓ season_replan archives + updates")
 
 
+def test_goal_guard_macro_leads_to_target():
+    """Цель сезона одна, макро ведёт к ней, откат ловится."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import goal_guard
+
+    sp = json.loads((ROOT / "state/season_plan.json").read_text(encoding="utf-8"))
+    at = json.loads((ROOT / "state/athlete.json").read_text(encoding="utf-8"))
+
+    # 1) Цель объявлена и одинакова в season_goal и goals[primary]
+    sg = sp.get("season_goal")
+    assert sg, "season_goal не задан — нет якоря плана"
+    prim = next(g for g in sp["goals"] if g.get("primary"))
+    target_sec = prim["goal_metric"]["target"]
+    assert abs(target_sec / 10.0 - goal_guard.pace_sec(sg["race_pace_min_per_km"])) <= 1.0, \
+        "цель в goals[] и season_goal расходятся"
+
+    # 2) Макро к цели ведёт — нарушений нет
+    problems = goal_guard.check(sp, at)
+    assert not problems, "goal_guard нашёл нарушения:\n  - " + "\n  - ".join(problems)
+
+    # 3) Guard ловит откат: если неделя гонки откатывается на медленный темп,
+    #    проверка обязана ругнуться
+    import copy
+    broken = copy.deepcopy(sp)
+    for w in broken["weekly_macro"]:
+        if w["season_week"] == 23:
+            w["quality"]["_legacy_structure"] = "5К TT @ race pace: цель 22:00"
+    assert goal_guard.check(broken, at), "goal_guard НЕ заметил откат недели гонки"
+
+    print("  ✓ goal_guard: макро ведёт к цели, откат ловится")
+
+
+def test_review_gates_built_and_persisted():
+    """Gates строятся после каждой фазы и каждой CP; решения переживают регенерацию."""
+    sys.path.insert(0, str(ROOT / "lib"))
+    from lib import review_gates
+
+    sp = json.loads((ROOT / "state/season_plan.json").read_text(encoding="utf-8"))
+    gates = review_gates.build_gates(sp)
+    assert gates, "gates не построились"
+
+    # 1) есть gate после каждой run-фазы
+    phase_gates = [g for g in gates if g.kind == "phase"]
+    run_phases = [p for p in sp["phases"] if p["id"].startswith("run_")
+                  and p["id"] != "run_taper"]
+    assert len(phase_gates) >= len(run_phases), \
+        "не для каждой run-фазы есть gate ({} на {})".format(len(phase_gates), len(run_phases))
+
+    # 2) у каждой gate есть вопрос, рычаг и ветки решений
+    for g in gates:
+        assert g.question, "у gate {} нет вопроса".format(g.id)
+        assert g.lever, "у gate {} нет рычага корректировки".format(g.id)
+        assert set(g.decisions) >= {"pass", "warn", "fail"}, \
+            "у gate {} нет трёх веток решений".format(g.id)
+
+    # 3) каждая CP имеет gate
+    cp_ids = {c["id"] for c in sp.get("control_points", [])
+              if (c.get("session") or {}).get("target_sec")}
+    gate_cps = {g.id.replace("gate_cp_", "") for g in gates
+                if g.kind in ("quality", "metric")}
+    assert cp_ids <= gate_cps, \
+        "не у каждой CP есть gate: нет {}".format(cp_ids - gate_cps)
+
+    # 4) решения сохраняются при перегенерации
+    tmp_prog = ROOT / "state/season_progress.json"
+    original = tmp_prog.read_text(encoding="utf-8")
+    try:
+        review_gates.decide("gate_cp_cp_3k_w4", "confirm", "тест")
+        prog = review_gates.load_progress()
+        g = next(x for x in prog["gates"] if x["id"] == "gate_cp_cp_3k_w4")
+        assert g["decision"] == "confirm", "решение не сохранилось"
+        assert g["decided_at"], "не записано время решения"
+
+        # перегенерация не теряет решение
+        review_gates.sync_gates(sp)
+        prog = review_gates.load_progress()
+        g = next(x for x in prog["gates"] if x["id"] == "gate_cp_cp_3k_w4")
+        assert g["decision"] == "confirm", "решение потерялось при перегенерации"
+    finally:
+        tmp_prog.write_text(original, encoding="utf-8")
+
+    print("  ✓ review_gates: gates после фаз и CP, решения сохраняются")
+
+
 def test_fit_retention_no_op_when_empty():
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
@@ -634,6 +718,8 @@ def main():
         test_analyze_modes,
         test_plan_generate_stub,
         test_season_replan_archive,
+        test_goal_guard_macro_leads_to_target,
+        test_review_gates_built_and_persisted,
         test_fit_retention_no_op_when_empty,
         test_fit_ingest_writes_to_store,
         test_garmin_weight_manual,

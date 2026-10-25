@@ -68,6 +68,36 @@ def _pull(sport: str, count: int, out_dir: Path) -> list[dict]:
         return []
 
 
+def load_raw_activities(use_cache: bool = True) -> list[dict]:
+    """Сырые активности из кэша (или свежая выкачка).
+
+    Нужны для метрик, которых нет в агрегате по неделям:
+    темп на сессии, средний/макс HR, vo2max.
+    """
+    cache_path = REPO / "state/actual_load_cache.json"
+    raw: list[dict] = []
+    if use_cache and cache_path.exists():
+        try:
+            cached = json.loads(cache_path.read_text(encoding="utf-8"))
+            age = (datetime.now(timezone.utc) -
+                   datetime.fromisoformat(cached["pulled_at"])).total_seconds()
+            if age < 6 * 3600:
+                raw = cached.get("activities", [])
+        except (json.JSONDecodeError, KeyError, ValueError, OSError):
+            raw = []
+    if not raw:
+        tmp = Path("/tmp/coach_actual_pull")
+        for sport in ("running", "cycling", "swimming"):
+            raw.extend(_pull(sport, 120, tmp / sport))
+        if raw:
+            cache_path.parent.mkdir(parents=True, exist_ok=True)
+            cache_path.write_text(json.dumps({
+                "pulled_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                "activities": raw,
+            }, ensure_ascii=False), encoding="utf-8")
+    return raw
+
+
 def load_actual(season_start: str | None = None,
                 count_per_sport: int = 120,
                 use_cache: bool = True) -> dict:

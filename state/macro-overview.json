@@ -58,7 +58,7 @@
           "end": "2026-10-24",
           "start_d": "18–24 окт",
           "detailed": true,
-          "is_now": true,
+          "is_now": false,
           "is_next": false,
           "run_km": 30,
           "long_km": 13,
@@ -94,8 +94,8 @@
           "end": "2026-10-31",
           "start_d": "25–31 окт",
           "detailed": true,
-          "is_now": false,
-          "is_next": true,
+          "is_now": true,
+          "is_next": false,
           "run_km": 35,
           "long_km": 14,
           "run_h": 3.3,
@@ -125,7 +125,7 @@
           "start_d": "1–7 ноя",
           "detailed": true,
           "is_now": false,
-          "is_next": false,
+          "is_next": true,
           "run_km": 38,
           "long_km": 14,
           "run_h": 3.6,
@@ -899,7 +899,7 @@
       "end": "2026-10-24",
       "start_d": "18–24 окт",
       "detailed": true,
-      "is_now": true,
+      "is_now": false,
       "is_next": false,
       "run_km": 30,
       "long_km": 13,
@@ -935,8 +935,8 @@
       "end": "2026-10-31",
       "start_d": "25–31 окт",
       "detailed": true,
-      "is_now": false,
-      "is_next": true,
+      "is_now": true,
+      "is_next": false,
       "run_km": 35,
       "long_km": 14,
       "run_h": 3.3,
@@ -966,7 +966,7 @@
       "start_d": "1–7 ноя",
       "detailed": true,
       "is_now": false,
-      "is_next": false,
+      "is_next": true,
       "run_km": 38,
       "long_km": 14,
       "run_h": 3.6,
@@ -1897,5 +1897,758 @@
     ],
     "_source": "Кирилл, 2026-10-24: «План должен штурмовать 40.00 в апреле на S25»"
   },
-  "generated_at": "24.10.2026 21:44"
+  "gates": [
+    {
+      "id": "gate_cp_cp_3k_w4",
+      "season_week": 4,
+      "kind": "quality",
+      "title": "3K time trial · pace",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "14:00",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:40",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 14:00 или HR > 168 — порог ниже расчётного, сдвигаем лестницу на +1 неделю."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 14:00 или HR > 168 — порог ниже расчётного, сдвигаем лестницу на +1 неделю."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_3k_w4",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_cp_cp_5k_w8",
+      "season_week": 8,
+      "kind": "quality",
+      "title": "5K max · max",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "22:30",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:30",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_5k_w8",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_phase_run_base",
+      "season_week": 12,
+      "kind": "phase",
+      "title": "Итог базовой фазы · Поднимаем базовый объём",
+      "question": "Достигнут ли базовый объём и подтверждён ли порог для входа в build?",
+      "checks": [
+        {
+          "id": "run_km",
+          "label": "Объём бега за фазу (К/нед)",
+          "metric": "run_km_mean",
+          "threshold": "45–55 К",
+          "op": "between",
+          "unit": "К/нед",
+          "severity": "hard",
+          "source": "auto",
+          "value": 25.6,
+          "status": "fail",
+          "note": ""
+        },
+        {
+          "id": "sessions",
+          "label": "Сессий в неделю",
+          "metric": "sessions_mean",
+          "threshold": "≥ 7",
+          "op": "ge",
+          "unit": "сессий",
+          "severity": "soft",
+          "source": "auto",
+          "value": 6.5,
+          "status": "warn",
+          "note": ""
+        },
+        {
+          "id": "threshold_pace",
+          "label": "Фактический порог (темп @ LTH)",
+          "metric": "threshold_pace",
+          "threshold": "4:15",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "hard",
+          "source": "auto",
+          "value": 278.9,
+          "status": "fail",
+          "note": ""
+        },
+        {
+          "id": "volume_hours",
+          "label": "Тренировочных часов за фазу",
+          "metric": "hours_mean",
+          "threshold": "≥ 5 ч/нед",
+          "op": "ge",
+          "unit": "ч/нед",
+          "severity": "soft",
+          "source": "auto",
+          "value": 5.71,
+          "status": "pass",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "Фактический порог по FIT 13.10 ≈ 4:35–4:39/км. Цель сезона требует 4:10–4:15 к W13. Если к концу фазы порог ниже 4:25 — build придётся начинать с чистого порога, а не с объёма, и лестница к 4:00 сдвинется.",
+        "PB 10К = 40:04 при 100 кг; сейчас 101.7 кг. Каждый кг сверх целевых 96 съедает примерно 4–6 с/км на 10К."
+      ],
+      "decisions": {
+        "pass": [
+          "Объём бега 45–55 К/нед и ≥8 сессий — подтверждено.",
+          "Порог на 4:20–4:30 — можно начинать build с пороговыми блоками."
+        ],
+        "warn": [
+          "Объём 38–45 К: добавить 5К/нед в W13–W15, но не больше (+10%/нед).",
+          "Порог 4:30–4:40: W13–W16 уходят в чистый порог, объёмные недели — на easy."
+        ],
+        "fail": [
+          "Объём < 38 К или порог > 4:40: цель 40:00 в апреле под вопросом.",
+          "Пересобрать фазу build: сократить до 6 недель, отдать время race-specific.",
+          "Честно пересмотреть целевое время (41:00 вместо 40:00) — и записать это в season_goal."
+        ]
+      },
+      "lever": "weekly_macro[].run_km / long_km / quality._legacy_structure, athlete.json training_paces",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_cp_cp_3k_w12",
+      "season_week": 12,
+      "kind": "quality",
+      "title": "3K max · max",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "12:20",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:07",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_3k_w12",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_cp_cp_5k_w16",
+      "season_week": 16,
+      "kind": "quality",
+      "title": "5K max · max",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "20:30",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:06",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_5k_w16",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_phase_run_build",
+      "season_week": 19,
+      "kind": "phase",
+      "title": "Итог build-фазы: порог vs цель · Поднимаем threshold pace",
+      "question": "Успел ли порог уйти к 4:10–4:15, чтобы race-specific шёл к 4:00?",
+      "checks": [
+        {
+          "id": "run_km",
+          "label": "Объём бега за фазу (К/нед)",
+          "metric": "run_km_mean",
+          "threshold": "50–60 К",
+          "op": "between",
+          "unit": "К/нед",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "sessions",
+          "label": "Сессий в неделю",
+          "metric": "sessions_mean",
+          "threshold": "≥ 7",
+          "op": "ge",
+          "unit": "сессий",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "threshold_pace",
+          "label": "Фактический порог (темп @ LTH)",
+          "metric": "threshold_pace",
+          "threshold": "4:15",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "volume_hours",
+          "label": "Тренировочных часов за фазу",
+          "metric": "hours_mean",
+          "threshold": "≥ 7 ч/нед",
+          "op": "ge",
+          "unit": "ч/нед",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "Ключевой риск всего сезона: цель 4:00 требует порога 4:10–4:15. Каждая неделя без движения порога — это шаг назад в гонке.",
+        "Стадион в январе–феврале не чистят (мёртвый сезон) — темповые отрезки придётся делать по шоссе или на станке."
+      ],
+      "decisions": {
+        "pass": [
+          "Порог 4:10–4:15 — race-specific получает рабочую базу, цель 40:00 достижима.",
+          "Объём 50–60 К/нед, длинные интервалы 2К по 4:12 держатся."
+        ],
+        "warn": [
+          "Порог 4:15–4:25: W20–W22 целиком в пороге, отрезки 5×2К сократить до 4×2К.",
+          "Порог 4:25+: гонка на 4:00 в апреле не выходит — пересмотреть цель или сдвинуть гонку."
+        ],
+        "fail": [
+          "Порог не сдвинулся за 7 недель — проблема не в объёме, а в восстановлении/весе.",
+          "Снизить интенсивность, добавить 2 недели базы перед build.",
+          "Пересмотреть целевое время в season_goal и не врать себе дальше."
+        ]
+      },
+      "lever": "weekly_macro[].quality._legacy_structure, control_points[].session.pace_min_per_km",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_cp_cp_5k_w23",
+      "season_week": 23,
+      "kind": "quality",
+      "title": "5K @ race pace · pace",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "20:00",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:00",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "≥ 20:15 — гонка-темп не закрыт: тапер сдвигается, объём в W24–W25 режется."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "≥ 20:15 — гонка-темп не закрыт: тапер сдвигается, объём в W24–W25 режется."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_5k_w23",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_phase_run_specific",
+      "season_week": 25,
+      "kind": "phase",
+      "title": "Готовность к гонке · Поднимаем race pace",
+      "question": "Закрыт ли гонку-темп 4:00/км и держится ли объём?",
+      "checks": [
+        {
+          "id": "run_km",
+          "label": "Объём бега за фазу (К/нед)",
+          "metric": "run_km_mean",
+          "threshold": "45–70 К",
+          "op": "between",
+          "unit": "К/нед",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "sessions",
+          "label": "Сессий в неделю",
+          "metric": "sessions_mean",
+          "threshold": "≥ 7",
+          "op": "ge",
+          "unit": "сессий",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "threshold_pace",
+          "label": "Фактический порог (темп @ LTH)",
+          "metric": "threshold_pace",
+          "threshold": "4:15",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "volume_hours",
+          "label": "Тренировочных часов за фазу",
+          "metric": "hours_mean",
+          "threshold": "≥ 8 ч/нед",
+          "op": "ge",
+          "unit": "ч/нед",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "Это последняя точка принятия решения перед гонкой. После неё — только тапер.",
+        "Гонка 18.04.2027 — через 2 недели после конца фазы."
+      ],
+      "decisions": {
+        "pass": [
+          "5К на гонку-темпе ≤ 20:00 — цель 40:00 подтверждена.",
+          "Объём 50+ К/нед и длинный темп 10К @ 4:05 — форма на месте."
+        ],
+        "warn": [
+          "5К 20:00–20:15 — тапер сдвинуть на 2 дня, объём W24–W25 урезать на 20%.",
+          "Длинный темп хуже 4:10 — W24 целиком tempo на 4:08, без объёма."
+        ],
+        "fail": [
+          "5К > 20:15 — гонка-темп не закрыт. Чистый тапер или смена цели.",
+          "Рекомендация: зафиксировать в season_goal новый target (41:00) и ехать на него."
+        ]
+      },
+      "lever": "weekly_macro[].quality._legacy_structure, goals[].goal_metric.target",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_race_28",
+      "season_week": 28,
+      "kind": "race",
+      "title": "Перед гонкой: S25 Berlin 10K",
+      "question": "Подтверждаем цель и тапер — или меняем?",
+      "checks": [
+        {
+          "id": "race_pace",
+          "label": "Гонку-темп закрыт?",
+          "metric": "race_pace_confirmed",
+          "threshold": "да (5К ≤ 20:00)",
+          "op": "eq",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "taper",
+          "label": "Тапер: объём снижен, качество сохранено",
+          "metric": "taper_ok",
+          "threshold": "да",
+          "op": "eq",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "Гонка без подтверждённого гонку-темпа — лотерея.",
+        "После этого gate план не меняется: только тапер."
+      ],
+      "decisions": {
+        "pass": [
+          "Гонку-темп закрыт — едем с целью 40:00."
+        ],
+        "warn": [
+          "Темп не закрыт — тапер сокращается, но гонка идёт: заниженные ожидания лучше, чем срыв."
+        ],
+        "fail": [
+          "Гонку-темп не закрыт вовсе — записать новую цель в season_goal и ехать на неё. Не импровизировать в апреле."
+        ]
+      },
+      "lever": "weekly_macro[].quality._legacy_structure",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_cp_cp_olympic_sim_w32",
+      "season_week": 42,
+      "kind": "metric",
+      "title": "Olympic-distance brick (swim-bike-run) · sim",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "170:00",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "—",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "Пересмотреть приоритеты триатлона."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "Пересмотреть приоритеты триатлона."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_olympic_sim_w32",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_race_49",
+      "season_week": 49,
+      "kind": "race",
+      "title": "Перед гонкой: Olympic triathlon (TBD)",
+      "question": "Подтверждаем цель и тапер — или меняем?",
+      "checks": [
+        {
+          "id": "race_pace",
+          "label": "Гонку-темп закрыт?",
+          "metric": "race_pace_confirmed",
+          "threshold": "да (5К ≤ 20:00)",
+          "op": "eq",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "taper",
+          "label": "Тапер: объём снижен, качество сохранено",
+          "metric": "taper_ok",
+          "threshold": "да",
+          "op": "eq",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "Гонка без подтверждённого гонку-темпа — лотерея.",
+        "После этого gate план не меняется: только тапер."
+      ],
+      "decisions": {
+        "pass": [
+          "Гонку-темп закрыт — едем с целью 40:00."
+        ],
+        "warn": [
+          "Темп не закрыт — тапер сокращается, но гонка идёт: заниженные ожидания лучше, чем срыв."
+        ],
+        "fail": [
+          "Гонку-темп не закрыт вовсе — записать новую цель в season_goal и ехать на неё. Не импровизировать в апреле."
+        ]
+      },
+      "lever": "weekly_macro[].quality._legacy_structure",
+      "decided_at": "",
+      "decision": ""
+    }
+  ],
+  "current_week": 3,
+  "generated_at": "25.10.2026 04:48"
 }

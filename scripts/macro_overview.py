@@ -221,6 +221,23 @@ def build_data(season_plan_path: Path, athlete_path: Path,
 
     season_goal = sp.get("season_goal", {})
 
+    # текущая неделя сезона — для статуса gates
+    from datetime import date as _date
+    try:
+        current_week = season_week.date_to_season_week(
+            _date.today().isoformat(), sp["season_start_date"])
+    except Exception:
+        current_week = 0
+
+    # Gates: точки принятия решения после фаз и контрольных точек
+    gates = []
+    try:
+        sys.path.insert(0, str(REPO))
+        from lib import review_gates
+        gates = [g.to_dict() for g in review_gates.sync_gates(sp)]
+    except Exception as e:  # noqa: BLE001 — gates не критичны для овервью
+        print(f"предупреждение: gates не загружены ({e})")
+
     det = [w for w in weeks if w["detailed"]]
     peak = max(det, key=lambda w: w["run_km"]) if det else None
     act_weeks = [w for w in weeks if "actual" in w]
@@ -242,6 +259,8 @@ def build_data(season_plan_path: Path, athlete_path: Path,
         "actual_h": round(sum(w["actual"]["total_h"] for w in act_weeks), 1),
         "color_label": COLOR_LABEL,
         "season_goal": season_goal,
+        "gates": gates,
+        "current_week": current_week,
         "generated_at": datetime.now().strftime("%d.%m.%Y %H:%M"),
     }
 
@@ -281,6 +300,41 @@ h2 .hint{font-size:11px;color:var(--muted);font-weight:400}
   font-weight:700}
 .goal-head{font-size:19px;font-weight:700;color:#ff8f7a;line-height:1.25;margin:3px 0 4px}
 .goal-gap{font-size:11.5px;color:var(--muted);margin-bottom:9px}
+
+/* GATES — точки принятия решения */
+.gates{margin:14px 0}
+.gate{border:1px solid var(--border);border-radius:10px;margin-bottom:8px;
+  background:var(--panel);overflow:hidden}
+.gate-hd{display:flex;align-items:center;gap:9px;padding:9px 11px;cursor:pointer;
+  user-select:none;flex-wrap:wrap}
+.gate-ico{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;
+  justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.g-pending{background:#2a3140;color:#9aa3b2}
+.g-pass{background:rgba(92,214,192,.18);color:#5cd6c0}
+.g-warn{background:rgba(240,180,87,.18);color:#f0b457}
+.g-fail{background:rgba(255,107,90,.18);color:#ff6b5a}
+.gate-wk{font-family:ui-monospace,monospace;font-size:10.5px;color:var(--muted);flex-shrink:0}
+.gate-ttl{font-size:12.5px;font-weight:600;color:var(--text);flex:1 1 auto;min-width:0}
+.gate-kind{font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;
+  padding:2px 6px;border-radius:4px;background:var(--panel2);color:var(--muted);flex-shrink:0}
+.gate-body{padding:0 11px 11px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
+.gate-body.hidden{display:none}
+.gq{color:var(--text);font-weight:600;margin:9px 0 7px;font-size:12px}
+.gcheck{display:flex;gap:7px;align-items:baseline;padding:3px 0;font-size:11.5px}
+.gcheck .gc-v{font-family:ui-monospace,monospace;flex-shrink:0;min-width:62px}
+.gcheck .gc-t{flex:1;color:var(--muted)}
+.gwarn{background:rgba(240,180,87,.09);border-left:2px solid rgba(240,180,87,.55);
+  padding:7px 9px;margin:6px 0;border-radius:0 6px 6px 0;font-size:11.5px;line-height:1.45;color:#e8d5b0}
+.gdec{border-left:2px solid var(--border);padding:6px 0 6px 9px;margin:5px 0;
+  font-size:11.5px;line-height:1.45}
+.gdec b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--muted);margin-bottom:2px}
+.gdec.pass{border-color:rgba(92,214,192,.55)} .gdec.pass b{color:#5cd6c0}
+.gdec.warn{border-color:rgba(240,180,87,.55)} .gdec.warn b{color:#f0b457}
+.gdec.fail{border-color:rgba(255,107,90,.55)} .gdec.fail b{color:#ff6b5a}
+.glever{font-size:11px;color:var(--muted);margin-top:8px;padding-top:7px;
+  border-top:1px dashed var(--border)}
+.glever b{color:var(--accent)}
 .hero-sub{font-size:12px;color:var(--muted);margin-top:3px}
 .hero-dates{font-family:ui-monospace,monospace;font-size:12px;color:var(--accent2);margin-top:6px}
 .peaks{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:11px}
@@ -414,6 +468,9 @@ footer{margin-top:20px;text-align:center;font-size:11px;color:var(--muted)}
 <h2>Недели <span class="hint">тап — раскрыть: план, факт, цель</span></h2>
 <div id="weeks"></div>
 
+<h2>Точки принятия решения <span class="hint">после каждой фазы и каждой контрольной точки</span></h2>
+<div id="gates" class="gates"></div>
+
 <h2>Фазы</h2>
 <div id="phases"></div>
 
@@ -437,6 +494,75 @@ if (SG.headline) {
   document.getElementById('goalhead').textContent = SG.headline;
   document.getElementById('goalgap').textContent =
     'сейчас ' + (SG.current_form||'') + ' · разрыв ' + (SG.gap||'');
+}
+
+// GATES — точки принятия решения
+const GATES = D.gates || [];
+const G_ICON = {pass:'✓', warn:'!', fail:'✗', pending:'·'};
+const G_KIND = {phase:'фаза', quality:'контрольная', metric:'замер', race:'гонка'};
+const CUR_W = D.current_week || 0;
+function gStatus(g) {
+  // gate ещё не наступил — решения по нему принимать не по чему
+  if (g.season_week > CUR_W) return 'pending';
+  const st = (g.checks||[]).map(c => c.status);
+  if (st.includes('fail')) return 'fail';
+  if (st.includes('warn')) return 'warn';
+  if (st.includes('pass')) return 'pass';
+  return 'pending';
+}
+document.getElementById('gates').innerHTML = GATES.map((g, i) => {
+  const st = gStatus(g);
+  const body = 'gbody' + i;
+  let h = '<div class="gate">';
+  h += '<div class="gate-hd" data-toggle="' + body + '">';
+  h += '<span class="gate-ico g-' + st + '">' + (G_ICON[st]||'·') + '</span>';
+  h += '<span class="gate-wk">W' + g.season_week + '</span>';
+  h += '<span class="gate-ttl">' + esc(g.title) + '</span>';
+  h += '<span class="gate-kind">' + (G_KIND[g.kind] || g.kind) + '</span>';
+  h += '</div>';
+  h += '<div class="gate-body hidden" id="' + body + '">';
+  h += '<div class="gq">Вопрос: ' + esc(g.question) + '</div>';
+  (g.checks||[]).forEach(c => {
+    let v = (c.value === null || c.value === undefined) ? '—'
+      : (typeof c.value === 'number' ? (Math.round(c.value*10)/10) : c.value);
+    // темпы показываем в мин:сек, не в сырых секундах
+    if (c.metric === 'threshold_pace' || c.metric === 'tt_pace') {
+      if (typeof v === 'number' && v > 60) {
+        v = Math.floor(v/60) + ':' + String(Math.round(v%60)).padStart(2,'0');
+      }
+    }
+    const m = {pass:'✓', warn:'!', fail:'✗', pending:'·'}[c.status] || '·';
+    h += '<div class="gcheck"><span class="gc-v" style="color:' +
+         (c.status==='fail' ? '#ff6b5a' : c.status==='warn' ? '#f0b457' :
+          c.status==='pass' ? '#5cd6c0' : '#9aa3b2') + '">' + m + ' ' + esc(v) + '</span>' +
+         '<span class="gc-t">' + esc(c.label) + ' — порог ' + esc(c.threshold) + '</span></div>';
+  });
+  (g.warnings||[]).forEach(w => { h += '<div class="gwarn">⚠ ' + esc(w) + '</div>'; });
+  const D2 = g.decisions || {};
+  ['pass','warn','fail'].forEach(k => {
+    if (D2[k] && D2[k].length) {
+      h += '<div class="gdec ' + k + '"><b>' +
+           ({pass:'Если прошли', warn:'Если на грани', fail:'Если провалили'})[k] + '</b>';
+      D2[k].forEach(x => { h += '• ' + esc(x) + '<br>'; });
+      h += '</div>';
+    }
+  });
+  if (g.lever) h += '<div class="glever"><b>Рычаг:</b> ' + esc(g.lever) + '</div>';
+  if (g.decision) h += '<div class="gdec pass"><b>Принято решение</b>' + esc(g.decision) + '</div>';
+  h += '</div></div>';
+  return h;
+}).join('');
+
+// раскрытие gates (делегирование)
+const gEl = document.getElementById('gates');
+if (gEl && gEl.addEventListener) {
+  gEl.addEventListener('click', function(e) {
+    const t = e.target;
+    const hd = t && t.closest ? t.closest('.gate-hd') : null;
+    if (!hd) return;
+    const body = document.getElementById(hd.getAttribute('data-toggle'));
+    if (body) body.classList.toggle('hidden');
+  });
 }
 
 // Пики

@@ -607,6 +607,39 @@ def _apply_overrides(slots: list[dict], overrides: list[dict], season_week: int,
     return slots, applied_log
 
 
+def _gates_for_week(sp: dict, sw: int) -> list[dict]:
+    """Gates для этой недели: её собственные + ближайший следующий.
+
+    Фактические значения берутся из state/season_progress.json — там их
+    считает review_gates --evaluate (по FIT из Garmin). Если файл ещё не
+    заполнен — gate показывается без значений (pending).
+    """
+    try:
+        from lib import review_gates
+        prog = review_gates.load_progress()
+        stored = {g["id"]: g for g in prog.get("gates", [])}
+        gates = review_gates.build_gates(sp)
+    except Exception:
+        return []
+
+    out = []
+    for g in gates:
+        if g.season_week != sw:
+            continue
+        d = stored.get(g.id)
+        out.append(d if d else g.to_dict())
+
+    # ближайший следующий gate — чтобы было видно, что впереди
+    nxt = [g for g in gates if g.season_week > sw]
+    if nxt:
+        g = min(nxt, key=lambda x: x.season_week)
+        d = stored.get(g.id)
+        dd = d if d else g.to_dict()
+        dd = {**dd, "_upcoming": True}
+        out.append(dd)
+    return out
+
+
 def generate(season_week: int | str,
              season_plan_path: str | Path = "state/season_plan.json",
              athlete_path: str | Path = "state/athlete.json",
@@ -771,6 +804,7 @@ def generate(season_week: int | str,
         "week_goal": week_goal,
         "week_goal_detail": week_goal_detail,
         "season_goal": sp.get("season_goal"),
+        "gates": _gates_for_week(sp, sw),
         "season_week": sw,
         "iso_week": iso,
         "weekIso": iso,

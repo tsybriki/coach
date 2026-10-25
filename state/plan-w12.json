@@ -1,0 +1,851 @@
+{
+  "$schema": "./plan.schema.md",
+  "version": 2,
+  "title": "W12 · 2026-12-27..2027-01-02 · Берлин",
+  "week_goal": "Проверяем форму на контрольной точке",
+  "week_goal_detail": "масштаб: объёмная работа · Максимальная аэробная и анаэробная мощность на измеримой дистанции",
+  "season_goal": {
+    "headline": "10К за 40:00 (4:00/км) на S25 Berlin, 18.04.2027",
+    "race_pace_min_per_km": "4:00",
+    "target_time": "40:00",
+    "current_form": "10К 44:06 (4:24/км), 11.10.2026",
+    "gap": "24 с/км (+10.3% скорости)",
+    "rules": [
+      "Race-pace блок в макро (W17–W25) обязан выходить на 4:00/км — иначе цель недостижима.",
+      "Любая контрольная точка, которая не даёт темп 4:00, — это не проверка готовности, а проверка формы.",
+      "Порог (threshold) — это 4:10–4:15/км, а не 4:20–4:35. Фактический порог по FIT 13.10 ≈ 4:35–4:39.",
+      "Если к W19 фактический порог не дошёл до 4:15 — пересмотр фазы, а не продление тупика."
+    ],
+    "_source": "Кирилл, 2026-10-24: «План должен штурмовать 40.00 в апреле на S25»"
+  },
+  "gates": [
+    {
+      "id": "gate_phase_run_base",
+      "season_week": 12,
+      "kind": "phase",
+      "title": "Итог базовой фазы · Поднимаем базовый объём",
+      "question": "Достигнут ли базовый объём и подтверждён ли порог для входа в build?",
+      "checks": [
+        {
+          "id": "run_km",
+          "label": "Объём бега за фазу (К/нед)",
+          "metric": "run_km_mean",
+          "threshold": "45–55 К",
+          "op": "between",
+          "unit": "К/нед",
+          "severity": "hard",
+          "source": "auto",
+          "value": 25.6,
+          "status": "fail",
+          "note": ""
+        },
+        {
+          "id": "sessions",
+          "label": "Сессий в неделю",
+          "metric": "sessions_mean",
+          "threshold": "≥ 7",
+          "op": "ge",
+          "unit": "сессий",
+          "severity": "soft",
+          "source": "auto",
+          "value": 6.5,
+          "status": "warn",
+          "note": ""
+        },
+        {
+          "id": "threshold_pace",
+          "label": "Фактический порог (темп @ LTH)",
+          "metric": "threshold_pace",
+          "threshold": "4:15",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "hard",
+          "source": "auto",
+          "value": 278.9,
+          "status": "fail",
+          "note": ""
+        },
+        {
+          "id": "volume_hours",
+          "label": "Тренировочных часов за фазу",
+          "metric": "hours_mean",
+          "threshold": "≥ 5 ч/нед",
+          "op": "ge",
+          "unit": "ч/нед",
+          "severity": "soft",
+          "source": "auto",
+          "value": 5.71,
+          "status": "pass",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "Фактический порог по FIT 13.10 ≈ 4:35–4:39/км. Цель сезона требует 4:10–4:15 к W13. Если к концу фазы порог ниже 4:25 — build придётся начинать с чистого порога, а не с объёма, и лестница к 4:00 сдвинется.",
+        "PB 10К = 40:04 при 100 кг; сейчас 101.7 кг. Каждый кг сверх целевых 96 съедает примерно 4–6 с/км на 10К."
+      ],
+      "decisions": {
+        "pass": [
+          "Объём бега 45–55 К/нед и ≥8 сессий — подтверждено.",
+          "Порог на 4:20–4:30 — можно начинать build с пороговыми блоками."
+        ],
+        "warn": [
+          "Объём 38–45 К: добавить 5К/нед в W13–W15, но не больше (+10%/нед).",
+          "Порог 4:30–4:40: W13–W16 уходят в чистый порог, объёмные недели — на easy."
+        ],
+        "fail": [
+          "Объём < 38 К или порог > 4:40: цель 40:00 в апреле под вопросом.",
+          "Пересобрать фазу build: сократить до 6 недель, отдать время race-specific.",
+          "Честно пересмотреть целевое время (41:00 вместо 40:00) — и записать это в season_goal."
+        ]
+      },
+      "lever": "weekly_macro[].run_km / long_km / quality._legacy_structure, athlete.json training_paces",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_cp_cp_3k_w12",
+      "season_week": 12,
+      "kind": "quality",
+      "title": "3K max · max",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "12:20",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:07",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_3k_w12",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
+      "id": "gate_cp_cp_5k_w16",
+      "season_week": 16,
+      "kind": "quality",
+      "title": "5K max · max",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "20:30",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:06",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_5k_w16",
+      "decided_at": "",
+      "decision": "",
+      "_upcoming": true
+    }
+  ],
+  "season_week": 12,
+  "iso_week": "2026-W53",
+  "weekIso": "2026-W53",
+  "season_start_date": "2026-10-11",
+  "phase": {
+    "id": "run_base",
+    "goal_id": "g_run_spring",
+    "start": "2026-10-11",
+    "end": "2027-01-02",
+    "hours_per_week_target": 5,
+    "goal": "Поднимаем базовый объём",
+    "focus": "Аэробная база: растёт общий объём бега, интенсивность ниже порога. Фундамент под всё остальное.",
+    "_season_week_start": 1,
+    "_season_week_end": 12
+  },
+  "chosen_allocation": {
+    "snapshot_date": "2026-10-13",
+    "strategy": "balanced_60_40",
+    "g_run_spring_eff_pct": 60,
+    "g_tri_autumn_eff_pct": 40,
+    "reason": "Phase 1 stub — реальное распределение через goal_allocator.candidates() в Phase 2. Сейчас зафиксировано по spring-10k-2027-v2.md: основной объём до W24 под 10К, далее transition к tri."
+  },
+  "rules": {
+    "hr_zones": {
+      "hr_max": 182,
+      "rhr": 54,
+      "hrr": 128,
+      "method": "Karvonen + %HRmax",
+      "lth": 164,
+      "vo2_target": "172-174",
+      "zones": {
+        "Z1": "100-118",
+        "Z2": "118-135",
+        "Z3": "136-150",
+        "Z4": "150-160",
+        "Z5": "160-168",
+        "Z6": "169-172",
+        "Z7": "173-182"
+      },
+      "notes": "7-зонная модель (Кирилл 2026-10-16, финал). NON-OVERLAPPING ascending: Z1<Z2<Z3<Z4<Z5<Z6<Z7. Boundaries 118/135/150/160/168/172/173 — каждая верхняя зоны = нижняя следующей, допускаются gaps в 1 удар (Z2 135→Z3 136; Z5 168→Z6 169; Z6 172→Z7 173). LTH=164 lives inside Z5 (threshold). VO2 target=172-174 sits at top of Z6 (172) and joins Z7 (173+). Z1=recovery, Z2=easy, Z3=endurance, Z4=tempo, Z5=threshold, Z6=super-threshold, Z7=VO2max. Plain numeric (no L suffix). Subzones удалены — все 7 зон — primary, не subzones."
+    },
+    "metric_split": {
+      "by_hr_first": "easy, Z2, Z2-low, long, recovery, warmup, cooldown",
+      "by_pace_first": "intervals, progression, tempo, race-pace"
+    }
+  },
+  "slots": [
+    {
+      "id": "вс-bike",
+      "day": "ВС",
+      "time": "11:00",
+      "duration_min": 90,
+      "name": "Длинный вел Z2 90мин",
+      "kind": "bike",
+      "subkind": "long_z2",
+      "focus": "Z2",
+      "location": "long_ride_or_station",
+      "priority": 70,
+      "category": "bike",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        },
+        {
+          "phase": "work",
+          "duration_min": 70,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Длинный вел Z2 70мин. Zwift watch-сессия."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        }
+      ],
+      "workout_pending": true
+    },
+    {
+      "id": "cp-cp_3k_w12",
+      "day": "ПН",
+      "time": "18:45",
+      "duration_min": 39,
+      "name": "CONTROL: 3K max",
+      "kind": "control_point",
+      "control_point_id": "cp_3k_w12",
+      "metric_target": "time_sec",
+      "target_value": 780,
+      "location": "stadium",
+      "structure": [
+        {
+          "phase": "warmup",
+          "basis": "time",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        },
+        {
+          "phase": "work",
+          "basis": "distance",
+          "distance_m": 3000,
+          "duration_min": 12,
+          "zone": "Z7",
+          "hr_target": 182,
+          "pace_min_per_km": "all-out"
+        },
+        {
+          "phase": "cooldown",
+          "basis": "time",
+          "duration_min": 12,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        }
+      ],
+      "subkind": "quality",
+      "quality_selection": {
+        "goal": "time_trial",
+        "scale": "light",
+        "variant": {
+          "id": "tt_max",
+          "label": "Тест на максимум",
+          "scale": "medium",
+          "work_m": 5000,
+          "test_type": "max",
+          "blocks": [
+            {
+              "type": "tt_max",
+              "distance_m": 5000,
+              "pace": "all-out",
+              "zone": "Z7",
+              "hr_target": 182
+            }
+          ],
+          "note": "Максимальная скорость на дистанции. Не тянуть на старте — иначе дрейф."
+        },
+        "work_m": 5000,
+        "guarded": true,
+        "warning": "Объём работы вырос с 3070 м (последняя реальная) до 5000 м.",
+        "rationale": "Цель: Проверяем форму на контрольной точке. Масштаб недели: light. Вариант: Тест на максимум — работа 5000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 6000 м. ",
+        "template_meta": {
+          "label": "Time trial",
+          "develops": "Замер: держим заданный темп (pace) или максимальная скорость (max) — тип задаёт контрольная точка",
+          "work_zone": "Z4",
+          "hr_target": 158,
+          "pace": "по цели CP",
+          "indicators": "Время на дистанции, темп по 200м, HR-дрейф"
+        },
+        "is_cp": true,
+        "cp_id": "cp_3k_w12",
+        "cp_target": 780,
+        "session": {
+          "test_type": "max",
+          "distance_m": 3000,
+          "target_sec": 740,
+          "session_goal": "Максимум 3К: проверяем, что порог ушёл в 4:07.",
+          "measures": [
+            "top_end_speed",
+            "vo2max"
+          ],
+          "protocol": "разминка 15мин Z1 → 3К all-out → заминка 12мин Z1",
+          "pass_criteria": "≤ 12:20 при HR 168+ — порог на месте, идём к race pace.",
+          "fail_action": "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма.",
+          "pace_min_per_km": "4:07",
+          "pace_sec_per_km": 260.0,
+          "_ladder_note": "Лестница под цель сезона 40:00 (4:00/км)."
+        },
+        "session_goal": "Максимум 3К: проверяем, что порог ушёл в 4:07.",
+        "pass_criteria": "≤ 12:20 при HR 168+ — порог на месте, идём к race pace.",
+        "fail_action": "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма.",
+        "protocol": "разминка 15мин Z1 → 3К all-out → заминка 12мин Z1",
+        "pace_min_per_km": "4:07"
+      },
+      "session": {
+        "test_type": "max",
+        "distance_m": 3000,
+        "target_sec": 740,
+        "session_goal": "Максимум 3К: проверяем, что порог ушёл в 4:07.",
+        "measures": [
+          "top_end_speed",
+          "vo2max"
+        ],
+        "protocol": "разминка 15мин Z1 → 3К all-out → заминка 12мин Z1",
+        "pass_criteria": "≤ 12:20 при HR 168+ — порог на месте, идём к race pace.",
+        "fail_action": "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма.",
+        "pace_min_per_km": "4:07",
+        "pace_sec_per_km": 260.0,
+        "_ladder_note": "Лестница под цель сезона 40:00 (4:00/км)."
+      },
+      "goal": "Максимум 3К: проверяем, что порог ушёл в 4:07.",
+      "quality_goal": "time_trial",
+      "quality_variant": "tt_max",
+      "quality_work_m": 5000,
+      "focus": "Z4",
+      "rationale": "Цель: Проверяем форму на контрольной точке. Масштаб недели: light. Вариант: Тест на максимум — работа 5000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 6000 м. ",
+      "quality_warning": "Объём работы вырос с 3070 м (последняя реальная) до 5000 м."
+    },
+    {
+      "id": "вт-easy_runs",
+      "day": "ВТ",
+      "time": "09:00",
+      "duration_min": 30,
+      "name": "Easy бег 30мин Z2",
+      "kind": "run",
+      "subkind": "easy",
+      "focus": "Z2",
+      "location": "asphalt_commuter",
+      "priority": 50,
+      "category": "easy_runs",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "work",
+          "duration_min": 30,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Лёгкий бег. Дыхание носовое."
+        }
+      ]
+    },
+    {
+      "id": "вт-key_run",
+      "day": "ВТ",
+      "time": "18:30",
+      "duration_min": 60,
+      "name": "Easy бег 60мин Z2",
+      "kind": "run",
+      "subkind": "easy",
+      "focus": "Z2",
+      "location": "asphalt_commuter",
+      "priority": 80,
+      "category": "key_run",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 5,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка."
+        },
+        {
+          "phase": "work",
+          "duration_min": 45,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Основная часть. Носовое дыхание."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Заминка."
+        }
+      ]
+    },
+    {
+      "id": "ср-long_run",
+      "day": "СР",
+      "time": "17:00",
+      "duration_min": 90,
+      "name": "Длинный бег 90мин Z2",
+      "kind": "run",
+      "subkind": "long_Z2",
+      "focus": "Z2",
+      "location": "stadium_or_pool",
+      "priority": 100,
+      "category": "long_run",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка 10мин Z1."
+        },
+        {
+          "phase": "work",
+          "duration_min": 65,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Длинный бег 65мин Z2. Дыхание носовое, темп комфортный. Если HR > 145 — снизить темп. Источник: spring-10k-2027-v2.md."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "id": "чт-bike",
+      "day": "ЧТ",
+      "time": "10:30",
+      "duration_min": 45,
+      "name": "Вел-станок Z2 45мин (дома)",
+      "kind": "bike",
+      "subkind": "stationary_z2",
+      "focus": "Z2",
+      "location": "home_stationary_bike",
+      "priority": 70,
+      "category": "bike",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 5,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка на станке. Каденс 80-85."
+        },
+        {
+          "phase": "work",
+          "duration_min": 30,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Стабильное Z2. Каденс 85-90. Можно Zwift watch-симулятор."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Заминка."
+        }
+      ],
+      "workout_pending": true
+    },
+    {
+      "id": "пт-swim",
+      "day": "ПТ",
+      "time": "18:00",
+      "duration_min": 60,
+      "name": "Пул 60мин easy",
+      "kind": "swim",
+      "subkind": "easy",
+      "focus": "Z1",
+      "location": "pool_or_asphalt",
+      "priority": 60,
+      "category": "swim",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "duration_min": 5,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Разминка."
+        },
+        {
+          "phase": "work",
+          "duration_min": 45,
+          "zone": "Z2",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Основная часть. Носовое дыхание."
+        },
+        {
+          "phase": "cooldown",
+          "duration_min": 10,
+          "zone": "Z1",
+          "pace_min_per_km": null,
+          "reps": null,
+          "set_repeats": null,
+          "notes": "Заминка."
+        }
+      ]
+    },
+    {
+      "id": "сб-ofp",
+      "day": "СБ",
+      "time": "10:00",
+      "duration_min": 25,
+      "name": "ofp core 25мин",
+      "kind": "ofp",
+      "subkind": "core",
+      "focus": "core",
+      "location": "home",
+      "priority": 40,
+      "category": "ofp",
+      "workout_ref": null,
+      "structure": [
+        {
+          "phase": "warmup",
+          "exercise": "Мобилилити: hip openers, glute bridge 2×15.",
+          "duration_min": 5,
+          "notes": "Активация ягодиц."
+        },
+        {
+          "phase": "main",
+          "set": {
+            "name": "Core circuit x2 rounds",
+            "exercises": [
+              {
+                "name": "Планка",
+                "reps": "3×45с",
+                "rest": "30с"
+              },
+              {
+                "name": "Медведи на коленях",
+                "reps": "2×12/стор",
+                "rest": "30с"
+              },
+              {
+                "name": "Bird-dog",
+                "reps": "3×10/стор",
+                "rest": "30с"
+              },
+              {
+                "name": "Glute bridge",
+                "reps": "3×15",
+                "rest": "30с"
+              },
+              {
+                "name": "Гиперэкстензия",
+                "reps": "2×15",
+                "rest": "30с"
+              }
+            ]
+          },
+          "duration_min": 20,
+          "notes": "Акцент на заднюю цепь (превентивно от защемления спины)."
+        },
+        {
+          "phase": "cooldown",
+          "exercise": "Растяжка 5мин. Без агрессии на грушевидную.",
+          "duration_min": 5,
+          "notes": "Spring-10k-2027-v2.md core program."
+        }
+      ]
+    }
+  ],
+  "load_context": null,
+  "control_points_in_range": [
+    "cp_3k_w12"
+  ],
+  "control_point_slots": [
+    {
+      "id": "cp-cp_3k_w12",
+      "day": "ПН",
+      "time": "18:45",
+      "duration_min": 39,
+      "name": "CONTROL: 3K max",
+      "kind": "control_point",
+      "control_point_id": "cp_3k_w12",
+      "metric_target": "time_sec",
+      "target_value": 780,
+      "location": "stadium",
+      "structure": [
+        {
+          "phase": "warmup",
+          "basis": "time",
+          "duration_min": 15,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        },
+        {
+          "phase": "work",
+          "basis": "distance",
+          "distance_m": 3000,
+          "duration_min": 12,
+          "zone": "Z7",
+          "hr_target": 182,
+          "pace_min_per_km": "all-out"
+        },
+        {
+          "phase": "cooldown",
+          "basis": "time",
+          "duration_min": 12,
+          "zone": "Z1",
+          "pace_min_per_km": null
+        }
+      ],
+      "subkind": "quality",
+      "quality_selection": {
+        "goal": "time_trial",
+        "scale": "light",
+        "variant": {
+          "id": "tt_max",
+          "label": "Тест на максимум",
+          "scale": "medium",
+          "work_m": 5000,
+          "test_type": "max",
+          "blocks": [
+            {
+              "type": "tt_max",
+              "distance_m": 5000,
+              "pace": "all-out",
+              "zone": "Z7",
+              "hr_target": 182
+            }
+          ],
+          "note": "Максимальная скорость на дистанции. Не тянуть на старте — иначе дрейф."
+        },
+        "work_m": 5000,
+        "guarded": true,
+        "warning": "Объём работы вырос с 3070 м (последняя реальная) до 5000 м.",
+        "rationale": "Цель: Проверяем форму на контрольной точке. Масштаб недели: light. Вариант: Тест на максимум — работа 5000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 6000 м. ",
+        "template_meta": {
+          "label": "Time trial",
+          "develops": "Замер: держим заданный темп (pace) или максимальная скорость (max) — тип задаёт контрольная точка",
+          "work_zone": "Z4",
+          "hr_target": 158,
+          "pace": "по цели CP",
+          "indicators": "Время на дистанции, темп по 200м, HR-дрейф"
+        },
+        "is_cp": true,
+        "cp_id": "cp_3k_w12",
+        "cp_target": 780,
+        "session": {
+          "test_type": "max",
+          "distance_m": 3000,
+          "target_sec": 740,
+          "session_goal": "Максимум 3К: проверяем, что порог ушёл в 4:07.",
+          "measures": [
+            "top_end_speed",
+            "vo2max"
+          ],
+          "protocol": "разминка 15мин Z1 → 3К all-out → заминка 12мин Z1",
+          "pass_criteria": "≤ 12:20 при HR 168+ — порог на месте, идём к race pace.",
+          "fail_action": "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма.",
+          "pace_min_per_km": "4:07",
+          "pace_sec_per_km": 260.0,
+          "_ladder_note": "Лестница под цель сезона 40:00 (4:00/км)."
+        },
+        "session_goal": "Максимум 3К: проверяем, что порог ушёл в 4:07.",
+        "pass_criteria": "≤ 12:20 при HR 168+ — порог на месте, идём к race pace.",
+        "fail_action": "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма.",
+        "protocol": "разминка 15мин Z1 → 3К all-out → заминка 12мин Z1",
+        "pace_min_per_km": "4:07"
+      },
+      "session": {
+        "test_type": "max",
+        "distance_m": 3000,
+        "target_sec": 740,
+        "session_goal": "Максимум 3К: проверяем, что порог ушёл в 4:07.",
+        "measures": [
+          "top_end_speed",
+          "vo2max"
+        ],
+        "protocol": "разминка 15мин Z1 → 3К all-out → заминка 12мин Z1",
+        "pass_criteria": "≤ 12:20 при HR 168+ — порог на месте, идём к race pace.",
+        "fail_action": "> 12:40 — порог отстаёт, W13–W16 уходят в чистый порог вместо объёма.",
+        "pace_min_per_km": "4:07",
+        "pace_sec_per_km": 260.0,
+        "_ladder_note": "Лестница под цель сезона 40:00 (4:00/км)."
+      },
+      "goal": "Максимум 3К: проверяем, что порог ушёл в 4:07.",
+      "quality_goal": "time_trial",
+      "quality_variant": "tt_max",
+      "quality_work_m": 5000,
+      "focus": "Z4",
+      "rationale": "Цель: Проверяем форму на контрольной точке. Масштаб недели: light. Вариант: Тест на максимум — работа 5000 м. Опора (реальная сессия): 3070 м, порог 2763 м. Контекст макро (пред. неделя): 6000 м. ",
+      "quality_warning": "Объём работы вырос с 3070 м (последняя реальная) до 5000 м."
+    }
+  ],
+  "overrides_applied": [],
+  "volume_check": {
+    "ok": true,
+    "target_h": 5,
+    "available_h": 10.0,
+    "gap_h": -5.0,
+    "max_h": 11,
+    "min_h": 2,
+    "suggestion": null
+  },
+  "totals": {
+    "planned_hours": 7.3,
+    "target_hours": 5,
+    "delta_hours": -2.3,
+    "slots_count": 8
+  },
+  "_generated_by": "lib.plan_generate (Phase 2.5: real layout v18)"
+}

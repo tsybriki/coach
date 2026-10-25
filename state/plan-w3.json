@@ -18,6 +18,75 @@
     ],
     "_source": "Кирилл, 2026-10-24: «План должен штурмовать 40.00 в апреле на S25»"
   },
+  "gates": [
+    {
+      "id": "gate_cp_cp_3k_w4",
+      "season_week": 4,
+      "kind": "quality",
+      "title": "3K time trial · pace",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "14:00",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:40",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 14:00 или HR > 168 — порог ниже расчётного, сдвигаем лестницу на +1 неделю."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 14:00 или HR > 168 — порог ниже расчётного, сдвигаем лестницу на +1 неделю."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_3k_w4",
+      "decided_at": "",
+      "decision": "",
+      "_upcoming": true
+    }
+  ],
   "season_week": 3,
   "iso_week": "2026-W44",
   "weekIso": "2026-W44",

@@ -16,7 +16,8 @@
     },
     "target_race_pace_10k": "40:00 (4:00/км) — S25 Berlin 18.04.2027",
     "gap_to_target": "24 с/км (+10.3% скорости)",
-    "measured_threshold_pace": "4:35-4:39/км при HR 163-164 (FIT 13.10: 918м за 4:16 = 4:39/км при HR 163; 408м за 1:50 = 4:30/км при HR 164)"
+    "measured_threshold_pace": "4:38/км при HR 163-164 (FIT 13.10: лапс 918м за 4:16 = 4:39/км при avg HR 163, max HR 170; лапс 408м за 1:50 = 4:30/км при avg HR 164, max HR 172). Считается автоматически: lib/review_gates.py → лапсы с avg HR 158-168 без спринта.",
+    "measured_threshold_note": "Порог должен уйти с 4:38 до 4:10-4:15 к W13 — это минус 23-28 с/км за 10 недель."
   },
   "form_trend_4w": "recovering_after_back_injury",
   "hr_zones": {
