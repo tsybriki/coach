@@ -752,6 +752,45 @@ def test_plan_generate_layout_all_phases():
     print("  ✓ plan_generate работает для W1, W13, W20, W26, W27, W28, W31, W37, W44, W48")
 
 
+def test_daniels_tables_parse_and_repair():
+    """Таблицы Дэниэлса разбираются, повреждённые ячейки починены."""
+    from lib import daniels
+
+    # Время: '4:30' → 270; '7.10' (потерянный разделитель) → 430;
+    # '3:38.8' (дробные секунды) → 218.8, а НЕ 13088.
+    assert daniels.parse_time("4:30") == 270
+    assert daniels.parse_time("7.10") == 430
+    assert daniels.parse_time("3:38.8") == 219
+    assert daniels.parse_time("431") == 271
+    assert daniels.parse_time("-") is None
+
+    tables = daniels._parse_all()
+    train = {r["vdot"]: r for r in tables["training_paces"]}
+    race = {r["vdot"]: r for r in tables["race_times"]}
+
+    # Строка VDOT 47 из книги: E 5:34/км, M 4:46/км, T 1:47/400м.
+    assert train[47]["easy"]["km"] == 334
+    assert train[47]["marathon"]["km"] == 286
+    assert train[47]["threshold"]["400m"] == 107
+    assert train[47]["interval"]["400m"] == 98
+    assert race[47]["10000m"] == 43 * 60 + 36
+
+    # Дробные секунды у VDOT 78–85 читаются как время, а не как 13088с.
+    assert 200 < race[78]["1500m"] < 230
+    assert 210 < race[80]["5000m"] < 850
+
+    # Починенные ячейки: тренд столбца восстановлен.
+    assert train[34]["interval"]["400m"] == 128
+    assert train[50]["marathon"]["km"] == 271
+    assert train[80]["easy"]["km"] == 218
+    assert race[68]["15000m"] == 2925
+
+    # Времена на дистанциях убывают с ростом VDOT.
+    series = [race[v]["10000m"] for v in range(42, 86)]
+    assert all(a >= b for a, b in zip(series, series[1:])), series[:10]
+    print("  ✓ daniels: разбор и починка повреждённых ячеек")
+
+
 def main():
     print("\n=== Phase 1 smoke tests ===\n")
     tests = [
@@ -787,6 +826,7 @@ def main():
         test_html_slot_links_navigable,
         test_render_html_basis_aware,
         test_render_html_every_slot_renders,
+        test_daniels_tables_parse_and_repair,
     ]
     failed = 0
     for t in tests:
