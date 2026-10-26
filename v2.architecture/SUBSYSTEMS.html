@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Coach App — подсистемы и их взаимодействия</title>
+<style>
+
+  :root {
+    --bg:#fdf6ed; --card-bg:#fffefb; --ink:#1a1a1a;
+    --muted:#6a6056; --faint:#9a9085; --border:#e6dac4;
+    --code-bg:#f4ede0; --planner:#c2410c; --state:#0284c7;
+    --fact:#0b7d71; --delivery:#a17405; --narrator:#7c3aed;
+    --entry:#d4a017; --input:#6a6056;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { -webkit-text-size-adjust:100%; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.5; font-size:16px; padding-bottom:48px; }
+  code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+
+  header { padding:16px 14px 12px; border-bottom:1px solid var(--border); background:var(--card-bg); }
+  header h1 { font-size:19px; font-weight:700; }
+  header .sub { font-size:12.5px; color:var(--muted); margin-top:4px; }
+  header .meta { font-size:11px; color:var(--faint); margin-top:6px; line-height:1.6; }
+
+  nav { position:sticky; top:0; z-index:10; background:rgba(253,246,237,.96); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border); overflow-x:auto; white-space:nowrap; padding:7px 12px; scrollbar-width:none; }
+  nav::-webkit-scrollbar { display:none; }
+  nav a { display:inline-block; font-size:12px; color:var(--muted); text-decoration:none;
+    padding:4px 9px; margin-right:4px; border:1px solid var(--border); border-radius:999px; background:var(--card-bg); }
+
+  main { padding:0 12px; max-width:780px; margin:0 auto; }
+  section { margin-top:26px; }
+  .h2 { font-size:16px; font-weight:700; padding-bottom:6px; border-bottom:2px solid var(--ink); margin-bottom:10px; }
+  h3 { font-size:14px; font-weight:700; margin:16px 0 6px; }
+  p { font-size:14.5px; margin-bottom:8px; }
+  .lead { font-size:14px; color:var(--muted); }
+  .muted { color:var(--muted); }
+
+  .dia { background:var(--card-bg); border:1px solid var(--border); border-radius:10px; padding:8px; overflow-x:auto; }
+  .dia svg { width:100%; min-width:340px; display:block; }
+  .cap { font-size:12px; color:var(--muted); margin-top:7px; }
+
+  .legend { display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:9px; }
+  .legend span { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; color:var(--muted); }
+  .legend i { width:11px; height:11px; border-radius:3px; border:1.5px solid; display:inline-block; }
+
+  .tw { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:6px 0 12px; position:relative; }
+  table { border-collapse:collapse; width:100%; min-width:440px; font-size:12.5px; }
+  th,td { text-align:left; padding:6px 7px; border-bottom:1px solid var(--border); vertical-align:top; }
+  th { font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted);
+    font-weight:700; background:var(--code-bg); }
+  td.n { white-space:nowrap; color:var(--faint); font-weight:700; }
+
+  .ent { border:1px solid var(--border); border-radius:8px; background:var(--card-bg);
+    margin-bottom:8px; overflow:hidden; }
+  .ent .eh { background:var(--ink); color:#fff; padding:5px 10px; font-size:13px; font-weight:700;
+    display:flex; justify-content:space-between; gap:8px; align-items:center; }
+  .ent .eh .st { font-size:10px; font-weight:700; padding:1px 8px; border-radius:999px;
+    background:rgba(255,255,255,.2); white-space:nowrap; }
+  .ent .bd { padding:9px 11px; font-size:12.5px; }
+  .ent .bd p { font-size:12.5px; margin-bottom:5px; }
+  .ent .bd .lab { color:var(--faint); font-size:10px; text-transform:uppercase; letter-spacing:.04em; }
+  .ent .bd b { font-weight:700; }
+
+  .planner { border:2px solid var(--planner); border-radius:10px; background:rgba(194,65,12,.04);
+    padding:10px 11px; margin-bottom:10px; }
+  .planner > .ph { font-size:14px; font-weight:700; color:var(--planner); margin-bottom:3px; }
+  .planner > .ps { font-size:12.5px; color:var(--muted); margin-bottom:10px; }
+  .ent3 { border:1px solid var(--entry); border-radius:8px; background:var(--card-bg);
+    padding:9px 10px; margin-bottom:8px; }
+  .ent3 .t { font-size:12.5px; font-weight:700; color:var(--entry); margin-bottom:4px; }
+  .ent3 ol { margin:0; padding-left:20px; font-size:12.5px; }
+  .ent3 ol li { margin-bottom:3px; }
+  .ent3 .kv { font-size:12px; margin-top:6px; }
+  .ent3 .kv div { margin-bottom:3px; }
+  .ent3 .kv b { color:var(--muted); font-weight:700; }
+
+  .fork { border:1px solid var(--border); border-radius:8px; background:var(--card-bg);
+    padding:9px 11px; margin-bottom:8px; }
+  .fork .fq { font-size:13px; font-weight:700; margin-bottom:6px; }
+  .fork .opt { font-size:12.5px; margin-bottom:4px; }
+  .fork .opt b { font-weight:700; }
+  .fork .ch { font-size:12px; color:var(--muted); margin-top:6px; }
+
+  .note { background:var(--code-bg); border:1px solid var(--border); border-radius:8px;
+    padding:9px 11px; font-size:12.5px; margin-bottom:8px; }
+
+  .link { border:1px solid var(--border); border-radius:8px; background:var(--card-bg);
+    padding:8px 10px; margin-bottom:6px; }
+  .link .ln { display:flex; align-items:baseline; gap:6px; font-size:12.5px; font-weight:700; }
+  .link .ln .nb { display:inline-block; min-width:17px; height:17px; line-height:17px; text-align:center;
+    border-radius:50%; background:var(--code-bg); border:1px solid var(--border); color:var(--muted);
+    font-size:10px; font-weight:700; flex:0 0 auto; }
+  .link .ln .ar { color:var(--faint); font-weight:400; }
+  .link .ln .to { color:var(--state); }
+  .link .lw { font-size:12.5px; color:var(--ink); margin-top:3px; padding-left:23px; }
+  .link .lwh { font-size:11.5px; color:var(--faint); margin-top:1px; padding-left:23px; }
+
+  hr { border:none; border-top:1px solid var(--border); margin:22px 0 0; }
+  .end { text-align:center; font-size:11.5px; color:var(--faint); padding:20px 0 8px; }
+
+  @media (max-width:560px) {
+    main { padding:0 10px; }
+    header h1 { font-size:17px; }
+    p { font-size:14px; }
+    table { min-width:400px; font-size:12px; }
+    .tw::after { content:'→ свайп'; position:absolute; right:2px; bottom:2px; font-size:9px;
+      color:var(--faint); background:var(--card-bg); padding:0 4px; pointer-events:none; }
+  }
+
+</style></head><body>
+<header>
+<h1>Coach App — подсистемы и их взаимодействия</h1>
+<div class="sub">уровень выше операционного контура: кто что делает и как с кем говорит</div>
+<div class="meta">v1.1 · подсистем: 9 · взаимодействий: 12 · развилок: 3</div>
+<div class="meta">доменная модель v3.6 — Season · Plan · Phase · Week · Workout · Step, факт и итог</div>
+</header>
+<nav>
+<a href="#d">1 · Схема</a>
+<a href="#p">2 · Планировщик</a>
+<a href="#s">3 · Подсистемы</a>
+<a href="#i">4 · Взаимодействия</a>
+<a href="#f">5 · Развилки</a>
+</nav>
+<main>
+<section id="d">
+<div class="h2">1 · Схема подсистем</div>
+<p class="lead">Операционный контур (Season → … → Step, факт, итог недели) закрыт в DOMAIN-SPEC.html. Здесь — только раскладка на подсистемы поверх него: кто принимает решение, кто хранит, кто приносит факт, кто отдаёт результат человеку.</p>
+<div class="dia">
+<svg viewBox="0 0 380 716" role="img" aria-label="Схема подсистем">
+<path d="M 96 78 L 96 104" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="96" cy="91" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="96" y="93.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">1</text>
+<path d="M 278 78 L 278 104" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="278" cy="91" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="278" y="93.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">2</text>
+<path d="M 96 372 L 96 420" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="96" cy="396" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="96" y="398.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">3</text>
+<path d="M 176 452 L 200 452" fill="none" stroke="#6a6056" stroke-width="1.2"/>
+<circle cx="188" cy="438" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="188" y="440.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">4</text>
+<path d="M 200 480 L 176 480" fill="none" stroke="#6a6056" stroke-width="1.2"/>
+<circle cx="188" cy="494" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="188" y="496.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">5</text>
+<path d="M 336 420 L 336 372" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="336" cy="396" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="336" y="398.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">6</text>
+<path d="M 58 520 L 58 560" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="58" cy="540" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="58" y="542.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">7</text>
+<path d="M 108 586 L 130 586" fill="none" stroke="#6a6056" stroke-width="1.2"/>
+<circle cx="119" cy="572" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="119" y="574.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">8</text>
+<path d="M 226 586 L 250 586" fill="none" stroke="#6a6056" stroke-width="1.2"/>
+<circle cx="238" cy="572" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="238" y="574.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">9</text>
+<path d="M 303 612 L 303 634 L 2 634 L 2 386 L 58 386 L 58 372" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="150" cy="626" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="150" y="628.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">10</text>
+<path d="M 366 372 L 366 634 L 340 634 L 340 650" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="366" cy="500" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="366" y="502.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">11</text>
+<path d="M 309 650 L 309 614" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="309" cy="631" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="309" y="633.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">12</text>
+<rect x="8" y="14" width="176" height="64" rx="9" fill="rgba(106,96,86,0.06)" stroke="#6a6056" stroke-width="1.2"/>
+<text x="18" y="29" font-size="10.5" font-weight="700" fill="#6a6056">Профиль атлета</text>
+<text x="18" y="41" font-size="8.3" fill="#6a6056">VDOT · HR-зоны · вес</text>
+<text x="18" y="53" font-size="8.3" fill="#6a6056">травмы · форма</text>
+<text x="18" y="65" font-size="7.6" fill="#9a9085" font-style="italic">Garmin · Stryd · Дэниэлс</text>
+<rect x="200" y="14" width="156" height="64" rx="9" fill="rgba(106,96,86,0.06)" stroke="#6a6056" stroke-width="1.2"/>
+<text x="210" y="29" font-size="10.5" font-weight="700" fill="#6a6056">Среда и реестры</text>
+<text x="210" y="41" font-size="8.3" fill="#6a6056">слоты · оборудование</text>
+<text x="210" y="53" font-size="8.3" fill="#6a6056">модели · лимиты · override</text>
+<text x="210" y="65" font-size="7.6" fill="#9a9085" font-style="italic">ICS · календарь · вручную</text>
+<rect x="8" y="104" width="360" height="268" rx="9" fill="rgba(194,65,12,0.06)" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="8,5"/>
+<text x="18" y="119" font-size="10.5" font-weight="700" fill="#c2410c">ПЛАНИРОВЩИК</text>
+<text x="18" y="131" font-size="8.3" fill="#6a6056">логика построения тренировочного процесса</text>
+<rect x="22" y="148" width="332" height="86" rx="9" fill="rgba(212,160,17,0.10)" stroke="#d4a017" stroke-width="1.2"/>
+<text x="32" y="163" font-size="10.5" font-weight="700" fill="#d4a017">Вход 1 · ЦЕЛЬ → МАКРОПЛАН</text>
+<text x="32" y="175" font-size="8.3" fill="#6a6056">вход: Goal (метрика + дата) + Профиль атлета</text>
+<text x="32" y="187" font-size="8.3" fill="#6a6056">шаг: достижимость → вердикт → варианты</text>
+<text x="32" y="199" font-size="8.3" fill="#6a6056">выход: Plan · фазы · weekly targets</text>
+<rect x="22" y="242" width="332" height="62" rx="9" fill="rgba(212,160,17,0.10)" stroke="#d4a017" stroke-width="1.2"/>
+<text x="32" y="257" font-size="10.5" font-weight="700" fill="#d4a017">Вход 2 · МАКРО + НЕДЕЛЯ → ТРЕНИРОВКИ</text>
+<text x="32" y="269" font-size="8.3" fill="#6a6056">вход: макро + Профиль + Среда</text>
+<text x="32" y="281" font-size="8.3" fill="#6a6056">выход: requests → assignments → workouts → steps</text>
+<rect x="22" y="312" width="332" height="46" rx="9" fill="rgba(212,160,17,0.10)" stroke="#d4a017" stroke-width="1.2"/>
+<text x="32" y="327" font-size="10.5" font-weight="700" fill="#d4a017">Вход 3 · ОСТАТОК НЕДЕЛИ → ПЕРЕПЛАН</text>
+<text x="32" y="339" font-size="8.3" fill="#6a6056">вход: факт · отклонения · форма</text>
+<rect x="8" y="420" width="168" height="100" rx="9" fill="rgba(2,132,199,0.06)" stroke="#0284c7" stroke-width="1.2"/>
+<text x="18" y="435" font-size="10.5" font-weight="700" fill="#0284c7">ХРАНИЛИЩЕ</text>
+<text x="18" y="447" font-size="8.3" fill="#6a6056">Season · Plan · Phase</text>
+<text x="18" y="459" font-size="8.3" fill="#6a6056">Week · Workout · Step</text>
+<text x="18" y="471" font-size="8.3" fill="#6a6056">ActualSession · WeekSummary</text>
+<text x="18" y="483" font-size="8.3" fill="#6a6056">журнал Command</text>
+<text x="18" y="495" font-size="8.3" fill="#6a6056">версии · миграции</text>
+<rect x="200" y="420" width="156" height="100" rx="9" fill="rgba(20,184,166,0.08)" stroke="#0b7d71" stroke-width="1.2"/>
+<text x="210" y="435" font-size="10.5" font-weight="700" fill="#0b7d71">ФАКТ И ОЦЕНКА</text>
+<text x="210" y="447" font-size="8.3" fill="#6a6056">приём: Garmin / Stryd</text>
+<text x="210" y="459" font-size="8.3" fill="#6a6056">связывание — вручную</text>
+<text x="210" y="471" font-size="8.3" fill="#6a6056">вердикты · саммари · гейты</text>
+<text x="210" y="483" font-size="8.3" fill="#6a6056">поздний факт → игнор</text>
+<text x="210" y="495" font-size="8.3" fill="#6a6056">интенсивность — сами</text>
+<rect x="8" y="560" width="100" height="52" rx="9" fill="rgba(212,160,23,0.08)" stroke="#a17405" stroke-width="1.2"/>
+<text x="18" y="575" font-size="10.5" font-weight="700" fill="#a17405">Проекции</text>
+<text x="18" y="587" font-size="8.3" fill="#6a6056">снапшот</text>
+<rect x="130" y="560" width="96" height="52" rx="9" fill="rgba(212,160,23,0.08)" stroke="#a17405" stroke-width="1.2"/>
+<text x="140" y="575" font-size="10.5" font-weight="700" fill="#a17405">API / BFF</text>
+<text x="140" y="587" font-size="8.3" fill="#6a6056">команды</text>
+<rect x="250" y="560" width="106" height="52" rx="9" fill="rgba(212,160,23,0.08)" stroke="#a17405" stroke-width="1.2"/>
+<text x="260" y="575" font-size="10.5" font-weight="700" fill="#a17405">Клиент PWA</text>
+<text x="260" y="587" font-size="8.3" fill="#6a6056">offline · outbox</text>
+<rect x="8" y="650" width="348" height="54" rx="9" fill="rgba(124,58,237,0.06)" stroke="#7c3aed" stroke-width="1.2"/>
+<text x="18" y="665" font-size="10.5" font-weight="700" fill="#7c3aed">НАРРАТОР (LLM)</text>
+<text x="18" y="677" font-size="8.3" fill="#6a6056">текст · варианты · объяснения — не считает и не применяет</text>
+<defs><marker id="ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#6a6056"/></marker></defs>
+</svg>
+</div>
+<div class="legend">
+<span><i style="border-color:#c2410c;background:rgba(194,65,12,0.06)"></i>планировщик — считает и принимает решения</span>
+<span><i style="border-color:#6a6056;background:rgba(106,96,86,0.06)"></i>входные справочники</span>
+<span><i style="border-color:#0284c7;background:rgba(2,132,199,0.06)"></i>состояние</span>
+<span><i style="border-color:#0b7d71;background:rgba(20,184,166,0.08)"></i>факт и оценка</span>
+<span><i style="border-color:#a17405;background:rgba(212,160,23,0.08)"></i>доставка пользователю</span>
+<span><i style="border-color:#7c3aed;background:rgba(124,58,237,0.06)"></i>нарратор — только текст</span>
+</div>
+<p class="cap">Подсистемы — соседи, связи помечены номерами; номера — таблица «Взаимодействия». Тонкая стрелка без наконечника — двусторонняя связь.</p>
+</section>
+<section id="p">
+<div class="h2">2 · Планировщик</div>
+<p class="lead">Планировщик — единственная подсистема, которая принимает решения. Три входа: сезон, неделя, остаток недели.</p>
+<div class="ent3">
+<div class="t">Вход 1 · ЦЕЛЬ → МАКРОПЛАН</div>
+<ol>
+<li>Нормализовать цель: метрика + дата → целевой VDOT (Дэниэлс: 10К 40:00 → VDOT 52).</li>
+<li>Оценить текущую форму: факт 10К 44:06 → VDOT 46.4, тренируемся по 48. Разрыв 4–6 VDOT.</li>
+<li>Оценить потолок: сколько VDOT набирается за N недель при текущем объёме.</li>
+<li>Вердикт: достижима · достижима с оговорками · недостижима.</li>
+<li>При недостижимости — варианты: смягчить метрику · сдвинуть дату · наилучшая достижимая цель.</li>
+<li>Построить Plan: фазы, weekly targets, load budget, control points.</li>
+</ol>
+<div class="kv">
+<div><b>вход</b> Goal (метрика + дата) + Профиль атлета</div>
+<div><b>цифры</b> Цель 10К 40:00 = VDOT 52 · факт 10К 44:06 = VDOT 46.4 · тренировочный 48 · гонка 18.04.2027 = W28 из 49</div>
+<div><b>есть</b> goal_guard.py проверяет согласованность плана с целью — но не достижимость цели из текущей формы.</div>
+<div><b>нет</b> Шаг 3 — модели потолка формы нет. Шаг 6 — генератора макро нет: weekly_macro (28 недель из 49) написан руками.</div>
+</div>
+</div>
+<div class="ent3">
+<div class="t">Вход 2 · МАКРО + НЕДЕЛЯ → ТРЕНИРОВКИ</div>
+<ol>
+<li>Взять цель и объём недели из макро.</li>
+<li>Выбрать структуру качественной сессии по (goal, scale).</li>
+<li>Разложить по слотам календаря.</li>
+<li>Что не разложилось — в unplaced: висяк, решение пользователя.</li>
+<li>Собрать шаги; длительность тренировки = Σ шагов.</li>
+<li>Неделя готова к активации — активация по команде пользователя.</li>
+</ol>
+<div class="kv">
+<div><b>вход</b> макро (weekly target недели) + Профиль атлета + Среда (слоты)</div>
+<div><b>цифры</b> работает: plan_generate · step_builder · quality_session · workout_templates</div>
+<div><b>есть</b> lib/plan_generate.py + lib/step_builder.py + lib/quality_session.py + state/workout_templates.json — этот вход собран и работает.</div>
+<div><b>нет</b> Наследование слотов Season ← Phase ← Week не реализовано: слот берётся только из constraints.json.</div>
+</div>
+</div>
+<div class="ent3">
+<div class="t">Вход 3 · ОСТАТОК НЕДЕЛИ → ПЕРЕПЛАН</div>
+<ol>
+<li>Пересобрать сессии на сегодня и позже, прошедшие не трогать.</li>
+<li>Отдать diff с последствиями и предупреждениями.</li>
+</ol>
+<div class="kv">
+<div><b>вход</b> факт · отклонения · форма</div>
+<div><b>цифры</b> стаб</div>
+<div><b>есть</b> —</div>
+<div><b>нет</b> lib/plan_adjust.py возвращает пустой diff; lib/season_replan.py архивирует и мержит season_plan без sanity-check.</div>
+</div>
+</div>
+</section>
+<section id="s">
+<div class="h2">3 · Подсистемы</div>
+<div class="ent">
+<div class="eh">
+<span>Профиль атлета</span>
+<span class="st" style="background:#0b7d71;color:#fff">есть</span>
+</div>
+<div class="bd">
+<p>нормативное состояние атлета, из которого планировщик считает</p>
+<div><span class="lab">владеет</span><br>VDOT · HR-зоны · вес · травмы · форма</div>
+<div style="margin-top:6px"><span class="lab">вход</span><br>Garmin (вес, активности) · Stryd (VO2, GT) · Дэниэлс (VDOT ↔ темпы) · вручную</div>
+<p class="muted" style="margin-top:6px">state/athlete.json, state/daniels_profile.json, lib/daniels.py. Автоподтягивания из Stryd нет.</p>
+</div>
+</div>
+<div class="ent">
+<div class="eh">
+<span>Среда и реестры</span>
+<span class="st" style="background:#0b7d71;color:#fff">есть</span>
+</div>
+<div class="bd">
+<p>чем ограничена тренировка — окна, оборудование, модели, правила</p>
+<div><span class="lab">владеет</span><br>слоты · оборудование · PlanModel · LoadModel · ограничения · override фаз и недель</div>
+<div style="margin-top:6px"><span class="lab">вход</span><br>ICS / Google Calendar · вручную</div>
+<p class="muted" style="margin-top:6px">state/constraints.json, state/workout_templates.json, слоты в season_plan.json. Трёхуровневое перекрытие слотов не реализовано.</p>
+</div>
+</div>
+<div class="ent">
+<div class="eh">
+<span>Планировщик</span>
+<span class="st" style="background:#d4a017;color:#fff">частично</span>
+</div>
+<div class="bd">
+<p>строит тренировочный процесс: макроплан → неделя → переплан остатка</p>
+<div><span class="lab">владеет</span><br>Plan (фазы, weekly targets, load budget) · Week (requests → assignments → workouts → steps) · diff остатка</div>
+<div style="margin-top:6px"><span class="lab">вход</span><br>Профиль атлета · Среда и реестры · Goal · факт</div>
+<p class="muted" style="margin-top:6px">Вход 2 (неделя) собран и работает. Вход 1 (макро) — генератора нет. Вход 3 — стаб.</p>
+</div>
+</div>
+<div class="ent">
+<div class="eh">
+<span>Хранилище и журнал</span>
+<span class="st" style="background:#d4a017;color:#fff">частично</span>
+</div>
+<div class="bd">
+<p>единственное место, где состояние живёт</p>
+<div><span class="lab">владеет</span><br>Season · Plan · Phase · Week · Workout · Step · ActualSession · WeekSummary · журнал Command</div>
+<div style="margin-top:6px"><span class="lab">вход</span><br>запись: Планировщик, Факт и оценка</div>
+<p class="muted" style="margin-top:6px">state/*.json + state/season_plan.archive. Нет схемы версий и миграций. Нет связи план↔факт: поля actual_id нет.</p>
+</div>
+</div>
+<div class="ent">
+<div class="eh">
+<span>Факт и оценка</span>
+<span class="st" style="background:#d4a017;color:#fff">частично</span>
+</div>
+<div class="bd">
+<p>принять выполненное, связать с планом вручную, посчитать вердикты и саммари</p>
+<div><span class="lab">владеет</span><br>ActualSession · link_actual · вердикты · WeekSummary · гейты</div>
+<div style="margin-top:6px"><span class="lab">вход</span><br>Garmin / Stryd (вытянуть) · плановые тренировки из Хранилища</div>
+<p class="muted" style="margin-top:6px">Приём есть: lib/actual_load.py, lib/fit_ingest.py. Связи план↔факт нет. Intensity minutes (moderate/vigorous) не считаются. В диаграмме DOMAIN-SPEC ещё перечислены Stryd/TrainingPeaks — расходится с I14 «только Garmin».</p>
+</div>
+</div>
+<div class="ent">
+<div class="eh">
+<span>Проекции</span>
+<span class="st" style="background:#9a9085;color:#fff">нет</span>
+</div>
+<div class="bd">
+<p>собрать то, что читает клиент: неделя, сезон, план против факта</p>
+<div><span class="lab">владеет</span><br>снапшот состояния в форме экранов</div>
+<div style="margin-top:6px"><span class="lab">вход</span><br>Хранилище</div>
+<p class="muted" style="margin-top:6px">Есть только статические HTML-рендеры: lib/render_html.py.</p>
+</div>
+</div>
+<div class="ent">
+<div class="eh">
+<span>API / BFF</span>
+<span class="st" style="background:#9a9085;color:#fff">нет</span>
+</div>
+<div class="bd">
+<p>маршруты, форматы, команды. Доменной логики нет</p>
+<div><span class="lab">владеет</span><br>проекции наружу · команды внутрь</div>
+<div style="margin-top:6px"><span class="lab">вход</span><br>Проекции · Клиент</div>
+<p class="muted" style="margin-top:6px">—</p>
+</div>
+</div>
+<div class="ent">
+<div class="eh">
+<span>Клиент (PWA)</span>
+<span class="st" style="background:#9a9085;color:#fff">нет</span>
+</div>
+<div class="bd">
+<p>экраны приложения; чтение офлайн, команды — через outbox</p>
+<div><span class="lab">владеет</span><br>IndexedDB-снапшот · очередь команд</div>
+<div style="margin-top:6px"><span class="lab">вход</span><br>API</div>
+<p class="muted" style="margin-top:6px">Есть статические HTML-файлы (state/plan-wN.html, w1-mobile.html) — не приложение.</p>
+</div>
+</div>
+<div class="ent">
+<div class="eh">
+<span>Нарратор (LLM)</span>
+<span class="st" style="background:#d4a017;color:#fff">частично</span>
+</div>
+<div class="bd">
+<p>текст, объяснения, варианты. Не считает и не применяет</p>
+<div><span class="lab">владеет</span><br>пояснения к плану и diff · варианты решения</div>
+<div style="margin-top:6px"><span class="lab">вход</span><br>Планировщик (plan + diff)</div>
+<p class="muted" style="margin-top:6px">lib/ask_model.py + hooks. В новой архитектуре — порт, а не сервис с решением.</p>
+</div>
+</div>
+</section>
+<section id="i">
+<div class="h2">4 · Взаимодействия</div>
+<div class="link">
+<div class="ln"><span class="nb">1</span><span class="fr">Профиль атлета</span><span class="ar">→</span><span class="to">Планировщик</span></div>
+<div class="lw">VDOT, зоны, вес, травмы</div>
+<div class="lwh">каждое построение плана</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">2</span><span class="fr">Среда и реестры</span><span class="ar">→</span><span class="to">Планировщик</span></div>
+<div class="lw">слоты, оборудование, модели, лимиты</div>
+<div class="lwh">раскладка по слотам</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">3</span><span class="fr">Планировщик</span><span class="ar">→</span><span class="to">Хранилище</span></div>
+<div class="lw">макро · неделя · diff остатка</div>
+<div class="lwh">propose · activate · replan</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">4</span><span class="fr">Хранилище</span><span class="ar">→</span><span class="to">Факт и оценка</span></div>
+<div class="lw">плановые тренировки недели</div>
+<div class="lwh">сопоставление факта</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">5</span><span class="fr">Факт и оценка</span><span class="ar">→</span><span class="to">Хранилище</span></div>
+<div class="lw">ActualSession · link · вердикты · саммари</div>
+<div class="lwh">вытянуть факт · связать · close_week</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">6</span><span class="fr">Факт и оценка</span><span class="ar">→</span><span class="to">Планировщик</span></div>
+<div class="lw">факт, отклонения, форма</div>
+<div class="lwh">вход 3 — переплан остатка</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">7</span><span class="fr">Хранилище</span><span class="ar">→</span><span class="to">Проекции</span></div>
+<div class="lw">снапшот состояния</div>
+<div class="lwh">чтение</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">8</span><span class="fr">Проекции</span><span class="ar">→</span><span class="to">API</span></div>
+<div class="lw">готовые проекции</div>
+<div class="lwh">запрос клиента</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">9</span><span class="fr">API</span><span class="ar">→</span><span class="to">Клиент</span></div>
+<div class="lw">снапшот</div>
+<div class="lwh">push / pull</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">10</span><span class="fr">Клиент</span><span class="ar">→</span><span class="to">Планировщик</span></div>
+<div class="lw">команды пользователя</div>
+<div class="lwh">действие в интерфейсе</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">11</span><span class="fr">Планировщик</span><span class="ar">→</span><span class="to">Нарратор</span></div>
+<div class="lw">plan + diff</div>
+<div class="lwh">«объясни» · «предложи вариант»</div>
+</div>
+<div class="link">
+<div class="ln"><span class="nb">12</span><span class="fr">Нарратор</span><span class="ar">→</span><span class="to">Клиент</span></div>
+<div class="lw">текст, варианты</div>
+<div class="lwh">показать пользователю</div>
+</div>
+</section>
+<section id="f">
+<div class="h2">5 · Развилки</div>
+<div class="fork">
+<div class="fq">1. Достижимость — шаг внутри планировщика или отдельный вход?</div>
+<div class="opt"><b>A</b> — Шаг внутри: планировщик один, вердикт возвращается как часть ответа по макро.</div>
+<div class="opt"><b>B</b> — Отдельный вход: сперва спросить «достижима ли цель», потом строить макро.</div>
+<div class="ch">что меняет: Меняет API планировщика и то, откуда берётся потолок формы: свой расчёт или внешний сервис.</div>
+</div>
+<div class="fork">
+<div class="fq">2. Макроплан — артефакт в хранилище или производное?</div>
+<div class="opt"><b>A</b> — Артефакт: записан и хранится, версии видны.</div>
+<div class="opt"><b>B</b> — Производное: считается из Goal + атлета + правил, пересчитывается при смене VDOT.</div>
+<div class="ch">что меняет: Меняет границы Хранилища, появляется версионирование и пересчёт; сегодня макро написано руками — оба варианта это чинят.</div>
+</div>
+<div class="fork">
+<div class="fq">3. Хранилище — одно общее состояние сезона или отдельные по подсистемам?</div>
+<div class="opt"><b>A</b> — Одно: Season как корень, всё внутри.</div>
+<div class="opt"><b>B</b> — Раздельно: профиль · среда · план · факт — свои репозитории.</div>
+<div class="ch">что меняет: Меняет офлайн-снапшот (что кэшируем в клиенте) и разрешение конфликтов команд.</div>
+</div>
+</section>
+<section id="n">
+<div class="h2">Замечания по текущему состоянию</div>
+<div class="note">Диаграмма DOMAIN-SPEC.html всё ещё подписывает блок факта как «Garmin / Stryd / TrainingPeaks» и содержит строку «поздно пришедшая активность меняет закрытую неделю» — обе расходятся с подтверждёнными I14 и I23.</div>
+<div class="note">Связь план↔факт зафиксирована в домене (Workout.actual_id ↔ ActualSession.linked_workout_id), но в данных её нет ни в одной таблице state — это дыра реализации, а не модели.</div>
+<div class="note">weekly_macro покрывает 28 недель из 49; фазы с заданными границами — только run_base … run_taper (W1–W28), триатлонные фазы без диапазонов.</div>
+</section>
+<hr>
+<p class="end">Coach App · подсистемы v1.1</p>
+</main></body></html>
