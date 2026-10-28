@@ -103,7 +103,7 @@
 <header>
 <h1>Coach App — логические подсистемы</h1>
 <div class="sub">кто за что отвечает — независимо от того, где это живёт и как хранится</div>
-<div class="meta">v2.0 · подсистем: 8 · взаимодействий: 15 · развилок: 3</div>
+<div class="meta">v2.1 · подсистем: 8 · взаимодействий: 15 · развилок: 3</div>
 <div class="meta">уровень: логический — решения и ответственность</div>
 </header>
 <nav>
@@ -140,88 +140,95 @@
 <div class="h2">2 · Схема</div>
 <p class="lead">Уровень выше доменной модели. Домен отвечает на вопрос «что за сущности», этот уровень — «кто какое решение принимает». Всё, что связано с размещением, хранением и протоколами, вынесено из картинки: это следующий уровень.</p>
 <div class="dia">
-<svg viewBox="0 0 380 690" role="img" aria-label="Логические подсистемы">
-<path d="M 40 34 L 12 34 L 12 244 L 40 244" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="12" cy="140" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="12" y="142.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">1</text>
-<path d="M 40 170 L 20 170 L 20 226 L 40 226" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="20" cy="198" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="20" y="200.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">5</text>
-<path d="M 40 101 L 28 101 L 28 310 L 40 310" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="28" cy="205" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="28" y="207.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">3</text>
-<path d="M 190 276 L 190 294" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="190" cy="285" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="190" y="287.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">6</text>
-<path d="M 340 40 L 358 40 L 358 340 L 340 340" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="358" cy="190" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="358" y="192.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">2</text>
-<path d="M 340 364 L 358 364 L 358 490 L 340 490" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="358" cy="427" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="358" y="429.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">7</text>
-<path d="M 340 500 L 366 500 L 366 320 L 340 320" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="366" cy="410" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="366" y="412.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">8</text>
-<path d="M 190 446 L 190 464" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="190" cy="455" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="190" y="457.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">12</text>
-<path d="M 190 528 L 190 546" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="190" cy="537" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="190" y="539.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">13</text>
-<path d="M 190 594 L 190 612" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="190" cy="603" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="190" y="605.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">15</text>
-<path d="M 40 640 L 12 640 L 12 500 L 40 500" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="12" cy="570" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="12" y="572.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">10</text>
-<path d="M 40 655 L 20 655 L 20 350 L 40 350" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
-<circle cx="20" cy="500" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
-<text x="20" y="502.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">9</text>
-<rect x="40" y="8" width="300" height="52" rx="8" fill="rgba(106,96,86,0.07)" stroke="#6a6056" stroke-width="1.3"/>
-<text x="50" y="23" font-size="10.5" font-weight="700" fill="#6a6056">АТЛЕТ</text>
-<text x="50" y="34" font-size="8.2" fill="#9a9085">нормативы, из которых всё считается</text>
-<text x="50" y="45" font-size="8.3" fill="#6a6056">VDOT · HR-зоны · вес · травмы · форма</text>
-<text x="50" y="56" font-size="7.6" fill="#9a9085" font-style="italic">Garmin · Stryd · Дэниэлс · вручную</text>
-<rect x="40" y="76" width="300" height="52" rx="8" fill="rgba(106,96,86,0.07)" stroke="#6a6056" stroke-width="1.3"/>
-<text x="50" y="91" font-size="10.5" font-weight="700" fill="#6a6056">СРЕДА</text>
-<text x="50" y="102" font-size="8.2" fill="#9a9085">чем ограничена тренировка</text>
-<text x="50" y="113" font-size="8.3" fill="#6a6056">слоты · окна · оборудование · лимиты</text>
-<text x="50" y="124" font-size="7.6" fill="#9a9085" font-style="italic">ICS / календарь · вручную</text>
-<rect x="40" y="144" width="300" height="52" rx="8" fill="rgba(106,96,86,0.07)" stroke="#6a6056" stroke-width="1.3"/>
-<text x="50" y="159" font-size="10.5" font-weight="700" fill="#6a6056">МЕТОДОЛОГИЯ</text>
-<text x="50" y="170" font-size="8.2" fill="#9a9085">правила построения процесса — «знания планировщика»</text>
-<text x="50" y="181" font-size="8.3" fill="#6a6056">PlanModel · LoadModel · шаблоны тренировок</text>
-<text x="50" y="192" font-size="7.6" fill="#9a9085" font-style="italic">версионируемые правила</text>
-<rect x="40" y="212" width="300" height="64" rx="8" fill="rgba(194,65,12,0.07)" stroke="#c2410c" stroke-width="1.3"/>
-<text x="50" y="227" font-size="10.5" font-weight="700" fill="#c2410c">ЦЕЛЬ И ДОСТИЖИМОСТЬ</text>
-<text x="50" y="238" font-size="8.2" fill="#9a9085">можно ли вообще</text>
-<text x="50" y="249" font-size="8.3" fill="#6a6056">цель + дата + атлет → потолок формы → вердикт</text>
-<text x="50" y="260" font-size="8.3" fill="#6a6056">недостижимо → варианты: смягчить · сдвинуть · наилучшая</text>
-<rect x="40" y="294" width="300" height="76" rx="8" fill="rgba(194,65,12,0.07)" stroke="#c2410c" stroke-width="1.3"/>
-<text x="50" y="309" font-size="10.5" font-weight="700" fill="#c2410c">ПЛАНИРОВАНИЕ</text>
-<text x="50" y="320" font-size="8.2" fill="#9a9085">как строится тренировочный процесс</text>
-<text x="50" y="331" font-size="8.3" fill="#6a6056">макро: фазы · недельные цели · бюджет нагрузки</text>
-<text x="50" y="342" font-size="8.3" fill="#6a6056">неделя: запросы → слоты → тренировки → шаги</text>
-<text x="50" y="353" font-size="8.3" fill="#6a6056">остаток недели: переплан · неразложенное — висяк</text>
-<rect x="40" y="388" width="300" height="58" rx="8" fill="rgba(20,184,166,0.08)" stroke="#0b7d71" stroke-width="1.3"/>
-<text x="50" y="403" font-size="10.5" font-weight="700" fill="#0b7d71">ФАКТ</text>
-<text x="50" y="414" font-size="8.2" fill="#9a9085">что фактически было</text>
-<rect x="50" y="425" width="128" height="12" rx="6" fill="#fffefb" stroke="#0b7d71" stroke-width="0.8"/>
-<text x="114.0" y="434" font-size="7.4" fill="#0b7d71" text-anchor="middle">внешнее: Garmin · Stryd</text>
-<rect x="40" y="464" width="300" height="64" rx="8" fill="rgba(20,184,166,0.08)" stroke="#0b7d71" stroke-width="1.3"/>
-<text x="50" y="479" font-size="10.5" font-weight="700" fill="#0b7d71">ОЦЕНКА</text>
-<text x="50" y="490" font-size="8.2" fill="#9a9085">как соотносим план с фактом</text>
-<text x="50" y="501" font-size="8.3" fill="#6a6056">связь — вручную · вердикт по каждой сессии</text>
-<text x="50" y="512" font-size="8.3" fill="#6a6056">саммари недели · отклонения · интенсивность</text>
-<rect x="40" y="546" width="300" height="48" rx="8" fill="rgba(212,160,23,0.09)" stroke="#a17405" stroke-width="1.3"/>
-<text x="50" y="561" font-size="10.5" font-weight="700" fill="#a17405">ВЫХОД</text>
-<text x="50" y="572" font-size="8.2" fill="#9a9085">граница с пользователем</text>
-<text x="50" y="583" font-size="8.3" fill="#6a6056">неделя · сезон · план против факта</text>
-<rect x="40" y="612" width="300" height="64" rx="8" fill="rgba(124,58,237,0.07)" stroke="#7c3aed" stroke-width="1.3" stroke-dasharray="7,4"/>
-<text x="50" y="627" font-size="10.5" font-weight="700" fill="#7c3aed">КОНТУР РЕШЕНИЙ</text>
-<text x="50" y="638" font-size="8.2" fill="#9a9085">сквозной слой, не подсистема</text>
-<text x="50" y="649" font-size="8.3" fill="#6a6056">propose · activate · close · link · replan</text>
-<text x="50" y="660" font-size="8.3" fill="#6a6056">только по команде: автоматика предлагает, человек применяет</text>
+<svg viewBox="0 0 380 712" role="img" aria-label="Логические подсистемы">
+<path d="M 52 40 L 12 40 L 12 282 L 52 282" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="12" cy="160" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="12" y="162.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">1</text>
+<path d="M 340 40 L 352 40 L 352 348 L 340 348" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="352" cy="200" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="352" y="202.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">2</text>
+<path d="M 52 118 L 32 118 L 32 356 L 52 356" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="32" cy="190" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="32" y="192.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">3</text>
+<path d="M 52 200 L 22 200 L 22 396 L 52 396" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="22" cy="270" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="22" y="272.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">4</text>
+<path d="M 190 234 L 190 250" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="190" cy="242" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="190" y="244.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">5</text>
+<path d="M 190 314 L 190 330" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="190" cy="322" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="190" y="324.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">6</text>
+<path d="M 340 390 L 352 390 L 352 510 L 340 510" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="352" cy="450" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="352" y="452.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">7</text>
+<path d="M 340 550 L 372 550 L 372 360 L 340 360" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="372" cy="430" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="372" y="432.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">8</text>
+<path d="M 52 668 L 12 668 L 12 376 L 52 376" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="12" cy="510" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="12" y="512.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">9</text>
+<path d="M 340 680 L 364 680 L 364 560" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="364" cy="620" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="364" y="622.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">10</text>
+<path d="M 190 480 L 190 496" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="190" cy="488" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="190" y="490.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">12</text>
+<path d="M 190 560 L 190 576" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="190" cy="568" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="190" y="570.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">13</text>
+<path d="M 52 406 L 42 406 L 42 596 L 52 596" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="42" cy="480" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="42" y="482.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">14</text>
+<path d="M 190 624 L 190 640" fill="none" stroke="#6a6056" stroke-width="1.2" stroke-dasharray="5,3" marker-end="url(#ar)"/>
+<circle cx="190" cy="632" r="7.5" fill="#fffefb" stroke="#6a6056" stroke-width="1"/>
+<text x="190" y="634.8" font-size="8" font-weight="700" fill="#6a6056" text-anchor="middle">15</text>
+<rect x="52" y="14" width="288" height="64" rx="8" fill="rgba(106,96,86,0.07)" stroke="#6a6056" stroke-width="1.3"/>
+<text x="62" y="29" font-size="10.5" font-weight="700" fill="#6a6056">АТЛЕТ</text>
+<text x="62" y="40" font-size="8.2" fill="#9a9085">нормативы, из которых всё считается</text>
+<text x="62" y="51" font-size="8.3" fill="#6a6056">VDOT · HR-зоны · вес · травмы · форма</text>
+<text x="62" y="62" font-size="7.6" fill="#9a9085" font-style="italic">Garmin · Stryd · Дэниэлс · вручную</text>
+<rect x="52" y="94" width="288" height="58" rx="8" fill="rgba(106,96,86,0.07)" stroke="#6a6056" stroke-width="1.3"/>
+<text x="62" y="109" font-size="10.5" font-weight="700" fill="#6a6056">СРЕДА</text>
+<text x="62" y="120" font-size="8.2" fill="#9a9085">чем ограничена тренировка</text>
+<text x="62" y="131" font-size="8.3" fill="#6a6056">слоты · окна · оборудование · лимиты</text>
+<text x="62" y="142" font-size="7.6" fill="#9a9085" font-style="italic">ICS / календарь · вручную</text>
+<rect x="52" y="168" width="288" height="66" rx="8" fill="rgba(106,96,86,0.07)" stroke="#6a6056" stroke-width="1.3"/>
+<text x="62" y="183" font-size="10.5" font-weight="700" fill="#6a6056">МЕТОДОЛОГИЯ</text>
+<text x="62" y="194" font-size="8.2" fill="#9a9085">правила построения процесса — и код, который их применяет</text>
+<text x="62" y="205" font-size="8.3" fill="#6a6056">правила (данные): PlanModel · LoadModel · шаблоны</text>
+<text x="62" y="216" font-size="8.3" fill="#6a6056">движок (код): как правила применяются</text>
+<text x="62" y="227" font-size="7.6" fill="#9a9085" font-style="italic">знания планировщика — и данные, и код</text>
+<rect x="52" y="250" width="288" height="64" rx="8" fill="rgba(194,65,12,0.07)" stroke="#c2410c" stroke-width="1.3"/>
+<text x="62" y="265" font-size="10.5" font-weight="700" fill="#c2410c">ЦЕЛЬ И ДОСТИЖИМОСТЬ</text>
+<text x="62" y="276" font-size="8.2" fill="#9a9085">можно ли вообще</text>
+<text x="62" y="287" font-size="8.3" fill="#6a6056">цель + дата + атлет → потолок формы → вердикт</text>
+<text x="62" y="298" font-size="8.3" fill="#6a6056">недостижимо → варианты: смягчить · сдвинуть · наилучшая</text>
+<rect x="52" y="330" width="288" height="76" rx="8" fill="rgba(194,65,12,0.07)" stroke="#c2410c" stroke-width="1.3"/>
+<text x="62" y="345" font-size="10.5" font-weight="700" fill="#c2410c">ПЛАНИРОВАНИЕ</text>
+<text x="62" y="356" font-size="8.2" fill="#9a9085">как строится тренировочный процесс</text>
+<text x="62" y="367" font-size="8.3" fill="#6a6056">макро: фазы · недельные цели · бюджет нагрузки</text>
+<text x="62" y="378" font-size="8.3" fill="#6a6056">неделя: запросы → слоты → тренировки → шаги</text>
+<text x="62" y="389" font-size="8.3" fill="#6a6056">остаток недели: переплан · неразложенное — висяк</text>
+<rect x="52" y="422" width="288" height="58" rx="8" fill="rgba(20,184,166,0.08)" stroke="#0b7d71" stroke-width="1.3"/>
+<text x="62" y="437" font-size="10.5" font-weight="700" fill="#0b7d71">ФАКТ</text>
+<text x="62" y="448" font-size="8.2" fill="#9a9085">что фактически было</text>
+<rect x="62" y="459" width="128" height="12" rx="6" fill="#fffefb" stroke="#0b7d71" stroke-width="0.8"/>
+<text x="126.0" y="468" font-size="7.4" fill="#0b7d71" text-anchor="middle">внешнее: Garmin · Stryd</text>
+<rect x="52" y="496" width="288" height="64" rx="8" fill="rgba(20,184,166,0.08)" stroke="#0b7d71" stroke-width="1.3"/>
+<text x="62" y="511" font-size="10.5" font-weight="700" fill="#0b7d71">ОЦЕНКА</text>
+<text x="62" y="522" font-size="8.2" fill="#9a9085">как соотносим план с фактом</text>
+<text x="62" y="533" font-size="8.3" fill="#6a6056">связь — вручную · вердикт по каждой сессии</text>
+<text x="62" y="544" font-size="8.3" fill="#6a6056">саммари недели · отклонения · интенсивность</text>
+<rect x="52" y="576" width="288" height="48" rx="8" fill="rgba(212,160,23,0.09)" stroke="#a17405" stroke-width="1.3"/>
+<text x="62" y="591" font-size="10.5" font-weight="700" fill="#a17405">ВЫХОД</text>
+<text x="62" y="602" font-size="8.2" fill="#9a9085">граница с пользователем</text>
+<text x="62" y="613" font-size="8.3" fill="#6a6056">неделя · сезон · план против факта</text>
+<rect x="52" y="640" width="288" height="64" rx="8" fill="rgba(124,58,237,0.07)" stroke="#7c3aed" stroke-width="1.3" stroke-dasharray="7,4"/>
+<text x="62" y="655" font-size="10.5" font-weight="700" fill="#7c3aed">КОНТУР РЕШЕНИЙ</text>
+<text x="62" y="666" font-size="8.2" fill="#9a9085">сквозной слой, не подсистема</text>
+<text x="62" y="677" font-size="8.3" fill="#6a6056">propose · activate · close · link · replan</text>
+<text x="62" y="688" font-size="8.3" fill="#6a6056">только по команде: автоматика предлагает, человек применяет</text>
 <defs><marker id="ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#6a6056"/></marker></defs>
 </svg>
 </div>
@@ -232,7 +239,7 @@
 <span><i style="border-color:#a17405;background:rgba(212,160,23,0.09)"></i>граница с пользователем</span>
 <span><i style="border-color:#7c3aed;background:rgba(124,58,237,0.07)"></i>сквозной слой решений</span>
 </div>
-<p class="cap">Полосы — подсистемы, стрелки — кто у кого берёт. Показаны 12 связей из 15, полный список — в таблице «Взаимодействия». Номер у стрелки = номер строки в таблице.</p>
+<p class="cap">Полосы — подсистемы, стрелки — кто у кого берёт. Показано 14 связей из 15; не показана одна: внешние источники → факт (чип на полосе «Факт»). Номер у стрелки = номер строки в таблице «Взаимодействия».</p>
 </section>
 <section id="s">
 <div class="h2">3 · Подсистемы</div>
@@ -268,11 +275,11 @@
 <span style="font-size:10px;font-weight:700;background:#6a6056;color:#fff;padding:1px 8px;border-radius:999px">src</span>
 </div>
 <div class="bd">
-<p>правила построения тренировочного процесса — «знания планировщика»</p>
-<div class="f"><span class="lab">решает</span><br><b>Ничего не решает — задаёт, по каким правилам и шаблонам считать.</b></div>
-<div class="f"><span class="lab">владеет</span><br>PlanModel, LoadModel, шаблоны тренировок, шкала зон</div>
+<p>правила построения тренировочного процесса — и код, который их применяет</p>
+<div class="f"><span class="lab">решает</span><br><b>Ничего не решает сама: правила задают, что считать, движок — как считать. Выбор внутри заданных правил — решение Планирования.</b></div>
+<div class="f"><span class="lab">владеет</span><br>правила (данные): PlanModel, LoadModel, шаблоны тренировок, шкала зон · движок (код): логика применения правил</div>
 <div class="f"><span class="lab">обращается к</span><br>Планирование (4) · Цель и достижимость (5)</div>
-<div class="bnd"><span class="lab">граница</span><br>Не знает ни атлета, ни цели, ни календаря. Правила — данные, а не код.</div>
+<div class="bnd"><span class="lab">граница</span><br>Не знает ни атлета, ни цели, ни календаря. Правила и движок работают с любым входом. Новая методика — это правила и код, а не только данные.</div>
 </div>
 </div>
 <div class="ent">
@@ -360,12 +367,12 @@
 </div>
 <div class="link">
 <div class="ln"><span class="nb">4</span><span class="fr">Методология</span><span class="ar">→</span><span class="to">Планирование</span></div>
-<div class="lw">модели, шаблоны, правила нагрузки</div>
+<div class="lw">правила и движок: модели, шаблоны, расчёт нагрузки</div>
 <div class="lwh">сборка недели</div>
 </div>
 <div class="link">
 <div class="ln"><span class="nb">5</span><span class="fr">Методология</span><span class="ar">→</span><span class="to">Цель и достижимость</span></div>
-<div class="lw">правило роста формы, потолок</div>
+<div class="lw">правило роста формы и потолок — из правил и кода</div>
 <div class="lwh">оценка достижимости</div>
 </div>
 <div class="link">
@@ -424,7 +431,7 @@
 <p class="lead">Куда каждая логическая подсистема может ложиться физически. Это следующий уровень — здесь только раскладка, решения не приняты.</p>
 <div class="phys"><span class="pf">Атлет</span><span class="pt">сервер, состояние + кэш в клиенте</span></div>
 <div class="phys"><span class="pf">Среда</span><span class="pt">сервер + внешний календарь</span></div>
-<div class="phys"><span class="pf">Методология</span><span class="pt">сервер, версионируемые правила</span></div>
+<div class="phys"><span class="pf">Методология</span><span class="pt">сервер, версионируемые правила + код движка</span></div>
 <div class="phys"><span class="pf">Цель и достижимость</span><span class="pt">сервер, детерминированный расчёт</span></div>
 <div class="phys"><span class="pf">Планирование</span><span class="pt">сервер, детерминированно</span></div>
 <div class="phys"><span class="pf">Факт</span><span class="pt">сервер + адаптеры Garmin / Stryd</span></div>
@@ -441,10 +448,10 @@
 <div class="ch">что меняет: Меняет, где живёт модель потолка формы и кто отвечает за неё. Раздельно — потолок виден как отдельный кусок, который можно заменить.</div>
 </div>
 <div class="fork">
-<div class="fq">2. Методология — подсистема (правила как данные) или часть планировщика (правила в коде)?</div>
-<div class="opt"><b>A</b> — Подсистема: PlanModel, LoadModel и шаблоны — данные, которые можно менять и версионировать.</div>
-<div class="opt"><b>B</b> — В коде планировщика: одна реализация, новая методика — новая версия кода.</div>
-<div class="ch">что меняет: Отсюда растёт вопрос «в рамках знаний планировщика»: если знания — данные, недостижимость цели можно объяснить конкретным ограничением модели.</div>
+<div class="fq">2. Где граница между правилами методологии и кодом, который их применяет?</div>
+<div class="opt"><b>A</b> — Движок внутри Планирования: методология — данные, а код чтения правил живёт в планировщике. Новая методика — всегда новый код.</div>
+<div class="opt"><b>B</b> — Движок отдельно: свой слой «правила + исполнитель» → результат. Планирование вызывает его и о правилах не знает. Новая методика — новые данные, иногда новый исполнитель.</div>
+<div class="ch">что меняет: При B «недостижимо в рамках знаний» — это конкретное ограничение правил, вердикт ссылается на них. При A — на то, что умеет планировщик. И цена новой методики: в B иногда только данные, в A всегда код.</div>
 </div>
 <div class="fork">
 <div class="fq">3. Факт — одна подсистема с Оценкой или две?</div>
@@ -459,7 +466,8 @@
 <div class="note">Макро в данных покрывает 28 недель из 49 и написано руками — то есть сегодня его нет как результата работы подсистемы.</div>
 <div class="note">Связь план↔факт зафиксирована в домене (Workout.actual_id ↔ ActualSession.linked_workout_id), но в данных её нет ни в одной таблице state.</div>
 <div class="note">Диаграмма DOMAIN-SPEC.html подписывает блок факта как «Garmin / Stryd / TrainingPeaks» и содержит строку «поздно пришедшая активность меняет закрытую неделю» — обе расходятся с подтверждёнными I14 и I23.</div>
+<div class="note">Движок методологии — это существующий код: lib/plan_generate.py, lib/step_builder.py, lib/quality_session.py, lib/daniels.py, lib/load_model.py. Правила — state/workout_templates.json и блоки weekly_macro. Сегодня они живут рядом, без границы.</div>
 </section>
 <hr>
-<p class="end">Coach App · логический уровень v2.0</p>
+<p class="end">Coach App · логический уровень v2.1</p>
 </main></body></html>
