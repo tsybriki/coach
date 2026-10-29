@@ -177,6 +177,18 @@ def render(d: dict) -> str:
   .ent .bd .bnd {{ font-size:12px; color:var(--muted); border-top:1px solid var(--border);
     padding-top:6px; margin-top:7px; }}
 
+  .ent3 {{ border:1px solid var(--border); border-radius:8px; background:var(--card-bg);
+    padding:9px 11px; margin-bottom:8px; }}
+  .ent3 .t {{ font-size:13px; font-weight:700; color:var(--decide); margin-bottom:5px; }}
+  .ent3 .t .step {{ display:inline-block; min-width:18px; height:18px; line-height:18px; text-align:center;
+    border-radius:50%; background:var(--decide); color:#fff; font-size:10px; font-weight:700;
+    margin-right:6px; }}
+  .ent3 ol {{ margin:0; padding-left:20px; font-size:12.5px; }}
+  .ent3 ol li {{ margin-bottom:3px; }}
+  .ent3 .kv {{ font-size:12px; margin-top:7px; border-top:1px solid var(--border); padding-top:6px; }}
+  .ent3 .kv div {{ margin-bottom:3px; }}
+  .ent3 .kv b {{ color:var(--muted); font-weight:700; }}
+
   .link {{ border:1px solid var(--border); border-radius:8px; background:var(--card-bg);
     padding:8px 10px; margin-bottom:6px; }}
   .link .ln {{ display:flex; align-items:baseline; gap:6px; font-size:12.5px; font-weight:700; }}
@@ -224,10 +236,11 @@ def render(d: dict) -> str:
     A("<nav>")
     A('<a href="#l">1 · Уровни</a>')
     A('<a href="#d">2 · Схема</a>')
-    A('<a href="#s">3 · Подсистемы</a>')
-    A('<a href="#i">4 · Взаимодействия</a>')
-    A('<a href="#ph">5 · Физика</a>')
-    A('<a href="#f">6 · Развилки</a>')
+    A('<a href="#p">3 · Планировщик</a>')
+    A('<a href="#s">4 · Подсистемы</a>')
+    A('<a href="#i">5 · Взаимодействия</a>')
+    A('<a href="#ph">6 · Физика</a>')
+    A('<a href="#f">7 · Развилки</a>')
     A("</nav>")
 
     A("<main>")
@@ -259,8 +272,29 @@ def render(d: dict) -> str:
     A(f'<p class="cap">{esc(d["diagram"]["caption"])}</p>')
     A("</section>")
 
+    A('<section id="p">')
+    A('<div class="h2">3 · Планировщик</div>')
+    A(f'<p class="lead">{esc(d["planner"]["lead"])}</p>')
+    for i, e in enumerate(d["planner"]["entries"], 1):
+        A('<div class="ent3">')
+        A(f'<div class="t"><span class="step">{i}</span>{esc(e["name"])}</div>')
+        A('<ol>')
+        for s in e["steps"]:
+            A(f'<li>{esc(s)}</li>')
+        A("</ol>")
+        A('<div class="kv">')
+        A(f'<div><b>вход</b> {esc(e["input"])}</div>')
+        A(f'<div><b>цифры</b> {esc(e["numbers"])}</div>')
+        if e.get("have"):
+            A(f'<div><b>есть</b> {esc(e["have"])}</div>')
+        if e.get("missing"):
+            A(f'<div><b>нет</b> {esc(e["missing"])}</div>')
+        A("</div>")
+        A("</div>")
+    A("</section>")
+
     A('<section id="s">')
-    A('<div class="h2">3 · Подсистемы</div>')
+    A('<div class="h2">4 · Подсистемы</div>')
     for s in d["subsystems"]:
         color = C.get(s.get("tone", "src"), C["muted"])
         A('<div class="ent">')
@@ -280,7 +314,7 @@ def render(d: dict) -> str:
     A("</section>")
 
     A('<section id="i">')
-    A('<div class="h2">4 · Взаимодействия</div>')
+    A('<div class="h2">5 · Взаимодействия</div>')
     for it in d["interactions"]:
         A('<div class="link">')
         A(f'<div class="ln"><span class="nb">{it["n"]}</span>'
@@ -293,7 +327,7 @@ def render(d: dict) -> str:
     A("</section>")
 
     A('<section id="ph">')
-    A('<div class="h2">5 · Куда это ложится физически</div>')
+    A('<div class="h2">6 · Куда это ложится физически</div>')
     A(f'<p class="lead">{esc(d["physical"]["lead"])}</p>')
     for r in d["physical"]["rows"]:
         A(f'<div class="phys"><span class="pf">{esc(r["from"])}</span>'
@@ -301,7 +335,7 @@ def render(d: dict) -> str:
     A("</section>")
 
     A('<section id="f">')
-    A('<div class="h2">6 · Развилки</div>')
+    A('<div class="h2">7 · Развилки</div>')
     for f in d["forks"]:
         A('<div class="fork">')
         A(f'<div class="fq">{f["n"]}. {esc(f["question"])}</div>')
