@@ -185,6 +185,26 @@
   expected_version int        # версия состояния, на которой клиент строил команду
 }</code></pre>
 <h3>Типы команд</h3>
+<p>Пустых мест быть не должно: каждая операция, меняющая состояние, — команда.</p>
+<h4>Загрузка факта</h4>
+<div class="tw"><table><tr>
+<th>Тип</th>
+<th>Что делает</th>
+<th>args</th>
+</tr>
+<tr>
+<td><code>pull_fact</code></td>
+<td>вытянуть активности из Garmin за период</td>
+<td><code>{from, to?, sport?}</code></td>
+</tr>
+</table></div>
+<p><b>Без <code>pull_fact</code> связывание не работает.</b> Факт живёт вне плана и появляется только через</p>
+<p>загрузку: сначала <code>pull_fact</code> — в хранилище появляются <code>ActualSession</code> без плановой пары,</p>
+<p>потом <code>link_actual</code> связывает конкретную сессию с тренировкой. Без загруженного факта</p>
+<p>связывать нечего — интерфейс выбора факта пуст.</p>
+<p>Ответ <code>pull_fact</code> содержит, что именно пришло: <code>pulled[]</code> — новые сессии, <code>skipped[]</code> —</p>
+<p>уже загруженные (тот же <code>external_id</code>), <code>degraded</code> — источник недоступен.</p>
+<h4>Неделя</h4>
 <div class="tw"><table><tr>
 <th>Тип</th>
 <th>Что делает</th>
@@ -216,6 +236,18 @@
 <td><code>{request_id, slot_id, start}</code></td>
 </tr>
 <tr>
+<td><code>unplace_request</code></td>
+<td>размещённая тренировка → обратно в висяки</td>
+<td><code>{request_id}</code></td>
+</tr>
+</table></div>
+<h4>Факт и связь</h4>
+<div class="tw"><table><tr>
+<th>Тип</th>
+<th>Что делает</th>
+<th>args</th>
+</tr>
+<tr>
 <td><code>link_actual</code></td>
 <td>факт ↔ тренировка</td>
 <td><code>{workout_id, actual_id}</code></td>
@@ -224,6 +256,20 @@
 <td><code>unlink_actual</code></td>
 <td>разрыв связи</td>
 <td><code>{workout_id}</code></td>
+</tr>
+<tr>
+<td><code>edit_actual</code></td>
+<td>поправить факт вручную</td>
+<td><code>{actual_id, patch}</code></td>
+</tr>
+</table></div>
+<p><code>edit_actual</code> — для ручного факта (<code>source: manual</code>): Garmin не знает про силовую с</p>
+<p>дистанцией «0 км» или про ОФП. Факт без Garmin-записи всё равно должен попадать в отчёт.</p>
+<h4>Профиль и цель</h4>
+<div class="tw"><table><tr>
+<th>Тип</th>
+<th>Что делает</th>
+<th>args</th>
 </tr>
 <tr>
 <td><code>update_athlete</code></td>
@@ -235,9 +281,147 @@
 <td>новая цель плана</td>
 <td><code>{goal}</code></td>
 </tr>
+<tr>
+<td><code>set_plan</code></td>
+<td>макроплан: фазы, недельные цели</td>
+<td><code>{plan}</code></td>
+</tr>
 </table></div>
+<h4>Среда</h4>
+<div class="tw"><table><tr>
+<th>Тип</th>
+<th>Что делает</th>
+<th>args</th>
+</tr>
+<tr>
+<td><code>set_slots</code></td>
+<td>базовые окна тренировок</td>
+<td><code>{slots}</code></td>
+</tr>
+<tr>
+<td><code>override_slots</code></td>
+<td>перекрытие слотов фазы или недели</td>
+<td><code>{scope, scope_id, ops[], reason}</code></td>
+</tr>
+<tr>
+<td><code>set_equipment</code></td>
+<td>реестр оборудования</td>
+<td><code>{equipment}</code></td>
+</tr>
+<tr>
+<td><code>sync_calendar</code></td>
+<td>забрать окна из календаря</td>
+<td><code>{from, to}</code></td>
+</tr>
+</table></div>
+<h4>Гейты (контрольные точки)</h4>
+<div class="tw"><table><tr>
+<th>Тип</th>
+<th>Что делает</th>
+<th>args</th>
+</tr>
+<tr>
+<td><code>set_gate_result</code></td>
+<td>значение проверки контрольной точки</td>
+<td><code>{gate_id, check_id, value, note?}</code></td>
+</tr>
+<tr>
+<td><code>decide_gate</code></td>
+<td>решение по контрольной точке</td>
+<td><code>{gate_id, decision, note?}</code></td>
+</tr>
+</table></div>
+<p><code>set_gate_result</code> — записать измеренное значение (время на 3К, темп). <code>decide_gate</code> —</p>
+<p>решение пользователя: «идём по плану» или «корректируем». Два разных шага: первое —</p>
+<p>факт, второе — намерение. Автоматика считает значения, но решение — за человеком.</p>
+<h4>Служебное</h4>
+<div class="tw"><table><tr>
+<th>Тип</th>
+<th>Что делает</th>
+<th>args</th>
+</tr>
+<tr>
+<td><code>narrate</code></td>
+<td>получить текстовое объяснение</td>
+<td><code>{about, diff?}</code></td>
+</tr>
+<tr>
+<td><code>import_state</code></td>
+<td>первичный импорт состояния</td>
+<td><code>{source}</code></td>
+</tr>
+<tr>
+<td><code>import_fit</code></td>
+<td>загрузить FIT-файл и разобрать метрики</td>
+<td><code>{path?, pull_days?}</code></td>
+</tr>
+</table></div>
+<p><code>narrate</code> — единственная команда, которая не меняет состояние. Она возвращает текст,</p>
+<p>не считает и не применяет.</p>
 <p><code>brain</code> не инициирует команды сам. Он готовит предложение — тот же конверт с <code>issued_by: brain</code> —</p>
 <p>и ждёт подтверждения пользователя.</p>
+<h3>Что было упущено и почему это важно</h3>
+<div class="tw"><table><tr>
+<th>Команда</th>
+<th>Без неё</th>
+<th>Что ломается</th>
+</tr>
+<tr>
+<td><code>pull_fact</code></td>
+<td>факта нет в системе</td>
+<td>связывание невозможно; отчёт всегда пустой</td>
+</tr>
+<tr>
+<td><code>edit_actual</code></td>
+<td>ручной факт невозможен</td>
+<td>силовые и ОФП не попадают в отчёт</td>
+</tr>
+<tr>
+<td><code>set_gate_result</code></td>
+<td>результат гейта некуда записать</td>
+<td>контрольные точки — только чтение</td>
+</tr>
+<tr>
+<td><code>decide_gate</code></td>
+<td>решение по гейту некуда записать</td>
+<td>решение пользователя теряется</td>
+</tr>
+<tr>
+<td><code>import_fit</code></td>
+<td>FIT не загрузить</td>
+<td>нет детальных метрик: каденс, дрейф, тренировочный эффект</td>
+</tr>
+<tr>
+<td><code>override_slots</code></td>
+<td>перекрытие слота только вручную в файле</td>
+<td>наследование Season ← Phase ← Week не работает</td>
+</tr>
+<tr>
+<td><code>set_slots</code></td>
+<td>базовые окна меняются правкой файла</td>
+<td>календарь тренировок не управляется из приложения</td>
+</tr>
+<tr>
+<td><code>sync_calendar</code></td>
+<td>календарь не подтягивается</td>
+<td>окна плава бассейна устаревают</td>
+</tr>
+<tr>
+<td><code>set_plan</code></td>
+<td>макроплан меняется правкой файла</td>
+<td>фазы и недельные цели не управляются</td>
+</tr>
+<tr>
+<td><code>unplace_request</code></td>
+<td>висяк нельзя вернуть в висяки</td>
+<td>ошибку раскладки не исправить</td>
+</tr>
+<tr>
+<td><code>set_equipment</code></td>
+<td>реестр оборудования меняется правкой файла</td>
+<td>ограничения по оборудованию не управляются</td>
+</tr>
+</table></div>
 <h3>Ответ на команду</h3>
 <pre><code>CommandResult {
   status       enum        # applied | rejected | needs_confirmation
@@ -253,6 +437,8 @@
 <h3>Идемпотентность</h3>
 <p><code>id</code> команды пишется в журнал. Повтор с тем же <code>id</code> возвращает тот же <code>CommandResult</code></p>
 <p>и не применяет команду второй раз. Это позволяет клиенту ретраить outbox не глядя.</p>
+<p><code>pull_fact</code> — частный случай: повторный вызов с тем же периодом не создаёт дублей</p>
+<p>(<code>external_id</code> уникален), а возвращает <code>skipped[]</code> для уже загруженных.</p>
 <h3>Конкуренция</h3>
 <p><code>expected_version</code> не совпал с текущим → команда отклоняется, ответ <code>status: rejected</code>,</p>
 <p><code>error.code = version_conflict</code>, в ответе — текущий снапшот, чтобы клиент переспросил.</p>
@@ -330,6 +516,10 @@
 <li>Доменная ошибка (нарушен инвариант) → команда отклоняется, состояние не меняется,</li>
 </ol>
 <p>в <code>warnings</code> — что именно нарушено.</p>
+<ol>
+<li><b><code>pull_fact</code> при недоступном Garmin</b> → <code>rejected</code> с <code>degraded</code>, <code>pulled[]</code> пуст.</li>
+</ol>
+<p>Планирование при этом не затронуто.</p>
 </section>
 <section id="s2">
 <div class="h2">Хранилище<span class="fn">02-хранилище.md</span></div>
@@ -607,10 +797,13 @@ GET  /api/v1/season                  скелет сезона: фазы, нед
 
 POST /api/v1/commands                одна команда
 POST /api/v1/commands/batch          несколько команд подряд (idempotency по id)
-POST /api/v1/actual/pull             вытянуть факт из Garmin
 POST /api/v1/narrate                 спросить нарратора (текст, не числа)
 
 GET  /api/v1/events                  SSE: изменения версии</code></pre>
+<p>Отдельного маршрута под загрузку факта нет: <code>pull_fact</code> — это команда, она идёт</p>
+<p>POST <code>/api/v1/commands</code> как любая другая. Отдельный маршрут означал бы, что загрузка</p>
+<p>факта — не действие пользователя, а фоновый процесс. Но по правилам модели загрузка</p>
+<p>идёт по команде, и результат виден в <code>diff</code>.</p>
 <h2>Формат ответа</h2>
 <p>Успех:</p>
 <pre><code>{ "version": 42, "data": { ... } }</code></pre>
@@ -870,10 +1063,15 @@ token           токен доступа (chmod 600)</code></pre>
 <li><b>Связывание</b> — выбор факта для тренировки, руками. Список фактов недели, касание →</li>
 </ol>
 <p>связано.</p>
+<p>Перед списком — кнопка «Загрузить из Garmin»: без загруженного факта связывать нечего.</p>
+<p>Кнопка вызывает команду <code>pull_fact</code>; в офлайне она уходит в очередь и выполняется</p>
+<p>при появлении сети.</p>
 <ol>
 <li><b>Закрытие недели</b> — три шага ритуала: вытянуть факт → сопоставить → посчитать.</li>
 <li><b>Атлет</b> — профиль: VDOT, зоны, вес, травмы.</li>
 <li><b>Цель и достижимость</b> — вердикт по новой цели и варианты.</li>
+<li><b>Контрольная точка</b> — значения проверок, решение: идём по плану или корректируем.</li>
+<li><b>Среда</b> — базовые окна, оборудование, перекрытия фазы и недели.</li>
 </ol>
 <h2>Офлайн</h2>
 <p><b>Что доступно без сети:</b></p>
@@ -884,6 +1082,7 @@ token           токен доступа (chmod 600)</code></pre>
 <li>профиль атлета.</li>
 </ul>
 <p><b>Что требует сети:</b> новые недели, вытягивание факта, связывание, закрытие недели.</p>
+<p>Загрузка факта из Garmin в офлайне невозможна — команда ждёт в очереди.</p>
 <p><b>Как показывается устаревшее:</b> в шапке — «данные на &lt;время&gt;», кнопка «обновить».</p>
 <p>Кэш хранит <code>version</code> состояния; сервер отвечает <code>304</code>, если не менялось.</p>
 <p><b>Размер офлайн-пакета:</b> ориентир — до 1 МБ на текущую + соседние недели + сезон-скелет.</p>
@@ -938,8 +1137,20 @@ token           токен доступа (chmod 600)</code></pre>
 <p>«неполная» (I27).</p>
 <p><b>Дубликаты:</b> <code>external_id</code> = <code>activity_id</code> Garmin, уникален (I42). Повторная загрузка</p>
 <p>того же id — обновление, не новая запись.</p>
-<p><b>Деградация:</b> Garmin недоступен → команда <code>actual/pull</code> отклоняется с <code>degraded</code>,</p>
+<p><b>Деградация:</b> Garmin недоступен → команда <code>pull_fact</code> отклоняется с <code>degraded</code>,</p>
 <p>остальное приложение работает.</p>
+<p><b>FIT-файлы.</b> Garmin Connect отдаёт сводку по активности, но детальные метрики</p>
+<p>(покадровые HR, каденс, дрейф, тренировочный эффект) живут в FIT-файле. <code>pull_fact</code> тянет</p>
+<p>сводку; <code>import_fit</code> загружает сам файл и разбирает метрики из него.</p>
+<p><b>Два пути получения активности:</b></p>
+<ul>
+<li><code>pull_fact</code> — команда: тянет из Garmin, создаёт <code>ActualSession</code> без плановой пары.</li>
+</ul>
+<p>Дальше <code>link_actual</code> связывает её с тренировкой.</p>
+<ul>
+<li>ручная запись — команда <code>edit_actual</code>: для силовых и ОФП, которых в Garmin нет.</li>
+</ul>
+<p>Оба пути ведут в один и тот же факт. Разница только в <code>source</code>.</p>
 <h2>Stryd</h2>
 <p>Stryd — источник истины по VO2max и тестовой мощности. Garmin RD не используется (нагрудный</p>
 <p>ремень). Фактическое время в зонах считается по данным Stryd, не по Garmin.</p>
