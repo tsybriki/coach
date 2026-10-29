@@ -103,7 +103,7 @@
 <header>
 <h1>Coach App — логические подсистемы</h1>
 <div class="sub">кто за что отвечает — независимо от того, где это живёт и как хранится</div>
-<div class="meta">v2.1 · подсистем: 8 · взаимодействий: 15 · развилок: 3</div>
+<div class="meta">v2.2 · подсистем: 8 · взаимодействий: 15 · развилок: 3</div>
 <div class="meta">уровень: логический — решения и ответственность</div>
 </header>
 <nav>
@@ -190,9 +190,9 @@
 <text x="62" y="62" font-size="7.6" fill="#9a9085" font-style="italic">Garmin · Stryd · Дэниэлс · вручную</text>
 <rect x="52" y="94" width="288" height="58" rx="8" fill="rgba(106,96,86,0.07)" stroke="#6a6056" stroke-width="1.3"/>
 <text x="62" y="109" font-size="10.5" font-weight="700" fill="#6a6056">СРЕДА</text>
-<text x="62" y="120" font-size="8.2" fill="#9a9085">чем ограничена тренировка</text>
+<text x="62" y="120" font-size="8.2" fill="#9a9085">чем ограничена тренировка — своё состояние, версионируется</text>
 <text x="62" y="131" font-size="8.3" fill="#6a6056">слоты · окна · оборудование · лимиты</text>
-<text x="62" y="142" font-size="7.6" fill="#9a9085" font-style="italic">ICS / календарь · вручную</text>
+<text x="62" y="142" font-size="7.6" fill="#9a9085" font-style="italic">задаётся здесь, не подтягивается из календаря</text>
 <rect x="52" y="168" width="288" height="66" rx="8" fill="rgba(106,96,86,0.07)" stroke="#6a6056" stroke-width="1.3"/>
 <text x="62" y="183" font-size="10.5" font-weight="700" fill="#6a6056">МЕТОДОЛОГИЯ</text>
 <text x="62" y="194" font-size="8.2" fill="#9a9085">правила построения процесса — и код, который их применяет</text>
@@ -262,11 +262,11 @@
 <span style="font-size:10px;font-weight:700;background:#6a6056;color:#fff;padding:1px 8px;border-radius:999px">src</span>
 </div>
 <div class="bd">
-<p>чем ограничена тренировка — окна, оборудование, лимиты</p>
-<div class="f"><span class="lab">решает</span><br><b>Ничего не решает — задаёт рамку, внутри которой ищет планировщик.</b></div>
-<div class="f"><span class="lab">владеет</span><br>слоты, окна, оборудование, ограничения, override фаз и недель</div>
+<p>чем ограничена тренировка — окна, оборудование, лимиты. Своё состояние, версионируется</p>
+<div class="f"><span class="lab">решает</span><br><b>Ничего не решает — задаёт рамку, внутри которой ищет планировщик. Версия среды входит в версию состояния: смена окна видна во всех проекциях.</b></div>
+<div class="f"><span class="lab">владеет</span><br>слоты, окна, оборудование, ограничения, override фаз и недель — всё это состояние, со своей версией</div>
 <div class="f"><span class="lab">обращается к</span><br>Планирование (3)</div>
-<div class="bnd"><span class="lab">граница</span><br>Не знает о тренировках и целях. Доступность ресурса — во времени, а не «навсегда».</div>
+<div class="bnd"><span class="lab">граница</span><br>Не знает о тренировках и целях. Доступность ресурса — во времени, а не «навсегда». Календаря нет: доступность задаётся здесь, а не подтягивается извне.</div>
 </div>
 </div>
 <div class="ent">
@@ -467,7 +467,9 @@
 <div class="note">Связь план↔факт зафиксирована в домене (Workout.actual_id ↔ ActualSession.linked_workout_id), но в данных её нет ни в одной таблице state.</div>
 <div class="note">Диаграмма DOMAIN-SPEC.html подписывает блок факта как «Garmin / Stryd / TrainingPeaks» и содержит строку «поздно пришедшая активность меняет закрытую неделю» — обе расходятся с подтверждёнными I14 и I23.</div>
 <div class="note">Движок методологии — это существующий код: lib/plan_generate.py, lib/step_builder.py, lib/quality_session.py, lib/daniels.py, lib/load_model.py. Правила — state/workout_templates.json и блоки weekly_macro. Сегодня они живут рядом, без границы.</div>
+<div class="note">Google Calendar не подключается: доступность тренировок — дефолтные слоты и инвентарь в подсистеме «Среда», версионируемые как обычное состояние.</div>
+<div class="note">Данные Stryd отдельно не грузим: берём то, что Stryd складывает в Garmin. Нагрудный ремень используется на важных тренировках — данные идут через Garmin.</div>
 </section>
 <hr>
-<p class="end">Coach App · логический уровень v2.1</p>
+<p class="end">Coach App · логический уровень v2.2</p>
 </main></body></html>
