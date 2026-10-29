@@ -88,7 +88,7 @@ SSE через прокси: отключить буферизацию (`X-Accel
 | Garmin недоступен | `POST /actual/pull` → `degraded`, план и чтение работают |
 | Календарь недоступен | слоты берутся из локального кэша, в ответе `warnings: [calendar_stale]` |
 | Нарратор недоступен | `/narrate` возвращает заглушку, остальное работает |
-| Файл состояния битый | сервер не стартует, `/health` → `unhealthy`, алерт |
+| Состояние нечитаемо | сервер не стартует, `/health` → `unhealthy`, алерт |
 
 Внешний источник не роняет приложение — это правило деградации, а не пожелание.
 
@@ -105,14 +105,14 @@ coach-app/
     domain/       сущности, инварианты, производные — ноль I/O
     services/     сценарии: planner, goal_feasibility, week_builder, assessment
     ports/        контракты внешнего мира
-    adapters/     реализации: json_repo, garmin, stryd, calendar, narrator
+    adapters/     реализации портов: storage, garmin, stryd, calendar, narrator
     api/          BFF: роуты, схемы ответов, auth
     main.py       сборка зависимостей, запуск
-  data/           состояние (см. 02-хранилище.md)
   migrations/
   tests/
   tools/
 ```
 
 Зависимости строго вниз: `api → services → ports → domain`. `adapters` реализуют `ports`
-и не импортируют `api` или `services`. `domain` не знает про файлы, HTTP и время.
+и не импортируют `api` или `services`. `domain` не знает про формат хранения, HTTP и время.
+Хранилище — за портами: BFF не знает, что это файлы или база (см. `02-хранилище.md`).

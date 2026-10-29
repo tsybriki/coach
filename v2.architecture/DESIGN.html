@@ -149,7 +149,10 @@
 <li><b>Решения принимает код.</b> LLM только формулирует. Числа считает домен.</li>
 <li><b>Ничего не инициируется само.</b> Любое изменение состояния — команда от пользователя.</li>
 <li><b>Источник правды один.</b> Производное пересчитывается, а не хранится вторым экземпляром.</li>
-<li><b>Логика не знает о файлах.</b> Формат хранения — за адаптером.</li>
+<li><b>Логика не знает о формате хранения.</b> Доступ к данным — только через порты;</li>
+</ol>
+<p>формат (файлы, база) знает только адаптер. Проверяется чекером, не договорённостью.</p>
+<ol>
 <li><b>Деградация вместо отказа.</b> Упавший внешний источник ограничивает, но не роняет.</li>
 <li><b>Один пользователь.</b> Ничего не строим на будущее, чего этот пользователь не делает.</li>
 </ol>
@@ -162,7 +165,9 @@
 <li>Утвердить развилки из <code>08-развилки.md</code>.</li>
 <li>Создать репозиторий приложения + конституцию (<code>.hermes.md</code>) по <code>development-standards</code>.</li>
 <li>Реализовать базу по <code>07-реализация.md</code> — с тестом на каждый инвариант.</li>
+<li>В конституцию проекта — правило «доступ к данным только через порты» с командой проверки:</li>
 </ol>
+<p><code>python3 tools/check_storage_leaks.py</code>.</p>
 </section>
 <section id="s1">
 <div class="h2">Контракты<span class="fn">01-контракты.md</span></div>
@@ -260,18 +265,28 @@
 </tr>
 <tr>
 <td><code>SeasonRepo</code></td>
-<td>чтение и запись состояния сезона</td>
-<td>атомарная запись, версия в ответе</td>
+<td>состояние сезона: план, фазы, недели</td>
+<td>отказ при устаревшей версии</td>
+</tr>
+<tr>
+<td><code>FactRepo</code></td>
+<td>факт: чтение, добавление, связывание</td>
+<td>дубликат <code>external_id</code> → отказ с кодом</td>
 </tr>
 <tr>
 <td><code>AthleteRepo</code></td>
 <td>профиль атлета</td>
-<td>отсутствие файла → пустой профиль, не ошибка</td>
+<td>нет профиля → пустой профиль, не ошибка</td>
 </tr>
 <tr>
-<td><code>ActualRepo</code></td>
-<td>факт: чтение, добавление, связывание</td>
-<td>дубликат <code>external_id</code> → отказ с кодом</td>
+<td><code>MethodologyRepo</code></td>
+<td>правила: модели, шаблоны, шкала зон</td>
+<td>нет правил → пустой набор, не ошибка</td>
+</tr>
+<tr>
+<td><code>CommandLog</code></td>
+<td>журнал команд: идемпотентность</td>
+<td>повтор команды → тот же результат</td>
 </tr>
 <tr>
 <td><code>ActivityPort</code></td>
@@ -299,6 +314,8 @@
 <td>детерминированный в тестах</td>
 </tr>
 </table></div>
+<p>Первые пять — порты хранения. Их сигнатуры описаны в <code>02-хранилище.md</code>.</p>
+<p>Ни один порт не упоминает формат хранения: нет параметров <code>path</code>, <code>table</code>, <code>query</code>.</p>
 <h2>Правила ошибок</h2>
 <ol>
 <li>Код ошибки + человеческое сообщение. Без стектрейсов в ответе.</li>
@@ -306,7 +323,7 @@
 </ol>
 <p>остальные работают.</p>
 <ol>
-<li>Битые входные данные (пустой файл, невалидный JSON, отсутствующее поле) → понятное</li>
+<li>Битые входные данные (пустое значение, невалидный объект, отсутствующее поле) → понятное</li>
 </ol>
 <p>сообщение и безопасное поведение, не исключение.</p>
 <ol>
@@ -317,42 +334,233 @@
 <section id="s2">
 <div class="h2">Хранилище<span class="fn">02-хранилище.md</span></div>
 <p>Уровень: физический. Отвечает на вопрос «где состояние лежит и как пишется».</p>
-<h2>Формат: JSON, один файл на корень агрегата</h2>
-<p><b>Почему JSON, а не SQLite.</b> Данных мало (один сезон, сотни фактов за год), писатель один</p>
-<p>(BFF), нужен diff в git и читаемость руками. Критерий пересмотра: больше одного писателя</p>
-<p>или запросы по произвольным полям — тогда SQLite.</p>
-<h2>Раскладка</h2>
+<h2>Принцип: физическое хранилище знает только адаптер</h2>
+<p>Никто, кроме адаптера хранилища, не знает, что состояние лежит в файлах, в базе данных или</p>
+<p>где-либо ещё. Домен, сервисы, BFF и клиент работают только через интерфейсы.</p>
+<p>Это значит:</p>
+<ul>
+<li>домен не импортирует <code>sqlite3</code>, <code>json</code>, <code>os.path</code> — ему не нужно;</li>
+<li>сервисы не знают, есть ли база;</li>
+<li>BFF не знает, как хранится состояние — он знает только порты;</li>
+<li>клиент не знает, откуда пришли данные.</li>
+</ul>
+<p>Смена хранилища — замена одного файла в <code>adapters/</code>. Ничего больше не меняется.</p>
+<h3>Правило проверяется, а не декларируется</h3>
+<pre><code>python3 tools/check_storage_leaks.py</code></pre>
+<p>Чекер проходит по коду и по дизайн-документам и падает, если вне <code>adapters/storage/</code></p>
+<p>появилось знание о формате хранения: <code>sqlite3</code>, <code>json.dump</code>, <code>read_text</code>, <code>os.replace</code>,</p>
+<p><code>flock</code>, пути к файлам, <code>.json</code>. Команда обязана быть в CI: зелёный чекер — условие коммита.</p>
+<p>Эталон: <code>v2.architecture/check_storage_leaks.py</code> в репозитории <code>~/coach</code>.</p>
+<h2>Путь развития</h2>
+<p><b>Сейчас — файлы.</b> JSON, один файл на корень агрегата. Данных мало, писатель один,</p>
+<p>нужен diff в git и читаемость руками.</p>
+<p><b>Потом — база данных.</b> SQLite. Переход спланирован заранее: контракты портов не меняются,</p>
+<p>меняется только реализация и добавляется шаг миграции данных.</p>
+<p><b>Критерий перехода</b>, зафиксированный заранее, чтобы не спорить позже:</p>
+<div class="tw"><table><tr>
+<th>Триггер</th>
+<th>Почему он важен</th>
+</tr>
+<tr>
+<td>Второй писатель (клиент пишет напрямую, или два процесса)</td>
+<td>Файловая блокировка перестаёт быть достаточной</td>
+</tr>
+<tr>
+<td>Нужны запросы по произвольным полям (все факты за период, все пропущенные за сезон)</td>
+<td>Файлы требуют читать и фильтровать в коде</td>
+</tr>
+<tr>
+<td>Состояние перестало помещаться в память целиком</td>
+<td>Читать всё для одного экрана — дорого</td>
+</tr>
+<tr>
+<td>Нужна транзакция между несколькими сущностями</td>
+<td>Файлы дают атомарность на файл, а не на набор</td>
+</tr>
+</table></div>
+<p>Пока ни один триггер не сработал — файлы. Когда сработает — переход по процедуре ниже.</p>
+<h2>Схема доступа: интерфейсы</h2>
+<p>Доступ к данным — <b>только</b> через эти интерфейсы. Они объявлены в <code>ports/</code>, реализуются</p>
+<p>в <code>adapters/</code>.</p>
+<pre><code>class SeasonRepo(Protocol):
+    """Состояние сезона: план, фазы, недели, журнал команд."""
+    def load(self) -&gt; SeasonState: ...
+    def save(self, state: SeasonState, expected_version: int) -&gt; int: ...
+    def week(self, season_week: int) -&gt; Week | None: ...
+    def put_week(self, week: Week, expected_version: int) -&gt; int: ...</code></pre>
+<pre><code>class FactRepo(Protocol):
+    """Факт: выполненные сессии."""
+    def list_for_week(self, season_week: int) -&gt; list[ActualSession]: ...
+    def list_in_range(self, start: date, end: date) -&gt; list[ActualSession]: ...
+    def get(self, actual_id: str) -&gt; ActualSession | None: ...
+    def upsert(self, session: ActualSession) -&gt; ActualSession: ...
+    def link(self, actual_id: str, workout_id: str | None) -&gt; None: ...</code></pre>
+<pre><code>class AthleteRepo(Protocol):
+    """Профиль атлета."""
+    def get(self) -&gt; Athlete: ...
+    def update(self, athlete: Athlete) -&gt; None: ...</code></pre>
+<pre><code>class MethodologyRepo(Protocol):
+    """Правила методологии: PlanModel, LoadModel, шаблоны, шкала зон."""
+    def plan_models(self) -&gt; list[PlanModel]: ...
+    def load_model(self) -&gt; LoadModel: ...
+    def workout_templates(self) -&gt; dict: ...</code></pre>
+<pre><code>class CommandLog(Protocol):
+    """Журнал команд: идемпотентность."""
+    def get(self, command_id: str) -&gt; CommandResult | None: ...
+    def append(self, command: Command, result: CommandResult) -&gt; None: ...</code></pre>
+<p><b>Правило:</b> ни один метод интерфейса не упоминает формат хранения. Нет параметров</p>
+<p><code>path</code>, <code>table</code>, <code>collection</code>, <code>query</code>. Всё — на языке домена: <code>season_week</code>, <code>actual_id</code>,</p>
+<p><code>expected_version</code>.</p>
+<h2>Что достаточно для текущих задач</h2>
+<div class="tw"><table><tr>
+<th>Операция</th>
+<th>Интерфейс</th>
+<th>Где используется</th>
+</tr>
+<tr>
+<td>Прочитать сезон целиком</td>
+<td><code>SeasonRepo.load</code></td>
+<td>проекции для клиента</td>
+</tr>
+<tr>
+<td>Прочитать одну неделю</td>
+<td><code>SeasonRepo.week</code></td>
+<td>экран недели</td>
+</tr>
+<tr>
+<td>Сохранить неделю</td>
+<td><code>SeasonRepo.put_week</code></td>
+<td>propose / activate / close / replan</td>
+</tr>
+<tr>
+<td>Сохранить сезон</td>
+<td><code>SeasonRepo.save</code></td>
+<td>новая цель, смена плана</td>
+</tr>
+<tr>
+<td>Факт за неделю</td>
+<td><code>FactRepo.list_for_week</code></td>
+<td>связывание, саммари</td>
+</tr>
+<tr>
+<td>Факт за период</td>
+<td><code>FactRepo.list_in_range</code></td>
+<td>отчёт за сезон, год</td>
+</tr>
+<tr>
+<td>Одна сессия</td>
+<td><code>FactRepo.get</code></td>
+<td>карточка тренировки</td>
+</tr>
+<tr>
+<td>Записать сессию</td>
+<td><code>FactRepo.upsert</code></td>
+<td>вытягивание из Garmin</td>
+</tr>
+<tr>
+<td>Связать с планом</td>
+<td><code>FactRepo.link</code></td>
+<td>link_actual / unlink_actual</td>
+</tr>
+<tr>
+<td>Профиль</td>
+<td><code>AthleteRepo</code></td>
+<td>всё планирование</td>
+</tr>
+<tr>
+<td>Правила</td>
+<td><code>MethodologyRepo</code></td>
+<td>планировщик, нагрузка</td>
+</tr>
+<tr>
+<td>Журнал</td>
+<td><code>CommandLog</code></td>
+<td>идемпотентность</td>
+</tr>
+</table></div>
+<p><b>Интерфейсов достаточно.</b> Не хватает двух вещей, и они добавлены:</p>
+<ol>
+<li><b><code>FactRepo.list_in_range</code></b> — запрос за период. Без него отчёт за сезон требует</li>
+</ol>
+<p>чтения всех недель и фильтрации в коде. В файловом хранилище это работает,</p>
+<p>в базе — это запрос. Добавлен именно поэтому: дешевле предусмотреть сейчас.</p>
+<ol>
+<li><b><code>SeasonRepo.week</code></b> — точечное чтение недели. Без него клиент тянет весь сезон,</li>
+</ol>
+<p>чтобы показать одну неделю.</p>
+<h2>Текущая реализация: файлы</h2>
 <pre><code>data/
   season.json            Season · Plan · Phase · журнал Command
   athlete.json           профиль атлета
   weeks/W&lt;n&gt;.json        Week · requests[] · assignments[] · workouts[] · steps[] · summary
   actual/W&lt;n&gt;.json       ActualSession[] за неделю
   methodology/           PlanModel · LoadModel · шаблоны тренировок · шкала зон
-  versions.json          текущая версия схемы + Applied migration</code></pre>
+  versions.json          текущая версия схемы + применённые миграции</code></pre>
 <p>Имена — от домена: <code>athlete.json</code>, а не <code>athlete_json_file.json</code>. Неделя разбита по файлам,</p>
-<p>чтобы размер файла не рос с сезоном и его можно было отдавать в клиент поштучно.</p>
-<h2>Версия схемы и миграции</h2>
+<p>чтобы размер не рос с сезоном и неделю можно было отдавать в клиент поштучно.</p>
+<h3>Версия схемы и миграции</h3>
 <ul>
 <li><code>data/versions.json</code>: <code>{"schema_version": 3, "applied": ["0001_initial", "0002_week_files"]}</code>.</li>
 <li>Миграции — код в <code>migrations/</code>, по одной на версию, идемпотентные.</li>
-<li>При открытии: текущая версия файла сравнивается с целевой, недостающие миграции применяются</li>
+<li>При открытии текущая версия сравнивается с целевой, недостающие миграции применяются</li>
 </ul>
 <p>по порядку. Миграция падает — данные не трогаются, процесс не стартует.</p>
 <ul>
 <li>Миграции только вверх. Откат — восстановление из бэкапа.</li>
 </ul>
-<h2>Атомарная запись</h2>
+<h3>Атомарная запись</h3>
 <pre><code>запись: 1. во временный файл в том же каталоге
         2. fsync файла
         3. os.replace(tmp, target)   # атомарно на одном ФС
         4. fsync каталога</code></pre>
 <p>Читатель никогда не видит половину файла. При падении на шаге 3 старое состояние цело.</p>
-<h2>Блокировка записи</h2>
+<h3>Блокировка записи</h3>
 <p>Один писатель — BFF. <code>data/.lock</code> с <code>flock</code> на время записи. Если лок занят — команда</p>
 <p>отклоняется с <code>busy</code>, а не ждёт и не пишет поверх.</p>
+<h2>Процедура перехода на базу данных</h2>
+<p>Переход — не «поменять файлы на таблицы». Это отдельная работа с отдельным тестом.</p>
+<h3>Шаг 1 · Зафиксировать схему в базе</h3>
+<p>Таблицы отражают домен, а не JSON-документы. Ключевой момент — **не хранить целые</p>
+<p>JSON-объекты в одной колонке**: тогда база превратится в файл внутри строки, и запросы</p>
+<p>по полям останутся невозможными.</p>
+<pre><code>season            id, horizon_start, horizon_end, season_week_count, version
+plan              id, season_id, status, goal_id, period_start, period_end, ...
+phase             id, plan_id, objective, focus, load_range, ...
+week              id, plan_id, season_week, start, end, status, focus, load_target, ...
+request           id, week_id, sport, kind, focus, duration_min, ...
+assignment        id, week_id, request_id, slot_id, start, duration_min, ...
+workout           id, week_id, request_id, sport, kind, focus, status, actual_id, ...
+step              id, workout_id, role, sport, target_type, target_value, ...
+actual_session    id, season_id, date, sport, duration_min, distance_m, source, external_id, ...
+week_summary      week_id, closed_at, totals, verdict, deviations, intensity, ...
+command_log       id, type, issued_at, issued_by, result, ...
+athlete           singleton row
+methodology       model_id, kind, payload, version</code></pre>
+<p><code>actual_session.external_id</code> — уникальный индекс (инвариант I42).</p>
+<p><code>week_summary</code> — содержит сводку; если понадобятся запросы по её полям — выносится</p>
+<p>в отдельные колонки или таблицы.</p>
+<h3>Шаг 2 · Реализовать порты поверх базы</h3>
+<p>Новый адаптер — реализация тех же пяти интерфейсов. Тела методов — SQL, сигнатуры те же.</p>
+<p>Ничего в <code>domain/</code>, <code>services/</code> и <code>api/</code> не меняется.</p>
+<h3>Шаг 3 · Написать контрактные тесты</h3>
+<p>Один и тот же набор тестов прогоняется против обоих хранилищ:</p>
+<pre><code>test_contract_season_repo.py   — один набор тестов, два адаптера
+test_contract_fact_repo.py
+test_contract_athlete_repo.py</code></pre>
+<p>Тест проверяет поведение, а не формат: сохранил → прочитал то же; сохранил с устаревшей</p>
+<p>версией → отказ; несуществующий id → <code>None</code>, не исключение; <code>external_id</code> дублируется → отказ.</p>
+<p>Пока эти тесты не зелёные для обоих адаптеров — хранилище не переключается.</p>
+<h3>Шаг 4 · Перенести данные</h3>
+<pre><code>python3 -m tools.migrate_to_db --from files --to sqlite</code></pre>
+<p>Скрипт читает через порты (не напрямую по файлам), пишет через порты, сверяет количество</p>
+<p>и контрольные суммы по полям, печатает отчёт. Работает и в обратную сторону.</p>
+<h3>Шаг 5 · Переключить и оставить оба</h3>
+<p>Флаг в конфиге: <code>storage.backend = files | sqlite</code>. Оба адаптера живут в коде, пока</p>
+<p>SQLite-вариант не проверен на реальном сезоне. Флаг убирается, когда SQLite-адаптер</p>
+<p>занимает место основного, а файловый — удаляется.</p>
 <h2>Один источник правды</h2>
 <ul>
-<li>Состояние — в <code>data/</code>.</li>
+<li>Состояние — в хранилище, выбранном конфигом.</li>
 <li>Производное (HTML-превью, снапшоты для клиента, отчёты) — пересчитывается, не хранится</li>
 </ul>
 <p>вторым экземпляром. Кэш клиента — производная, помечена версией.</p>
@@ -363,17 +571,21 @@
 <p><code>~/coach/state/season_plan.json</code>, <code>athlete.json</code>, <code>constraints.json</code>, <code>plan-w*.json</code> — источник</p>
 <p>первичного состояния. Импорт — отдельная команда, одноразовая:</p>
 <pre><code>python3 -m tools.import_coach_state --src ~/coach/state --dst data</code></pre>
-<p>Импорт читает, маппит на новую схему, пишет через обычный атомарный путь, печатает отчёт:</p>
-<p>что перенесено, что не распознано, где потребовалось решение. Дальше <code>data/</code> — правда,</p>
+<p>Импорт читает, маппит на новую схему, пишет через обычный порт, печатает отчёт:</p>
+<p>что перенесено, что не распознано, где потребовалось решение. Дальше хранилище — правда,</p>
 <p><code>~/coach/state</code> — историческая копия, в расчётах нового приложения не участвует.</p>
 <p><b>Что не переносится автоматически:</b> связь план↔факт (в пайплайне её нет — <code>actual_id</code></p>
 <p>в <code>plan-w*.json</code> отсутствует), <code>summary</code> (считается заново при закрытии недели),</p>
 <p>недельные макро-цели, не выраженные в домене.</p>
 <h2>Бэкап</h2>
 <ul>
-<li>Копия <code>data/</code> целиком — один tar, ежедневно, 14 копий.</li>
-<li>Секреты в <code>data/</code> не лежат.</li>
-<li>Восстановление — распаковка поверх: атомарность записи делает это безопасным.</li>
+<li>Бэкап — снимок хранилища, а не «папка <code>data/</code>»: реализация бэкапа принадлежит адаптеру.</li>
+</ul>
+<p>Для файлов — один tar; для базы — <code>sqlite3 .backup</code> или dump.</p>
+<ul>
+<li>Ежедневно, 14 копий.</li>
+<li>Секреты в хранилище не лежат.</li>
+<li>Восстановление — из последнего целого снимка.</li>
 </ul>
 </section>
 <section id="s3">
@@ -459,7 +671,7 @@ GET  /api/v1/events                  SSE: изменения версии</code>
 <td><code>/narrate</code> возвращает заглушку, остальное работает</td>
 </tr>
 <tr>
-<td>Файл состояния битый</td>
+<td>Состояние нечитаемо</td>
 <td>сервер не стартует, <code>/health</code> → <code>unhealthy</code>, алерт</td>
 </tr>
 </table></div>
@@ -473,15 +685,15 @@ GET  /api/v1/events                  SSE: изменения версии</code>
     domain/       сущности, инварианты, производные — ноль I/O
     services/     сценарии: planner, goal_feasibility, week_builder, assessment
     ports/        контракты внешнего мира
-    adapters/     реализации: json_repo, garmin, stryd, calendar, narrator
+    adapters/     реализации портов: storage, garmin, stryd, calendar, narrator
     api/          BFF: роуты, схемы ответов, auth
     main.py       сборка зависимостей, запуск
-  data/           состояние (см. 02-хранилище.md)
   migrations/
   tests/
   tools/</code></pre>
 <p>Зависимости строго вниз: <code>api → services → ports → domain</code>. <code>adapters</code> реализуют <code>ports</code></p>
-<p>и не импортируют <code>api</code> или <code>services</code>. <code>domain</code> не знает про файлы, HTTP и время.</p>
+<p>и не импортируют <code>api</code> или <code>services</code>. <code>domain</code> не знает про формат хранения, HTTP и время.</p>
+<p>Хранилище — за портами: BFF не знает, что это файлы или база (см. <code>02-хранилище.md</code>).</p>
 </section>
 <section id="s4">
 <div class="h2">Хостинг<span class="fn">04-хостинг.md</span></div>
@@ -609,8 +821,8 @@ token           токен доступа (chmod 600)</code></pre>
 <p><code>cloudflared</code> читает свой конфиг из <code>~/.cloudflared/config.yml</code>, там же credentials для туннеля.</p>
 <p>Секреты не в репозитории.</p>
 <h2>Что снаружи видно</h2>
-<p>Наружу — только BFF: маршруты API, <code>/health</code> без данных. Домен, Garmin, календарь, нарратор,</p>
-<p>файлы состояния наружу не выходят. Наружу отдаются только то, что сам пользователь запрашивает</p>
+<p>Наружу — только BFF: маршруты API, <code>/health</code> без данных. Домен, Garmin, календарь, нарратор</p>
+<p>и хранилище наружу не выходят. Наружу отдаются только то, что сам пользователь запрашивает</p>
 <p>у себя: план и факт.</p>
 <h2>Риски и что с ними делать</h2>
 <div class="tw"><table><tr>
@@ -631,7 +843,7 @@ token           токен доступа (chmod 600)</code></pre>
 </tr>
 <tr>
 <td>Данные на диске дома</td>
-<td>Бэкап <code>data/</code> ежедневно, 14 копий (см. <code>02-хранилище.md</code>)</td>
+<td>Бэкап хранилища ежедневно, 14 копий (см. <code>02-хранилище.md</code>)</td>
 </tr>
 </table></div>
 </section>
@@ -742,7 +954,7 @@ token           токен доступа (chmod 600)</code></pre>
 <p>Недоступен → берём локальный кэш с отметкой <code>calendar_stale</code> в <code>warnings</code>.</p>
 <h2>Дэниэлс</h2>
 <p>Справочник соответствий VDOT ↔ темпы зон ↔ время на дистанции. Не внешний источник в смысле</p>
-<p>сети — это версионируемые таблицы в <code>data/methodology/</code>, плюс код их чтения.</p>
+<p>сети — это версионируемые правила, которые приходят через <code>MethodologyRepo</code>.</p>
 <p>Используется для: перевода цели в целевой VDOT (<code>10К 40:00 → VDOT 52</code>), темпов по зонам,</p>
 <p>расчёта нагрузки.</p>
 <h2>Нарратор (LLM)</h2>
@@ -755,7 +967,7 @@ token           токен доступа (chmod 600)</code></pre>
 <li>Каждый внешний вызов — с таймаутом и политикой retry.</li>
 <li>Ошибка внешнего источника никогда не роняет приложение: деградация вместо отказа.</li>
 <li>Любое число из источника хранится с <code>source</code> и <code>external_id</code>.</li>
-<li>Секреты — в <code>~/.config/coach-app/</code>, не в репозитории и не в <code>data/</code>.</li>
+<li>Секреты — в конфигурации приложения, не в репозитории и не в хранилище.</li>
 <li>Адаптер не импортирует <code>api</code> и <code>services</code> — только <code>domain</code> и <code>ports</code>.</li>
 </ol>
 </section>
@@ -764,7 +976,8 @@ token           токен доступа (chmod 600)</code></pre>
 <p>План работ. Сначала база, чтобы приложение открылось и показало неделю; потом остальное.</p>
 <h2>Правила</h2>
 <p>Стандарт <code>development-standards</code>: слои <code>domain → ports → app → adapters</code>, зависимости строго</p>
-<p>вниз, тест на каждый доменный инвариант, атомарная запись, деградация вместо отказа.</p>
+<p>вниз, тест на каждый доменный инвариант, доступ к данным только через порты,</p>
+<p>деградация вместо отказа.</p>
 <p>Конституция проекта — <code>.hermes.md</code> в корне нового репозитория. Каждое правило с проверяющей</p>
 <p>командой.</p>
 <h2>Этап 0 · Репозиторий и каркас</h2>
@@ -773,7 +986,8 @@ token           токен доступа (chmod 600)</code></pre>
 <li><code>.hermes.md</code> — конституция.</li>
 <li><code>pyproject.toml</code>, <code>pytest</code>, <code>ruff</code>, <code>mypy</code>.</li>
 <li>Пустая структура <code>app/{domain,ports,services,adapters,api}</code> + <code>tests/</code>.</li>
-<li>CI: тесты зелёные — обязательное условие коммита.</li>
+<li><code>tools/check_storage_leaks.py</code> — перенос чекера из <code>~/coach/v2.architecture/</code>.</li>
+<li>CI: тесты зелёные <b>и</b> чекер утечек зелёный — обязательное условие коммита.</li>
 </ul>
 <p><b>Готово, когда:</b> <code>pytest</code> проходит на пустом домене, структура соответствует <code>.hermes.md</code>.</p>
 <h2>Этап 1 · Домен</h2>
@@ -793,14 +1007,27 @@ token           токен доступа (chmod 600)</code></pre>
 <p><b>Готово, когда:</b> 43 теста инвариантов зелёные, <code>mypy</code> чистый.</p>
 <h2>Этап 2 · Хранилище</h2>
 <ul>
-<li><code>app/adapters/json_repo.py</code> — реализация <code>SeasonRepo</code>.</li>
-<li>Атомарная запись через временный файл + <code>os.replace</code>.</li>
-<li><code>flock</code> на запись.</li>
+<li><code>app/ports/storage.py</code> — пять интерфейсов: <code>SeasonRepo</code>, <code>FactRepo</code>, <code>AthleteRepo</code>,</li>
+</ul>
+<p><code>MethodologyRepo</code>, <code>CommandLog</code>.</p>
+<ul>
+<li><code>app/adapters/storage/files.py</code> — реализация поверх файлов.</li>
 <li>Версия схемы + <code>migrations/</code>.</li>
 <li><code>tools/import_coach_state.py</code> — импорт из <code>~/coach/state</code>, отчёт о расхождениях.</li>
+<li><code>test_contract_*_repo.py</code> — один набор тестов на все порты хранения.</li>
 </ul>
-<p><b>Готово, когда:</b> импорт <code>~/coach/state</code> даёт рабочее состояние, тест на атомарность</p>
-<p>и на миграцию зелёные.</p>
+<p><b>Готово, когда:</b> импорт <code>~/coach/state</code> даёт рабочее состояние, контрактные тесты</p>
+<p>зелёные, <code>tools/check_storage_leaks.py</code> не находит утечек.</p>
+<h2>Этап 2б · Переход на базу данных</h2>
+<p>Спланирован заранее, выполняется по триггерам из <code>02-хранилище.md</code>.</p>
+<ul>
+<li><code>app/adapters/storage/sqlite.py</code> — вторая реализация тех же портов.</li>
+<li>Схема в SQL — по домену, без JSON-в-колонке.</li>
+<li><code>tools/migrate_to_db.py</code> — перенос данных через порты, со сверкой.</li>
+<li>Переключение — конфигом, оба адаптера живут одновременно.</li>
+</ul>
+<p><b>Готово, когда:</b> одни и те же контрактные тесты зелёные для обоих адаптеров,</p>
+<p>перенос сверен, а SQLite-адаптер проверен на реальном сезоне.</p>
 <h2>Этап 3 · Сервисы</h2>
 <ul>
 <li><code>app/services/planner.py</code> — вход 2: макро + неделя → тренировки.</li>
@@ -832,7 +1059,7 @@ token           токен доступа (chmod 600)</code></pre>
 <ul>
 <li><code>cloudflared</code> в <code>systemd --user</code>, BFF в <code>systemd --user</code>.</li>
 <li>Домен, сертификат, токен.</li>
-<li>Бэкап <code>data/</code> по расписанию.</li>
+<li>Бэкап хранилища по расписанию (реализация — в адаптере).</li>
 </ul>
 <p><b>Готово, когда:</b> с мобильного интернета открывается неделя; из дома — напрямую.</p>
 <h2>Что сознательно не входит в базу</h2>
@@ -870,7 +1097,7 @@ token           токен доступа (chmod 600)</code></pre>
         ↑         ↑
     импорт   план+факт</code></pre>
 <p>Этапы 1 и 2 независимы от 3–6. Этап 5 (клиент) можно вести параллельно с 3–4: клиент</p>
-<p>работает против заглушки API, которая отдаёт снапшот из файла.</p>
+<p>работает против заглушки API, которая отдаёт снапшот из хранилища.</p>
 </section>
 <section id="s8">
 <div class="h2">Развилки<span class="fn">08-развилки.md</span></div>
@@ -885,12 +1112,13 @@ token           токен доступа (chmod 600)</code></pre>
 <p><b>Мой выбор:</b> A как основной, B как запасной. D (IPv6 напрямую) не включать.</p>
 <p><b>Что нужно от тебя:</b> есть ли домен и на чём он живёт; есть ли аккаунт Cloudflare;</p>
 <p>допустимо ли, что трафик идёт через Cloudflare.</p>
-<h2>2 · Данные: файлы или SQLite?</h2>
-<ul>
-<li><b>A · JSON-файлы</b> (рекомендую) — мало данных, один писатель, diff в git, читаемо руками.</li>
-<li><b>B · SQLite</b> — если появится больше одного писателя или запросы по произвольным полям.</li>
-</ul>
-<p><b>Мой выбор:</b> A. Критерий пересмотра зафиксирован в <code>02-хранилище.md</code>.</p>
+<h2>2 · Данные: формат — уже не развилка</h2>
+<p>Формат хранения — не то, что решается при проектировании, а то, что меняется по триггерам.</p>
+<p>Путь зафиксирован в <code>02-хранилище.md</code>: сначала файлы, при срабатывании триггера — SQLite,</p>
+<p>переход через порты, контрактные тесты на оба адаптера.</p>
+<p>Триггеры: второй писатель · запросы по произвольным полям · состояние не влезает в память ·</p>
+<p>нужна транзакция между сущностями. Пока ни один не сработал — файлы.</p>
+<p><b>Что нужно от тебя:</b> ничего. Вопрос снят.</p>
 <h2>3 · План и факт: стартовать с нуля или импортом из пайплайна?</h2>
 <ul>
 <li><b>A · Импорт</b> (рекомендую) — сезон 2026–27 уже наполнен, импорт даёт рабочее состояние</li>
@@ -951,5 +1179,6 @@ token           токен доступа (chmod 600)</code></pre>
 <h2>Что блокирует начало реализации</h2>
 <p>Только <b>№6</b> — без правила роста вход 1 остаётся заглушкой. Остальное я могу принять</p>
 <p>по умолчанию и помечать в коде.</p>
+<p>Формат хранения — не блокер: переход на базу спланирован заранее, триггеры зафиксированы.</p>
 </section>
 </main></body></html>
