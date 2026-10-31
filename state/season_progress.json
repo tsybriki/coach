@@ -93,74 +93,8 @@
       "decision": ""
     },
     {
-      "id": "gate_cp_cp_5k_w8",
-      "season_week": 8,
-      "kind": "quality",
-      "title": "5K max · max",
-      "question": "Что говорит результат: идём по плану или корректируем?",
-      "checks": [
-        {
-          "id": "time",
-          "label": "Время на дистанции",
-          "metric": "tt_time",
-          "threshold": "22:30",
-          "op": "le",
-          "unit": "",
-          "severity": "hard",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "pace",
-          "label": "Средний темп",
-          "metric": "tt_pace",
-          "threshold": "4:30",
-          "op": "pace_le",
-          "unit": "/км",
-          "severity": "soft",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "hr",
-          "label": "Пульс на финише",
-          "metric": "tt_hr",
-          "threshold": "≤ по протоколу",
-          "op": "le",
-          "unit": "уд/мин",
-          "severity": "soft",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        }
-      ],
-      "warnings": [
-        "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11."
-      ],
-      "decisions": {
-        "pass": [
-          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
-        ],
-        "warn": [
-          "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11."
-        ],
-        "fail": [
-          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
-          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
-        ]
-      },
-      "lever": "cp_5k_w8",
-      "decided_at": "",
-      "decision": ""
-    },
-    {
       "id": "gate_phase_run_base",
-      "season_week": 12,
+      "season_week": 6,
       "kind": "phase",
       "title": "Итог базовой фазы · Поднимаем базовый объём",
       "question": "Достигнут ли базовый объём и подтверждён ли порог для входа в build?",
@@ -242,6 +176,72 @@
       "decision": ""
     },
     {
+      "id": "gate_cp_cp_5k_w8",
+      "season_week": 8,
+      "kind": "quality",
+      "title": "5K max · max",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "22:30",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:30",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_5k_w8",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
       "id": "gate_cp_cp_3k_w12",
       "season_week": 12,
       "kind": "quality",
@@ -308,74 +308,8 @@
       "decision": ""
     },
     {
-      "id": "gate_cp_cp_5k_w16",
-      "season_week": 16,
-      "kind": "quality",
-      "title": "5K max · max",
-      "question": "Что говорит результат: идём по плану или корректируем?",
-      "checks": [
-        {
-          "id": "time",
-          "label": "Время на дистанции",
-          "metric": "tt_time",
-          "threshold": "20:30",
-          "op": "le",
-          "unit": "",
-          "severity": "hard",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "pace",
-          "label": "Средний темп",
-          "metric": "tt_pace",
-          "threshold": "4:06",
-          "op": "pace_le",
-          "unit": "/км",
-          "severity": "soft",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "hr",
-          "label": "Пульс на финише",
-          "metric": "tt_hr",
-          "threshold": "≤ по протоколу",
-          "op": "le",
-          "unit": "уд/мин",
-          "severity": "soft",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        }
-      ],
-      "warnings": [
-        "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
-      ],
-      "decisions": {
-        "pass": [
-          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
-        ],
-        "warn": [
-          "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
-        ],
-        "fail": [
-          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
-          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
-        ]
-      },
-      "lever": "cp_5k_w16",
-      "decided_at": "",
-      "decision": ""
-    },
-    {
       "id": "gate_phase_run_build",
-      "season_week": 19,
+      "season_week": 13,
       "kind": "phase",
       "title": "Итог build-фазы: порог vs цель · Поднимаем threshold pace",
       "question": "Успел ли порог уйти к 4:10–4:15, чтобы race-specific шёл к 4:00?",
@@ -457,10 +391,76 @@
       "decision": ""
     },
     {
+      "id": "gate_cp_cp_5k_w16",
+      "season_week": 16,
+      "kind": "quality",
+      "title": "5K max · max",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "20:30",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:06",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_5k_w16",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
       "id": "gate_phase_run_specific",
-      "season_week": 23,
+      "season_week": 20,
       "kind": "phase",
-      "title": "Готовность к гонке · Поднимаем race pace",
+      "title": "Готовность к гонке · Поднимаем VO2max и порог",
       "question": "Закрыт ли гонку-темп 4:00/км и держится ли объём?",
       "checks": [
         {

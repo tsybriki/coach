@@ -9,9 +9,9 @@
       "goal": "Поднимаем базовый объём",
       "focus": "Аэробная база: растёт общий объём бега, интенсивность ниже порога. Фундамент под всё остальное.",
       "w_from": 1,
-      "w_to": 12,
-      "date_range": "11 окт 2026 — 2 янв 2027",
-      "weeks_count": 12,
+      "w_to": 6,
+      "date_range": "11 окт 2026 — 21 ноя 2026",
+      "weeks_count": 6,
       "target_h": 7.3,
       "is_event": false,
       "notes": "",
@@ -154,7 +154,17 @@
           "run_km_easy": 17.8,
           "intensity_pct": 9.1,
           "deload": false,
-          "sessions_target": 7
+          "sessions_target": 7,
+          "actual": {
+            "run_km": 52.9,
+            "bike_km": 16.6,
+            "swim_km": 1.4,
+            "sessions": 8,
+            "total_h": 6.84,
+            "run_h": 5.2,
+            "bike_h": 1.1,
+            "swim_h": 0.5
+          }
         },
         {
           "w": 4,
@@ -164,9 +174,9 @@
           "detailed": true,
           "is_now": false,
           "is_next": true,
-          "run_km": 38,
-          "long_km": 14,
-          "run_h": 3.6,
+          "run_km": 41,
+          "long_km": 10,
+          "run_h": 3.9,
           "bike_h": 1.0,
           "swim_h": 0.5,
           "ofp_h": 0.8,
@@ -183,15 +193,15 @@
               "work_m": 3000
             }
           ],
-          "comp_h": 5.9,
-          "total_h": 6.34,
+          "comp_h": 6.2,
+          "total_h": 6.62,
           "variant_id": "tt_pace",
           "quality_label": "Темповый тест",
           "quality_work_m": 3000,
           "quality_paces": [],
-          "run_km_long": 14.0,
+          "run_km_long": 10.0,
           "run_km_quality": 3.0,
-          "run_km_easy": 21.0,
+          "run_km_easy": 28.0,
           "intensity_pct": 7.9,
           "deload": false,
           "sessions_target": 7,
@@ -205,9 +215,9 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 40,
-          "long_km": 16,
-          "run_h": 3.8,
+          "run_km": 45,
+          "long_km": 11,
+          "run_h": 4.3,
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 0.8,
@@ -220,15 +230,15 @@
               "work_m": 4600
             }
           ],
-          "comp_h": 6.3,
-          "total_h": 6.88,
+          "comp_h": 6.8,
+          "total_h": 7.35,
           "variant_id": "3x1k+2x800",
           "quality_label": "3×1К @ 4:12 + 2×800 @ 3:50",
           "quality_work_m": 4600,
           "quality_paces": [],
-          "run_km_long": 16.0,
+          "run_km_long": 11.0,
           "run_km_quality": 4.6,
-          "run_km_easy": 19.4,
+          "run_km_easy": 29.4,
           "intensity_pct": 11.5,
           "deload": false,
           "sessions_target": 7
@@ -241,9 +251,9 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 42,
-          "long_km": 16,
-          "run_h": 4.0,
+          "run_km": 50,
+          "long_km": 12,
+          "run_h": 4.8,
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 0.8,
@@ -256,19 +266,34 @@
               "work_m": 2200
             }
           ],
-          "comp_h": 6.5,
-          "total_h": 7.01,
+          "comp_h": 7.3,
+          "total_h": 7.76,
           "variant_id": "1k-800-400",
           "quality_label": "1К @ 4:20 → 800 @ 3:55 → 400 @ 3:45",
           "quality_work_m": 2200,
           "quality_paces": [],
-          "run_km_long": 16.0,
+          "run_km_long": 12.0,
           "run_km_quality": 2.2,
-          "run_km_easy": 23.8,
+          "run_km_easy": 35.8,
           "intensity_pct": 5.2,
           "deload": false,
           "sessions_target": 7
-        },
+        }
+      ],
+      "has_actual": true
+    },
+    {
+      "id": "run_build",
+      "goal": "Поднимаем threshold pace",
+      "focus": "Порог аэробного обмена: темп на LTH растёт, появляются длинные интервалы 2К.",
+      "w_from": 7,
+      "w_to": 13,
+      "date_range": "22 ноя 2026 — 9 янв 2027",
+      "weeks_count": 7,
+      "target_h": 10.8,
+      "is_event": false,
+      "notes": "",
+      "detailed": [
         {
           "w": 7,
           "start": "2026-11-22",
@@ -277,34 +302,30 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 45,
-          "long_km": 18,
-          "run_h": 4.3,
+          "run_km": 50,
+          "long_km": 12,
+          "run_h": 4.8,
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 1.0,
           "goal_text": "Развиваем аэробную мощность",
-          "phase": "run_base",
+          "phase": "run_build",
           "color": "orange",
           "variants": [
             {
-              "label": "5К tempo @ 4:20",
-              "work_m": 5000
-            },
-            {
-              "label": "6К tempo @ 4:08",
-              "work_m": 6000
+              "label": "8К long tempo @ 4:12",
+              "work_m": 8000
             }
           ],
-          "comp_h": 7.0,
-          "total_h": 7.31,
-          "variant_id": "5k",
-          "quality_label": "5К tempo @ 4:20",
-          "quality_work_m": 5000,
+          "comp_h": 7.5,
+          "total_h": 7.75,
+          "variant_id": "8k",
+          "quality_label": "8К long tempo @ 4:12",
+          "quality_work_m": 8000,
           "quality_paces": [],
-          "run_km_long": 18.0,
-          "run_km_quality": 5.0,
-          "run_km_easy": 22.0,
+          "run_km_long": 12.0,
+          "run_km_quality": 8.0,
+          "run_km_easy": 30.0,
           "intensity_pct": 11.1,
           "deload": false,
           "sessions_target": 8
@@ -317,14 +338,14 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 48,
-          "long_km": 14,
-          "run_h": 4.6,
+          "run_km": 52,
+          "long_km": 13,
+          "run_h": 4.9,
           "bike_h": 2.0,
           "swim_h": 0.7,
           "ofp_h": 1.0,
           "goal_text": "тест на максимум · 5K max · 4:30/км",
-          "phase": "run_base",
+          "phase": "run_build",
           "color": "cp",
           "variants": [
             {
@@ -332,15 +353,15 @@
               "work_m": 5000
             }
           ],
-          "comp_h": 8.3,
-          "total_h": 8.59,
+          "comp_h": 8.6,
+          "total_h": 8.97,
           "variant_id": "tt_max",
           "quality_label": "Тест на максимум",
           "quality_work_m": 5000,
           "quality_paces": [],
-          "run_km_long": 14.0,
+          "run_km_long": 13.0,
           "run_km_quality": 5.0,
-          "run_km_easy": 29.0,
+          "run_km_easy": 34.0,
           "intensity_pct": 10.4,
           "deload": false,
           "sessions_target": 8,
@@ -354,34 +375,30 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 50,
-          "long_km": 16,
-          "run_h": 4.8,
+          "run_km": 55,
+          "long_km": 14,
+          "run_h": 5.2,
           "bike_h": 2.0,
           "swim_h": 0.7,
           "ofp_h": 1.0,
           "goal_text": "Развиваем threshold pace",
-          "phase": "run_base",
+          "phase": "run_build",
           "color": "orange",
           "variants": [
             {
-              "label": "4×1К @ 4:15",
-              "work_m": 4000
-            },
-            {
-              "label": "5×1К @ 4:12",
-              "work_m": 5000
+              "label": "8К long tempo @ 4:12",
+              "work_m": 8000
             }
           ],
-          "comp_h": 8.5,
-          "total_h": 8.98,
-          "variant_id": "4x1k",
-          "quality_label": "4×1К @ 4:15",
-          "quality_work_m": 4000,
+          "comp_h": 8.9,
+          "total_h": 9.22,
+          "variant_id": "8k",
+          "quality_label": "8К long tempo @ 4:12",
+          "quality_work_m": 8000,
           "quality_paces": [],
-          "run_km_long": 16.0,
-          "run_km_quality": 4.0,
-          "run_km_easy": 30.0,
+          "run_km_long": 14.0,
+          "run_km_quality": 8.0,
+          "run_km_easy": 33.0,
           "intensity_pct": 8.0,
           "deload": false,
           "sessions_target": 8
@@ -394,42 +411,34 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 50,
-          "long_km": 18,
-          "run_h": 4.8,
+          "run_km": 58,
+          "long_km": 14,
+          "run_h": 5.5,
           "bike_h": 2.0,
           "swim_h": 1.3,
           "ofp_h": 1.0,
           "goal_text": "Развиваем VO2max",
-          "phase": "run_base",
-          "color": "red",
+          "phase": "run_build",
+          "color": "orange",
           "variants": [
             {
-              "label": "10×200 @ 3:40",
-              "work_m": 2000
-            },
-            {
-              "label": "5×800 @ 3:55",
+              "label": "4×1К @ 4:15",
               "work_m": 4000
             },
             {
-              "label": "2×2К @ 4:05 + 1×800 @ 3:50",
-              "work_m": 4800
-            },
-            {
-              "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
-              "work_m": 3200
+              "label": "5×1К @ 4:12",
+              "work_m": 5000
             }
           ],
-          "comp_h": 9.1,
-          "total_h": 9.81,
-          "variant_id": "5x800",
-          "quality_label": "5×800 @ 3:55",
+          "comp_h": 9.8,
+          "total_h": 10.4,
+          "variant_id": "4x1k",
+          "quality_label": "4×1К @ 4:15",
           "quality_work_m": 4000,
           "quality_paces": [],
-          "run_km_long": 18.0,
+          "run_km_long": 14.0,
           "run_km_quality": 4.0,
-          "run_km_easy": 28.0,
+          "run_km_easy": 40.0,
           "intensity_pct": 8.0,
           "deload": false,
           "sessions_target": 8
@@ -442,30 +451,34 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 50,
-          "long_km": 16,
-          "run_h": 4.8,
+          "run_km": 60,
+          "long_km": 15,
+          "run_h": 5.7,
           "bike_h": 2.0,
           "swim_h": 1.3,
           "ofp_h": 1.0,
           "goal_text": "Развиваем общую аэробную мощность",
-          "phase": "run_base",
-          "color": "violet",
+          "phase": "run_build",
+          "color": "orange",
           "variants": [
             {
-              "label": "6 циклов: 200@5:10 + 800@3:50",
-              "work_m": 6000
+              "label": "4×1К @ 4:15",
+              "work_m": 4000
+            },
+            {
+              "label": "5×1К @ 4:12",
+              "work_m": 5000
             }
           ],
-          "comp_h": 9.1,
-          "total_h": 9.37,
-          "variant_id": "200-800 x6",
-          "quality_label": "6 циклов: 200@5:10 + 800@3:50",
-          "quality_work_m": 6000,
+          "comp_h": 10.0,
+          "total_h": 10.59,
+          "variant_id": "4x1k",
+          "quality_label": "4×1К @ 4:15",
+          "quality_work_m": 4000,
           "quality_paces": [],
-          "run_km_long": 16.0,
-          "run_km_quality": 6.0,
-          "run_km_easy": 28.0,
+          "run_km_long": 15.0,
+          "run_km_quality": 4.0,
+          "run_km_easy": 41.0,
           "intensity_pct": 12.0,
           "deload": false,
           "sessions_target": 8
@@ -478,14 +491,14 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 45,
-          "long_km": 12,
-          "run_h": 4.3,
+          "run_km": 62,
+          "long_km": 16,
+          "run_h": 5.9,
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 0.8,
           "goal_text": "тест на максимум · 3K max · 4:07/км",
-          "phase": "run_base",
+          "phase": "run_build",
           "color": "cp",
           "variants": [
             {
@@ -497,35 +510,20 @@
               "work_m": 3000
             }
           ],
-          "comp_h": 6.8,
-          "total_h": 7.17,
+          "comp_h": 8.4,
+          "total_h": 8.77,
           "variant_id": "tt_max_3k",
           "quality_label": "3К на максимум",
           "quality_work_m": 3000,
           "quality_paces": [],
-          "run_km_long": 12.0,
+          "run_km_long": 16.0,
           "run_km_quality": 3.0,
-          "run_km_easy": 30.0,
+          "run_km_easy": 43.0,
           "intensity_pct": 6.7,
           "deload": true,
           "sessions_target": 8,
           "is_tt": true
-        }
-      ],
-      "has_actual": true
-    },
-    {
-      "id": "run_build",
-      "goal": "Поднимаем threshold pace",
-      "focus": "Порог аэробного обмена: темп на LTH растёт, появляются длинные интервалы 2К.",
-      "w_from": 13,
-      "w_to": 19,
-      "date_range": "3 янв 2027 — 20 фев 2027",
-      "weeks_count": 7,
-      "target_h": 10.8,
-      "is_event": false,
-      "notes": "",
-      "detailed": [
+        },
         {
           "w": 13,
           "start": "2027-01-03",
@@ -534,9 +532,9 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 50,
+          "run_km": 65,
           "long_km": 16,
-          "run_h": 4.8,
+          "run_h": 6.2,
           "bike_h": 2.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
@@ -545,23 +543,42 @@
           "color": "orange",
           "variants": [
             {
-              "label": "2×2К @ 4:15",
+              "label": "4×1К @ 4:15",
               "work_m": 4000
+            },
+            {
+              "label": "5×1К @ 4:12",
+              "work_m": 5000
             }
           ],
-          "comp_h": 9.3,
-          "total_h": 9.73,
-          "variant_id": "2x2k",
-          "quality_label": "2×2К @ 4:15",
+          "comp_h": 10.7,
+          "total_h": 11.23,
+          "variant_id": "4x1k",
+          "quality_label": "4×1К @ 4:15",
           "quality_work_m": 4000,
           "quality_paces": [],
           "run_km_long": 16.0,
           "run_km_quality": 4.0,
-          "run_km_easy": 30.0,
+          "run_km_easy": 45.0,
           "intensity_pct": 8.0,
           "deload": false,
           "sessions_target": 8
-        },
+        }
+      ],
+      "has_actual": false
+    },
+    {
+      "id": "run_specific",
+      "goal": "Поднимаем VO2max и порог",
+      "focus": "Специфика под гонку: темп на соревновательной скорости, race-pace отрезки в ключевой работе.",
+      "w_from": 14,
+      "w_to": 20,
+      "date_range": "10 янв 2027 — 27 фев 2027",
+      "weeks_count": 7,
+      "target_h": 11.1,
+      "is_event": false,
+      "notes": "",
+      "detailed": [
         {
           "w": 14,
           "start": "2027-01-10",
@@ -571,29 +588,33 @@
           "is_now": false,
           "is_next": false,
           "run_km": 55,
-          "long_km": 18,
+          "long_km": 14,
           "run_h": 5.2,
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
           "goal_text": "Развиваем threshold pace",
-          "phase": "run_build",
+          "phase": "run_specific",
           "color": "orange",
           "variants": [
             {
-              "label": "6×800 @ 4:10",
-              "work_m": 4800
+              "label": "5К tempo @ 4:20",
+              "work_m": 5000
+            },
+            {
+              "label": "6К tempo @ 4:08",
+              "work_m": 6000
             }
           ],
           "comp_h": 10.2,
-          "total_h": 10.91,
-          "variant_id": "6x800",
-          "quality_label": "6×800 @ 4:10",
-          "quality_work_m": 4800,
+          "total_h": 10.59,
+          "variant_id": "5k",
+          "quality_label": "5К tempo @ 4:20",
+          "quality_work_m": 5000,
           "quality_paces": [],
-          "run_km_long": 18.0,
-          "run_km_quality": 4.8,
-          "run_km_easy": 32.2,
+          "run_km_long": 14.0,
+          "run_km_quality": 5.0,
+          "run_km_easy": 36.0,
           "intensity_pct": 8.7,
           "deload": false,
           "sessions_target": 8
@@ -606,30 +627,34 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 55,
-          "long_km": 18,
-          "run_h": 5.2,
+          "run_km": 58,
+          "long_km": 14,
+          "run_h": 5.5,
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
           "goal_text": "Развиваем порог и VO2max в одной сессии",
-          "phase": "run_build",
-          "color": "ember",
+          "phase": "run_specific",
+          "color": "orange",
           "variants": [
             {
-              "label": "5К tempo @ 4:10 + 4×400 @ 3:45",
-              "work_m": 6600
+              "label": "5К tempo @ 4:20",
+              "work_m": 5000
+            },
+            {
+              "label": "6К tempo @ 4:08",
+              "work_m": 6000
             }
           ],
-          "comp_h": 10.2,
-          "total_h": 10.74,
-          "variant_id": "5k+4x400",
-          "quality_label": "5К tempo @ 4:10 + 4×400 @ 3:45",
-          "quality_work_m": 6600,
+          "comp_h": 10.5,
+          "total_h": 10.87,
+          "variant_id": "5k",
+          "quality_label": "5К tempo @ 4:20",
+          "quality_work_m": 5000,
           "quality_paces": [],
-          "run_km_long": 18.0,
-          "run_km_quality": 6.6,
-          "run_km_easy": 30.4,
+          "run_km_long": 14.0,
+          "run_km_quality": 5.0,
+          "run_km_easy": 39.0,
           "intensity_pct": 12.0,
           "deload": false,
           "sessions_target": 8
@@ -642,14 +667,14 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 55,
-          "long_km": 16,
-          "run_h": 5.2,
+          "run_km": 60,
+          "long_km": 15,
+          "run_h": 5.7,
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
           "goal_text": "тест на максимум · 5K max · 4:06/км",
-          "phase": "run_build",
+          "phase": "run_specific",
           "color": "cp",
           "variants": [
             {
@@ -657,15 +682,15 @@
               "work_m": 5000
             }
           ],
-          "comp_h": 10.2,
-          "total_h": 10.59,
+          "comp_h": 10.7,
+          "total_h": 11.06,
           "variant_id": "tt_max",
           "quality_label": "Тест на максимум",
           "quality_work_m": 5000,
           "quality_paces": [],
-          "run_km_long": 16.0,
+          "run_km_long": 15.0,
           "run_km_quality": 5.0,
-          "run_km_easy": 34.0,
+          "run_km_easy": 40.0,
           "intensity_pct": 9.1,
           "deload": false,
           "sessions_target": 8,
@@ -679,30 +704,34 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 55,
-          "long_km": 18,
-          "run_h": 5.2,
+          "run_km": 62,
+          "long_km": 16,
+          "run_h": 5.9,
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
           "goal_text": "Развиваем способность держать threshold pace",
-          "phase": "run_build",
+          "phase": "run_specific",
           "color": "orange",
           "variants": [
             {
-              "label": "3×2К @ 4:12",
-              "work_m": 6000
+              "label": "4×1К @ 4:15",
+              "work_m": 4000
+            },
+            {
+              "label": "5×1К @ 4:12",
+              "work_m": 5000
             }
           ],
-          "comp_h": 10.2,
-          "total_h": 10.76,
-          "variant_id": "3x2k",
-          "quality_label": "3×2К @ 4:12",
-          "quality_work_m": 6000,
+          "comp_h": 10.9,
+          "total_h": 11.44,
+          "variant_id": "4x1k",
+          "quality_label": "4×1К @ 4:15",
+          "quality_work_m": 4000,
           "quality_paces": [],
-          "run_km_long": 18.0,
-          "run_km_quality": 6.0,
-          "run_km_easy": 31.0,
+          "run_km_long": 16.0,
+          "run_km_quality": 4.0,
+          "run_km_easy": 42.0,
           "intensity_pct": 10.9,
           "deload": false,
           "sessions_target": 8
@@ -715,104 +744,13 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 60,
-          "long_km": 20,
-          "run_h": 5.7,
-          "bike_h": 3.0,
-          "swim_h": 1.5,
-          "ofp_h": 1.0,
-          "goal_text": "Развиваем аэробную мощность",
-          "phase": "run_build",
-          "color": "orange",
-          "variants": [
-            {
-              "label": "8К long tempo @ 4:12",
-              "work_m": 8000
-            }
-          ],
-          "comp_h": 11.2,
-          "total_h": 11.53,
-          "variant_id": "8k",
-          "quality_label": "8К long tempo @ 4:12",
-          "quality_work_m": 8000,
-          "quality_paces": [],
-          "run_km_long": 20.0,
-          "run_km_quality": 8.0,
-          "run_km_easy": 32.0,
-          "intensity_pct": 13.3,
-          "deload": false,
-          "sessions_target": 8
-        },
-        {
-          "w": 19,
-          "start": "2027-02-14",
-          "end": "2027-02-20",
-          "start_d": "14–20 фев",
-          "detailed": true,
-          "is_now": false,
-          "is_next": false,
           "run_km": 65,
-          "long_km": 22,
+          "long_km": 16,
           "run_h": 6.2,
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
           "goal_text": "Развиваем аэробную мощность",
-          "phase": "run_build",
-          "color": "orange",
-          "variants": [
-            {
-              "label": "5К tempo @ 4:20",
-              "work_m": 5000
-            },
-            {
-              "label": "6К tempo @ 4:08",
-              "work_m": 6000
-            }
-          ],
-          "comp_h": 11.7,
-          "total_h": 12.02,
-          "variant_id": "6k",
-          "quality_label": "6К tempo @ 4:08",
-          "quality_work_m": 6000,
-          "quality_paces": [],
-          "run_km_long": 22.0,
-          "run_km_quality": 6.0,
-          "run_km_easy": 37.0,
-          "intensity_pct": 9.2,
-          "deload": false,
-          "sessions_target": 8
-        }
-      ],
-      "has_actual": false
-    },
-    {
-      "id": "run_specific",
-      "goal": "Поднимаем race pace",
-      "focus": "Специфика под гонку: темп на соревновательной скорости, race-pace отрезки в ключевой работе.",
-      "w_from": 20,
-      "w_to": 23,
-      "date_range": "21 фев 2027 — 20 мар 2027",
-      "weeks_count": 4,
-      "target_h": 11.1,
-      "is_event": false,
-      "notes": "",
-      "detailed": [
-        {
-          "w": 20,
-          "start": "2027-02-21",
-          "end": "2027-02-27",
-          "start_d": "21–27 фев",
-          "detailed": true,
-          "is_now": false,
-          "is_next": false,
-          "run_km": 65,
-          "long_km": 22,
-          "run_h": 6.2,
-          "bike_h": 3.0,
-          "swim_h": 1.5,
-          "ofp_h": 1.0,
-          "goal_text": "Развиваем VO2max",
           "phase": "run_specific",
           "color": "red",
           "variants": [
@@ -831,24 +769,24 @@
           "quality_label": "4×2К @ 4:10",
           "quality_work_m": 8000,
           "quality_paces": [],
-          "run_km_long": 22.0,
+          "run_km_long": 16.0,
           "run_km_quality": 8.0,
-          "run_km_easy": 35.0,
-          "intensity_pct": 12.3,
+          "run_km_easy": 41.0,
+          "intensity_pct": 13.3,
           "deload": false,
           "sessions_target": 8
         },
         {
-          "w": 21,
-          "start": "2027-02-28",
-          "end": "2027-03-06",
-          "start_d": "28 фев – 6 мар",
+          "w": 19,
+          "start": "2027-02-14",
+          "end": "2027-02-20",
+          "start_d": "14–20 фев",
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 70,
-          "long_km": 22,
-          "run_h": 6.7,
+          "run_km": 68,
+          "long_km": 17,
+          "run_h": 6.5,
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
@@ -857,23 +795,114 @@
           "color": "orange",
           "variants": [
             {
-              "label": "10К long tempo @ 4:05",
-              "work_m": 10000
+              "label": "4×1К @ 4:15",
+              "work_m": 4000
             },
             {
-              "label": "12К long tempo @ 4:00",
-              "work_m": 12000
+              "label": "5×1К @ 4:12",
+              "work_m": 5000
+            }
+          ],
+          "comp_h": 12.0,
+          "total_h": 12.51,
+          "variant_id": "4x1k",
+          "quality_label": "4×1К @ 4:15",
+          "quality_work_m": 4000,
+          "quality_paces": [],
+          "run_km_long": 17.0,
+          "run_km_quality": 4.0,
+          "run_km_easy": 47.0,
+          "intensity_pct": 9.2,
+          "deload": false,
+          "sessions_target": 8
+        },
+        {
+          "w": 20,
+          "start": "2027-02-21",
+          "end": "2027-02-27",
+          "start_d": "21–27 фев",
+          "detailed": true,
+          "is_now": false,
+          "is_next": false,
+          "run_km": 70,
+          "long_km": 18,
+          "run_h": 6.7,
+          "bike_h": 3.0,
+          "swim_h": 1.5,
+          "ofp_h": 1.0,
+          "goal_text": "Развиваем VO2max",
+          "phase": "run_specific",
+          "color": "orange",
+          "variants": [
+            {
+              "label": "4×1К @ 4:15",
+              "work_m": 4000
+            },
+            {
+              "label": "5×1К @ 4:12",
+              "work_m": 5000
             }
           ],
           "comp_h": 12.2,
-          "total_h": 12.45,
-          "variant_id": "10k",
-          "quality_label": "10К long tempo @ 4:05",
-          "quality_work_m": 10000,
+          "total_h": 12.7,
+          "variant_id": "4x1k",
+          "quality_label": "4×1К @ 4:15",
+          "quality_work_m": 4000,
           "quality_paces": [],
-          "run_km_long": 22.0,
-          "run_km_quality": 10.0,
-          "run_km_easy": 38.0,
+          "run_km_long": 18.0,
+          "run_km_quality": 4.0,
+          "run_km_easy": 48.0,
+          "intensity_pct": 12.3,
+          "deload": false,
+          "sessions_target": 8
+        }
+      ],
+      "has_actual": false
+    },
+    {
+      "id": "run_taper",
+      "goal": "Поднимаем гонка-темп, подводим к гонке",
+      "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей.",
+      "w_from": 21,
+      "w_to": 28,
+      "date_range": "28 фев 2027 — 24 апр 2027",
+      "weeks_count": 8,
+      "target_h": 4.5,
+      "is_event": false,
+      "notes": "",
+      "detailed": [
+        {
+          "w": 21,
+          "start": "2027-02-28",
+          "end": "2027-03-06",
+          "start_d": "28 фев – 6 мар",
+          "detailed": true,
+          "is_now": false,
+          "is_next": false,
+          "run_km": 60,
+          "long_km": 15,
+          "run_h": 5.7,
+          "bike_h": 3.0,
+          "swim_h": 1.5,
+          "ofp_h": 1.0,
+          "goal_text": "Развиваем аэробную мощность",
+          "phase": "run_taper",
+          "color": "gray",
+          "variants": [
+            {
+              "label": "6×400 @ 3:50, отдых 90с",
+              "work_m": 2400
+            }
+          ],
+          "comp_h": 11.2,
+          "total_h": 11.81,
+          "variant_id": "taper_400",
+          "quality_label": "6×400 @ 3:50, отдых 90с",
+          "quality_work_m": 2400,
+          "quality_paces": [],
+          "run_km_long": 15.0,
+          "run_km_quality": 2.4,
+          "run_km_easy": 42.6,
           "intensity_pct": 14.3,
           "deload": false,
           "sessions_target": 8
@@ -886,34 +915,30 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 70,
-          "long_km": 24,
-          "run_h": 6.7,
+          "run_km": 53,
+          "long_km": 13,
+          "run_h": 5.0,
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
           "goal_text": "Развиваем способность держать threshold pace",
-          "phase": "run_specific",
-          "color": "orange",
+          "phase": "run_taper",
+          "color": "gray",
           "variants": [
             {
-              "label": "4×2К @ 4:10",
-              "work_m": 8000
-            },
-            {
-              "label": "2×3К @ 4:12",
-              "work_m": 6000
+              "label": "6×400 @ 3:50, отдых 90с",
+              "work_m": 2400
             }
           ],
-          "comp_h": 12.2,
-          "total_h": 12.74,
-          "variant_id": "4x2k",
-          "quality_label": "4×2К @ 4:10",
-          "quality_work_m": 8000,
+          "comp_h": 10.5,
+          "total_h": 11.15,
+          "variant_id": "taper_400",
+          "quality_label": "6×400 @ 3:50, отдых 90с",
+          "quality_work_m": 2400,
           "quality_paces": [],
-          "run_km_long": 24.0,
-          "run_km_quality": 8.0,
-          "run_km_easy": 38.0,
+          "run_km_long": 13.0,
+          "run_km_quality": 2.4,
+          "run_km_easy": 37.6,
           "intensity_pct": 11.4,
           "deload": false,
           "sessions_target": 8
@@ -926,50 +951,39 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 55,
-          "long_km": 14,
-          "run_h": 5.2,
+          "run_km": 45,
+          "long_km": 11,
+          "run_h": 4.3,
           "bike_h": 0.8,
           "swim_h": 0.6,
           "ofp_h": 0.4,
           "goal_text": "темповый тест · 5K @ race pace · 4:00/км",
-          "phase": "run_specific",
+          "phase": "run_taper",
           "color": "cp",
           "variants": [
             {
-              "label": "Гонка-темп",
-              "work_m": 5000
+              "label": "Темповый тест",
+              "work_m": 3000
+            },
+            {
+              "label": "3К на максимум",
+              "work_m": 3000
             }
           ],
-          "comp_h": 7.0,
-          "total_h": 7.34,
-          "variant_id": "tt_race",
-          "quality_label": "Гонка-темп",
-          "quality_work_m": 5000,
+          "comp_h": 6.1,
+          "total_h": 6.42,
+          "variant_id": "tt_pace",
+          "quality_label": "Темповый тест",
+          "quality_work_m": 3000,
           "quality_paces": [],
-          "run_km_long": 14.0,
-          "run_km_quality": 5.0,
-          "run_km_easy": 36.0,
+          "run_km_long": 11.0,
+          "run_km_quality": 3.0,
+          "run_km_easy": 31.0,
           "intensity_pct": 9.1,
           "deload": true,
           "sessions_target": 8,
           "is_tt": true
-        }
-      ],
-      "has_actual": false
-    },
-    {
-      "id": "run_taper",
-      "goal": "Сохраняем качество, снижаем объём",
-      "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей.",
-      "w_from": 24,
-      "w_to": 27,
-      "date_range": "21 мар 2027 — 17 апр 2027",
-      "weeks_count": 4,
-      "target_h": 4.5,
-      "is_event": false,
-      "notes": "",
-      "detailed": [
+        },
         {
           "w": 24,
           "start": "2027-03-21",
@@ -986,22 +1000,22 @@
           "ofp_h": 0.4,
           "goal_text": "Развиваем порог и VO2max в одной сессии",
           "phase": "run_taper",
-          "color": "ember",
+          "color": "gray",
           "variants": [
             {
-              "label": "3×1К @ 4:15 + 2×400 @ 3:45",
-              "work_m": 3800
+              "label": "6×400 @ 3:50, отдых 90с",
+              "work_m": 2400
             }
           ],
           "comp_h": 5.4,
-          "total_h": 5.93,
-          "variant_id": "3x1k+2x400",
-          "quality_label": "3×1К @ 4:15 + 2×400 @ 3:45",
-          "quality_work_m": 3800,
+          "total_h": 5.98,
+          "variant_id": "taper_400",
+          "quality_label": "6×400 @ 3:50, отдых 90с",
+          "quality_work_m": 2400,
           "quality_paces": [],
           "run_km_long": 10.0,
-          "run_km_quality": 3.8,
-          "run_km_easy": 24.2,
+          "run_km_quality": 2.4,
+          "run_km_easy": 25.6,
           "intensity_pct": 10.0,
           "deload": true,
           "sessions_target": 7
@@ -1014,9 +1028,9 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 30,
+          "run_km": 31,
           "long_km": 8,
-          "run_h": 2.9,
+          "run_h": 3.0,
           "bike_h": 0.7,
           "swim_h": 0.5,
           "ofp_h": 0.4,
@@ -1025,19 +1039,19 @@
           "color": "gray",
           "variants": [
             {
-              "label": "1×1К @ 4:00 + 6×200 @ 3:45",
-              "work_m": 2200
+              "label": "6×400 @ 3:50, отдых 90с",
+              "work_m": 2400
             }
           ],
-          "comp_h": 4.5,
-          "total_h": 5.03,
-          "variant_id": "taper_1k",
-          "quality_label": "1×1К @ 4:00 + 6×200 @ 3:45",
-          "quality_work_m": 2200,
+          "comp_h": 4.6,
+          "total_h": 5.15,
+          "variant_id": "taper_400",
+          "quality_label": "6×400 @ 3:50, отдых 90с",
+          "quality_work_m": 2400,
           "quality_paces": [],
           "run_km_long": 8.0,
-          "run_km_quality": 2.2,
-          "run_km_easy": 19.8,
+          "run_km_quality": 2.4,
+          "run_km_easy": 20.6,
           "intensity_pct": 7.3,
           "deload": true,
           "sessions_target": 7
@@ -1050,9 +1064,9 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 24,
+          "run_km": 23,
           "long_km": 6,
-          "run_h": 2.3,
+          "run_h": 2.2,
           "bike_h": 0.5,
           "swim_h": 0.4,
           "ofp_h": 0.3,
@@ -1061,19 +1075,19 @@
           "color": "gray",
           "variants": [
             {
-              "label": "1×1К @ 4:00 + 6×200 @ 3:45",
-              "work_m": 2200
+              "label": "6×400 @ 3:50, отдых 90с",
+              "work_m": 2400
             }
           ],
-          "comp_h": 3.5,
-          "total_h": 4.13,
-          "variant_id": "taper_1k",
-          "quality_label": "1×1К @ 4:00 + 6×200 @ 3:45",
-          "quality_work_m": 2200,
+          "comp_h": 3.4,
+          "total_h": 4.06,
+          "variant_id": "taper_400",
+          "quality_label": "6×400 @ 3:50, отдых 90с",
+          "quality_work_m": 2400,
           "quality_paces": [],
           "run_km_long": 6.0,
-          "run_km_quality": 2.2,
-          "run_km_easy": 15.8,
+          "run_km_quality": 2.4,
+          "run_km_easy": 14.6,
           "intensity_pct": 9.2,
           "deload": true,
           "sessions_target": 6
@@ -1113,6 +1127,46 @@
           "intensity_pct": 15.0,
           "deload": true,
           "sessions_target": 6
+        },
+        {
+          "w": 28,
+          "start": "2027-04-18",
+          "end": "2027-04-24",
+          "start_d": "18–24 апр",
+          "detailed": true,
+          "is_now": false,
+          "is_next": false,
+          "run_km": 8.0,
+          "long_km": 0.0,
+          "run_h": 0.8,
+          "bike_h": 0.0,
+          "swim_h": 0.0,
+          "ofp_h": 0.2,
+          "goal_text": "Гонка",
+          "phase": "run_taper",
+          "color": "cp",
+          "variants": [
+            {
+              "label": "Темповый тест",
+              "work_m": 3000
+            },
+            {
+              "label": "3К на максимум",
+              "work_m": 3000
+            }
+          ],
+          "comp_h": 1.0,
+          "total_h": 1.4,
+          "variant_id": "tt_race",
+          "quality_label": "10К @ race pace — гонка",
+          "quality_work_m": 5000,
+          "quality_paces": [],
+          "run_km_long": 0.0,
+          "run_km_quality": 5.0,
+          "run_km_easy": 3.0,
+          "intensity_pct": 62.5,
+          "deload": null,
+          "sessions_target": null
         }
       ],
       "has_actual": false
@@ -1188,8 +1242,8 @@
           "detailed": true,
           "is_now": false,
           "is_next": false,
-          "run_km": 8,
-          "long_km": 0,
+          "run_km": 8.0,
+          "long_km": 0.0,
           "run_h": 0.8,
           "bike_h": 0.0,
           "swim_h": 0.0,
@@ -1210,7 +1264,7 @@
           "comp_h": 1.0,
           "total_h": 1.4,
           "variant_id": "tt_race",
-          "quality_label": "10К @ race pace 4:00 — гонка",
+          "quality_label": "10К @ race pace — гонка",
           "quality_work_m": 5000,
           "quality_paces": [],
           "run_km_long": 0.0,
@@ -1433,7 +1487,17 @@
       "run_km_easy": 17.8,
       "intensity_pct": 9.1,
       "deload": false,
-      "sessions_target": 7
+      "sessions_target": 7,
+      "actual": {
+        "run_km": 52.9,
+        "bike_km": 16.6,
+        "swim_km": 1.4,
+        "sessions": 8,
+        "total_h": 6.84,
+        "run_h": 5.2,
+        "bike_h": 1.1,
+        "swim_h": 0.5
+      }
     },
     {
       "w": 4,
@@ -1443,9 +1507,9 @@
       "detailed": true,
       "is_now": false,
       "is_next": true,
-      "run_km": 38,
-      "long_km": 14,
-      "run_h": 3.6,
+      "run_km": 41,
+      "long_km": 10,
+      "run_h": 3.9,
       "bike_h": 1.0,
       "swim_h": 0.5,
       "ofp_h": 0.8,
@@ -1462,15 +1526,15 @@
           "work_m": 3000
         }
       ],
-      "comp_h": 5.9,
-      "total_h": 6.34,
+      "comp_h": 6.2,
+      "total_h": 6.62,
       "variant_id": "tt_pace",
       "quality_label": "Темповый тест",
       "quality_work_m": 3000,
       "quality_paces": [],
-      "run_km_long": 14.0,
+      "run_km_long": 10.0,
       "run_km_quality": 3.0,
-      "run_km_easy": 21.0,
+      "run_km_easy": 28.0,
       "intensity_pct": 7.9,
       "deload": false,
       "sessions_target": 7,
@@ -1484,9 +1548,9 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 40,
-      "long_km": 16,
-      "run_h": 3.8,
+      "run_km": 45,
+      "long_km": 11,
+      "run_h": 4.3,
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 0.8,
@@ -1499,15 +1563,15 @@
           "work_m": 4600
         }
       ],
-      "comp_h": 6.3,
-      "total_h": 6.88,
+      "comp_h": 6.8,
+      "total_h": 7.35,
       "variant_id": "3x1k+2x800",
       "quality_label": "3×1К @ 4:12 + 2×800 @ 3:50",
       "quality_work_m": 4600,
       "quality_paces": [],
-      "run_km_long": 16.0,
+      "run_km_long": 11.0,
       "run_km_quality": 4.6,
-      "run_km_easy": 19.4,
+      "run_km_easy": 29.4,
       "intensity_pct": 11.5,
       "deload": false,
       "sessions_target": 7
@@ -1520,9 +1584,9 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 42,
-      "long_km": 16,
-      "run_h": 4.0,
+      "run_km": 50,
+      "long_km": 12,
+      "run_h": 4.8,
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 0.8,
@@ -1535,15 +1599,15 @@
           "work_m": 2200
         }
       ],
-      "comp_h": 6.5,
-      "total_h": 7.01,
+      "comp_h": 7.3,
+      "total_h": 7.76,
       "variant_id": "1k-800-400",
       "quality_label": "1К @ 4:20 → 800 @ 3:55 → 400 @ 3:45",
       "quality_work_m": 2200,
       "quality_paces": [],
-      "run_km_long": 16.0,
+      "run_km_long": 12.0,
       "run_km_quality": 2.2,
-      "run_km_easy": 23.8,
+      "run_km_easy": 35.8,
       "intensity_pct": 5.2,
       "deload": false,
       "sessions_target": 7
@@ -1556,34 +1620,30 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 45,
-      "long_km": 18,
-      "run_h": 4.3,
+      "run_km": 50,
+      "long_km": 12,
+      "run_h": 4.8,
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 1.0,
       "goal_text": "Развиваем аэробную мощность",
-      "phase": "run_base",
+      "phase": "run_build",
       "color": "orange",
       "variants": [
         {
-          "label": "5К tempo @ 4:20",
-          "work_m": 5000
-        },
-        {
-          "label": "6К tempo @ 4:08",
-          "work_m": 6000
+          "label": "8К long tempo @ 4:12",
+          "work_m": 8000
         }
       ],
-      "comp_h": 7.0,
-      "total_h": 7.31,
-      "variant_id": "5k",
-      "quality_label": "5К tempo @ 4:20",
-      "quality_work_m": 5000,
+      "comp_h": 7.5,
+      "total_h": 7.75,
+      "variant_id": "8k",
+      "quality_label": "8К long tempo @ 4:12",
+      "quality_work_m": 8000,
       "quality_paces": [],
-      "run_km_long": 18.0,
-      "run_km_quality": 5.0,
-      "run_km_easy": 22.0,
+      "run_km_long": 12.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 30.0,
       "intensity_pct": 11.1,
       "deload": false,
       "sessions_target": 8
@@ -1596,14 +1656,14 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 48,
-      "long_km": 14,
-      "run_h": 4.6,
+      "run_km": 52,
+      "long_km": 13,
+      "run_h": 4.9,
       "bike_h": 2.0,
       "swim_h": 0.7,
       "ofp_h": 1.0,
       "goal_text": "тест на максимум · 5K max · 4:30/км",
-      "phase": "run_base",
+      "phase": "run_build",
       "color": "cp",
       "variants": [
         {
@@ -1611,15 +1671,15 @@
           "work_m": 5000
         }
       ],
-      "comp_h": 8.3,
-      "total_h": 8.59,
+      "comp_h": 8.6,
+      "total_h": 8.97,
       "variant_id": "tt_max",
       "quality_label": "Тест на максимум",
       "quality_work_m": 5000,
       "quality_paces": [],
-      "run_km_long": 14.0,
+      "run_km_long": 13.0,
       "run_km_quality": 5.0,
-      "run_km_easy": 29.0,
+      "run_km_easy": 34.0,
       "intensity_pct": 10.4,
       "deload": false,
       "sessions_target": 8,
@@ -1633,34 +1693,30 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 50,
-      "long_km": 16,
-      "run_h": 4.8,
+      "run_km": 55,
+      "long_km": 14,
+      "run_h": 5.2,
       "bike_h": 2.0,
       "swim_h": 0.7,
       "ofp_h": 1.0,
       "goal_text": "Развиваем threshold pace",
-      "phase": "run_base",
+      "phase": "run_build",
       "color": "orange",
       "variants": [
         {
-          "label": "4×1К @ 4:15",
-          "work_m": 4000
-        },
-        {
-          "label": "5×1К @ 4:12",
-          "work_m": 5000
+          "label": "8К long tempo @ 4:12",
+          "work_m": 8000
         }
       ],
-      "comp_h": 8.5,
-      "total_h": 8.98,
-      "variant_id": "4x1k",
-      "quality_label": "4×1К @ 4:15",
-      "quality_work_m": 4000,
+      "comp_h": 8.9,
+      "total_h": 9.22,
+      "variant_id": "8k",
+      "quality_label": "8К long tempo @ 4:12",
+      "quality_work_m": 8000,
       "quality_paces": [],
-      "run_km_long": 16.0,
-      "run_km_quality": 4.0,
-      "run_km_easy": 30.0,
+      "run_km_long": 14.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 33.0,
       "intensity_pct": 8.0,
       "deload": false,
       "sessions_target": 8
@@ -1673,42 +1729,34 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 50,
-      "long_km": 18,
-      "run_h": 4.8,
+      "run_km": 58,
+      "long_km": 14,
+      "run_h": 5.5,
       "bike_h": 2.0,
       "swim_h": 1.3,
       "ofp_h": 1.0,
       "goal_text": "Развиваем VO2max",
-      "phase": "run_base",
-      "color": "red",
+      "phase": "run_build",
+      "color": "orange",
       "variants": [
         {
-          "label": "10×200 @ 3:40",
-          "work_m": 2000
-        },
-        {
-          "label": "5×800 @ 3:55",
+          "label": "4×1К @ 4:15",
           "work_m": 4000
         },
         {
-          "label": "2×2К @ 4:05 + 1×800 @ 3:50",
-          "work_m": 4800
-        },
-        {
-          "label": "3×800 с прогрессией 4:15→3:50 + 4×200 @ 3:45",
-          "work_m": 3200
+          "label": "5×1К @ 4:12",
+          "work_m": 5000
         }
       ],
-      "comp_h": 9.1,
-      "total_h": 9.81,
-      "variant_id": "5x800",
-      "quality_label": "5×800 @ 3:55",
+      "comp_h": 9.8,
+      "total_h": 10.4,
+      "variant_id": "4x1k",
+      "quality_label": "4×1К @ 4:15",
       "quality_work_m": 4000,
       "quality_paces": [],
-      "run_km_long": 18.0,
+      "run_km_long": 14.0,
       "run_km_quality": 4.0,
-      "run_km_easy": 28.0,
+      "run_km_easy": 40.0,
       "intensity_pct": 8.0,
       "deload": false,
       "sessions_target": 8
@@ -1721,30 +1769,34 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 50,
-      "long_km": 16,
-      "run_h": 4.8,
+      "run_km": 60,
+      "long_km": 15,
+      "run_h": 5.7,
       "bike_h": 2.0,
       "swim_h": 1.3,
       "ofp_h": 1.0,
       "goal_text": "Развиваем общую аэробную мощность",
-      "phase": "run_base",
-      "color": "violet",
+      "phase": "run_build",
+      "color": "orange",
       "variants": [
         {
-          "label": "6 циклов: 200@5:10 + 800@3:50",
-          "work_m": 6000
+          "label": "4×1К @ 4:15",
+          "work_m": 4000
+        },
+        {
+          "label": "5×1К @ 4:12",
+          "work_m": 5000
         }
       ],
-      "comp_h": 9.1,
-      "total_h": 9.37,
-      "variant_id": "200-800 x6",
-      "quality_label": "6 циклов: 200@5:10 + 800@3:50",
-      "quality_work_m": 6000,
+      "comp_h": 10.0,
+      "total_h": 10.59,
+      "variant_id": "4x1k",
+      "quality_label": "4×1К @ 4:15",
+      "quality_work_m": 4000,
       "quality_paces": [],
-      "run_km_long": 16.0,
-      "run_km_quality": 6.0,
-      "run_km_easy": 28.0,
+      "run_km_long": 15.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 41.0,
       "intensity_pct": 12.0,
       "deload": false,
       "sessions_target": 8
@@ -1757,14 +1809,14 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 45,
-      "long_km": 12,
-      "run_h": 4.3,
+      "run_km": 62,
+      "long_km": 16,
+      "run_h": 5.9,
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 0.8,
       "goal_text": "тест на максимум · 3K max · 4:07/км",
-      "phase": "run_base",
+      "phase": "run_build",
       "color": "cp",
       "variants": [
         {
@@ -1776,15 +1828,15 @@
           "work_m": 3000
         }
       ],
-      "comp_h": 6.8,
-      "total_h": 7.17,
+      "comp_h": 8.4,
+      "total_h": 8.77,
       "variant_id": "tt_max_3k",
       "quality_label": "3К на максимум",
       "quality_work_m": 3000,
       "quality_paces": [],
-      "run_km_long": 12.0,
+      "run_km_long": 16.0,
       "run_km_quality": 3.0,
-      "run_km_easy": 30.0,
+      "run_km_easy": 43.0,
       "intensity_pct": 6.7,
       "deload": true,
       "sessions_target": 8,
@@ -1798,9 +1850,9 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 50,
+      "run_km": 65,
       "long_km": 16,
-      "run_h": 4.8,
+      "run_h": 6.2,
       "bike_h": 2.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
@@ -1809,19 +1861,23 @@
       "color": "orange",
       "variants": [
         {
-          "label": "2×2К @ 4:15",
+          "label": "4×1К @ 4:15",
           "work_m": 4000
+        },
+        {
+          "label": "5×1К @ 4:12",
+          "work_m": 5000
         }
       ],
-      "comp_h": 9.3,
-      "total_h": 9.73,
-      "variant_id": "2x2k",
-      "quality_label": "2×2К @ 4:15",
+      "comp_h": 10.7,
+      "total_h": 11.23,
+      "variant_id": "4x1k",
+      "quality_label": "4×1К @ 4:15",
       "quality_work_m": 4000,
       "quality_paces": [],
       "run_km_long": 16.0,
       "run_km_quality": 4.0,
-      "run_km_easy": 30.0,
+      "run_km_easy": 45.0,
       "intensity_pct": 8.0,
       "deload": false,
       "sessions_target": 8
@@ -1835,29 +1891,33 @@
       "is_now": false,
       "is_next": false,
       "run_km": 55,
-      "long_km": 18,
+      "long_km": 14,
       "run_h": 5.2,
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
       "goal_text": "Развиваем threshold pace",
-      "phase": "run_build",
+      "phase": "run_specific",
       "color": "orange",
       "variants": [
         {
-          "label": "6×800 @ 4:10",
-          "work_m": 4800
+          "label": "5К tempo @ 4:20",
+          "work_m": 5000
+        },
+        {
+          "label": "6К tempo @ 4:08",
+          "work_m": 6000
         }
       ],
       "comp_h": 10.2,
-      "total_h": 10.91,
-      "variant_id": "6x800",
-      "quality_label": "6×800 @ 4:10",
-      "quality_work_m": 4800,
+      "total_h": 10.59,
+      "variant_id": "5k",
+      "quality_label": "5К tempo @ 4:20",
+      "quality_work_m": 5000,
       "quality_paces": [],
-      "run_km_long": 18.0,
-      "run_km_quality": 4.8,
-      "run_km_easy": 32.2,
+      "run_km_long": 14.0,
+      "run_km_quality": 5.0,
+      "run_km_easy": 36.0,
       "intensity_pct": 8.7,
       "deload": false,
       "sessions_target": 8
@@ -1870,30 +1930,34 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 55,
-      "long_km": 18,
-      "run_h": 5.2,
+      "run_km": 58,
+      "long_km": 14,
+      "run_h": 5.5,
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
       "goal_text": "Развиваем порог и VO2max в одной сессии",
-      "phase": "run_build",
-      "color": "ember",
+      "phase": "run_specific",
+      "color": "orange",
       "variants": [
         {
-          "label": "5К tempo @ 4:10 + 4×400 @ 3:45",
-          "work_m": 6600
+          "label": "5К tempo @ 4:20",
+          "work_m": 5000
+        },
+        {
+          "label": "6К tempo @ 4:08",
+          "work_m": 6000
         }
       ],
-      "comp_h": 10.2,
-      "total_h": 10.74,
-      "variant_id": "5k+4x400",
-      "quality_label": "5К tempo @ 4:10 + 4×400 @ 3:45",
-      "quality_work_m": 6600,
+      "comp_h": 10.5,
+      "total_h": 10.87,
+      "variant_id": "5k",
+      "quality_label": "5К tempo @ 4:20",
+      "quality_work_m": 5000,
       "quality_paces": [],
-      "run_km_long": 18.0,
-      "run_km_quality": 6.6,
-      "run_km_easy": 30.4,
+      "run_km_long": 14.0,
+      "run_km_quality": 5.0,
+      "run_km_easy": 39.0,
       "intensity_pct": 12.0,
       "deload": false,
       "sessions_target": 8
@@ -1906,14 +1970,14 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 55,
-      "long_km": 16,
-      "run_h": 5.2,
+      "run_km": 60,
+      "long_km": 15,
+      "run_h": 5.7,
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
       "goal_text": "тест на максимум · 5K max · 4:06/км",
-      "phase": "run_build",
+      "phase": "run_specific",
       "color": "cp",
       "variants": [
         {
@@ -1921,15 +1985,15 @@
           "work_m": 5000
         }
       ],
-      "comp_h": 10.2,
-      "total_h": 10.59,
+      "comp_h": 10.7,
+      "total_h": 11.06,
       "variant_id": "tt_max",
       "quality_label": "Тест на максимум",
       "quality_work_m": 5000,
       "quality_paces": [],
-      "run_km_long": 16.0,
+      "run_km_long": 15.0,
       "run_km_quality": 5.0,
-      "run_km_easy": 34.0,
+      "run_km_easy": 40.0,
       "intensity_pct": 9.1,
       "deload": false,
       "sessions_target": 8,
@@ -1943,30 +2007,34 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 55,
-      "long_km": 18,
-      "run_h": 5.2,
+      "run_km": 62,
+      "long_km": 16,
+      "run_h": 5.9,
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
       "goal_text": "Развиваем способность держать threshold pace",
-      "phase": "run_build",
+      "phase": "run_specific",
       "color": "orange",
       "variants": [
         {
-          "label": "3×2К @ 4:12",
-          "work_m": 6000
+          "label": "4×1К @ 4:15",
+          "work_m": 4000
+        },
+        {
+          "label": "5×1К @ 4:12",
+          "work_m": 5000
         }
       ],
-      "comp_h": 10.2,
-      "total_h": 10.76,
-      "variant_id": "3x2k",
-      "quality_label": "3×2К @ 4:12",
-      "quality_work_m": 6000,
+      "comp_h": 10.9,
+      "total_h": 11.44,
+      "variant_id": "4x1k",
+      "quality_label": "4×1К @ 4:15",
+      "quality_work_m": 4000,
       "quality_paces": [],
-      "run_km_long": 18.0,
-      "run_km_quality": 6.0,
-      "run_km_easy": 31.0,
+      "run_km_long": 16.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 42.0,
       "intensity_pct": 10.9,
       "deload": false,
       "sessions_target": 8
@@ -1979,89 +2047,13 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 60,
-      "long_km": 20,
-      "run_h": 5.7,
-      "bike_h": 3.0,
-      "swim_h": 1.5,
-      "ofp_h": 1.0,
-      "goal_text": "Развиваем аэробную мощность",
-      "phase": "run_build",
-      "color": "orange",
-      "variants": [
-        {
-          "label": "8К long tempo @ 4:12",
-          "work_m": 8000
-        }
-      ],
-      "comp_h": 11.2,
-      "total_h": 11.53,
-      "variant_id": "8k",
-      "quality_label": "8К long tempo @ 4:12",
-      "quality_work_m": 8000,
-      "quality_paces": [],
-      "run_km_long": 20.0,
-      "run_km_quality": 8.0,
-      "run_km_easy": 32.0,
-      "intensity_pct": 13.3,
-      "deload": false,
-      "sessions_target": 8
-    },
-    {
-      "w": 19,
-      "start": "2027-02-14",
-      "end": "2027-02-20",
-      "start_d": "14–20 фев",
-      "detailed": true,
-      "is_now": false,
-      "is_next": false,
       "run_km": 65,
-      "long_km": 22,
+      "long_km": 16,
       "run_h": 6.2,
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
       "goal_text": "Развиваем аэробную мощность",
-      "phase": "run_build",
-      "color": "orange",
-      "variants": [
-        {
-          "label": "5К tempo @ 4:20",
-          "work_m": 5000
-        },
-        {
-          "label": "6К tempo @ 4:08",
-          "work_m": 6000
-        }
-      ],
-      "comp_h": 11.7,
-      "total_h": 12.02,
-      "variant_id": "6k",
-      "quality_label": "6К tempo @ 4:08",
-      "quality_work_m": 6000,
-      "quality_paces": [],
-      "run_km_long": 22.0,
-      "run_km_quality": 6.0,
-      "run_km_easy": 37.0,
-      "intensity_pct": 9.2,
-      "deload": false,
-      "sessions_target": 8
-    },
-    {
-      "w": 20,
-      "start": "2027-02-21",
-      "end": "2027-02-27",
-      "start_d": "21–27 фев",
-      "detailed": true,
-      "is_now": false,
-      "is_next": false,
-      "run_km": 65,
-      "long_km": 22,
-      "run_h": 6.2,
-      "bike_h": 3.0,
-      "swim_h": 1.5,
-      "ofp_h": 1.0,
-      "goal_text": "Развиваем VO2max",
       "phase": "run_specific",
       "color": "red",
       "variants": [
@@ -2080,9 +2072,89 @@
       "quality_label": "4×2К @ 4:10",
       "quality_work_m": 8000,
       "quality_paces": [],
-      "run_km_long": 22.0,
+      "run_km_long": 16.0,
       "run_km_quality": 8.0,
-      "run_km_easy": 35.0,
+      "run_km_easy": 41.0,
+      "intensity_pct": 13.3,
+      "deload": false,
+      "sessions_target": 8
+    },
+    {
+      "w": 19,
+      "start": "2027-02-14",
+      "end": "2027-02-20",
+      "start_d": "14–20 фев",
+      "detailed": true,
+      "is_now": false,
+      "is_next": false,
+      "run_km": 68,
+      "long_km": 17,
+      "run_h": 6.5,
+      "bike_h": 3.0,
+      "swim_h": 1.5,
+      "ofp_h": 1.0,
+      "goal_text": "Развиваем аэробную мощность",
+      "phase": "run_specific",
+      "color": "orange",
+      "variants": [
+        {
+          "label": "4×1К @ 4:15",
+          "work_m": 4000
+        },
+        {
+          "label": "5×1К @ 4:12",
+          "work_m": 5000
+        }
+      ],
+      "comp_h": 12.0,
+      "total_h": 12.51,
+      "variant_id": "4x1k",
+      "quality_label": "4×1К @ 4:15",
+      "quality_work_m": 4000,
+      "quality_paces": [],
+      "run_km_long": 17.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 47.0,
+      "intensity_pct": 9.2,
+      "deload": false,
+      "sessions_target": 8
+    },
+    {
+      "w": 20,
+      "start": "2027-02-21",
+      "end": "2027-02-27",
+      "start_d": "21–27 фев",
+      "detailed": true,
+      "is_now": false,
+      "is_next": false,
+      "run_km": 70,
+      "long_km": 18,
+      "run_h": 6.7,
+      "bike_h": 3.0,
+      "swim_h": 1.5,
+      "ofp_h": 1.0,
+      "goal_text": "Развиваем VO2max",
+      "phase": "run_specific",
+      "color": "orange",
+      "variants": [
+        {
+          "label": "4×1К @ 4:15",
+          "work_m": 4000
+        },
+        {
+          "label": "5×1К @ 4:12",
+          "work_m": 5000
+        }
+      ],
+      "comp_h": 12.2,
+      "total_h": 12.7,
+      "variant_id": "4x1k",
+      "quality_label": "4×1К @ 4:15",
+      "quality_work_m": 4000,
+      "quality_paces": [],
+      "run_km_long": 18.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 48.0,
       "intensity_pct": 12.3,
       "deload": false,
       "sessions_target": 8
@@ -2095,34 +2167,30 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 70,
-      "long_km": 22,
-      "run_h": 6.7,
+      "run_km": 60,
+      "long_km": 15,
+      "run_h": 5.7,
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
       "goal_text": "Развиваем аэробную мощность",
-      "phase": "run_specific",
-      "color": "orange",
+      "phase": "run_taper",
+      "color": "gray",
       "variants": [
         {
-          "label": "10К long tempo @ 4:05",
-          "work_m": 10000
-        },
-        {
-          "label": "12К long tempo @ 4:00",
-          "work_m": 12000
+          "label": "6×400 @ 3:50, отдых 90с",
+          "work_m": 2400
         }
       ],
-      "comp_h": 12.2,
-      "total_h": 12.45,
-      "variant_id": "10k",
-      "quality_label": "10К long tempo @ 4:05",
-      "quality_work_m": 10000,
+      "comp_h": 11.2,
+      "total_h": 11.81,
+      "variant_id": "taper_400",
+      "quality_label": "6×400 @ 3:50, отдых 90с",
+      "quality_work_m": 2400,
       "quality_paces": [],
-      "run_km_long": 22.0,
-      "run_km_quality": 10.0,
-      "run_km_easy": 38.0,
+      "run_km_long": 15.0,
+      "run_km_quality": 2.4,
+      "run_km_easy": 42.6,
       "intensity_pct": 14.3,
       "deload": false,
       "sessions_target": 8
@@ -2135,34 +2203,30 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 70,
-      "long_km": 24,
-      "run_h": 6.7,
+      "run_km": 53,
+      "long_km": 13,
+      "run_h": 5.0,
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
       "goal_text": "Развиваем способность держать threshold pace",
-      "phase": "run_specific",
-      "color": "orange",
+      "phase": "run_taper",
+      "color": "gray",
       "variants": [
         {
-          "label": "4×2К @ 4:10",
-          "work_m": 8000
-        },
-        {
-          "label": "2×3К @ 4:12",
-          "work_m": 6000
+          "label": "6×400 @ 3:50, отдых 90с",
+          "work_m": 2400
         }
       ],
-      "comp_h": 12.2,
-      "total_h": 12.74,
-      "variant_id": "4x2k",
-      "quality_label": "4×2К @ 4:10",
-      "quality_work_m": 8000,
+      "comp_h": 10.5,
+      "total_h": 11.15,
+      "variant_id": "taper_400",
+      "quality_label": "6×400 @ 3:50, отдых 90с",
+      "quality_work_m": 2400,
       "quality_paces": [],
-      "run_km_long": 24.0,
-      "run_km_quality": 8.0,
-      "run_km_easy": 38.0,
+      "run_km_long": 13.0,
+      "run_km_quality": 2.4,
+      "run_km_easy": 37.6,
       "intensity_pct": 11.4,
       "deload": false,
       "sessions_target": 8
@@ -2175,30 +2239,34 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 55,
-      "long_km": 14,
-      "run_h": 5.2,
+      "run_km": 45,
+      "long_km": 11,
+      "run_h": 4.3,
       "bike_h": 0.8,
       "swim_h": 0.6,
       "ofp_h": 0.4,
       "goal_text": "темповый тест · 5K @ race pace · 4:00/км",
-      "phase": "run_specific",
+      "phase": "run_taper",
       "color": "cp",
       "variants": [
         {
-          "label": "Гонка-темп",
-          "work_m": 5000
+          "label": "Темповый тест",
+          "work_m": 3000
+        },
+        {
+          "label": "3К на максимум",
+          "work_m": 3000
         }
       ],
-      "comp_h": 7.0,
-      "total_h": 7.34,
-      "variant_id": "tt_race",
-      "quality_label": "Гонка-темп",
-      "quality_work_m": 5000,
+      "comp_h": 6.1,
+      "total_h": 6.42,
+      "variant_id": "tt_pace",
+      "quality_label": "Темповый тест",
+      "quality_work_m": 3000,
       "quality_paces": [],
-      "run_km_long": 14.0,
-      "run_km_quality": 5.0,
-      "run_km_easy": 36.0,
+      "run_km_long": 11.0,
+      "run_km_quality": 3.0,
+      "run_km_easy": 31.0,
       "intensity_pct": 9.1,
       "deload": true,
       "sessions_target": 8,
@@ -2220,22 +2288,22 @@
       "ofp_h": 0.4,
       "goal_text": "Развиваем порог и VO2max в одной сессии",
       "phase": "run_taper",
-      "color": "ember",
+      "color": "gray",
       "variants": [
         {
-          "label": "3×1К @ 4:15 + 2×400 @ 3:45",
-          "work_m": 3800
+          "label": "6×400 @ 3:50, отдых 90с",
+          "work_m": 2400
         }
       ],
       "comp_h": 5.4,
-      "total_h": 5.93,
-      "variant_id": "3x1k+2x400",
-      "quality_label": "3×1К @ 4:15 + 2×400 @ 3:45",
-      "quality_work_m": 3800,
+      "total_h": 5.98,
+      "variant_id": "taper_400",
+      "quality_label": "6×400 @ 3:50, отдых 90с",
+      "quality_work_m": 2400,
       "quality_paces": [],
       "run_km_long": 10.0,
-      "run_km_quality": 3.8,
-      "run_km_easy": 24.2,
+      "run_km_quality": 2.4,
+      "run_km_easy": 25.6,
       "intensity_pct": 10.0,
       "deload": true,
       "sessions_target": 7
@@ -2248,9 +2316,9 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 30,
+      "run_km": 31,
       "long_km": 8,
-      "run_h": 2.9,
+      "run_h": 3.0,
       "bike_h": 0.7,
       "swim_h": 0.5,
       "ofp_h": 0.4,
@@ -2259,19 +2327,19 @@
       "color": "gray",
       "variants": [
         {
-          "label": "1×1К @ 4:00 + 6×200 @ 3:45",
-          "work_m": 2200
+          "label": "6×400 @ 3:50, отдых 90с",
+          "work_m": 2400
         }
       ],
-      "comp_h": 4.5,
-      "total_h": 5.03,
-      "variant_id": "taper_1k",
-      "quality_label": "1×1К @ 4:00 + 6×200 @ 3:45",
-      "quality_work_m": 2200,
+      "comp_h": 4.6,
+      "total_h": 5.15,
+      "variant_id": "taper_400",
+      "quality_label": "6×400 @ 3:50, отдых 90с",
+      "quality_work_m": 2400,
       "quality_paces": [],
       "run_km_long": 8.0,
-      "run_km_quality": 2.2,
-      "run_km_easy": 19.8,
+      "run_km_quality": 2.4,
+      "run_km_easy": 20.6,
       "intensity_pct": 7.3,
       "deload": true,
       "sessions_target": 7
@@ -2284,9 +2352,9 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 24,
+      "run_km": 23,
       "long_km": 6,
-      "run_h": 2.3,
+      "run_h": 2.2,
       "bike_h": 0.5,
       "swim_h": 0.4,
       "ofp_h": 0.3,
@@ -2295,19 +2363,19 @@
       "color": "gray",
       "variants": [
         {
-          "label": "1×1К @ 4:00 + 6×200 @ 3:45",
-          "work_m": 2200
+          "label": "6×400 @ 3:50, отдых 90с",
+          "work_m": 2400
         }
       ],
-      "comp_h": 3.5,
-      "total_h": 4.13,
-      "variant_id": "taper_1k",
-      "quality_label": "1×1К @ 4:00 + 6×200 @ 3:45",
-      "quality_work_m": 2200,
+      "comp_h": 3.4,
+      "total_h": 4.06,
+      "variant_id": "taper_400",
+      "quality_label": "6×400 @ 3:50, отдых 90с",
+      "quality_work_m": 2400,
       "quality_paces": [],
       "run_km_long": 6.0,
-      "run_km_quality": 2.2,
-      "run_km_easy": 15.8,
+      "run_km_quality": 2.4,
+      "run_km_easy": 14.6,
       "intensity_pct": 9.2,
       "deload": true,
       "sessions_target": 6
@@ -2356,8 +2424,8 @@
       "detailed": true,
       "is_now": false,
       "is_next": false,
-      "run_km": 8,
-      "long_km": 0,
+      "run_km": 8.0,
+      "long_km": 0.0,
       "run_h": 0.8,
       "bike_h": 0.0,
       "swim_h": 0.0,
@@ -2378,7 +2446,7 @@
       "comp_h": 1.0,
       "total_h": 1.4,
       "variant_id": "tt_race",
-      "quality_label": "10К @ race pace 4:00 — гонка",
+      "quality_label": "10К @ race pace — гонка",
       "quality_work_m": 5000,
       "quality_paces": [],
       "run_km_long": 0.0,
@@ -2675,12 +2743,12 @@
       "weekday": "Вс"
     }
   ],
-  "peak_week": 21,
+  "peak_week": 20,
   "peak_km": 70,
-  "max_week_h": 12.74,
-  "actual_weeks": 2,
-  "actual_run_km": 51.2,
-  "actual_h": 11.4,
+  "max_week_h": 12.7,
+  "actual_weeks": 3,
+  "actual_run_km": 104.1,
+  "actual_h": 18.2,
   "color_label": {
     "teal": "объём",
     "orange": "threshold / tempo",
@@ -2772,74 +2840,8 @@
       "decision": ""
     },
     {
-      "id": "gate_cp_cp_5k_w8",
-      "season_week": 8,
-      "kind": "quality",
-      "title": "5K max · max",
-      "question": "Что говорит результат: идём по плану или корректируем?",
-      "checks": [
-        {
-          "id": "time",
-          "label": "Время на дистанции",
-          "metric": "tt_time",
-          "threshold": "22:30",
-          "op": "le",
-          "unit": "",
-          "severity": "hard",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "pace",
-          "label": "Средний темп",
-          "metric": "tt_pace",
-          "threshold": "4:30",
-          "op": "pace_le",
-          "unit": "/км",
-          "severity": "soft",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "hr",
-          "label": "Пульс на финише",
-          "metric": "tt_hr",
-          "threshold": "≤ по протоколу",
-          "op": "le",
-          "unit": "уд/мин",
-          "severity": "soft",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        }
-      ],
-      "warnings": [
-        "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11."
-      ],
-      "decisions": {
-        "pass": [
-          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
-        ],
-        "warn": [
-          "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11."
-        ],
-        "fail": [
-          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
-          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
-        ]
-      },
-      "lever": "cp_5k_w8",
-      "decided_at": "",
-      "decision": ""
-    },
-    {
       "id": "gate_phase_run_base",
-      "season_week": 12,
+      "season_week": 6,
       "kind": "phase",
       "title": "Итог базовой фазы · Поднимаем базовый объём",
       "question": "Достигнут ли базовый объём и подтверждён ли порог для входа в build?",
@@ -2921,6 +2923,72 @@
       "decision": ""
     },
     {
+      "id": "gate_cp_cp_5k_w8",
+      "season_week": 8,
+      "kind": "quality",
+      "title": "5K max · max",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "22:30",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:30",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 22:45 — аэробная база не держит темп, добавляем объём в W9–W11."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_5k_w8",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
       "id": "gate_cp_cp_3k_w12",
       "season_week": 12,
       "kind": "quality",
@@ -2987,74 +3055,8 @@
       "decision": ""
     },
     {
-      "id": "gate_cp_cp_5k_w16",
-      "season_week": 16,
-      "kind": "quality",
-      "title": "5K max · max",
-      "question": "Что говорит результат: идём по плану или корректируем?",
-      "checks": [
-        {
-          "id": "time",
-          "label": "Время на дистанции",
-          "metric": "tt_time",
-          "threshold": "20:30",
-          "op": "le",
-          "unit": "",
-          "severity": "hard",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "pace",
-          "label": "Средний темп",
-          "metric": "tt_pace",
-          "threshold": "4:06",
-          "op": "pace_le",
-          "unit": "/км",
-          "severity": "soft",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        },
-        {
-          "id": "hr",
-          "label": "Пульс на финише",
-          "metric": "tt_hr",
-          "threshold": "≤ по протоколу",
-          "op": "le",
-          "unit": "уд/мин",
-          "severity": "soft",
-          "source": "auto",
-          "value": null,
-          "status": "pending",
-          "note": ""
-        }
-      ],
-      "warnings": [
-        "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
-      ],
-      "decisions": {
-        "pass": [
-          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
-        ],
-        "warn": [
-          "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
-        ],
-        "fail": [
-          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
-          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
-        ]
-      },
-      "lever": "cp_5k_w16",
-      "decided_at": "",
-      "decision": ""
-    },
-    {
       "id": "gate_phase_run_build",
-      "season_week": 19,
+      "season_week": 13,
       "kind": "phase",
       "title": "Итог build-фазы: порог vs цель · Поднимаем threshold pace",
       "question": "Успел ли порог уйти к 4:10–4:15, чтобы race-specific шёл к 4:00?",
@@ -3136,10 +3138,76 @@
       "decision": ""
     },
     {
+      "id": "gate_cp_cp_5k_w16",
+      "season_week": 16,
+      "kind": "quality",
+      "title": "5K max · max",
+      "question": "Что говорит результат: идём по плану или корректируем?",
+      "checks": [
+        {
+          "id": "time",
+          "label": "Время на дистанции",
+          "metric": "tt_time",
+          "threshold": "20:30",
+          "op": "le",
+          "unit": "",
+          "severity": "hard",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "pace",
+          "label": "Средний темп",
+          "metric": "tt_pace",
+          "threshold": "4:06",
+          "op": "pace_le",
+          "unit": "/км",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        },
+        {
+          "id": "hr",
+          "label": "Пульс на финише",
+          "metric": "tt_hr",
+          "threshold": "≤ по протоколу",
+          "op": "le",
+          "unit": "уд/мин",
+          "severity": "soft",
+          "source": "auto",
+          "value": null,
+          "status": "pending",
+          "note": ""
+        }
+      ],
+      "warnings": [
+        "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
+      ],
+      "decisions": {
+        "pass": [
+          "Результат в плане — подтверждаем фазу, следующий gate сдвигает план на ступень выше."
+        ],
+        "warn": [
+          "> 20:45 → финальный блок W17–W25 переводится в чистый порог, гонка на 40:00 под вопросом — пересмотр фазы, а не продление тупика."
+        ],
+        "fail": [
+          "Результат провален — пересобираем фазу, а не продолжаем по рельсам.",
+          "Пересмотреть season_goal: цель 40:00 может оказаться нереальной."
+        ]
+      },
+      "lever": "cp_5k_w16",
+      "decided_at": "",
+      "decision": ""
+    },
+    {
       "id": "gate_phase_run_specific",
-      "season_week": 23,
+      "season_week": 20,
       "kind": "phase",
-      "title": "Готовность к гонке · Поднимаем race pace",
+      "title": "Готовность к гонке · Поднимаем VO2max и порог",
       "question": "Закрыт ли гонку-темп 4:00/км и держится ли объём?",
       "checks": [
         {
@@ -3457,5 +3525,5 @@
     }
   ],
   "current_week": 3,
-  "generated_at": "25.10.2026 11:09"
+  "generated_at": "31.10.2026 20:53"
 }

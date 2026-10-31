@@ -51,15 +51,15 @@
       "id": "run_base",
       "goal_id": "g_run_spring",
       "start": "2026-10-11",
-      "end": "2027-01-02",
+      "end": "2026-11-21",
       "hours_per_week_target": 7.3,
       "goal": "Поднимаем базовый объём",
       "focus": "Аэробная база: растёт общий объём бега, интенсивность ниже порога. Фундамент под всё остальное.",
       "_season_week_start": 1,
-      "_season_week_end": 12,
+      "_season_week_end": 6,
       "load_range_h": [
-        4.96,
-        9.74
+        4.99,
+        7.76
       ],
       "run_km_range": [
         27,
@@ -74,16 +74,16 @@
     {
       "id": "run_build",
       "goal_id": "g_run_spring",
-      "start": "2027-01-03",
-      "end": "2027-02-20",
+      "start": "2026-11-22",
+      "end": "2027-01-09",
       "hours_per_week_target": 10.8,
       "goal": "Поднимаем threshold pace",
       "focus": "Порог аэробного обмена: темп на LTH растёт, появляются длинные интервалы 2К.",
-      "_season_week_start": 13,
-      "_season_week_end": 19,
+      "_season_week_start": 7,
+      "_season_week_end": 13,
       "load_range_h": [
-        9.69,
-        11.94
+        7.75,
+        11.23
       ],
       "run_km_range": [
         50,
@@ -96,16 +96,16 @@
     {
       "id": "run_specific",
       "goal_id": "g_run_spring",
-      "start": "2027-02-21",
-      "end": "2027-03-20",
+      "start": "2027-01-10",
+      "end": "2027-02-27",
       "hours_per_week_target": 11.1,
-      "goal": "Поднимаем race pace",
+      "goal": "Поднимаем VO2max и порог",
       "focus": "Специфика под гонку: темп на соревновательной скорости, race-pace отрезки в ключевой работе.",
-      "_season_week_start": 20,
-      "_season_week_end": 23,
+      "_season_week_start": 14,
+      "_season_week_end": 20,
       "load_range_h": [
-        7.34,
-        12.64
+        10.59,
+        12.7
       ],
       "run_km_range": [
         55,
@@ -120,20 +120,20 @@
     {
       "id": "run_taper",
       "goal_id": "g_run_spring",
-      "start": "2027-03-21",
-      "end": "2027-04-17",
+      "start": "2027-02-28",
+      "end": "2027-04-24",
       "hours_per_week_target": 4.5,
-      "goal": "Сохраняем качество, снижаем объём",
+      "goal": "Поднимаем гонка-темп, подводим к гонке",
       "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей.",
-      "_season_week_start": 24,
+      "_season_week_start": 21,
       "_season_week_end": 28,
       "load_range_h": [
-        3.1,
-        5.88
+        1.4,
+        11.81
       ],
       "run_km_range": [
-        16,
-        38
+        8.0,
+        60
       ],
       "sessions_target": 7,
       "intensity_pct_mean": 10.4,
@@ -602,8 +602,8 @@
     },
     {
       "season_week": 4,
-      "run_km": 38,
-      "long_km": 14,
+      "run_km": 41,
+      "long_km": 10,
       "quality": {
         "goal": "time_trial",
         "scale": "light",
@@ -618,39 +618,52 @@
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×30м",
-      "total_h": 6.34,
+      "total_h": 6.62,
       "phase": "run_base",
       "_total_h_model": {
-        "run_h": 3.96,
+        "run_h": 4.29,
         "bike_h": 1.0,
         "swim_h": 0.5,
         "ofp_h": 0.83,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 14.0,
+      "run_km_long": 10.0,
       "run_km_quality": 3.0,
-      "run_km_easy": 21.0,
+      "run_km_easy": 28.0,
       "intensity_pct": 7.9,
       "deload": false,
       "deload_pct": 8.6,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 4.01,
-        "run_long_h": 1.32,
-        "run_easy_h": 1.98,
+        "run_h": 4.29,
+        "run_long_h": 0.94,
+        "run_easy_h": 2.64,
         "run_quality_h": 0.7,
         "bike_h": 1.0,
         "swim_h": 0.5,
         "ofp_h": 0.83,
+        "total_h": 6.62,
         "quality_min": 42,
-        "vdot": 48.0
+        "quality_work_km": 3.0,
+        "run_km": 41.0,
+        "long_km": 10.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 6.34
+      "target_h": 7.83,
+      "_daniels": {
+        "daniels_phase": 1,
+        "program_week": 4,
+        "plan_week": 4,
+        "quality_goal": "time_trial",
+        "quality_scale": "light",
+        "quality_minutes": 0,
+        "quality_zones": {}
+      }
     },
     {
       "season_week": 5,
-      "run_km": 40,
-      "long_km": 16,
+      "run_km": 45,
+      "long_km": 11,
       "quality": {
         "goal": "mixed",
         "scale": "medium",
@@ -665,39 +678,52 @@
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 6.88,
+      "total_h": 7.35,
       "phase": "run_base",
       "_total_h_model": {
-        "run_h": 3.86,
+        "run_h": 4.85,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 0.83,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 16.0,
+      "run_km_long": 11.0,
       "run_km_quality": 4.6,
-      "run_km_easy": 19.4,
+      "run_km_easy": 29.4,
       "intensity_pct": 11.5,
       "deload": false,
       "deload_pct": 5.3,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 4.38,
-        "run_long_h": 1.51,
-        "run_easy_h": 1.83,
+        "run_h": 4.85,
+        "run_long_h": 1.04,
+        "run_easy_h": 2.78,
         "run_quality_h": 1.03,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 0.83,
+        "total_h": 7.35,
         "quality_min": 62,
-        "vdot": 48.0
+        "quality_work_km": 4.6,
+        "run_km": 45.0,
+        "long_km": 11.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 6.88
+      "target_h": 8.78,
+      "_daniels": {
+        "daniels_phase": 1,
+        "program_week": 5,
+        "plan_week": 5,
+        "quality_goal": null,
+        "quality_scale": null,
+        "quality_minutes": 0,
+        "quality_zones": {}
+      }
     },
     {
       "season_week": 6,
-      "run_km": 42,
-      "long_km": 16,
+      "run_km": 50,
+      "long_km": 12,
       "quality": {
         "goal": "pyramid",
         "scale": "medium",
@@ -712,86 +738,116 @@
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 7.01,
+      "total_h": 7.76,
       "phase": "run_base",
       "_total_h_model": {
-        "run_h": 4.28,
+        "run_h": 5.26,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 0.83,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 16.0,
+      "run_km_long": 12.0,
       "run_km_quality": 2.2,
-      "run_km_easy": 23.8,
+      "run_km_easy": 35.8,
       "intensity_pct": 5.2,
       "deload": false,
       "deload_pct": 5.0,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 4.51,
-        "run_long_h": 1.51,
-        "run_easy_h": 2.25,
+        "run_h": 5.26,
+        "run_long_h": 1.13,
+        "run_easy_h": 3.38,
         "run_quality_h": 0.75,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 0.83,
+        "total_h": 7.76,
         "quality_min": 45,
-        "vdot": 48.0
+        "quality_work_km": 2.2,
+        "run_km": 50.0,
+        "long_km": 12.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 7.01
+      "target_h": 9.74,
+      "_daniels": {
+        "daniels_phase": 1,
+        "program_week": 6,
+        "plan_week": 6,
+        "quality_goal": null,
+        "quality_scale": null,
+        "quality_minutes": 0,
+        "quality_zones": {}
+      }
     },
     {
       "season_week": 7,
-      "run_km": 45,
-      "long_km": 18,
+      "run_km": 50,
+      "long_km": 12,
       "quality": {
         "goal": "tempo",
-        "scale": "medium",
+        "scale": "heavy",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем аэробную мощность",
         "scale_text": "средняя интенсивность",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
-        "variant_id": "5k",
-        "work_m": 5000,
-        "label": "5К tempo @ 4:20"
+        "variant_id": "8k",
+        "work_m": 8000,
+        "label": "8К long tempo @ 4:12"
       },
       "core": "2×30м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 7.31,
-      "phase": "run_base",
+      "total_h": 7.75,
+      "phase": "run_build",
       "_total_h_model": {
-        "run_h": 4.56,
+        "run_h": 5.08,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 18.0,
-      "run_km_quality": 5.0,
-      "run_km_easy": 22.0,
+      "run_km_long": 12.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 30.0,
       "intensity_pct": 11.1,
       "deload": false,
       "deload_pct": 7.1,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 4.64,
-        "run_long_h": 1.7,
-        "run_easy_h": 2.08,
-        "run_quality_h": 0.87,
+        "run_h": 5.08,
+        "run_long_h": 1.13,
+        "run_easy_h": 2.83,
+        "run_quality_h": 1.12,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 1.0,
-        "quality_min": 52,
-        "vdot": 48.0
+        "total_h": 7.75,
+        "quality_min": 67,
+        "quality_work_km": 8.0,
+        "run_km": 50.0,
+        "long_km": 12.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 7.31
+      "target_h": 9.69,
+      "_daniels": {
+        "daniels_phase": 2,
+        "program_week": 7,
+        "plan_week": 7,
+        "quality_goal": "tempo",
+        "quality_scale": "heavy",
+        "quality_minutes": 438,
+        "quality_zones": {
+          "E": 3400,
+          "R": 2400,
+          "T": 8000
+        }
+      }
     },
     {
       "season_week": 8,
-      "run_km": 48,
-      "long_km": 14,
+      "run_km": 52,
+      "long_km": 13,
       "quality": {
         "goal": "time_trial",
         "scale": "medium",
@@ -806,180 +862,244 @@
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "1×40м",
-      "total_h": 8.59,
-      "phase": "run_base",
+      "total_h": 8.97,
+      "phase": "run_build",
       "_total_h_model": {
-        "run_h": 4.84,
+        "run_h": 5.31,
         "bike_h": 2.0,
         "swim_h": 0.67,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 14.0,
+      "run_km_long": 13.0,
       "run_km_quality": 5.0,
-      "run_km_easy": 29.0,
+      "run_km_easy": 34.0,
       "intensity_pct": 10.4,
       "deload": false,
       "deload_pct": 6.7,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 4.93,
-        "run_long_h": 1.32,
-        "run_easy_h": 2.74,
+        "run_h": 5.31,
+        "run_long_h": 1.23,
+        "run_easy_h": 3.21,
         "run_quality_h": 0.87,
         "bike_h": 2.0,
         "swim_h": 0.67,
         "ofp_h": 1.0,
+        "total_h": 8.97,
         "quality_min": 52,
-        "vdot": 48.0
+        "quality_work_km": 5.0,
+        "run_km": 52.0,
+        "long_km": 13.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 8.59
+      "target_h": 10.06,
+      "_daniels": {
+        "daniels_phase": 2,
+        "program_week": 8,
+        "plan_week": 8,
+        "quality_goal": "time_trial",
+        "quality_scale": "medium",
+        "quality_minutes": 899,
+        "quality_zones": {
+          "E": 8000,
+          "R": 8000
+        }
+      }
     },
     {
       "season_week": 9,
-      "run_km": 50,
-      "long_km": 16,
+      "run_km": 55,
+      "long_km": 14,
       "quality": {
-        "goal": "threshold_speed",
-        "scale": "medium",
+        "goal": "tempo",
+        "scale": "heavy",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем threshold pace",
         "scale_text": "средняя интенсивность",
         "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
+        "variant_id": "8k",
+        "work_m": 8000,
+        "label": "8К long tempo @ 4:12"
+      },
+      "core": "2×30м",
+      "bike": "2×60м",
+      "swim": "1×40м",
+      "total_h": 9.22,
+      "phase": "run_build",
+      "_total_h_model": {
+        "run_h": 5.56,
+        "bike_h": 2.0,
+        "swim_h": 0.67,
+        "ofp_h": 1.0,
+        "note": "вычислено моделью нагрузки пайплайна"
+      },
+      "run_km_long": 14.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 33.0,
+      "intensity_pct": 8.0,
+      "deload": false,
+      "deload_pct": 4.2,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 5.56,
+        "run_long_h": 1.32,
+        "run_easy_h": 3.12,
+        "run_quality_h": 1.12,
+        "bike_h": 2.0,
+        "swim_h": 0.67,
+        "ofp_h": 1.0,
+        "total_h": 9.22,
+        "quality_min": 67,
+        "quality_work_km": 8.0,
+        "run_km": 55.0,
+        "long_km": 14.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 10.44,
+      "_daniels": {
+        "daniels_phase": 2,
+        "program_week": 9,
+        "plan_week": 9,
+        "quality_goal": "tempo",
+        "quality_scale": "heavy",
+        "quality_minutes": 12,
+        "quality_zones": {
+          "T": 9600
+        }
+      }
+    },
+    {
+      "season_week": 10,
+      "run_km": 58,
+      "long_km": 14,
+      "quality": {
+        "goal": "threshold_speed",
+        "scale": "medium",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Развиваем VO2max",
+        "scale_text": "средняя интенсивность",
+        "develops": "Аэробная мощность — верхняя граница аэробной системы",
         "variant_id": "4x1k",
         "work_m": 4000,
         "label": "4×1К @ 4:15"
       },
       "core": "2×30м",
       "bike": "2×60м",
-      "swim": "1×40м",
-      "total_h": 8.98,
-      "phase": "run_base",
-      "_total_h_model": {
-        "run_h": 4.89,
-        "bike_h": 2.0,
-        "swim_h": 0.67,
-        "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
-      },
-      "run_km_long": 16.0,
-      "run_km_quality": 4.0,
-      "run_km_easy": 30.0,
-      "intensity_pct": 8.0,
-      "deload": false,
-      "deload_pct": 4.2,
-      "sessions_target": 8,
-      "_load_breakdown": {
-        "run_h": 5.31,
-        "run_long_h": 1.51,
-        "run_easy_h": 2.83,
-        "run_quality_h": 0.97,
-        "bike_h": 2.0,
-        "swim_h": 0.67,
-        "ofp_h": 1.0,
-        "quality_min": 58,
-        "vdot": 48.0
-      },
-      "target_h": 8.98
-    },
-    {
-      "season_week": 10,
-      "run_km": 50,
-      "long_km": 18,
-      "quality": {
-        "goal": "vo2max",
-        "scale": "medium",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
-        "goal_text": "Развиваем VO2max",
-        "scale_text": "средняя интенсивность",
-        "develops": "Аэробная мощность — верхняя граница аэробной системы",
-        "variant_id": "5x800",
-        "work_m": 4000,
-        "label": "5×800 @ 3:55"
-      },
-      "core": "2×30м",
-      "bike": "2×60м",
       "swim": "2×40м",
-      "total_h": 9.81,
-      "phase": "run_base",
+      "total_h": 10.4,
+      "phase": "run_build",
       "_total_h_model": {
-        "run_h": 4.42,
+        "run_h": 6.07,
         "bike_h": 2.0,
         "swim_h": 1.33,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 18.0,
+      "run_km_long": 14.0,
       "run_km_quality": 4.0,
-      "run_km_easy": 28.0,
+      "run_km_easy": 40.0,
       "intensity_pct": 8.0,
       "deload": false,
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.48,
-        "run_long_h": 1.7,
-        "run_easy_h": 2.64,
-        "run_quality_h": 1.13,
+        "run_h": 6.07,
+        "run_long_h": 1.32,
+        "run_easy_h": 3.78,
+        "run_quality_h": 0.97,
         "bike_h": 2.0,
         "swim_h": 1.33,
         "ofp_h": 1.0,
-        "quality_min": 68,
-        "vdot": 48.0
+        "total_h": 10.4,
+        "quality_min": 58,
+        "quality_work_km": 4.0,
+        "run_km": 58.0,
+        "long_km": 14.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 9.81
+      "target_h": 10.81,
+      "_daniels": {
+        "daniels_phase": 2,
+        "program_week": 10,
+        "plan_week": 10,
+        "quality_goal": "threshold_speed",
+        "quality_scale": "medium",
+        "quality_minutes": 503,
+        "quality_zones": {
+          "E": 4000,
+          "R": 4800
+        }
+      }
     },
     {
       "season_week": 11,
-      "run_km": 50,
-      "long_km": 16,
+      "run_km": 60,
+      "long_km": 15,
       "quality": {
-        "goal": "fartlek",
+        "goal": "threshold_speed",
         "scale": "medium",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем общую аэробную мощность",
         "scale_text": "средняя интенсивность",
         "develops": "Игровая стимуляция: чередование лёгкого и быстрого без жёсткой структуры",
-        "variant_id": "200-800 x6",
-        "work_m": 6000,
-        "label": "6 циклов: 200@5:10 + 800@3:50"
+        "variant_id": "4x1k",
+        "work_m": 4000,
+        "label": "4×1К @ 4:15"
       },
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "2×40м",
-      "total_h": 9.37,
-      "phase": "run_base",
+      "total_h": 10.59,
+      "phase": "run_build",
       "_total_h_model": {
-        "run_h": 4.16,
+        "run_h": 6.26,
         "bike_h": 2.0,
         "swim_h": 1.33,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 16.0,
-      "run_km_quality": 6.0,
-      "run_km_easy": 28.0,
+      "run_km_long": 15.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 41.0,
       "intensity_pct": 12.0,
       "deload": false,
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.04,
-        "run_long_h": 1.51,
-        "run_easy_h": 2.64,
-        "run_quality_h": 0.88,
+        "run_h": 6.26,
+        "run_long_h": 1.42,
+        "run_easy_h": 3.87,
+        "run_quality_h": 0.97,
         "bike_h": 2.0,
         "swim_h": 1.33,
         "ofp_h": 1.0,
-        "quality_min": 53,
-        "vdot": 48.0
+        "total_h": 10.59,
+        "quality_min": 58,
+        "quality_work_km": 4.0,
+        "run_km": 60.0,
+        "long_km": 15.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 9.37
+      "target_h": 11.19,
+      "_daniels": {
+        "daniels_phase": 2,
+        "program_week": 11,
+        "plan_week": 11,
+        "quality_goal": "threshold_speed",
+        "quality_scale": "medium",
+        "quality_minutes": 180,
+        "quality_zones": {
+          "E": 4000,
+          "R": 4000,
+          "T": 9600
+        }
+      }
     },
     {
       "season_week": 12,
-      "run_km": 45,
-      "long_km": 12,
+      "run_km": 62,
+      "long_km": 16,
       "quality": {
         "goal": "time_trial",
         "scale": "light",
@@ -994,180 +1114,242 @@
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×40м",
-      "total_h": 7.17,
-      "phase": "run_base",
+      "total_h": 8.77,
+      "phase": "run_build",
       "_total_h_model": {
-        "run_h": 4.62,
+        "run_h": 6.27,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 0.83,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 12.0,
+      "run_km_long": 16.0,
       "run_km_quality": 3.0,
-      "run_km_easy": 30.0,
+      "run_km_easy": 43.0,
       "intensity_pct": 6.7,
       "deload": true,
       "deload_pct": -10.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 4.67,
-        "run_long_h": 1.13,
-        "run_easy_h": 2.83,
+        "run_h": 6.27,
+        "run_long_h": 1.51,
+        "run_easy_h": 4.06,
         "run_quality_h": 0.7,
         "bike_h": 1.0,
         "swim_h": 0.67,
         "ofp_h": 0.83,
+        "total_h": 8.77,
         "quality_min": 42,
-        "vdot": 48.0
+        "quality_work_km": 3.0,
+        "run_km": 62.0,
+        "long_km": 16.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 7.17
+      "target_h": 11.56,
+      "_daniels": {
+        "daniels_phase": 2,
+        "program_week": 12,
+        "plan_week": 12,
+        "quality_goal": "time_trial",
+        "quality_scale": "light",
+        "quality_minutes": 503,
+        "quality_zones": {
+          "E": 4000,
+          "R": 4800,
+          "T": 16000
+        }
+      }
     },
     {
       "season_week": 13,
-      "run_km": 50,
+      "run_km": 65,
       "long_km": 16,
       "quality": {
-        "goal": "threshold_power",
-        "scale": "light",
+        "goal": "threshold_speed",
+        "scale": "medium",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем способность держать threshold pace",
         "scale_text": "лёгкая работа",
         "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
-        "variant_id": "2x2k",
+        "variant_id": "4x1k",
         "work_m": 4000,
-        "label": "2×2К @ 4:15"
+        "label": "4×1К @ 4:15"
       },
       "core": "2×30м",
       "bike": "2×60м",
       "swim": "2×45м",
-      "total_h": 9.73,
+      "total_h": 11.23,
       "phase": "run_build",
       "_total_h_model": {
-        "run_h": 4.67,
+        "run_h": 6.73,
         "bike_h": 2.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
       "run_km_long": 16.0,
       "run_km_quality": 4.0,
-      "run_km_easy": 30.0,
+      "run_km_easy": 45.0,
       "intensity_pct": 8.0,
       "deload": false,
       "deload_pct": 11.1,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.23,
+        "run_h": 6.73,
         "run_long_h": 1.51,
-        "run_easy_h": 2.83,
-        "run_quality_h": 0.88,
+        "run_easy_h": 4.25,
+        "run_quality_h": 0.97,
         "bike_h": 2.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 53,
-        "vdot": 48.0
+        "total_h": 11.23,
+        "quality_min": 58,
+        "quality_work_km": 4.0,
+        "run_km": 65.0,
+        "long_km": 16.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 9.73
+      "target_h": 11.94,
+      "_daniels": {
+        "daniels_phase": 2,
+        "program_week": 25,
+        "plan_week": 12,
+        "quality_goal": "threshold_speed",
+        "quality_scale": "medium",
+        "quality_minutes": 503,
+        "quality_zones": {
+          "E": 4000,
+          "R": 4800,
+          "T": 16000
+        }
+      }
     },
     {
       "season_week": 14,
       "run_km": 55,
-      "long_km": 18,
+      "long_km": 14,
       "quality": {
-        "goal": "threshold_speed",
-        "scale": "heavy",
+        "goal": "tempo",
+        "scale": "medium",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем threshold pace",
         "scale_text": "высокая интенсивность",
         "develops": "Скорость на пороге аэробного порога (LTH) — короткие отрезки по 0.8–1К",
-        "variant_id": "6x800",
-        "work_m": 4800,
-        "label": "6×800 @ 4:10"
+        "variant_id": "5k",
+        "work_m": 5000,
+        "label": "5К tempo @ 4:20"
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 10.91,
-      "phase": "run_build",
+      "total_h": 10.59,
+      "phase": "run_specific",
       "_total_h_model": {
-        "run_h": 4.74,
+        "run_h": 5.59,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 18.0,
-      "run_km_quality": 4.8,
-      "run_km_easy": 32.2,
+      "run_km_long": 14.0,
+      "run_km_quality": 5.0,
+      "run_km_easy": 36.0,
       "intensity_pct": 8.7,
       "deload": false,
       "deload_pct": 10.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.91,
-        "run_long_h": 1.7,
-        "run_easy_h": 3.04,
-        "run_quality_h": 1.17,
+        "run_h": 5.59,
+        "run_long_h": 1.32,
+        "run_easy_h": 3.4,
+        "run_quality_h": 0.87,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 70,
-        "vdot": 48.0
+        "total_h": 10.59,
+        "quality_min": 52,
+        "quality_work_km": 5.0,
+        "run_km": 55.0,
+        "long_km": 14.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 10.91
+      "target_h": 7.34,
+      "_daniels": {
+        "daniels_phase": 3,
+        "program_week": 13,
+        "plan_week": 13,
+        "quality_goal": "tempo",
+        "quality_scale": "medium",
+        "quality_minutes": 12,
+        "quality_zones": {
+          "T": 4800
+        }
+      }
     },
     {
       "season_week": 15,
-      "run_km": 55,
-      "long_km": 18,
+      "run_km": 58,
+      "long_km": 14,
       "quality": {
-        "goal": "mixed",
-        "scale": "heavy",
+        "goal": "tempo",
+        "scale": "medium",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем порог и VO2max в одной сессии",
         "scale_text": "высокая интенсивность",
         "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
-        "variant_id": "5k+4x400",
-        "work_m": 6600,
-        "label": "5К tempo @ 4:10 + 4×400 @ 3:45"
+        "variant_id": "5k",
+        "work_m": 5000,
+        "label": "5К tempo @ 4:20"
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 10.74,
-      "phase": "run_build",
+      "total_h": 10.87,
+      "phase": "run_specific",
       "_total_h_model": {
-        "run_h": 5.35,
+        "run_h": 5.87,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 18.0,
-      "run_km_quality": 6.6,
-      "run_km_easy": 30.4,
+      "run_km_long": 14.0,
+      "run_km_quality": 5.0,
+      "run_km_easy": 39.0,
       "intensity_pct": 12.0,
       "deload": false,
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.74,
-        "run_long_h": 1.7,
-        "run_easy_h": 2.87,
-        "run_quality_h": 1.17,
+        "run_h": 5.87,
+        "run_long_h": 1.32,
+        "run_easy_h": 3.68,
+        "run_quality_h": 0.87,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 70,
-        "vdot": 48.0
+        "total_h": 10.87,
+        "quality_min": 52,
+        "quality_work_km": 5.0,
+        "run_km": 58.0,
+        "long_km": 14.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 10.74
+      "target_h": 8.22,
+      "_daniels": {
+        "daniels_phase": 3,
+        "program_week": 14,
+        "plan_week": 14,
+        "quality_goal": "tempo",
+        "quality_scale": "medium",
+        "quality_minutes": 40,
+        "quality_zones": {}
+      }
     },
     {
       "season_week": 16,
-      "run_km": 55,
-      "long_km": 16,
+      "run_km": 60,
+      "long_km": 15,
       "quality": {
         "goal": "time_trial",
         "scale": "medium",
@@ -1182,187 +1364,129 @@
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 10.59,
-      "phase": "run_build",
+      "total_h": 11.06,
+      "phase": "run_specific",
       "_total_h_model": {
-        "run_h": 5.51,
+        "run_h": 6.06,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 16.0,
+      "run_km_long": 15.0,
       "run_km_quality": 5.0,
-      "run_km_easy": 34.0,
+      "run_km_easy": 40.0,
       "intensity_pct": 9.1,
       "deload": false,
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.59,
-        "run_long_h": 1.51,
-        "run_easy_h": 3.21,
+        "run_h": 6.06,
+        "run_long_h": 1.42,
+        "run_easy_h": 3.78,
         "run_quality_h": 0.87,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
+        "total_h": 11.06,
         "quality_min": 52,
-        "vdot": 48.0
+        "quality_work_km": 5.0,
+        "run_km": 60.0,
+        "long_km": 15.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 10.59
+      "target_h": 9.11,
+      "_daniels": {
+        "daniels_phase": 3,
+        "program_week": 15,
+        "plan_week": 15,
+        "quality_goal": "time_trial",
+        "quality_scale": "medium",
+        "quality_minutes": 519,
+        "quality_zones": {
+          "E": 2400,
+          "I": 3000,
+          "R": 2400,
+          "T": 9600
+        }
+      }
     },
     {
       "season_week": 17,
-      "run_km": 55,
-      "long_km": 18,
+      "run_km": 62,
+      "long_km": 16,
       "quality": {
-        "goal": "threshold_power",
+        "goal": "threshold_speed",
         "scale": "medium",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем способность держать threshold pace",
         "scale_text": "средняя интенсивность",
         "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
-        "variant_id": "3x2k",
-        "work_m": 6000,
-        "label": "3×2К @ 4:12"
+        "variant_id": "4x1k",
+        "work_m": 4000,
+        "label": "4×1К @ 4:15"
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 10.76,
-      "phase": "run_build",
+      "total_h": 11.44,
+      "phase": "run_specific",
       "_total_h_model": {
-        "run_h": 4.99,
+        "run_h": 6.44,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 18.0,
-      "run_km_quality": 6.0,
-      "run_km_easy": 31.0,
+      "run_km_long": 16.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 42.0,
       "intensity_pct": 10.9,
       "deload": false,
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.76,
-        "run_long_h": 1.7,
-        "run_easy_h": 2.93,
-        "run_quality_h": 1.13,
+        "run_h": 6.44,
+        "run_long_h": 1.51,
+        "run_easy_h": 3.97,
+        "run_quality_h": 0.97,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 68,
-        "vdot": 48.0
+        "total_h": 11.44,
+        "quality_min": 58,
+        "quality_work_km": 4.0,
+        "run_km": 62.0,
+        "long_km": 16.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 10.76
+      "target_h": 9.99,
+      "_daniels": {
+        "daniels_phase": 3,
+        "program_week": 16,
+        "plan_week": 16,
+        "quality_goal": "threshold_speed",
+        "quality_scale": "medium",
+        "quality_minutes": 899,
+        "quality_zones": {
+          "E": 4000,
+          "I": 7800,
+          "R": 4000,
+          "T": 9600
+        }
+      }
     },
     {
       "season_week": 18,
-      "run_km": 60,
-      "long_km": 20,
-      "quality": {
-        "goal": "tempo",
-        "scale": "heavy",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
-        "goal_text": "Развиваем аэробную мощность",
-        "scale_text": "высокая интенсивность",
-        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
-        "variant_id": "8k",
-        "work_m": 8000,
-        "label": "8К long tempo @ 4:12"
-      },
-      "core": "2×30м",
-      "bike": "2×90м",
-      "swim": "2×45м",
-      "total_h": 11.53,
-      "phase": "run_build",
-      "_total_h_model": {
-        "run_h": 5.91,
-        "bike_h": 3.0,
-        "swim_h": 1.5,
-        "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
-      },
-      "run_km_long": 20.0,
-      "run_km_quality": 8.0,
-      "run_km_easy": 32.0,
-      "intensity_pct": 13.3,
-      "deload": false,
-      "deload_pct": 9.1,
-      "sessions_target": 8,
-      "_load_breakdown": {
-        "run_h": 6.03,
-        "run_long_h": 1.89,
-        "run_easy_h": 3.02,
-        "run_quality_h": 1.12,
-        "bike_h": 3.0,
-        "swim_h": 1.5,
-        "ofp_h": 1.0,
-        "quality_min": 67,
-        "vdot": 48.0
-      },
-      "target_h": 11.53
-    },
-    {
-      "season_week": 19,
       "run_km": 65,
-      "long_km": 22,
-      "quality": {
-        "goal": "tempo",
-        "scale": "medium",
-        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
-        "goal_text": "Развиваем аэробную мощность",
-        "scale_text": "средняя интенсивность",
-        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
-        "variant_id": "6k",
-        "work_m": 6000,
-        "label": "6К tempo @ 4:08"
-      },
-      "core": "2×30м",
-      "bike": "2×90м",
-      "swim": "2×45м",
-      "total_h": 12.02,
-      "phase": "run_build",
-      "_total_h_model": {
-        "run_h": 6.44,
-        "bike_h": 3.0,
-        "swim_h": 1.5,
-        "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
-      },
-      "run_km_long": 22.0,
-      "run_km_quality": 6.0,
-      "run_km_easy": 37.0,
-      "intensity_pct": 9.2,
-      "deload": false,
-      "deload_pct": 8.3,
-      "sessions_target": 8,
-      "_load_breakdown": {
-        "run_h": 6.52,
-        "run_long_h": 2.08,
-        "run_easy_h": 3.49,
-        "run_quality_h": 0.95,
-        "bike_h": 3.0,
-        "swim_h": 1.5,
-        "ofp_h": 1.0,
-        "quality_min": 57,
-        "vdot": 48.0
-      },
-      "target_h": 12.02
-    },
-    {
-      "season_week": 20,
-      "run_km": 65,
-      "long_km": 22,
+      "long_km": 16,
       "quality": {
         "goal": "vo2max",
         "scale": "heavy",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
-        "goal_text": "Развиваем VO2max",
+        "goal_text": "Развиваем аэробную мощность",
         "scale_text": "высокая интенсивность",
-        "develops": "Аэробная мощность — верхняя граница аэробной системы",
+        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
         "variant_id": "4x2k_vo2",
         "work_m": 8000,
         "label": "4×2К @ 4:10"
@@ -1373,313 +1497,560 @@
       "total_h": 12.27,
       "phase": "run_specific",
       "_total_h_model": {
-        "run_h": 5.78,
+        "run_h": 6.77,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 22.0,
+      "run_km_long": 16.0,
       "run_km_quality": 8.0,
-      "run_km_easy": 35.0,
+      "run_km_easy": 41.0,
+      "intensity_pct": 13.3,
+      "deload": false,
+      "deload_pct": 9.1,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 6.77,
+        "run_long_h": 1.51,
+        "run_easy_h": 3.87,
+        "run_quality_h": 1.38,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "total_h": 12.27,
+        "quality_min": 83,
+        "quality_work_km": 8.0,
+        "run_km": 65.0,
+        "long_km": 16.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 10.87,
+      "_daniels": {
+        "daniels_phase": 3,
+        "program_week": 17,
+        "plan_week": 17,
+        "quality_goal": "vo2max",
+        "quality_scale": "heavy",
+        "quality_minutes": 8,
+        "quality_zones": {
+          "T": 11200
+        }
+      }
+    },
+    {
+      "season_week": 19,
+      "run_km": 68,
+      "long_km": 17,
+      "quality": {
+        "goal": "threshold_speed",
+        "scale": "medium",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Развиваем аэробную мощность",
+        "scale_text": "средняя интенсивность",
+        "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
+        "variant_id": "4x1k",
+        "work_m": 4000,
+        "label": "4×1К @ 4:15"
+      },
+      "core": "2×30м",
+      "bike": "2×90м",
+      "swim": "2×45м",
+      "total_h": 12.51,
+      "phase": "run_specific",
+      "_total_h_model": {
+        "run_h": 7.01,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено моделью нагрузки пайплайна"
+      },
+      "run_km_long": 17.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 47.0,
+      "intensity_pct": 9.2,
+      "deload": false,
+      "deload_pct": 8.3,
+      "sessions_target": 8,
+      "_load_breakdown": {
+        "run_h": 7.01,
+        "run_long_h": 1.61,
+        "run_easy_h": 4.44,
+        "run_quality_h": 0.97,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "total_h": 12.51,
+        "quality_min": 58,
+        "quality_work_km": 4.0,
+        "run_km": 68.0,
+        "long_km": 17.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
+      },
+      "target_h": 11.76,
+      "_daniels": {
+        "daniels_phase": 3,
+        "program_week": 18,
+        "plan_week": 18,
+        "quality_goal": "threshold_speed",
+        "quality_scale": "medium",
+        "quality_minutes": 180,
+        "quality_zones": {
+          "E": 4000,
+          "R": 4000,
+          "T": 16000
+        }
+      }
+    },
+    {
+      "season_week": 20,
+      "run_km": 70,
+      "long_km": 18,
+      "quality": {
+        "goal": "threshold_speed",
+        "scale": "medium",
+        "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
+        "goal_text": "Развиваем VO2max",
+        "scale_text": "высокая интенсивность",
+        "develops": "Аэробная мощность — верхняя граница аэробной системы",
+        "variant_id": "4x1k",
+        "work_m": 4000,
+        "label": "4×1К @ 4:15"
+      },
+      "core": "2×30м",
+      "bike": "2×90м",
+      "swim": "2×45м",
+      "total_h": 12.7,
+      "phase": "run_specific",
+      "_total_h_model": {
+        "run_h": 7.2,
+        "bike_h": 3.0,
+        "swim_h": 1.5,
+        "ofp_h": 1.0,
+        "note": "вычислено моделью нагрузки пайплайна"
+      },
+      "run_km_long": 18.0,
+      "run_km_quality": 4.0,
+      "run_km_easy": 48.0,
       "intensity_pct": 12.3,
       "deload": false,
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 6.77,
-        "run_long_h": 2.08,
-        "run_easy_h": 3.31,
-        "run_quality_h": 1.38,
+        "run_h": 7.2,
+        "run_long_h": 1.7,
+        "run_easy_h": 4.53,
+        "run_quality_h": 0.97,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 83,
-        "vdot": 48.0
+        "total_h": 12.7,
+        "quality_min": 58,
+        "quality_work_km": 4.0,
+        "run_km": 70.0,
+        "long_km": 18.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 12.27
+      "target_h": 12.64,
+      "_daniels": {
+        "daniels_phase": 3,
+        "program_week": 26,
+        "plan_week": 18,
+        "quality_goal": "threshold_speed",
+        "quality_scale": "medium",
+        "quality_minutes": 180,
+        "quality_zones": {
+          "E": 4000,
+          "R": 4000,
+          "T": 16000
+        }
+      }
     },
     {
       "season_week": 21,
-      "run_km": 70,
-      "long_km": 22,
+      "run_km": 60,
+      "long_km": 15,
       "quality": {
-        "goal": "tempo",
-        "scale": "peak",
+        "goal": "taper_race_pace",
+        "scale": "medium",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем аэробную мощность",
         "scale_text": "максимальная",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
-        "variant_id": "10k",
-        "work_m": 10000,
-        "label": "10К long tempo @ 4:05"
+        "variant_id": "taper_400",
+        "work_m": 2400,
+        "label": "6×400 @ 3:50, отдых 90с"
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 12.45,
-      "phase": "run_specific",
+      "total_h": 11.81,
+      "phase": "run_taper",
       "_total_h_model": {
-        "run_h": 6.8,
+        "run_h": 6.31,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 22.0,
-      "run_km_quality": 10.0,
-      "run_km_easy": 38.0,
+      "run_km_long": 15.0,
+      "run_km_quality": 2.4,
+      "run_km_easy": 42.6,
       "intensity_pct": 14.3,
       "deload": false,
       "deload_pct": 7.7,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 6.95,
-        "run_long_h": 2.08,
-        "run_easy_h": 3.59,
-        "run_quality_h": 1.28,
+        "run_h": 6.31,
+        "run_long_h": 1.42,
+        "run_easy_h": 4.02,
+        "run_quality_h": 0.87,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 77,
-        "vdot": 48.0
+        "total_h": 11.81,
+        "quality_min": 52,
+        "quality_work_km": 2.4,
+        "run_km": 60.0,
+        "long_km": 15.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 12.45
+      "target_h": 10.5,
+      "_daniels": {
+        "daniels_phase": 4,
+        "program_week": 27,
+        "plan_week": 19,
+        "quality_goal": "taper_race_pace",
+        "quality_scale": "medium",
+        "quality_minutes": 729,
+        "quality_zones": {
+          "E": 800,
+          "I": 2000,
+          "R": 800,
+          "T": 13600
+        }
+      }
     },
     {
       "season_week": 22,
-      "run_km": 70,
-      "long_km": 24,
+      "run_km": 53,
+      "long_km": 13,
       "quality": {
-        "goal": "threshold_power",
-        "scale": "heavy",
+        "goal": "taper_race_pace",
+        "scale": "medium",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем способность держать threshold pace",
         "scale_text": "высокая интенсивность",
         "develops": "Выносливость на пороге — длинные отрезки 1.5–3К на LTH",
-        "variant_id": "4x2k",
-        "work_m": 8000,
-        "label": "4×2К @ 4:10"
+        "variant_id": "taper_400",
+        "work_m": 2400,
+        "label": "6×400 @ 3:50, отдых 90с"
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 12.74,
-      "phase": "run_specific",
+      "total_h": 11.15,
+      "phase": "run_taper",
       "_total_h_model": {
-        "run_h": 6.41,
+        "run_h": 5.65,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 24.0,
-      "run_km_quality": 8.0,
-      "run_km_easy": 38.0,
+      "run_km_long": 13.0,
+      "run_km_quality": 2.4,
+      "run_km_easy": 37.6,
       "intensity_pct": 11.4,
       "deload": false,
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 7.24,
-        "run_long_h": 2.27,
-        "run_easy_h": 3.59,
-        "run_quality_h": 1.38,
+        "run_h": 5.65,
+        "run_long_h": 1.23,
+        "run_easy_h": 3.55,
+        "run_quality_h": 0.87,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "quality_min": 83,
-        "vdot": 48.0
+        "total_h": 11.15,
+        "quality_min": 52,
+        "quality_work_km": 2.4,
+        "run_km": 53.0,
+        "long_km": 13.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 12.74
+      "target_h": 9.27,
+      "_daniels": {
+        "daniels_phase": 4,
+        "program_week": 19,
+        "plan_week": 19,
+        "quality_goal": "taper_race_pace",
+        "quality_scale": "medium",
+        "quality_minutes": 729,
+        "quality_zones": {
+          "E": 800,
+          "I": 2000,
+          "R": 800,
+          "T": 13600
+        }
+      }
     },
     {
       "season_week": 23,
-      "run_km": 55,
-      "long_km": 14,
+      "run_km": 45,
+      "long_km": 11,
       "quality": {
         "goal": "time_trial",
-        "scale": "heavy",
+        "scale": "light",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Проверяем форму на контрольной точке",
         "scale_text": "высокая интенсивность",
         "develops": "Замер: держим заданный темп (pace) или максимальная скорость (max) — тип задаёт контрольная точка",
-        "variant_id": "tt_race",
-        "work_m": 5000,
-        "label": "Гонка-темп"
+        "variant_id": "tt_pace",
+        "work_m": 3000,
+        "label": "Темповый тест"
       },
       "core": "1×25м",
       "bike": "1×45м",
       "swim": "1×35м",
-      "total_h": 7.34,
-      "phase": "run_specific",
+      "total_h": 6.42,
+      "phase": "run_taper",
       "_total_h_model": {
-        "run_h": 5.51,
+        "run_h": 4.67,
         "bike_h": 0.75,
         "swim_h": 0.58,
         "ofp_h": 0.42,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 14.0,
-      "run_km_quality": 5.0,
-      "run_km_easy": 36.0,
+      "run_km_long": 11.0,
+      "run_km_quality": 3.0,
+      "run_km_easy": 31.0,
       "intensity_pct": 9.1,
       "deload": true,
       "deload_pct": -21.4,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 5.59,
-        "run_long_h": 1.32,
-        "run_easy_h": 3.4,
-        "run_quality_h": 0.87,
+        "run_h": 4.67,
+        "run_long_h": 1.04,
+        "run_easy_h": 2.93,
+        "run_quality_h": 0.7,
         "bike_h": 0.75,
         "swim_h": 0.58,
         "ofp_h": 0.42,
-        "quality_min": 52,
-        "vdot": 48.0
+        "total_h": 6.42,
+        "quality_min": 42,
+        "quality_work_km": 3.0,
+        "run_km": 45.0,
+        "long_km": 11.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 7.34
+      "target_h": 8.03,
+      "_daniels": {
+        "daniels_phase": 4,
+        "program_week": 20,
+        "plan_week": 20,
+        "quality_goal": "time_trial",
+        "quality_scale": "light",
+        "quality_minutes": 729,
+        "quality_zones": {
+          "T": 19200
+        }
+      }
     },
     {
       "season_week": 24,
       "run_km": 38,
       "long_km": 10,
       "quality": {
-        "goal": "mixed",
-        "scale": "light",
+        "goal": "taper_race_pace",
+        "scale": "medium",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем порог и VO2max в одной сессии",
         "scale_text": "лёгкая работа",
         "develops": "Комбинированная работа: длинные отрезки на пороге + короткие на скорости",
-        "variant_id": "3x1k+2x400",
-        "work_m": 3800,
-        "label": "3×1К @ 4:15 + 2×400 @ 3:45"
+        "variant_id": "taper_400",
+        "work_m": 2400,
+        "label": "6×400 @ 3:50, отдых 90с"
       },
       "core": "1×25м",
       "bike": "1×45м",
       "swim": "1×35м",
-      "total_h": 5.93,
+      "total_h": 5.98,
       "phase": "run_taper",
       "_total_h_model": {
-        "run_h": 3.62,
+        "run_h": 4.23,
         "bike_h": 0.75,
         "swim_h": 0.58,
         "ofp_h": 0.42,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
       "run_km_long": 10.0,
-      "run_km_quality": 3.8,
-      "run_km_easy": 24.2,
+      "run_km_quality": 2.4,
+      "run_km_easy": 25.6,
       "intensity_pct": 10.0,
       "deload": true,
       "deload_pct": -30.9,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 4.18,
+        "run_h": 4.23,
         "run_long_h": 0.94,
-        "run_easy_h": 2.29,
-        "run_quality_h": 0.95,
+        "run_easy_h": 2.42,
+        "run_quality_h": 0.87,
         "bike_h": 0.75,
         "swim_h": 0.58,
         "ofp_h": 0.42,
-        "quality_min": 57,
-        "vdot": 48.0
+        "total_h": 5.98,
+        "quality_min": 52,
+        "quality_work_km": 2.4,
+        "run_km": 38.0,
+        "long_km": 10.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 5.93
+      "target_h": 6.8,
+      "_daniels": {
+        "daniels_phase": 4,
+        "program_week": 21,
+        "plan_week": 21,
+        "quality_goal": "taper_race_pace",
+        "quality_scale": "medium",
+        "quality_minutes": 568,
+        "quality_zones": {
+          "E": 1600,
+          "I": 2000,
+          "R": 1600,
+          "T": 4000
+        }
+      }
     },
     {
       "season_week": 25,
-      "run_km": 30,
+      "run_km": 31,
       "long_km": 8,
       "quality": {
         "goal": "taper_race_pace",
-        "scale": "light",
+        "scale": "medium",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Сохраняем гонка-темп, снимая объём",
         "scale_text": "лёгкая работа",
         "develops": "Частота и свежесть — гонка-темп остаётся в ногах, объём уходит",
-        "variant_id": "taper_1k",
-        "work_m": 2200,
-        "label": "1×1К @ 4:00 + 6×200 @ 3:45"
+        "variant_id": "taper_400",
+        "work_m": 2400,
+        "label": "6×400 @ 3:50, отдых 90с"
       },
       "core": "1×25м",
       "bike": "1×40м",
       "swim": "1×30м",
-      "total_h": 5.03,
+      "total_h": 5.15,
       "phase": "run_taper",
       "_total_h_model": {
-        "run_h": 2.96,
+        "run_h": 3.57,
         "bike_h": 0.67,
         "swim_h": 0.5,
         "ofp_h": 0.42,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
       "run_km_long": 8.0,
-      "run_km_quality": 2.2,
-      "run_km_easy": 19.8,
+      "run_km_quality": 2.4,
+      "run_km_easy": 20.6,
       "intensity_pct": 7.3,
       "deload": true,
       "deload_pct": -21.1,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 3.44,
+        "run_h": 3.57,
         "run_long_h": 0.76,
-        "run_easy_h": 1.87,
-        "run_quality_h": 0.82,
+        "run_easy_h": 1.95,
+        "run_quality_h": 0.87,
         "bike_h": 0.67,
         "swim_h": 0.5,
         "ofp_h": 0.42,
-        "quality_min": 49,
-        "vdot": 48.0
+        "total_h": 5.15,
+        "quality_min": 52,
+        "quality_work_km": 2.4,
+        "run_km": 31.0,
+        "long_km": 8.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 5.03
+      "target_h": 5.57,
+      "_daniels": {
+        "daniels_phase": 4,
+        "program_week": 22,
+        "plan_week": 22,
+        "quality_goal": "taper_race_pace",
+        "quality_scale": "medium",
+        "quality_minutes": 568,
+        "quality_zones": {
+          "E": 2400,
+          "I": 5000,
+          "R": 2400,
+          "T": 4000
+        }
+      }
     },
     {
       "season_week": 26,
-      "run_km": 24,
+      "run_km": 23,
       "long_km": 6,
       "quality": {
         "goal": "taper_race_pace",
-        "scale": "light",
+        "scale": "medium",
         "goal_text": "Сохраняем гонка-темп, снимая объём",
         "scale_text": "лёгкая работа",
         "develops": "Частота и свежесть — гонка-темп остаётся в ногах, объём уходит",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
-        "variant_id": "taper_1k",
-        "work_m": 2200,
-        "label": "1×1К @ 4:00 + 6×200 @ 3:45"
+        "variant_id": "taper_400",
+        "work_m": 2400,
+        "label": "6×400 @ 3:50, отдых 90с"
       },
       "core": "1×20м",
       "bike": "1×30м",
       "swim": "1×25м",
       "phase": "run_taper",
-      "total_h": 4.13,
+      "total_h": 4.06,
       "_total_h_model": {
-        "run_h": 2.49,
+        "run_h": 2.81,
         "bike_h": 0.5,
         "swim_h": 0.42,
         "ofp_h": 0.33,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
       "run_km_long": 6.0,
-      "run_km_quality": 2.2,
-      "run_km_easy": 15.8,
+      "run_km_quality": 2.4,
+      "run_km_easy": 14.6,
       "intensity_pct": 9.2,
       "deload": true,
       "deload_pct": -20.0,
       "sessions_target": 6,
       "_load_breakdown": {
-        "run_h": 2.88,
+        "run_h": 2.81,
         "run_long_h": 0.57,
-        "run_easy_h": 1.49,
-        "run_quality_h": 0.82,
+        "run_easy_h": 1.38,
+        "run_quality_h": 0.87,
         "bike_h": 0.5,
         "swim_h": 0.42,
         "ofp_h": 0.33,
-        "quality_min": 49,
-        "vdot": 48.0
+        "total_h": 4.06,
+        "quality_min": 52,
+        "quality_work_km": 2.4,
+        "run_km": 23.0,
+        "long_km": 6.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 4.13
+      "target_h": 4.33,
+      "_daniels": {
+        "daniels_phase": 4,
+        "program_week": 23,
+        "plan_week": 23,
+        "quality_goal": "taper_race_pace",
+        "quality_scale": "medium",
+        "quality_minutes": 819,
+        "quality_zones": {
+          "E": 2000,
+          "R": 2000,
+          "T": 8000
+        }
+      }
     },
     {
       "season_week": 27,
@@ -1702,11 +2073,11 @@
       "phase": "run_taper",
       "total_h": 3.15,
       "_total_h_model": {
-        "run_h": 1.4,
+        "run_h": 2.15,
         "bike_h": 0.42,
         "swim_h": 0.33,
         "ofp_h": 0.25,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
       "run_km_long": 4.0,
       "run_km_quality": 2.4,
@@ -1723,15 +2094,32 @@
         "bike_h": 0.42,
         "swim_h": 0.33,
         "ofp_h": 0.25,
+        "total_h": 3.15,
         "quality_min": 52,
-        "vdot": 48.0
+        "quality_work_km": 2.4,
+        "run_km": 16.0,
+        "long_km": 4.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 3.15
+      "target_h": 3.1,
+      "_daniels": {
+        "daniels_phase": 4,
+        "program_week": 24,
+        "plan_week": 24,
+        "quality_goal": "taper_race_pace",
+        "quality_scale": "medium",
+        "quality_minutes": 365,
+        "quality_zones": {
+          "E": 800,
+          "R": 800,
+          "T": 4800
+        }
+      }
     },
     {
       "season_week": 28,
-      "run_km": 8,
-      "long_km": 0,
+      "run_km": 8.0,
+      "long_km": 0.0,
       "quality": {
         "goal": "time_trial",
         "scale": "light",
@@ -1740,7 +2128,7 @@
         "develops": "Гонка S25 Berlin 10K — главная цель сезона",
         "variant_id": "tt_race",
         "work_m": 5000,
-        "label": "10К @ race pace 4:00 — гонка"
+        "label": "10К @ race pace — гонка"
       },
       "core": "1×15м",
       "bike": "0",
@@ -1760,8 +2148,28 @@
         "bike_h": 0.0,
         "swim_h": 0.0,
         "ofp_h": 0.25,
+        "total_h": 1.4,
         "quality_min": 52,
-        "vdot": 48.0
+        "quality_work_km": 5.0,
+        "run_km": 8.0,
+        "long_km": 0.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
+      },
+      "_daniels": {
+        "daniels_phase": 4,
+        "program_week": null,
+        "plan_week": null,
+        "quality_goal": "time_trial",
+        "quality_scale": "light",
+        "quality_minutes": 0,
+        "quality_zones": {}
+      },
+      "_total_h_model": {
+        "run_h": 1.15,
+        "bike_h": 0.0,
+        "swim_h": 0.0,
+        "ofp_h": 0.25,
+        "note": "вычислено моделью нагрузки пайплайна"
       }
     }
   ],
