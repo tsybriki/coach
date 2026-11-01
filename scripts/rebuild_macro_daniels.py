@@ -367,6 +367,105 @@ def quality_for(week: dict[str, Any], templates: dict[str, Any],
     }
 
 
+def _sessions_count(entry: dict[str, Any], week: dict[str, Any]) -> int:
+    """Число тренировок недели — из разбивки.
+
+    Бег: длинный + качественная работа + лёгкие пробежки. Плюс вел,
+    плавание и ОФП — по одной тренировке на вид.
+
+    Число лёгких пробежек — по **числу дней недели**, а не по километражу:
+    правило Дэниэлса — «7 дней в неделю Л-темп» в базе, дальше меньше,
+    но не «сколько километраж на пробежку». Окна среды — восемь, и на
+    них неделя помещается: длинный бег, качественная работа, вел,
+    плавание и ОФП занимают свои дни, остальные — лёгкие пробежки.
+    """
+    long_km = float(week.get("long_km") or 0.0)
+    quality = week.get("quality") or {}
+    quality_work_km = float(quality.get("work_m") or 0.0) / 1000.0
+    run_km = float(week.get("run_km") or 0.0)
+    easy_km = max(run_km - long_km - quality_work_km, 0.0)
+
+    # Тренировки недели: длинный бег, качественная работа, лёгкие
+    # пробежки и остальные виды спорта.
+    sessions = 0
+    busy_windows = 0
+    if long_km:
+        sessions += 1
+        busy_windows += 1
+    if quality.get("work_m"):
+        sessions += 1
+        busy_windows += 1
+    # «2×60м» — это две тренировки, а не одна: количество в макро.
+    for kind in ("bike", "swim", "core"):
+        count = _count_sessions(week.get(kind))
+        sessions += count
+        busy_windows += count
+    sessions += _easy_runs(easy_km, busy_windows)
+    return sessions
+
+
+def _easy_runs(easy_km: float, busy_windows: int) -> int:
+    """Число лёгких пробежек — по километражу, в пределах свободных окон.
+
+    Лёгкая пробежка в базе — 6-10 км. Число пробежек ограничено
+    свободными **окнами**, а не днями: в неделе 8 окон на 7 дней, и в
+    один день могут встать две тренировки (утром пробежка, вечером вел).
+
+    Окно занимает одна тренировка, поэтому число пробежек не может
+    превысить число свободных окон.
+    """
+    if easy_km <= 0:
+        return 0
+    by_km = max(1, round(easy_km / 8.0))
+    return max(0, min(by_km, WINDOWS_PER_WEEK - busy_windows, WINDOWS_PER_WEEK))
+
+
+def _easy_km(week: dict[str, Any]) -> float:
+    """Лёгкий километраж недели — всё, кроме длинного и качественного."""
+    long_km = float(week.get("long_km") or 0.0)
+    quality = week.get("quality") or {}
+    quality_km = float(quality.get("work_m") or 0.0) / 1000.0
+    return max(float(week.get("run_km") or 0.0) - long_km - quality_km, 0.0)
+
+
+# Окон в неделе: 8 на 7 дней (в некоторые дни встают две тренировки).
+WINDOWS_PER_WEEK = 8
+
+
+def _busy_windows(week: dict[str, Any]) -> int:
+    """Занятые окна недели: длинный бег, качественная работа, прочие виды.
+
+    Окно занимает одна тренировка, поэтому занятые окна — это и есть
+    ограничение на число пробежек.
+    """
+    busy = 0
+    if float(week.get("long_km") or 0.0):
+        busy += 1
+    quality = week.get("quality") or {}
+    if quality.get("work_m"):
+        busy += 1
+    for kind in ("bike", "swim", "core"):
+        busy += _count_sessions(week.get(kind))
+    return busy
+
+
+def _count_sessions(spec: str | None) -> int:
+    """Число тренировок по описанию вида спорта в макро.
+
+    «1×60м» — одна тренировка, «2×25м» — две. Пусто — ни одной.
+    """
+    if not spec:
+        return 0
+    text = str(spec).strip()
+    if "×" in text:
+        head = text.split("×", 1)[0].strip()
+        try:
+            return int(head)
+        except ValueError:
+            return 1
+    return 1
+
+
 def recompute_load(week: dict[str, Any], athlete: dict[str, Any]) -> dict[str, Any]:
     """Нагрузка недели — пересчётом из структуры, моделью пайплайна.
 
@@ -516,6 +615,12 @@ def main() -> int:
             "long_km": long_km,
             "phase": entry["phase"],
             "target_h": entry["target_h"],
+            # Число сессий — из разбивки недели, а не руками: длинный
+            # бег + качественная работа + лёгкие пробежки + вел, плавание
+            # и ОФП. Рукописное число рядом с вычисляемым — два разных
+            # ответа на один вопрос.
+            "sessions_target": _sessions_count(entry, new),
+            "easy_runs": _easy_runs(_easy_km(new), _busy_windows(new)),
             "_daniels": {
                 "daniels_phase": entry["daniels_phase"],
                 "program_week": entry["program_week"],

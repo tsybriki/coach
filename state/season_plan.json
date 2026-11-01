@@ -105,7 +105,7 @@
       "_season_week_end": 20,
       "load_range_h": [
         10.59,
-        12.7
+        12.74
       ],
       "run_km_range": [
         55,
@@ -492,7 +492,7 @@
       "intensity_pct": 29.6,
       "deload": false,
       "deload_pct": 0.0,
-      "sessions_target": 6,
+      "sessions_target": 8,
       "_load_breakdown": {
         "run_h": 2.91,
         "run_long_h": 0.66,
@@ -517,7 +517,8 @@
         "quality_scale": null,
         "quality_minutes": 0,
         "quality_zones": {}
-      }
+      },
+      "easy_runs": 2
     },
     {
       "season_week": 2,
@@ -552,7 +553,7 @@
       "intensity_pct": 13.3,
       "deload": false,
       "deload_pct": 11.1,
-      "sessions_target": 7,
+      "sessions_target": 8,
       "_load_breakdown": {
         "run_h": 3.61,
         "run_long_h": 0.76,
@@ -577,7 +578,8 @@
         "quality_scale": null,
         "quality_minutes": 0,
         "quality_zones": {}
-      }
+      },
+      "easy_runs": 2
     },
     {
       "season_week": 3,
@@ -612,7 +614,7 @@
       "intensity_pct": 9.1,
       "deload": false,
       "deload_pct": 16.7,
-      "sessions_target": 7,
+      "sessions_target": 8,
       "_load_breakdown": {
         "run_h": 4.0,
         "run_long_h": 0.85,
@@ -637,7 +639,8 @@
         "quality_scale": null,
         "quality_minutes": 0,
         "quality_zones": {}
-      }
+      },
+      "easy_runs": 2
     },
     {
       "season_week": 4,
@@ -672,7 +675,7 @@
       "intensity_pct": 7.9,
       "deload": false,
       "deload_pct": 8.6,
-      "sessions_target": 7,
+      "sessions_target": 8,
       "_load_breakdown": {
         "run_h": 4.29,
         "run_long_h": 0.94,
@@ -697,7 +700,8 @@
         "quality_scale": "light",
         "quality_minutes": 0,
         "quality_zones": {}
-      }
+      },
+      "easy_runs": 2
     },
     {
       "season_week": 5,
@@ -732,7 +736,7 @@
       "intensity_pct": 11.5,
       "deload": false,
       "deload_pct": 5.3,
-      "sessions_target": 7,
+      "sessions_target": 8,
       "_load_breakdown": {
         "run_h": 4.85,
         "run_long_h": 1.04,
@@ -757,7 +761,8 @@
         "quality_scale": null,
         "quality_minutes": 0,
         "quality_zones": {}
-      }
+      },
+      "easy_runs": 2
     },
     {
       "season_week": 6,
@@ -792,7 +797,7 @@
       "intensity_pct": 5.2,
       "deload": false,
       "deload_pct": 5.0,
-      "sessions_target": 7,
+      "sessions_target": 8,
       "_load_breakdown": {
         "run_h": 5.26,
         "run_long_h": 1.13,
@@ -817,7 +822,8 @@
         "quality_scale": null,
         "quality_minutes": 0,
         "quality_zones": {}
-      }
+      },
+      "easy_runs": 2
     },
     {
       "season_week": 7,
@@ -881,7 +887,8 @@
           "R": 2400,
           "T": 8000
         }
-      }
+      },
+      "easy_runs": 2
     },
     {
       "season_week": 8,
@@ -944,7 +951,8 @@
           "E": 8000,
           "R": 8000
         }
-      }
+      },
+      "easy_runs": 1
     },
     {
       "season_week": 9,
@@ -1006,7 +1014,8 @@
         "quality_zones": {
           "T": 9600
         }
-      }
+      },
+      "easy_runs": 1
     },
     {
       "season_week": 10,
@@ -1069,7 +1078,8 @@
           "E": 4000,
           "R": 4800
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 11,
@@ -1133,7 +1143,8 @@
           "R": 4000,
           "T": 9600
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 12,
@@ -1197,7 +1208,8 @@
           "R": 4800,
           "T": 16000
         }
-      }
+      },
+      "easy_runs": 2
     },
     {
       "season_week": 13,
@@ -1252,16 +1264,17 @@
       "_daniels": {
         "daniels_phase": 2,
         "program_week": 25,
-        "plan_week": 12,
+        "plan_week": 11,
         "quality_goal": "threshold_speed",
         "quality_scale": "medium",
-        "quality_minutes": 503,
+        "quality_minutes": 180,
         "quality_zones": {
           "E": 4000,
-          "R": 4800,
-          "T": 16000
+          "R": 4000,
+          "T": 9600
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 14,
@@ -1323,7 +1336,8 @@
         "quality_zones": {
           "T": 4800
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 15,
@@ -1383,7 +1397,8 @@
         "quality_scale": "medium",
         "quality_minutes": 40,
         "quality_zones": {}
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 16,
@@ -1448,7 +1463,8 @@
           "R": 2400,
           "T": 9600
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 17,
@@ -1513,7 +1529,8 @@
           "R": 4000,
           "T": 9600
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 18,
@@ -1575,7 +1592,8 @@
         "quality_zones": {
           "T": 11200
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 19,
@@ -1639,53 +1657,54 @@
           "R": 4000,
           "T": 16000
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 20,
       "run_km": 70,
       "long_km": 18,
       "quality": {
-        "goal": "threshold_speed",
-        "scale": "medium",
+        "goal": "vo2max",
+        "scale": "heavy",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем VO2max",
         "scale_text": "высокая интенсивность",
         "develops": "Аэробная мощность — верхняя граница аэробной системы",
-        "variant_id": "4x1k",
-        "work_m": 4000,
-        "label": "4×1К @ 4:15"
+        "variant_id": "4x2k_vo2",
+        "work_m": 8000,
+        "label": "4×2К @ 4:10"
       },
       "core": "2×30м",
       "bike": "2×90м",
       "swim": "2×45м",
-      "total_h": 12.7,
+      "total_h": 12.74,
       "phase": "run_specific",
       "_total_h_model": {
-        "run_h": 7.2,
+        "run_h": 7.24,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
         "note": "вычислено моделью нагрузки пайплайна"
       },
       "run_km_long": 18.0,
-      "run_km_quality": 4.0,
-      "run_km_easy": 48.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 44.0,
       "intensity_pct": 12.3,
       "deload": false,
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 7.2,
+        "run_h": 7.24,
         "run_long_h": 1.7,
-        "run_easy_h": 4.53,
-        "run_quality_h": 0.97,
+        "run_easy_h": 4.16,
+        "run_quality_h": 1.38,
         "bike_h": 3.0,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "total_h": 12.7,
-        "quality_min": 58,
-        "quality_work_km": 4.0,
+        "total_h": 12.74,
+        "quality_min": 83,
+        "quality_work_km": 8.0,
         "run_km": 70.0,
         "long_km": 18.0,
         "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
@@ -1694,16 +1713,15 @@
       "_daniels": {
         "daniels_phase": 3,
         "program_week": 26,
-        "plan_week": 18,
-        "quality_goal": "threshold_speed",
-        "quality_scale": "medium",
-        "quality_minutes": 180,
+        "plan_week": 17,
+        "quality_goal": "vo2max",
+        "quality_scale": "heavy",
+        "quality_minutes": 8,
         "quality_zones": {
-          "E": 4000,
-          "R": 4000,
-          "T": 16000
+          "T": 11200
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 21,
@@ -1768,7 +1786,8 @@
           "R": 800,
           "T": 13600
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 22,
@@ -1833,7 +1852,8 @@
           "R": 800,
           "T": 13600
         }
-      }
+      },
+      "easy_runs": 0
     },
     {
       "season_week": 23,
@@ -1895,7 +1915,8 @@
         "quality_zones": {
           "T": 19200
         }
-      }
+      },
+      "easy_runs": 3
     },
     {
       "season_week": 24,
@@ -1930,7 +1951,7 @@
       "intensity_pct": 10.0,
       "deload": true,
       "deload_pct": -30.9,
-      "sessions_target": 7,
+      "sessions_target": 8,
       "_load_breakdown": {
         "run_h": 4.23,
         "run_long_h": 0.94,
@@ -1960,7 +1981,8 @@
           "R": 1600,
           "T": 4000
         }
-      }
+      },
+      "easy_runs": 3
     },
     {
       "season_week": 25,
@@ -1995,7 +2017,7 @@
       "intensity_pct": 7.3,
       "deload": true,
       "deload_pct": -21.1,
-      "sessions_target": 7,
+      "sessions_target": 8,
       "_load_breakdown": {
         "run_h": 3.57,
         "run_long_h": 0.76,
@@ -2025,7 +2047,8 @@
           "R": 2400,
           "T": 4000
         }
-      }
+      },
+      "easy_runs": 3
     },
     {
       "season_week": 26,
@@ -2060,7 +2083,7 @@
       "intensity_pct": 9.2,
       "deload": true,
       "deload_pct": -20.0,
-      "sessions_target": 6,
+      "sessions_target": 7,
       "_load_breakdown": {
         "run_h": 2.81,
         "run_long_h": 0.57,
@@ -2089,7 +2112,8 @@
           "R": 2000,
           "T": 8000
         }
-      }
+      },
+      "easy_runs": 2
     },
     {
       "season_week": 27,
@@ -2153,7 +2177,8 @@
           "R": 800,
           "T": 4800
         }
-      }
+      },
+      "easy_runs": 1
     },
     {
       "season_week": 28,
@@ -2209,7 +2234,9 @@
         "swim_h": 0.0,
         "ofp_h": 0.25,
         "note": "вычислено моделью нагрузки пайплайна"
-      }
+      },
+      "sessions_target": 5,
+      "easy_runs": 1
     }
   ],
   "season_goal": {
