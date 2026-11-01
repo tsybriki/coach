@@ -2,7 +2,7 @@
   "title": "Макро-план сезона",
   "season_start": "2026-10-11",
   "total_weeks": 49,
-  "detailed_weeks": 28,
+  "detailed_weeks": 27,
   "phases": [
     {
       "id": "run_base",
@@ -50,7 +50,7 @@
           "run_km_easy": 12.0,
           "intensity_pct": 29.6,
           "deload": false,
-          "sessions_target": 6,
+          "sessions_target": 8,
           "actual": {
             "run_km": 51.2,
             "bike_km": 5.0,
@@ -96,7 +96,7 @@
           "run_km_easy": 20.0,
           "intensity_pct": 13.3,
           "deload": false,
-          "sessions_target": 7,
+          "sessions_target": 8,
           "actual": {
             "run_km": 0,
             "bike_km": 90.0,
@@ -114,7 +114,7 @@
           "end": "2026-10-31",
           "start_d": "25–31 окт",
           "detailed": true,
-          "is_now": true,
+          "is_now": false,
           "is_next": false,
           "run_km": 36,
           "long_km": 9,
@@ -154,7 +154,7 @@
           "run_km_easy": 23.8,
           "intensity_pct": 9.1,
           "deload": false,
-          "sessions_target": 7,
+          "sessions_target": 8,
           "actual": {
             "run_km": 52.9,
             "bike_km": 16.6,
@@ -172,8 +172,8 @@
           "end": "2026-11-07",
           "start_d": "1–7 ноя",
           "detailed": true,
-          "is_now": false,
-          "is_next": true,
+          "is_now": true,
+          "is_next": false,
           "run_km": 41,
           "long_km": 10,
           "run_h": 3.9,
@@ -204,8 +204,18 @@
           "run_km_easy": 28.0,
           "intensity_pct": 7.9,
           "deload": false,
-          "sessions_target": 7,
-          "is_tt": true
+          "sessions_target": 8,
+          "is_tt": true,
+          "actual": {
+            "run_km": 14.0,
+            "bike_km": 0,
+            "swim_km": 0,
+            "sessions": 1,
+            "total_h": 1.35,
+            "run_h": 1.4,
+            "bike_h": 0.0,
+            "swim_h": 0.0
+          }
         },
         {
           "w": 5,
@@ -214,7 +224,7 @@
           "start_d": "8–14 ноя",
           "detailed": true,
           "is_now": false,
-          "is_next": false,
+          "is_next": true,
           "run_km": 45,
           "long_km": 11,
           "run_h": 4.3,
@@ -241,7 +251,7 @@
           "run_km_easy": 29.4,
           "intensity_pct": 11.5,
           "deload": false,
-          "sessions_target": 7
+          "sessions_target": 8
         },
         {
           "w": 6,
@@ -277,7 +287,7 @@
           "run_km_easy": 35.8,
           "intensity_pct": 5.2,
           "deload": false,
-          "sessions_target": 7
+          "sessions_target": 8
         }
       ],
       "has_actual": true
@@ -832,26 +842,26 @@
           "ofp_h": 1.0,
           "goal_text": "Развиваем VO2max",
           "phase": "run_specific",
-          "color": "orange",
+          "color": "red",
           "variants": [
             {
-              "label": "4×1К @ 4:15",
-              "work_m": 4000
+              "label": "4×2К @ 4:10",
+              "work_m": 8000
             },
             {
-              "label": "5×1К @ 4:12",
-              "work_m": 5000
+              "label": "5×2К @ 4:05",
+              "work_m": 10000
             }
           ],
           "comp_h": 12.2,
-          "total_h": 12.7,
-          "variant_id": "4x1k",
-          "quality_label": "4×1К @ 4:15",
-          "quality_work_m": 4000,
+          "total_h": 12.74,
+          "variant_id": "4x2k_vo2",
+          "quality_label": "4×2К @ 4:10",
+          "quality_work_m": 8000,
           "quality_paces": [],
           "run_km_long": 18.0,
-          "run_km_quality": 4.0,
-          "run_km_easy": 48.0,
+          "run_km_quality": 8.0,
+          "run_km_easy": 44.0,
           "intensity_pct": 12.3,
           "deload": false,
           "sessions_target": 8
@@ -864,9 +874,9 @@
       "goal": "Поднимаем гонка-темп, подводим к гонке",
       "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей.",
       "w_from": 21,
-      "w_to": 28,
-      "date_range": "28 фев 2027 — 24 апр 2027",
-      "weeks_count": 8,
+      "w_to": 27,
+      "date_range": "28 фев 2027 — 17 апр 2027",
+      "weeks_count": 7,
       "target_h": 4.5,
       "is_event": false,
       "notes": "",
@@ -1018,7 +1028,7 @@
           "run_km_easy": 25.6,
           "intensity_pct": 10.0,
           "deload": true,
-          "sessions_target": 7
+          "sessions_target": 8
         },
         {
           "w": 25,
@@ -1054,7 +1064,7 @@
           "run_km_easy": 20.6,
           "intensity_pct": 7.3,
           "deload": true,
-          "sessions_target": 7
+          "sessions_target": 8
         },
         {
           "w": 26,
@@ -1090,7 +1100,7 @@
           "run_km_easy": 14.6,
           "intensity_pct": 9.2,
           "deload": true,
-          "sessions_target": 6
+          "sessions_target": 7
         },
         {
           "w": 27,
@@ -1127,46 +1137,6 @@
           "intensity_pct": 15.0,
           "deload": true,
           "sessions_target": 6
-        },
-        {
-          "w": 28,
-          "start": "2027-04-18",
-          "end": "2027-04-24",
-          "start_d": "18–24 апр",
-          "detailed": true,
-          "is_now": false,
-          "is_next": false,
-          "run_km": 8.0,
-          "long_km": 0.0,
-          "run_h": 0.8,
-          "bike_h": 0.0,
-          "swim_h": 0.0,
-          "ofp_h": 0.2,
-          "goal_text": "Гонка",
-          "phase": "run_taper",
-          "color": "cp",
-          "variants": [
-            {
-              "label": "Темповый тест",
-              "work_m": 3000
-            },
-            {
-              "label": "3К на максимум",
-              "work_m": 3000
-            }
-          ],
-          "comp_h": 1.0,
-          "total_h": 1.4,
-          "variant_id": "tt_race",
-          "quality_label": "10К @ race pace — гонка",
-          "quality_work_m": 5000,
-          "quality_paces": [],
-          "run_km_long": 0.0,
-          "run_km_quality": 5.0,
-          "run_km_easy": 3.0,
-          "intensity_pct": 62.5,
-          "deload": null,
-          "sessions_target": null
         }
       ],
       "has_actual": false
@@ -1233,48 +1203,7 @@
       "target_h": 5,
       "is_event": false,
       "notes": "снижение бега, вход в плавание/вело",
-      "detailed": [
-        {
-          "w": 28,
-          "start": "2027-04-18",
-          "end": "2027-04-24",
-          "start_d": "18–24 апр",
-          "detailed": true,
-          "is_now": false,
-          "is_next": false,
-          "run_km": 8.0,
-          "long_km": 0.0,
-          "run_h": 0.8,
-          "bike_h": 0.0,
-          "swim_h": 0.0,
-          "ofp_h": 0.2,
-          "goal_text": "Гонка",
-          "phase": "run_taper",
-          "color": "cp",
-          "variants": [
-            {
-              "label": "Темповый тест",
-              "work_m": 3000
-            },
-            {
-              "label": "3К на максимум",
-              "work_m": 3000
-            }
-          ],
-          "comp_h": 1.0,
-          "total_h": 1.4,
-          "variant_id": "tt_race",
-          "quality_label": "10К @ race pace — гонка",
-          "quality_work_m": 5000,
-          "quality_paces": [],
-          "run_km_long": 0.0,
-          "run_km_quality": 5.0,
-          "run_km_easy": 3.0,
-          "intensity_pct": 62.5,
-          "deload": null,
-          "sessions_target": null
-        }
-      ],
+      "detailed": [],
       "has_actual": false
     },
     {
@@ -1383,7 +1312,7 @@
       "run_km_easy": 12.0,
       "intensity_pct": 29.6,
       "deload": false,
-      "sessions_target": 6,
+      "sessions_target": 8,
       "actual": {
         "run_km": 51.2,
         "bike_km": 5.0,
@@ -1429,7 +1358,7 @@
       "run_km_easy": 20.0,
       "intensity_pct": 13.3,
       "deload": false,
-      "sessions_target": 7,
+      "sessions_target": 8,
       "actual": {
         "run_km": 0,
         "bike_km": 90.0,
@@ -1447,7 +1376,7 @@
       "end": "2026-10-31",
       "start_d": "25–31 окт",
       "detailed": true,
-      "is_now": true,
+      "is_now": false,
       "is_next": false,
       "run_km": 36,
       "long_km": 9,
@@ -1487,7 +1416,7 @@
       "run_km_easy": 23.8,
       "intensity_pct": 9.1,
       "deload": false,
-      "sessions_target": 7,
+      "sessions_target": 8,
       "actual": {
         "run_km": 52.9,
         "bike_km": 16.6,
@@ -1505,8 +1434,8 @@
       "end": "2026-11-07",
       "start_d": "1–7 ноя",
       "detailed": true,
-      "is_now": false,
-      "is_next": true,
+      "is_now": true,
+      "is_next": false,
       "run_km": 41,
       "long_km": 10,
       "run_h": 3.9,
@@ -1537,8 +1466,18 @@
       "run_km_easy": 28.0,
       "intensity_pct": 7.9,
       "deload": false,
-      "sessions_target": 7,
-      "is_tt": true
+      "sessions_target": 8,
+      "is_tt": true,
+      "actual": {
+        "run_km": 14.0,
+        "bike_km": 0,
+        "swim_km": 0,
+        "sessions": 1,
+        "total_h": 1.35,
+        "run_h": 1.4,
+        "bike_h": 0.0,
+        "swim_h": 0.0
+      }
     },
     {
       "w": 5,
@@ -1547,7 +1486,7 @@
       "start_d": "8–14 ноя",
       "detailed": true,
       "is_now": false,
-      "is_next": false,
+      "is_next": true,
       "run_km": 45,
       "long_km": 11,
       "run_h": 4.3,
@@ -1574,7 +1513,7 @@
       "run_km_easy": 29.4,
       "intensity_pct": 11.5,
       "deload": false,
-      "sessions_target": 7
+      "sessions_target": 8
     },
     {
       "w": 6,
@@ -1610,7 +1549,7 @@
       "run_km_easy": 35.8,
       "intensity_pct": 5.2,
       "deload": false,
-      "sessions_target": 7
+      "sessions_target": 8
     },
     {
       "w": 7,
@@ -2135,26 +2074,26 @@
       "ofp_h": 1.0,
       "goal_text": "Развиваем VO2max",
       "phase": "run_specific",
-      "color": "orange",
+      "color": "red",
       "variants": [
         {
-          "label": "4×1К @ 4:15",
-          "work_m": 4000
+          "label": "4×2К @ 4:10",
+          "work_m": 8000
         },
         {
-          "label": "5×1К @ 4:12",
-          "work_m": 5000
+          "label": "5×2К @ 4:05",
+          "work_m": 10000
         }
       ],
       "comp_h": 12.2,
-      "total_h": 12.7,
-      "variant_id": "4x1k",
-      "quality_label": "4×1К @ 4:15",
-      "quality_work_m": 4000,
+      "total_h": 12.74,
+      "variant_id": "4x2k_vo2",
+      "quality_label": "4×2К @ 4:10",
+      "quality_work_m": 8000,
       "quality_paces": [],
       "run_km_long": 18.0,
-      "run_km_quality": 4.0,
-      "run_km_easy": 48.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 44.0,
       "intensity_pct": 12.3,
       "deload": false,
       "sessions_target": 8
@@ -2306,7 +2245,7 @@
       "run_km_easy": 25.6,
       "intensity_pct": 10.0,
       "deload": true,
-      "sessions_target": 7
+      "sessions_target": 8
     },
     {
       "w": 25,
@@ -2342,7 +2281,7 @@
       "run_km_easy": 20.6,
       "intensity_pct": 7.3,
       "deload": true,
-      "sessions_target": 7
+      "sessions_target": 8
     },
     {
       "w": 26,
@@ -2378,7 +2317,7 @@
       "run_km_easy": 14.6,
       "intensity_pct": 9.2,
       "deload": true,
-      "sessions_target": 6
+      "sessions_target": 7
     },
     {
       "w": 27,
@@ -2421,40 +2360,10 @@
       "start": "2027-04-18",
       "end": "2027-04-24",
       "start_d": "18–24 апр",
-      "detailed": true,
+      "detailed": false,
       "is_now": false,
       "is_next": false,
-      "run_km": 8.0,
-      "long_km": 0.0,
-      "run_h": 0.8,
-      "bike_h": 0.0,
-      "swim_h": 0.0,
-      "ofp_h": 0.2,
-      "goal_text": "Гонка",
-      "phase": "run_taper",
-      "color": "cp",
-      "variants": [
-        {
-          "label": "Темповый тест",
-          "work_m": 3000
-        },
-        {
-          "label": "3К на максимум",
-          "work_m": 3000
-        }
-      ],
-      "comp_h": 1.0,
-      "total_h": 1.4,
-      "variant_id": "tt_race",
-      "quality_label": "10К @ race pace — гонка",
-      "quality_work_m": 5000,
-      "quality_paces": [],
-      "run_km_long": 0.0,
-      "run_km_quality": 5.0,
-      "run_km_easy": 3.0,
-      "intensity_pct": 62.5,
-      "deload": null,
-      "sessions_target": null
+      "color": "gray"
     },
     {
       "w": 29,
@@ -2745,10 +2654,10 @@
   ],
   "peak_week": 20,
   "peak_km": 70,
-  "max_week_h": 12.7,
-  "actual_weeks": 3,
-  "actual_run_km": 104.1,
-  "actual_h": 18.2,
+  "max_week_h": 12.74,
+  "actual_weeks": 4,
+  "actual_run_km": 118.1,
+  "actual_h": 19.6,
   "color_label": {
     "teal": "объём",
     "orange": "threshold / tempo",
@@ -3524,6 +3433,6 @@
       "decision": ""
     }
   ],
-  "current_week": 3,
-  "generated_at": "31.10.2026 22:57"
+  "current_week": 4,
+  "generated_at": "01.11.2026 14:30"
 }

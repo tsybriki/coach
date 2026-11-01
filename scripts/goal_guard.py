@@ -138,20 +138,25 @@ def check(sp: dict, at: dict) -> list[str]:
 
     # 2) race-pace блок выходит на темп цели
     race_week = None
+    race_wk = None
     for r in sp.get("races", []):
         if r.get("goal_id") == (prim or {}).get("id"):
             race_week = r
             break
     if race_week:
-        race_wk = None
         from lib import season_week
         try:
             race_wk = season_week.date_to_season_week(race_week["date"], sp["season_start_date"])
         except Exception:
             pass
         if race_wk:
+            # Блок гонка-темпа — последние недели макро перед гонкой.
+            # Неделя гонки в макро НЕТ (событие, а не тренировка), поэтому
+            # блок заканчивается последней неделей макро, а не неделей гонки.
             block = [w for w in sp.get("weekly_macro", [])
                      if race_wk - 6 <= w["season_week"] <= race_wk]
+            block_from = min((w["season_week"] for w in block), default=race_wk - 6)
+            block_to = max((w["season_week"] for w in block), default=race_wk)
             best = None
             for w in block:
                 # темпы — из каталога по variant_id (макро их не хранит)
@@ -162,12 +167,12 @@ def check(sp: dict, at: dict) -> list[str]:
                     if best is None or v < best:
                         best = v
             if best is None:
-                problems.append("race-pace блок W{}-W{}: нет ни одного темпа".format(race_wk - 6, race_wk))
+                problems.append("race-pace блок W{}-W{}: нет ни одного темпа".format(block_from, block_to))
             elif best > tp + 0.5:
                 problems.append(
                     "race-pace блок W{}-W{}: лучший темп {} ({:.0f} с/км) медленнее цели {} ({:.0f} с/км). "
                     "Гонка на 40:00 не выйдет.".format(
-                        race_wk - 6, race_wk, fmt(best), best, target_pace, tp))
+                        block_from, block_to, fmt(best), best, target_pace, tp))
 
     # 3) TT на гонку-темп
     tt_found = False
@@ -233,17 +238,20 @@ def check(sp: dict, at: dict) -> list[str]:
                     (w.get("quality") or {}).get("label")
                     or (w.get("quality") or {}).get("variant_id", "")))
 
-    # 4c) Неделя гонки: темп должен быть ≤ цели
-    if race_wk and race_wk in wm:
+    # 4c) Последняя неделя макро: её темп должен быть ≤ цели.
+    #     Недели гонки в макро нет (событие, а не тренировка), поэтому
+    #     проверяется последняя неделя плана перед гонкой.
+    if race_wk and wm:
+        last_macro_week = max(wm)
         vals = []
-        for ps in _week_paces(wm[race_wk]):
+        for ps in _week_paces(wm[last_macro_week]):
             v = pace_sec(ps)
             if v is not None:
                 vals.append(v)
         if vals and min(vals) > tp + 0.5:
             problems.append(
-                "неделя гонки W{}: лучший темп {} ({:.0f} с/км) медленнее цели {} ({:.0f} с/км)".format(
-                    race_wk, fmt(min(vals)), min(vals), target_pace, tp))
+                "последняя неделя макро W{}: лучший темп {} ({:.0f} с/км) медленнее цели {} ({:.0f} с/км)".format(
+                    last_macro_week, fmt(min(vals)), min(vals), target_pace, tp))
 
     # 5) athlete.json не противоречит
     tp_at = (at.get("current_form") or {}).get("training_paces") or {}

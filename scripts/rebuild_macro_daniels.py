@@ -107,9 +107,10 @@ ZONE_TO_TEMPLATE = {
 # Доля недельного километража в длинном беге — по правилу Дэниэлса.
 LONG_FRACTION = 0.25
 
-# Неделя гонки: структура и объём — из гонки, а не из программы.
-RACE_GOAL = "time_trial"
-RACE_VARIANT = "tt_race"
+# Неделя гонки в макро-плана НЕТ: гонка — событие, а не тренировка, и
+# планировать её не нужно (Кирилл, 01.11.2026). Расписание программы
+# покрывает недели ДО гонки, макро заканчивается на предпоследней неделе
+# перед гонкой.
 
 
 def control_points_by_week(season_plan: dict[str, Any]) -> dict[int, dict[str, Any]]:
@@ -526,35 +527,22 @@ def main() -> int:
     race_date = date.fromisoformat(race["date"])
     # Горизонт расписания программы — недели ДО гонки.
     #
-    # Неделя гонки — часть четвёртой фазы (Кирилл, 31.10.2026), и у неё
-    # нет недели программы: это событие, а не тренировка. Поэтому она не
-    # входит в расписание программы, а добавляется в конец четвёртой фазы.
+    # Неделя гонки в макро-план НЕ входит: гонка — событие, а не
+    # тренировка, и планировать её не нужно (Кирилл, 01.11.2026). Гонка
+    # живёт в календаре сезона, а не в списке недель макро.
     #
-    # Расписание считается на N недель ДО гонки, а не на N+1: лишняя
-    # неделя программы тогда уходит по `EXTRA` в фазу по кругу, как у
-    # планировщика, и макро с планировщиком считают одно (тест
+    # Расписание считается на N недель ДО гонки: лишняя неделя программы
+    # тогда уходит по `EXTRA` в фазу по кругу, как у планировщика, и макро
+    # с планировщиком считают одно (тест
     # `test_macro_planner_agreement.py`).
     weeks_to_race = (race_date - start).days // 7
     race_week = weeks_to_race + 1
 
     macro = build_macro(weeks_to_race, season_plan, athlete)
-    # Неделя гонки — часть четвёртой фазы: её программной недели нет,
-    # это событие, а не тренировка. Объём задаёт гонка.
-    macro.append({
-        "season_week": race_week,
-        "program_week": None,
-        "plan_week": None,
-        "daniels_phase": 4,
-        "phase": "run_taper",
-        "quality_goal": "time_trial",
-        "quality_zones": {},
-        "quality_minutes": 0,
-        "run_km": 8.0,
-        "target_h": 1.4,
-    })
 
     controls = control_points_by_week(season_plan)
     print(f"гонка: {race_date} → W{race_week} · недель до старта {weeks_to_race}")
+    print(f"неделя гонки в макро не планируется: макро покрывает W1..W{weeks_to_race}")
     print(f"пересобираем с W{args.from_week} (W1..W{args.from_week - 1} не трогаем)")
     print("контрольные точки: "
           + ", ".join(f"W{week} {point['variant_id']}"
@@ -593,22 +581,13 @@ def main() -> int:
             rebuilt.append(previous)
             continue
 
-        is_race = entry["program_week"] is None
         control = controls.get(season_week)
-        if is_race:
-            quality = {"goal": RACE_GOAL, "scale": "light",
-                       "variant_id": RACE_VARIANT, "work_m": 5000,
-                       "label": "10К @ race pace — гонка"}
-        else:
-            quality = quality_for(entry, templates, history, control)
+        quality = quality_for(entry, templates, history, control)
 
         new = dict(previous)
         run_km = entry["run_km"]
-        # Длинный бег — доля недельного километража. В гонку его нет.
-        if is_race:
-            long_km = 0.0
-        else:
-            long_km = round(run_km * LONG_FRACTION)
+        # Длинный бег — доля недельного километража.
+        long_km = round(run_km * LONG_FRACTION)
         new.update({
             "season_week": season_week,
             "run_km": run_km,

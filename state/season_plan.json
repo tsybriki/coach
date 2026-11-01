@@ -121,18 +121,18 @@
       "id": "run_taper",
       "goal_id": "g_run_spring",
       "start": "2027-02-28",
-      "end": "2027-04-24",
+      "end": "2027-04-17",
       "hours_per_week_target": 4.5,
       "goal": "Поднимаем гонка-темп, подводим к гонке",
       "focus": "Сброс объёма при сохранении интенсивности — чтобы форма пришла к гонке свежей.",
       "_season_week_start": 21,
-      "_season_week_end": 28,
+      "_season_week_end": 27,
       "load_range_h": [
-        1.4,
+        3.15,
         11.81
       ],
       "run_km_range": [
-        8.0,
+        16,
         60
       ],
       "sessions_target": 7,
@@ -2178,64 +2178,6 @@
           "T": 4800
         }
       },
-      "easy_runs": 1
-    },
-    {
-      "season_week": 28,
-      "run_km": 8.0,
-      "long_km": 0.0,
-      "quality": {
-        "goal": "time_trial",
-        "scale": "light",
-        "goal_text": "Гонка",
-        "scale_text": "всё или ничего",
-        "develops": "Гонка S25 Berlin 10K — главная цель сезона",
-        "variant_id": "tt_race",
-        "work_m": 5000,
-        "label": "10К @ race pace — гонка"
-      },
-      "core": "1×15м",
-      "bike": "0",
-      "swim": "0",
-      "phase": "run_taper",
-      "total_h": 1.4,
-      "target_h": 1.4,
-      "run_km_long": 0.0,
-      "run_km_quality": 5.0,
-      "run_km_easy": 3.0,
-      "intensity_pct": 62.5,
-      "_load_breakdown": {
-        "run_h": 1.15,
-        "run_long_h": 0.0,
-        "run_easy_h": 0.28,
-        "run_quality_h": 0.87,
-        "bike_h": 0.0,
-        "swim_h": 0.0,
-        "ofp_h": 0.25,
-        "total_h": 1.4,
-        "quality_min": 52,
-        "quality_work_km": 5.0,
-        "run_km": 8.0,
-        "long_km": 0.0,
-        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
-      },
-      "_daniels": {
-        "daniels_phase": 4,
-        "program_week": null,
-        "plan_week": null,
-        "quality_goal": "time_trial",
-        "quality_scale": "light",
-        "quality_minutes": 0,
-        "quality_zones": {}
-      },
-      "_total_h_model": {
-        "run_h": 1.15,
-        "bike_h": 0.0,
-        "swim_h": 0.0,
-        "ofp_h": 0.25,
-        "note": "вычислено моделью нагрузки пайплайна"
-      },
-      "sessions_target": 5,
       "easy_runs": 1
     }
   ],

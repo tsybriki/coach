@@ -145,25 +145,28 @@ def test_goal_guard_macro_leads_to_target():
     problems = goal_guard.check(sp, at)
     assert not problems, "goal_guard нашёл нарушения:\n  - " + "\n  - ".join(problems)
 
-    # 3) Guard ловит откат: если неделя гонки откатывается на медленный темп,
-    #    проверка обязана ругнуться
-    import copy
-    # Откат: замедляем темпы варианта гонку-недели в КАТАЛОГЕ.
-    # Структура живёт в каталоге — макро хранит только variant_id.
+    # 3) Guard ловит откат: если блок гонка-темпа откатывается на медленный
+    #    темп, проверка обязана ругнуться.
+    #
+    #    Неделя гонки в макро НЕТ (событие, а не тренировка), поэтому
+    #    откатывать нечего: блок гонка-темпа — это вариант `taper_400`
+    #    в последних неделях макро перед гонкой.
+    #
+    #    Структура живёт в каталоге — макро хранит только variant_id.
     tpl_path = ROOT / "state/workout_templates.json"
     tpl_orig = tpl_path.read_text(encoding="utf-8")
     try:
         tpl = json.loads(tpl_orig)
-        for v in tpl["templates"]["time_trial"]["variants"]:
-            if v["id"] == "tt_race":
+        for v in tpl["templates"]["taper_race_pace"]["variants"]:
+            if v["id"] == "taper_400":
                 for b in v.get("blocks") or []:
                     b["pace_legacy"] = "4:24"
                     b["daniels_zone"] = "threshold"
                     b["pace_offset_sec"] = 0
         tpl_path.write_text(json.dumps(tpl, ensure_ascii=False, indent=2), encoding="utf-8")
-        assert goal_guard.check(sp, at), "goal_guard НЕ заметил откат недели гонки"
+        assert goal_guard.check(sp, at), "goal_guard НЕ заметил откат блока гонка-темпа"
     finally:
-        tpl_path.write_text(tpl_orig, encoding="utf-8")
+        tpl_path.write_text(tpl_orig)
 
     print("  ✓ goal_guard: макро ведёт к цели, откат ловится")
 
