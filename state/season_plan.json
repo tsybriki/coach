@@ -462,7 +462,7 @@
     {
       "season_week": 1,
       "run_km": 27,
-      "long_km": 12,
+      "long_km": 7,
       "quality": {
         "goal": "progression",
         "scale": "light",
@@ -480,36 +480,49 @@
       "total_h": 4.99,
       "phase": "run_base",
       "_total_h_model": {
-        "run_h": 2.51,
+        "run_h": 2.91,
         "bike_h": 0.75,
         "swim_h": 0.5,
         "ofp_h": 0.83,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 12.0,
+      "run_km_long": 7.0,
       "run_km_quality": 8.0,
-      "run_km_easy": 7.0,
+      "run_km_easy": 12.0,
       "intensity_pct": 29.6,
       "deload": false,
       "deload_pct": 0.0,
       "sessions_target": 6,
       "_load_breakdown": {
         "run_h": 2.91,
-        "run_long_h": 1.13,
-        "run_easy_h": 0.66,
+        "run_long_h": 0.66,
+        "run_easy_h": 1.13,
         "run_quality_h": 1.12,
         "bike_h": 0.75,
         "swim_h": 0.5,
         "ofp_h": 0.83,
+        "total_h": 4.99,
         "quality_min": 67,
-        "vdot": 48.0
+        "quality_work_km": 8.0,
+        "run_km": 27.0,
+        "long_km": 7.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 4.99
+      "target_h": 4.96,
+      "_daniels": {
+        "daniels_phase": 1,
+        "program_week": 1,
+        "plan_week": 1,
+        "quality_goal": null,
+        "quality_scale": null,
+        "quality_minutes": 0,
+        "quality_zones": {}
+      }
     },
     {
       "season_week": 2,
-      "run_km": 30,
-      "long_km": 13,
+      "run_km": 32,
+      "long_km": 8,
       "quality": {
         "goal": "threshold_speed",
         "scale": "light",
@@ -524,39 +537,52 @@
       "core": "2×25м",
       "bike": "1×45м",
       "swim": "1×30м",
-      "total_h": 5.51,
+      "total_h": 5.69,
       "phase": "run_base",
       "_total_h_model": {
-        "run_h": 3.01,
+        "run_h": 3.61,
         "bike_h": 0.75,
         "swim_h": 0.5,
         "ofp_h": 0.83,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 13.0,
+      "run_km_long": 8.0,
       "run_km_quality": 4.0,
-      "run_km_easy": 13.0,
+      "run_km_easy": 20.0,
       "intensity_pct": 13.3,
       "deload": false,
       "deload_pct": 11.1,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 3.42,
-        "run_long_h": 1.23,
-        "run_easy_h": 1.23,
+        "run_h": 3.61,
+        "run_long_h": 0.76,
+        "run_easy_h": 1.89,
         "run_quality_h": 0.97,
         "bike_h": 0.75,
         "swim_h": 0.5,
         "ofp_h": 0.83,
+        "total_h": 5.69,
         "quality_min": 58,
-        "vdot": 48.0
+        "quality_work_km": 4.0,
+        "run_km": 32.0,
+        "long_km": 8.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 5.51
+      "target_h": 5.92,
+      "_daniels": {
+        "daniels_phase": 1,
+        "program_week": 2,
+        "plan_week": 2,
+        "quality_goal": null,
+        "quality_scale": null,
+        "quality_minutes": 0,
+        "quality_zones": {}
+      }
     },
     {
       "season_week": 3,
-      "run_km": 35,
-      "long_km": 14,
+      "run_km": 36,
+      "long_km": 9,
       "quality": {
         "goal": "vo2max",
         "scale": "medium",
@@ -571,34 +597,47 @@
       "core": "2×25м",
       "bike": "1×60м",
       "swim": "1×30м",
-      "total_h": 6.24,
+      "total_h": 6.33,
       "phase": "run_base",
       "_total_h_model": {
-        "run_h": 3.08,
+        "run_h": 4.0,
         "bike_h": 1.0,
         "swim_h": 0.5,
         "ofp_h": 0.83,
-        "note": "вычислено: длинная по Z2 + качественная по темпу цели + остальное по Z2"
+        "note": "вычислено моделью нагрузки пайплайна"
       },
-      "run_km_long": 14.0,
+      "run_km_long": 9.0,
       "run_km_quality": 3.2,
-      "run_km_easy": 17.8,
+      "run_km_easy": 23.8,
       "intensity_pct": 9.1,
       "deload": false,
       "deload_pct": 16.7,
       "sessions_target": 7,
       "_load_breakdown": {
-        "run_h": 3.9,
-        "run_long_h": 1.32,
-        "run_easy_h": 1.68,
+        "run_h": 4.0,
+        "run_long_h": 0.85,
+        "run_easy_h": 2.25,
         "run_quality_h": 0.9,
         "bike_h": 1.0,
         "swim_h": 0.5,
         "ofp_h": 0.83,
+        "total_h": 6.33,
         "quality_min": 54,
-        "vdot": 48.0
+        "quality_work_km": 3.2,
+        "run_km": 36.0,
+        "long_km": 9.0,
+        "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
       },
-      "target_h": 6.24
+      "target_h": 6.87,
+      "_daniels": {
+        "daniels_phase": 1,
+        "program_week": 3,
+        "plan_week": 3,
+        "quality_goal": null,
+        "quality_scale": null,
+        "quality_minutes": 0,
+        "quality_zones": {}
+      }
     },
     {
       "season_week": 4,
