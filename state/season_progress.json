@@ -108,7 +108,7 @@
           "unit": "К/нед",
           "severity": "hard",
           "source": "auto",
-          "value": 25.6,
+          "value": 34.7,
           "status": "fail",
           "note": ""
         },
@@ -121,8 +121,8 @@
           "unit": "сессий",
           "severity": "soft",
           "source": "auto",
-          "value": 6.5,
-          "status": "warn",
+          "value": 7.0,
+          "status": "pass",
           "note": ""
         },
         {
@@ -147,8 +147,8 @@
           "unit": "ч/нед",
           "severity": "soft",
           "source": "auto",
-          "value": 5.71,
-          "status": "pass",
+          "value": 6.08,
+          "status": "warn",
           "note": ""
         }
       ],

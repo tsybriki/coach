@@ -199,14 +199,37 @@ def week_profile(week: Any, pace_by_zone: dict[str, float]) -> dict[str, Any]:
     }
 
 
+# Форма фазы I по Дэниэлсу (Кирилл, 02.11.2026).
+#
+# 7 тренировок в неделю в лёгкой зоне; к четырём из них (не к длинной) —
+# 6-8 коротких быстрых отрезков по 100 м через 100 м; к трём — ОФП
+# 15 мин в конце; недельный километраж 55-57, не больше.
+#
+# ОФП идёт **внутри** пробежек, поэтому отдельных тренировок ОФП в
+# неделе нет: 7 пробежек + вел + плавание.
+PHASE_FORM = {
+    1: {
+        "runs": 7,
+        "ofp_runs": 3,
+        "ofp_minutes": 15,
+        "km_min": 55.0,
+        "km_max": 57.0,
+        "ofp_inside_runs": True,
+    },
+}
+
+
 # Диапазоны объёма и нагрузки фаз — по программе Дэниэлса.
 #
 # Объём внутри фазы растёт от её начала к концу; пик — в последней
 # фазе перед гонкой, а тапер (неделя гонки) объём снимает.
 PHASE_RANGES = {
-    "run_base": ((27.0, 50.0), (4.96, 9.74)),
-    "run_build": ((50.0, 65.0), (9.69, 11.94)),
-    "run_specific": ((55.0, 70.0), (7.34, 12.64)),
+    # Фаза I: форма недели задаёт 55-57 км (7 пробежек в неделю).
+    # Дальше объём только растёт: падение на границе фаз — это
+    # «неправильный тапер», а фазы идут подряд.
+    "run_base": ((55.0, 57.0), (7.5, 9.5)),
+    "run_build": ((57.0, 65.0), (9.69, 11.94)),
+    "run_specific": ((65.0, 70.0), (7.34, 12.64)),
     "run_taper": ((16.0, 60.0), (3.1, 10.5)),
 }
 
@@ -366,6 +389,20 @@ def quality_for(week: dict[str, Any], templates: dict[str, Any],
         "rationale": chosen.get("rationale"),
         "minutes": minutes,
     }
+
+
+def _sessions_count_form(entry: dict[str, Any], week: dict[str, Any],
+                         form: dict[str, Any]) -> int:
+    """Число тренировок недели — по форме фазы.
+
+    Пробежки — по форме («7 дней в неделю Л-темп»). ОФП внутри
+    пробежек отдельных тренировок не создаёт. Вел и плавание — по
+    одной тренировке на вид (плюс разбивка макро).
+    """
+    sessions = int(form["runs"])
+    for kind in ("bike", "swim"):
+        sessions += _count_sessions(week.get(kind))
+    return sessions
 
 
 def _sessions_count(entry: dict[str, Any], week: dict[str, Any]) -> int:
@@ -588,6 +625,22 @@ def main() -> int:
         run_km = entry["run_km"]
         # Длинный бег — доля недельного километража.
         long_km = round(run_km * LONG_FRACTION)
+
+        # Форма фазы — из правил Дэниэлса: сколько пробежек в неделю и
+        # где живёт ОФП. В форме ОФП идёт **внутрь** пробежек, поэтому
+        # отдельных тренировок ОФП в неделе нет.
+        form = PHASE_FORM.get(entry["daniels_phase"])
+        if form:
+            runs = int(form["runs"])
+            # Одна из пробежек — длинная, остальные — лёгкие.
+            new["easy_runs"] = max(runs - 1, 1)
+            new["core"] = ""
+            new["_form"] = {
+                "runs": runs,
+                "ofp_runs": form["ofp_runs"],
+                "ofp_minutes": form["ofp_minutes"],
+                "ofp_inside_runs": True,
+            }
         new.update({
             "season_week": season_week,
             "run_km": run_km,
@@ -598,8 +651,14 @@ def main() -> int:
             # бег + качественная работа + лёгкие пробежки + вел, плавание
             # и ОФП. Рукописное число рядом с вычисляемым — два разных
             # ответа на один вопрос.
-            "sessions_target": _sessions_count(entry, new),
-            "easy_runs": _easy_runs(_easy_km(new), _busy_windows(new)),
+            "sessions_target": (
+                _sessions_count(entry, new) if not form
+                else _sessions_count_form(entry, new, form)
+            ),
+            "easy_runs": (
+                _easy_runs(_easy_km(new), _busy_windows(new))
+                if not form else new["easy_runs"]
+            ),
             "_daniels": {
                 "daniels_phase": entry["daniels_phase"],
                 "program_week": entry["program_week"],
