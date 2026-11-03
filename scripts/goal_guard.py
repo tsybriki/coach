@@ -331,6 +331,36 @@ def check(sp: dict, at: dict) -> list[str]:
             elif vid not in index:
                 problems.append("W{}: variant_id '{}' нет в workout_templates".format(n, vid))
 
+        # 7b) Тексты цели недели — по её цели и масштабу, из каталога.
+        #
+        #     Пересборка макро меняет цель недели, а рукописный текст
+        #     остаётся от прежней: неделя говорит «Развиваем VO2max», а
+        #     работает на порог. Читатель видит чужую цель — и это ровно
+        #     тот дефект, который надо ловить, а не замечать глазами.
+        from lib import goal_text as _goal_text
+        for w in sp.get("weekly_macro", []):
+            q = w.get("quality") or {}
+            n = w["season_week"]
+            gid = q.get("goal")
+            if not gid:
+                continue
+            if gid not in tpl:
+                problems.append(
+                    "W{}: цель '{}' нет в workout_templates — цель недели "
+                    "неизвестна каталогу".format(n, gid))
+                continue
+            want = _goal_text.week_texts(gid, q.get("scale"), tpl)
+            for field in ("goal_text", "scale_text", "develops"):
+                got = q.get(field)
+                expected = want.get(field)
+                if not expected:
+                    continue
+                if got != expected:
+                    problems.append(
+                        "W{}: {} = {!r} ≠ {!r} — текст недели не соответствует "
+                        "её цели '{}' ({})".format(
+                            n, field, got, expected, gid, q.get("scale")))
+
         # нагрузка должна сходиться с пересчётом (страховка от ручных правок)
         try:
             sys.path.insert(0, str(REPO))

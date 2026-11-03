@@ -171,6 +171,79 @@ def test_goal_guard_macro_leads_to_target():
     print("  ✓ goal_guard: макро ведёт к цели, откат ловится")
 
 
+def test_week_texts_follow_week_goal():
+    """Текст цели недели — из её цели и масштаба, а не от прошлой цели.
+
+    Дефект, который это ловит: пересборка макро по Дэниэлсу меняет
+    цель недели (`quality.goal`), а рукописный `goal_text` остаётся от
+    прежней. Неделя говорит «Развиваем VO2max», а работает на порог —
+    читатель видит чужую цель.
+
+    Проверяем три вещи:
+      1) текст каждой недели соответствует её цели и масштабу;
+      2) guard ловит подменённый текст;
+      3) пересборка макро восстанавливает текст.
+    """
+    sys.path.insert(0, str(ROOT / "lib"))
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from lib import goal_text
+    import goal_guard
+
+    sp = json.loads((ROOT / "state/season_plan.json").read_text(encoding="utf-8"))
+    at = json.loads((ROOT / "state/athlete.json").read_text(encoding="utf-8"))
+    tpl = json.loads(
+        (ROOT / "state/workout_templates.json").read_text(encoding="utf-8")
+    )["templates"]
+
+    # 1) текст каждой недели соответствует её цели и масштабу
+    for w in sp["weekly_macro"]:
+        q = w.get("quality") or {}
+        gid = q.get("goal")
+        if not gid:
+            continue
+        assert gid in tpl, "W{}: цель '{}' нет в каталоге".format(
+            w["season_week"], gid)
+        want = goal_text.week_texts(gid, q.get("scale"), tpl)
+        assert q.get("goal_text") == want["goal_text"], \
+            "W{}: goal_text {!r} ≠ {!r} (цель {})".format(
+                w["season_week"], q.get("goal_text"), want["goal_text"], gid)
+        assert q.get("scale_text") == want["scale_text"], \
+            "W{}: scale_text {!r} ≠ {!r} (масштаб {})".format(
+                w["season_week"], q.get("scale_text"), want["scale_text"],
+                q.get("scale"))
+        assert q.get("develops") == want["develops"], \
+            "W{}: develops {!r} ≠ {!r} (цель {})".format(
+                w["season_week"], q.get("develops"), want["develops"], gid)
+
+    # 2) guard ловит чужой текст цели
+    tampered = json.loads(json.dumps(sp))
+    for w in tampered["weekly_macro"]:
+        q = w.get("quality") or {}
+        if q.get("goal") == "vo2max":
+            q["goal_text"] = "Развиваем threshold pace"
+            break
+    problems = goal_guard.check(tampered, at)
+    assert problems, "goal_guard НЕ заметил чужой текст цели недели"
+    assert any("goal_text" in p for p in problems), \
+        "guard ругнулся не на текст цели: {}".format(problems)
+
+    # 3) пересборка макро восстанавливает текст по своей цели
+    stale = json.loads(json.dumps(sp))
+    for w in stale["weekly_macro"]:
+        q = w.get("quality") or {}
+        if q.get("goal"):
+            q["goal_text"] = "Прошлая цель"
+            q["scale_text"] = "Прошлый масштаб"
+    fixed = goal_text.refresh_week_texts(
+        dict((stale["weekly_macro"][0].get("quality") or {})), tpl)
+    assert fixed["goal_text"] == goal_text.week_texts(
+        stale["weekly_macro"][0]["quality"]["goal"],
+        stale["weekly_macro"][0]["quality"].get("scale"), tpl)["goal_text"], \
+        "refresh_week_texts не восстановил текст цели"
+
+    print("  ✓ тексты целей недель соответствуют целям, guard ловит подмену")
+
+
 def test_review_gates_built_and_persisted():
     """Gates строятся после каждой фазы и каждой CP; решения переживают регенерацию."""
     sys.path.insert(0, str(ROOT / "lib"))
@@ -794,6 +867,7 @@ def main():
         test_plan_generate_stub,
         test_season_replan_archive,
         test_goal_guard_macro_leads_to_target,
+        test_week_texts_follow_week_goal,
         test_review_gates_built_and_persisted,
         test_macro_structure_is_data_not_string,
         test_fit_retention_no_op_when_empty,

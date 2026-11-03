@@ -104,7 +104,11 @@ def build(sp, at):
         d = season_week.season_week_to_dates(n, start)[0]
         ds = "{:02d}.{:02d}".format(d.day, d.month)
         q = w["quality"]
-        cell = "{} ({})".format(q.get("goal", ""), q.get("scale", ""))
+        # Цель недели — по-русски, из её текста. Ключ (`progression`) —
+        # внутренний код, читателю он ничего не говорит.
+        goal_text = q.get("goal_text") or q.get("goal", "")
+        scale_text = q.get("scale_text") or q.get("scale", "")
+        cell = "{} ({})".format(goal_text, scale_text) if scale_text else goal_text
         # структура — из каталога (label + variant_id), не разобранная строка
         struct = "{} [{}]".format(q.get("label", "—"), q.get("variant_id", "—"))
         L.append("| W{} | {} | {}К | {}К | {}К | {}% | {} | `{}` | {} | {}ч |".format(

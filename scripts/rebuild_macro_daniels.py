@@ -44,6 +44,7 @@ from app.adapters.daniels import load_paces, load_plan  # noqa: E402
 from app.domain.methodology import recipe_zone_volume_m  # noqa: E402
 
 from lib import load_model  # noqa: E402
+from lib import goal_text  # noqa: E402
 from lib import quality_session  # noqa: E402
 
 STATE = Path.home() / "coach" / "state"
@@ -615,7 +616,14 @@ def main() -> int:
         season_week = entry["season_week"]
         previous = by_week.get(season_week, {})
         if season_week < args.from_week:
-            rebuilt.append(previous)
+            # Неделя не пересобирается, но её тексты цели — производные
+            # от цели и масштаба. Пересборка меняла цель соседних недель,
+            # а текст оставался от прежней: они тоже обязаны соответствовать
+            # своей цели.
+            skipped = dict(previous)
+            skipped["quality"] = goal_text.refresh_week_texts(
+                dict(skipped.get("quality") or {}), templates)
+            rebuilt.append(skipped)
             continue
 
         control = controls.get(season_week)
@@ -678,6 +686,12 @@ def main() -> int:
                 "work_m": quality.get("work_m"),
                 "label": quality.get("label"),
             })
+            # Тексты цели недели — из каталога, по её цели и масштабу.
+            # Пересборка меняет цель недели, а рукописный текст остался бы
+            # от прошлой: неделя говорила бы «Развиваем VO2max», работая на
+            # порог. Текст обязан переезжать вместе с целью.
+            block.update(goal_text.week_texts(
+                quality["goal"], quality.get("scale"), templates))
             new["quality"] = block
 
         # Нагрузка — пересчётом из структуры: total_h руками не пишется.
