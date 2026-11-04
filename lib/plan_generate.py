@@ -844,9 +844,17 @@ def generate(season_week: int | str,
     week_goal_detail = None
     if week_entry:
         q = week_entry.get("quality") or {}
-        week_goal = q.get("goal_text") or q.get("goal")
+        # Описание недели — про объём (`week_goal` в макро): «Набираем
+        # 56 км за 9 тренировок». `quality.goal_text` — цель одной
+        # тренировки («Проверяем форму на контрольной точке»), и как
+        # описание недели она вводит в заблуждение: неделя с тестом
+        # читается как «неделя про тест».
+        week_goal = (week_entry.get("week_goal")
+                     or q.get("goal_text") or q.get("goal"))
         detail_bits = []
-        if q.get("scale_text"):
+        if week_entry.get("week_goal_detail"):
+            detail_bits.append(week_entry["week_goal_detail"])
+        elif q.get("scale_text"):
             detail_bits.append("масштаб: " + q["scale_text"])
         if q.get("develops"):
             detail_bits.append(q["develops"])

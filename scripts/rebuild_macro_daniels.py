@@ -261,6 +261,35 @@ def phase_load_range(phase_id: str, season_plan: dict[str, Any]) -> tuple[float,
     return (0.0, 0.0)
 
 
+def _volume_goal(week: dict[str, Any], entry: dict[str, Any],
+                 season_plan: dict[str, Any]) -> dict[str, Any]:
+    """Описание недели — про объём.
+
+    Раньше описание недели бралось из цели качественной работы, и
+    неделя с контрольной точкой называлась «Проверяем форму на
+    контрольной точке». Это цель одной тренировки, а не недели: по
+    такой подписи каждая пробежка выглядит подготовкой к тесту, и
+    объём недели в описании не читается вовсе.
+
+    Описание недели — «Набираем 56 км за 9 тренировок» плюс масштаб
+    объёма относительно диапазона фазы.
+    """
+    km_range = phase_km_range(entry.get("phase", ""), season_plan)
+    text = goal_text.week_volume_text(
+        week.get("run_km"), week.get("sessions_target"),
+        km_range[0], km_range[1])
+    if not text:
+        return {}
+    detail = ""
+    if "·" in text:
+        detail = f"масштаб: {text.split('·')[-1].strip()}"
+    return {
+        "week_goal": text,
+        "week_goal_detail": detail,
+        "focus": text,
+    }
+
+
 def ramp(count: int, low: float, high: float) -> list[float]:
     """Линейный ход внутри фазы: от её начала к концу.
 
@@ -623,6 +652,10 @@ def main() -> int:
             skipped = dict(previous)
             skipped["quality"] = goal_text.refresh_week_texts(
                 dict(skipped.get("quality") or {}), templates)
+            # Описание недели — про объём (см. ниже). И для непересобранных
+            # недель оно тоже нужно: описание недели не зависит от цели
+            # качественной работы.
+            skipped.update(_volume_goal(skipped, entry, season_plan))
             rebuilt.append(skipped)
             continue
 
@@ -693,6 +726,14 @@ def main() -> int:
             block.update(goal_text.week_texts(
                 quality["goal"], quality.get("scale"), templates))
             new["quality"] = block
+
+        # Описание недели — про объём, а не про контрольную точку.
+        #
+        # `quality.goal_text` — цель *одной* тренировки. Как описание
+        # недели она вводила в заблуждение: неделя с тестом читалась
+        # как «неделя про тест», и по этой подписи каждая пробежка
+        # выглядела подготовкой к нему. Описание недели — объём.
+        new.update(_volume_goal(new, entry, season_plan))
 
         # Нагрузка — пересчётом из структуры: total_h руками не пишется.
         load = recompute_load(new, athlete)

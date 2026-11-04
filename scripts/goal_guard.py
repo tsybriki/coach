@@ -361,6 +361,32 @@ def check(sp: dict, at: dict) -> list[str]:
                         "её цели '{}' ({})".format(
                             n, field, got, expected, gid, q.get("scale")))
 
+        # 7c) Описание недели — про объём, а не про цель тренировки.
+        #
+        #     Описание бралось из `quality.goal_text` — цели одной
+        #     тренировки. Неделя с контрольной точкой называлась «Проверяем
+        #     форму на контрольной точке»: по такой подписи каждая
+        #     пробежка недели выглядит подготовкой к тесту, а объём
+        #     недели в описании не читается вовсе.
+        for w in sp.get("weekly_macro", []):
+            n = w["season_week"]
+            description = w.get("week_goal")
+            if not description:
+                problems.append(
+                    "W{}: нет week_goal — описание недели обязано быть "
+                    "про объём".format(n))
+                continue
+            if "км" not in description:
+                problems.append(
+                    "W{}: описание недели {!r} без километров — это не "
+                    "описание объёма".format(n, description))
+            goal_text_value = (w.get("quality") or {}).get("goal_text") or ""
+            if goal_text_value and description == goal_text_value:
+                problems.append(
+                    "W{}: описание недели совпадает с целью тренировки "
+                    "{!r} — неделя описывает объём, а не одну сессию".format(
+                        n, description))
+
         # нагрузка должна сходиться с пересчётом (страховка от ручных правок)
         try:
             sys.path.insert(0, str(REPO))

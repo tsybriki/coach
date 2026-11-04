@@ -97,24 +97,27 @@ def build(sp, at):
     # ---------- НЕДЕЛИ ----------
     L.append("## Недели")
     L.append("")
-    L.append("| W | Дата | Бег | Long | Качеств. | Инт.% | Цель (адаптация) | Структура | Сессий | Нагрузка |")
-    L.append("|---|---|---|---|---|---|---|---|---|---|")
+    L.append("| W | Дата | Бег | Long | Качеств. | Инт.% | Цель (адаптация) | Описание недели | Структура | Сессий | Нагрузка |")
+    L.append("|---|---|---|---|---|---|---|---|---|---|---|")
     for w in sp["weekly_macro"]:
         n = w["season_week"]
         d = season_week.season_week_to_dates(n, start)[0]
         ds = "{:02d}.{:02d}".format(d.day, d.month)
         q = w["quality"]
-        # Цель недели — по-русски, из её текста. Ключ (`progression`) —
+        # Цель адаптации — по-русски, из её текста. Ключ (`progression`) —
         # внутренний код, читателю он ничего не говорит.
         goal_text = q.get("goal_text") or q.get("goal", "")
         scale_text = q.get("scale_text") or q.get("scale", "")
         cell = "{} ({})".format(goal_text, scale_text) if scale_text else goal_text
+        # Описание недели — про объём. Отдельная колонка: цель адаптации
+        # и описание недели — разные вещи, и путать их нельзя.
+        week_desc = w.get("week_goal", "")
         # структура — из каталога (label + variant_id), не разобранная строка
         struct = "{} [{}]".format(q.get("label", "—"), q.get("variant_id", "—"))
-        L.append("| W{} | {} | {}К | {}К | {}К | {}% | {} | `{}` | {} | {}ч |".format(
+        L.append("| W{} | {} | {}К | {}К | {}К | {}% | {} | {} | `{}` | {} | {}ч |".format(
             n, ds, w.get("run_km", ""), w.get("run_km_long", ""),
             w.get("run_km_quality", ""), w.get("intensity_pct", ""),
-            esc(cell), esc(struct),
+            esc(cell), esc(week_desc), esc(struct),
             w.get("sessions_target", ""), w.get("total_h", "")))
     L.append("")
 

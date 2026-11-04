@@ -244,6 +244,62 @@ def test_week_texts_follow_week_goal():
     print("  ✓ тексты целей недель соответствуют целям, guard ловит подмену")
 
 
+def test_week_description_is_about_volume():
+    """Описание недели — про объём, а не про цель одной тренировки.
+
+    Дефект, который это ловит: описание недели бралось из
+    `quality.goal_text` — цели качественной работы. Неделя с
+    контрольной точкой называлась «Проверяем форму на контрольной
+    точке», и по такой подписи каждая пробежка недели выглядела
+    подготовкой к тесту. Объём недели в описании не читался вовсе.
+
+    Проверяем:
+      1) описание каждой недели — про объём (километры);
+      2) описание не совпадает с целью тренировки;
+      3) guard ловит подменённое описание.
+    """
+    sys.path.insert(0, str(ROOT / "lib"))
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from lib import goal_text
+    import goal_guard
+
+    sp = json.loads((ROOT / "state/season_plan.json").read_text(encoding="utf-8"))
+    at = json.loads((ROOT / "state/athlete.json").read_text(encoding="utf-8"))
+
+    for w in sp["weekly_macro"]:
+        n = w["season_week"]
+        description = w.get("week_goal")
+        assert description, "W{}: нет описания недели".format(n)
+        assert "км" in description, \
+            "W{}: описание недели {!r} без километров".format(n, description)
+        goal_text_value = (w.get("quality") or {}).get("goal_text") or ""
+        assert description != goal_text_value, \
+            "W{}: описание недели совпадает с целью тренировки {!r}".format(
+                n, description)
+
+    # Описание собирается из объёма, а не пишется руками.
+    assert goal_text.week_volume_text(56.0, 9, 55.0, 57.0) == \
+        "Набираем 56 км за 9 тренировок · работа по плану"
+    assert goal_text.week_volume_text(40.0, 9, 55.0, 57.0) == \
+        "Набираем 40 км за 9 тренировок · набор базы"
+    assert goal_text.week_volume_text(70.0, 8, 55.0, 57.0) == \
+        "Набираем 70 км за 8 тренировок · объём выше плана"
+
+    # guard ловит описание, подменённое целью тренировки
+    tampered = json.loads(json.dumps(sp))
+    for w in tampered["weekly_macro"]:
+        q = w.get("quality") or {}
+        if q.get("goal_text"):
+            w["week_goal"] = q["goal_text"]
+            break
+    problems = goal_guard.check(tampered, at)
+    assert problems, "goal_guard НЕ заметил описание недели про цель тренировки"
+    assert any("week_goal" in p or "описание недели" in p for p in problems), \
+        "guard ругнулся не на описание недели: {}".format(problems)
+
+    print("  ✓ описания недель — про объём, guard ловит подмену")
+
+
 def test_review_gates_built_and_persisted():
     """Gates строятся после каждой фазы и каждой CP; решения переживают регенерацию."""
     sys.path.insert(0, str(ROOT / "lib"))
@@ -868,6 +924,7 @@ def main():
         test_season_replan_archive,
         test_goal_guard_macro_leads_to_target,
         test_week_texts_follow_week_goal,
+        test_week_description_is_about_volume,
         test_review_gates_built_and_persisted,
         test_macro_structure_is_data_not_string,
         test_fit_retention_no_op_when_empty,
