@@ -189,7 +189,10 @@ def week_profile(week: Any, pace_by_zone: dict[str, float]) -> dict[str, Any]:
         if minutes > best_minutes:
             best_minutes = minutes
             best = recipe
-        for zone, value in recipe_zone_volume_m(recipe).items():
+        # Объём зоны — с темпами: куски, заданные временем (2 мин в
+        # интервальном темпе), без темпов в метры не переводятся, и зона
+        # выпадает из подсчёта.
+        for zone, value in recipe_zone_volume_m(recipe, pace_by_zone).items():
             zones[zone] = zones.get(zone, 0.0) + value
     if best is None:
         return {"goal": None, "minutes": 0.0, "zones": {}}

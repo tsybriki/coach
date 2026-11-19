@@ -104,7 +104,7 @@
       "_season_week_start": 14,
       "_season_week_end": 20,
       "load_range_h": [
-        11.53,
+        11.5,
         12.74
       ],
       "run_km_range": [
@@ -935,10 +935,11 @@
         "plan_week": 7,
         "quality_goal": "tempo",
         "quality_scale": "heavy",
-        "quality_minutes": 438,
+        "quality_minutes": 365,
         "quality_zones": {
-          "E": 3400,
-          "R": 2400,
+          "E": 5944,
+          "I": 4321,
+          "R": 3200,
           "T": 8000
         }
       },
@@ -1006,7 +1007,8 @@
         "quality_minutes": 899,
         "quality_zones": {
           "E": 8000,
-          "R": 8000
+          "R": 8000,
+          "T": 9091
         }
       },
       "easy_runs": 1,
@@ -1072,6 +1074,8 @@
         "quality_scale": "heavy",
         "quality_minutes": 12,
         "quality_zones": {
+          "E": 915,
+          "I": 3704,
           "T": 9600
         }
       },
@@ -1139,7 +1143,8 @@
         "quality_minutes": 503,
         "quality_zones": {
           "E": 4000,
-          "R": 4800
+          "R": 4800,
+          "T": 9091
         }
       },
       "easy_runs": 0,
@@ -1205,7 +1210,8 @@
         "quality_scale": "medium",
         "quality_minutes": 180,
         "quality_zones": {
-          "E": 4000,
+          "E": 5280,
+          "I": 864,
           "R": 4000,
           "T": 9600
         }
@@ -1273,9 +1279,9 @@
         "quality_scale": "light",
         "quality_minutes": 503,
         "quality_zones": {
-          "E": 4000,
+          "E": 5646,
           "R": 4800,
-          "T": 16000
+          "T": 26227
         }
       },
       "easy_runs": 2,
@@ -1341,7 +1347,8 @@
         "quality_scale": "medium",
         "quality_minutes": 180,
         "quality_zones": {
-          "E": 4000,
+          "E": 5280,
+          "I": 864,
           "R": 4000,
           "T": 9600
         }
@@ -1357,45 +1364,45 @@
       "long_km": 16,
       "quality": {
         "goal": "tempo",
-        "scale": "medium",
+        "scale": "heavy",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем аэробную мощность",
-        "scale_text": "средняя интенсивность",
+        "scale_text": "высокая интенсивность",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
-        "variant_id": "5k",
-        "work_m": 5000,
-        "label": "5К tempo @ 4:20"
+        "variant_id": "8k",
+        "work_m": 8000,
+        "label": "8К long tempo @ 4:12"
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 11.53,
+      "total_h": 11.5,
       "phase": "run_specific",
       "_total_h_model": {
-        "run_h": 6.53,
+        "run_h": 6.5,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
         "note": "вычислено моделью нагрузки пайплайна"
       },
       "run_km_long": 16.0,
-      "run_km_quality": 5.0,
-      "run_km_easy": 44.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 41.0,
       "intensity_pct": 8.7,
       "deload": false,
       "deload_pct": 10.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 6.53,
+        "run_h": 6.5,
         "run_long_h": 1.51,
-        "run_easy_h": 4.16,
-        "run_quality_h": 0.87,
+        "run_easy_h": 3.87,
+        "run_quality_h": 1.12,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "total_h": 11.53,
-        "quality_min": 52,
-        "quality_work_km": 5.0,
+        "total_h": 11.5,
+        "quality_min": 67,
+        "quality_work_km": 8.0,
         "run_km": 65.0,
         "long_km": 16.0,
         "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
@@ -1406,9 +1413,11 @@
         "program_week": 13,
         "plan_week": 13,
         "quality_goal": "tempo",
-        "quality_scale": "medium",
+        "quality_scale": "heavy",
         "quality_minutes": 12,
         "quality_zones": {
+          "E": 1280,
+          "I": 5802,
           "T": 4800
         }
       },
@@ -1423,45 +1432,45 @@
       "long_km": 16,
       "quality": {
         "goal": "tempo",
-        "scale": "medium",
+        "scale": "heavy",
         "_note": "Конкретная структура выбирается при планировании недели из state/workout_templates.json по (goal, scale) + guard объёма.",
         "goal_text": "Развиваем аэробную мощность",
-        "scale_text": "средняя интенсивность",
+        "scale_text": "высокая интенсивность",
         "develops": "Непрерывная работа на Z4 — верх аэробной зоны, аэробная мощность",
-        "variant_id": "5k",
-        "work_m": 5000,
-        "label": "5К tempo @ 4:20"
+        "variant_id": "8k",
+        "work_m": 8000,
+        "label": "8К long tempo @ 4:12"
       },
       "core": "2×30м",
       "bike": "2×75м",
       "swim": "2×45м",
-      "total_h": 11.63,
+      "total_h": 11.59,
       "phase": "run_specific",
       "_total_h_model": {
-        "run_h": 6.63,
+        "run_h": 6.59,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
         "note": "вычислено моделью нагрузки пайплайна"
       },
       "run_km_long": 16.0,
-      "run_km_quality": 5.0,
-      "run_km_easy": 45.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 42.0,
       "intensity_pct": 12.0,
       "deload": false,
       "deload_pct": 0.0,
       "sessions_target": 8,
       "_load_breakdown": {
-        "run_h": 6.63,
+        "run_h": 6.59,
         "run_long_h": 1.51,
-        "run_easy_h": 4.25,
-        "run_quality_h": 0.87,
+        "run_easy_h": 3.97,
+        "run_quality_h": 1.12,
         "bike_h": 2.5,
         "swim_h": 1.5,
         "ofp_h": 1.0,
-        "total_h": 11.63,
-        "quality_min": 52,
-        "quality_work_km": 5.0,
+        "total_h": 11.59,
+        "quality_min": 67,
+        "quality_work_km": 8.0,
         "run_km": 66.0,
         "long_km": 16.0,
         "_model": "длинная по Z2 + качественная по темпу цели (с отдыхом) + остальное по Z2"
@@ -1472,9 +1481,13 @@
         "program_week": 14,
         "plan_week": 14,
         "quality_goal": "tempo",
-        "quality_scale": "medium",
+        "quality_scale": "heavy",
         "quality_minutes": 40,
-        "quality_zones": {}
+        "quality_zones": {
+          "E": 549,
+          "I": 4938,
+          "T": 9091
+        }
       },
       "easy_runs": 0,
       "week_goal": "Набираем 66 км за 8 тренировок · работа по плану",
@@ -1539,8 +1552,8 @@
         "quality_scale": "medium",
         "quality_minutes": 519,
         "quality_zones": {
-          "E": 2400,
-          "I": 3000,
+          "E": 4229,
+          "I": 3864,
           "R": 2400,
           "T": 9600
         }
@@ -1608,7 +1621,7 @@
         "quality_scale": "medium",
         "quality_minutes": 899,
         "quality_zones": {
-          "E": 4000,
+          "E": 6012,
           "I": 7800,
           "R": 4000,
           "T": 9600
@@ -1677,6 +1690,8 @@
         "quality_scale": "heavy",
         "quality_minutes": 8,
         "quality_zones": {
+          "E": 732,
+          "I": 4938,
           "T": 11200
         }
       },
@@ -1743,7 +1758,8 @@
         "quality_scale": "medium",
         "quality_minutes": 180,
         "quality_zones": {
-          "E": 4000,
+          "E": 6195,
+          "I": 4938,
           "R": 4000,
           "T": 16000
         }
@@ -1811,6 +1827,8 @@
         "quality_scale": "heavy",
         "quality_minutes": 8,
         "quality_zones": {
+          "E": 732,
+          "I": 4938,
           "T": 11200
         }
       },
@@ -1877,10 +1895,10 @@
         "quality_scale": "medium",
         "quality_minutes": 729,
         "quality_zones": {
-          "E": 800,
-          "I": 2000,
+          "E": 2263,
+          "I": 2864,
           "R": 800,
-          "T": 13600
+          "T": 22691
         }
       },
       "easy_runs": 0,
@@ -1946,10 +1964,10 @@
         "quality_scale": "medium",
         "quality_minutes": 729,
         "quality_zones": {
-          "E": 800,
-          "I": 2000,
+          "E": 2263,
+          "I": 2864,
           "R": 800,
-          "T": 13600
+          "T": 22691
         }
       },
       "easy_runs": 0,
@@ -2015,6 +2033,8 @@
         "quality_scale": "light",
         "quality_minutes": 729,
         "quality_zones": {
+          "E": 915,
+          "I": 864,
           "T": 19200
         }
       },
@@ -2081,10 +2101,10 @@
         "quality_scale": "medium",
         "quality_minutes": 568,
         "quality_zones": {
-          "E": 1600,
+          "E": 2332,
           "I": 2000,
           "R": 1600,
-          "T": 4000
+          "T": 13091
         }
       },
       "easy_runs": 3,
@@ -2150,7 +2170,7 @@
         "quality_scale": "medium",
         "quality_minutes": 568,
         "quality_zones": {
-          "E": 2400,
+          "E": 3498,
           "I": 5000,
           "R": 2400,
           "T": 4000
@@ -2219,9 +2239,9 @@
         "quality_scale": "medium",
         "quality_minutes": 819,
         "quality_zones": {
-          "E": 2000,
+          "E": 2366,
           "R": 2000,
-          "T": 8000
+          "T": 17091
         }
       },
       "easy_runs": 2,
@@ -2287,9 +2307,9 @@
         "quality_scale": "medium",
         "quality_minutes": 365,
         "quality_zones": {
-          "E": 800,
+          "E": 1166,
           "R": 800,
-          "T": 4800
+          "T": 13891
         }
       },
       "easy_runs": 1,

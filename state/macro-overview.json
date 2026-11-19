@@ -631,23 +631,19 @@
           "color": "orange",
           "variants": [
             {
-              "label": "5К tempo @ 4:20",
-              "work_m": 5000
-            },
-            {
-              "label": "6К tempo @ 4:08",
-              "work_m": 6000
+              "label": "8К long tempo @ 4:12",
+              "work_m": 8000
             }
           ],
           "comp_h": 11.2,
-          "total_h": 11.53,
-          "variant_id": "5k",
-          "quality_label": "5К tempo @ 4:20",
-          "quality_work_m": 5000,
+          "total_h": 11.5,
+          "variant_id": "8k",
+          "quality_label": "8К long tempo @ 4:12",
+          "quality_work_m": 8000,
           "quality_paces": [],
           "run_km_long": 16.0,
-          "run_km_quality": 5.0,
-          "run_km_easy": 44.0,
+          "run_km_quality": 8.0,
+          "run_km_easy": 41.0,
           "intensity_pct": 8.7,
           "deload": false,
           "sessions_target": 8
@@ -671,23 +667,19 @@
           "color": "orange",
           "variants": [
             {
-              "label": "5К tempo @ 4:20",
-              "work_m": 5000
-            },
-            {
-              "label": "6К tempo @ 4:08",
-              "work_m": 6000
+              "label": "8К long tempo @ 4:12",
+              "work_m": 8000
             }
           ],
           "comp_h": 11.3,
-          "total_h": 11.63,
-          "variant_id": "5k",
-          "quality_label": "5К tempo @ 4:20",
-          "quality_work_m": 5000,
+          "total_h": 11.59,
+          "variant_id": "8k",
+          "quality_label": "8К long tempo @ 4:12",
+          "quality_work_m": 8000,
           "quality_paces": [],
           "run_km_long": 16.0,
-          "run_km_quality": 5.0,
-          "run_km_easy": 45.0,
+          "run_km_quality": 8.0,
+          "run_km_easy": 42.0,
           "intensity_pct": 12.0,
           "deload": false,
           "sessions_target": 8
@@ -1888,23 +1880,19 @@
       "color": "orange",
       "variants": [
         {
-          "label": "5К tempo @ 4:20",
-          "work_m": 5000
-        },
-        {
-          "label": "6К tempo @ 4:08",
-          "work_m": 6000
+          "label": "8К long tempo @ 4:12",
+          "work_m": 8000
         }
       ],
       "comp_h": 11.2,
-      "total_h": 11.53,
-      "variant_id": "5k",
-      "quality_label": "5К tempo @ 4:20",
-      "quality_work_m": 5000,
+      "total_h": 11.5,
+      "variant_id": "8k",
+      "quality_label": "8К long tempo @ 4:12",
+      "quality_work_m": 8000,
       "quality_paces": [],
       "run_km_long": 16.0,
-      "run_km_quality": 5.0,
-      "run_km_easy": 44.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 41.0,
       "intensity_pct": 8.7,
       "deload": false,
       "sessions_target": 8
@@ -1928,23 +1916,19 @@
       "color": "orange",
       "variants": [
         {
-          "label": "5К tempo @ 4:20",
-          "work_m": 5000
-        },
-        {
-          "label": "6К tempo @ 4:08",
-          "work_m": 6000
+          "label": "8К long tempo @ 4:12",
+          "work_m": 8000
         }
       ],
       "comp_h": 11.3,
-      "total_h": 11.63,
-      "variant_id": "5k",
-      "quality_label": "5К tempo @ 4:20",
-      "quality_work_m": 5000,
+      "total_h": 11.59,
+      "variant_id": "8k",
+      "quality_label": "8К long tempo @ 4:12",
+      "quality_work_m": 8000,
       "quality_paces": [],
       "run_km_long": 16.0,
-      "run_km_quality": 5.0,
-      "run_km_easy": 45.0,
+      "run_km_quality": 8.0,
+      "run_km_easy": 42.0,
       "intensity_pct": 12.0,
       "deload": false,
       "sessions_target": 8
@@ -3484,5 +3468,5 @@
     }
   ],
   "current_week": 6,
-  "generated_at": "19.11.2026 00:27"
+  "generated_at": "19.11.2026 07:24"
 }
