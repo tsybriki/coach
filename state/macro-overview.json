@@ -30,7 +30,7 @@
           "bike_h": 0.8,
           "swim_h": 0.5,
           "ofp_h": 0.0,
-          "goal_text": "Развиваем базу: поднимаем темп в конце сессии",
+          "goal_text": "Набираем 55 км за 9 тренировок · работа по плану",
           "phase": "run_base",
           "color": "teal",
           "variants": [
@@ -76,7 +76,7 @@
           "bike_h": 0.8,
           "swim_h": 0.5,
           "ofp_h": 0.0,
-          "goal_text": "Развиваем threshold pace",
+          "goal_text": "Набираем 55 км за 9 тренировок · работа по плану",
           "phase": "run_base",
           "color": "orange",
           "variants": [
@@ -122,7 +122,7 @@
           "bike_h": 1.0,
           "swim_h": 0.5,
           "ofp_h": 0.0,
-          "goal_text": "Развиваем VO2max",
+          "goal_text": "Набираем 56 км за 9 тренировок · работа по плану",
           "phase": "run_base",
           "color": "red",
           "variants": [
@@ -172,7 +172,7 @@
           "end": "2026-11-07",
           "start_d": "1–7 ноя",
           "detailed": true,
-          "is_now": true,
+          "is_now": false,
           "is_next": false,
           "run_km": 56,
           "long_km": 14,
@@ -180,7 +180,7 @@
           "bike_h": 1.0,
           "swim_h": 0.5,
           "ofp_h": 0.0,
-          "goal_text": "темповый тест · 3K time trial · 4:40/км",
+          "goal_text": "Набираем 56 км за 9 тренировок · работа по плану",
           "phase": "run_base",
           "color": "cp",
           "variants": [
@@ -205,16 +205,17 @@
           "intensity_pct": 7.9,
           "deload": false,
           "sessions_target": 9,
+          "tt_text": "темповый тест · 3K time trial · 4:40/км",
           "is_tt": true,
           "actual": {
-            "run_km": 24.1,
+            "run_km": 57.4,
             "bike_km": 20.3,
-            "swim_km": 0,
-            "sessions": 3,
-            "total_h": 3.52,
-            "run_h": 2.4,
+            "swim_km": 1.9,
+            "sessions": 7,
+            "total_h": 7.29,
+            "run_h": 5.5,
             "bike_h": 1.1,
-            "swim_h": 0.0
+            "swim_h": 0.7
           }
         },
         {
@@ -224,14 +225,14 @@
           "start_d": "8–14 ноя",
           "detailed": true,
           "is_now": false,
-          "is_next": true,
+          "is_next": false,
           "run_km": 57,
           "long_km": 14,
           "run_h": 5.4,
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 0.0,
-          "goal_text": "Развиваем порог и VO2max в одной сессии",
+          "goal_text": "Набираем 57 км за 9 тренировок · работа по плану",
           "phase": "run_base",
           "color": "ember",
           "variants": [
@@ -251,7 +252,17 @@
           "run_km_easy": 38.4,
           "intensity_pct": 11.5,
           "deload": false,
-          "sessions_target": 9
+          "sessions_target": 9,
+          "actual": {
+            "run_km": 52.7,
+            "bike_km": 0,
+            "swim_km": 2.6,
+            "sessions": 6,
+            "total_h": 5.97,
+            "run_h": 5.0,
+            "bike_h": 0.0,
+            "swim_h": 1.0
+          }
         },
         {
           "w": 6,
@@ -259,7 +270,7 @@
           "end": "2026-11-21",
           "start_d": "15–21 ноя",
           "detailed": true,
-          "is_now": false,
+          "is_now": true,
           "is_next": false,
           "run_km": 57,
           "long_km": 14,
@@ -267,7 +278,7 @@
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 0.0,
-          "goal_text": "Развиваем переключение зон",
+          "goal_text": "Набираем 57 км за 9 тренировок · работа по плану",
           "phase": "run_base",
           "color": "violet",
           "variants": [
@@ -287,7 +298,17 @@
           "run_km_easy": 40.8,
           "intensity_pct": 5.2,
           "deload": false,
-          "sessions_target": 9
+          "sessions_target": 9,
+          "actual": {
+            "run_km": 43.4,
+            "bike_km": 0,
+            "swim_km": 0,
+            "sessions": 3,
+            "total_h": 4.07,
+            "run_h": 4.1,
+            "bike_h": 0.0,
+            "swim_h": 0.0
+          }
         }
       ],
       "has_actual": true
@@ -311,14 +332,14 @@
           "start_d": "22–28 ноя",
           "detailed": true,
           "is_now": false,
-          "is_next": false,
+          "is_next": true,
           "run_km": 57,
           "long_km": 14,
           "run_h": 5.4,
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем аэробную мощность",
+          "goal_text": "Набираем 57 км за 8 тренировок · работа по плану",
           "phase": "run_build",
           "color": "orange",
           "variants": [
@@ -354,7 +375,7 @@
           "bike_h": 2.0,
           "swim_h": 0.7,
           "ofp_h": 1.0,
-          "goal_text": "тест на максимум · 5K max · 4:30/км",
+          "goal_text": "Набираем 58 км за 8 тренировок · работа по плану",
           "phase": "run_build",
           "color": "cp",
           "variants": [
@@ -375,6 +396,7 @@
           "intensity_pct": 10.4,
           "deload": false,
           "sessions_target": 8,
+          "tt_text": "тест на максимум · 5K max · 4:30/км",
           "is_tt": true
         },
         {
@@ -391,7 +413,7 @@
           "bike_h": 2.0,
           "swim_h": 0.7,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем аэробную мощность",
+          "goal_text": "Набираем 60 км за 8 тренировок · работа по плану",
           "phase": "run_build",
           "color": "orange",
           "variants": [
@@ -427,7 +449,7 @@
           "bike_h": 2.0,
           "swim_h": 1.3,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем threshold pace",
+          "goal_text": "Набираем 61 км за 8 тренировок · работа по плану",
           "phase": "run_build",
           "color": "orange",
           "variants": [
@@ -467,7 +489,7 @@
           "bike_h": 2.0,
           "swim_h": 1.3,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем threshold pace",
+          "goal_text": "Набираем 62 км за 8 тренировок · работа по плану",
           "phase": "run_build",
           "color": "orange",
           "variants": [
@@ -507,7 +529,7 @@
           "bike_h": 1.0,
           "swim_h": 0.7,
           "ofp_h": 0.8,
-          "goal_text": "тест на максимум · 3K max · 4:07/км",
+          "goal_text": "Набираем 64 км за 8 тренировок · работа по плану",
           "phase": "run_build",
           "color": "cp",
           "variants": [
@@ -532,6 +554,7 @@
           "intensity_pct": 6.7,
           "deload": true,
           "sessions_target": 8,
+          "tt_text": "тест на максимум · 3K max · 4:07/км",
           "is_tt": true
         },
         {
@@ -548,7 +571,7 @@
           "bike_h": 2.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем threshold pace",
+          "goal_text": "Набираем 65 км за 8 тренировок · работа по плану",
           "phase": "run_build",
           "color": "orange",
           "variants": [
@@ -603,7 +626,7 @@
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем аэробную мощность",
+          "goal_text": "Набираем 65 км за 8 тренировок · работа по плану",
           "phase": "run_specific",
           "color": "orange",
           "variants": [
@@ -643,7 +666,7 @@
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем аэробную мощность",
+          "goal_text": "Набираем 66 км за 8 тренировок · работа по плану",
           "phase": "run_specific",
           "color": "orange",
           "variants": [
@@ -683,7 +706,7 @@
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "тест на максимум · 5K max · 4:06/км",
+          "goal_text": "Набираем 67 км за 8 тренировок · работа по плану",
           "phase": "run_specific",
           "color": "cp",
           "variants": [
@@ -704,6 +727,7 @@
           "intensity_pct": 9.1,
           "deload": false,
           "sessions_target": 8,
+          "tt_text": "тест на максимум · 5K max · 4:06/км",
           "is_tt": true
         },
         {
@@ -720,7 +744,7 @@
           "bike_h": 2.5,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем threshold pace",
+          "goal_text": "Набираем 68 км за 8 тренировок · работа по плану",
           "phase": "run_specific",
           "color": "orange",
           "variants": [
@@ -760,7 +784,7 @@
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем VO2max",
+          "goal_text": "Набираем 68 км за 8 тренировок · работа по плану",
           "phase": "run_specific",
           "color": "red",
           "variants": [
@@ -800,7 +824,7 @@
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем threshold pace",
+          "goal_text": "Набираем 69 км за 8 тренировок · работа по плану",
           "phase": "run_specific",
           "color": "orange",
           "variants": [
@@ -840,7 +864,7 @@
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Развиваем VO2max",
+          "goal_text": "Набираем 70 км за 8 тренировок · работа по плану",
           "phase": "run_specific",
           "color": "red",
           "variants": [
@@ -895,7 +919,7 @@
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Сохраняем гонка-темп, снимая объём",
+          "goal_text": "Набираем 60 км за 8 тренировок · работа по плану",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -931,7 +955,7 @@
           "bike_h": 3.0,
           "swim_h": 1.5,
           "ofp_h": 1.0,
-          "goal_text": "Сохраняем гонка-темп, снимая объём",
+          "goal_text": "Набираем 53 км за 8 тренировок · работа по плану",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -967,7 +991,7 @@
           "bike_h": 0.8,
           "swim_h": 0.6,
           "ofp_h": 0.4,
-          "goal_text": "темповый тест · 5K @ race pace · 4:00/км",
+          "goal_text": "Набираем 45 км за 8 тренировок · работа по плану",
           "phase": "run_taper",
           "color": "cp",
           "variants": [
@@ -992,6 +1016,7 @@
           "intensity_pct": 9.1,
           "deload": true,
           "sessions_target": 8,
+          "tt_text": "темповый тест · 5K @ race pace · 4:00/км",
           "is_tt": true
         },
         {
@@ -1008,7 +1033,7 @@
           "bike_h": 0.8,
           "swim_h": 0.6,
           "ofp_h": 0.4,
-          "goal_text": "Сохраняем гонка-темп, снимая объём",
+          "goal_text": "Набираем 38 км за 8 тренировок · работа по плану",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -1044,7 +1069,7 @@
           "bike_h": 0.7,
           "swim_h": 0.5,
           "ofp_h": 0.4,
-          "goal_text": "Сохраняем гонка-темп, снимая объём",
+          "goal_text": "Набираем 31 км за 8 тренировок · работа по плану",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -1080,7 +1105,7 @@
           "bike_h": 0.5,
           "swim_h": 0.4,
           "ofp_h": 0.3,
-          "goal_text": "Сохраняем гонка-темп, снимая объём",
+          "goal_text": "Набираем 23 км за 7 тренировок · работа по плану",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -1116,7 +1141,7 @@
           "bike_h": 0.4,
           "swim_h": 0.3,
           "ofp_h": 0.2,
-          "goal_text": "Сохраняем гонка-темп, снимая объём",
+          "goal_text": "Набираем 16 км за 6 тренировок · работа по плану",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -1167,7 +1192,7 @@
           "bike_h": 0.4,
           "swim_h": 0.3,
           "ofp_h": 0.2,
-          "goal_text": "Сохраняем гонка-темп, снимая объём",
+          "goal_text": "Набираем 16 км за 6 тренировок · работа по плану",
           "phase": "run_taper",
           "color": "gray",
           "variants": [
@@ -1292,7 +1317,7 @@
       "bike_h": 0.8,
       "swim_h": 0.5,
       "ofp_h": 0.0,
-      "goal_text": "Развиваем базу: поднимаем темп в конце сессии",
+      "goal_text": "Набираем 55 км за 9 тренировок · работа по плану",
       "phase": "run_base",
       "color": "teal",
       "variants": [
@@ -1338,7 +1363,7 @@
       "bike_h": 0.8,
       "swim_h": 0.5,
       "ofp_h": 0.0,
-      "goal_text": "Развиваем threshold pace",
+      "goal_text": "Набираем 55 км за 9 тренировок · работа по плану",
       "phase": "run_base",
       "color": "orange",
       "variants": [
@@ -1384,7 +1409,7 @@
       "bike_h": 1.0,
       "swim_h": 0.5,
       "ofp_h": 0.0,
-      "goal_text": "Развиваем VO2max",
+      "goal_text": "Набираем 56 км за 9 тренировок · работа по плану",
       "phase": "run_base",
       "color": "red",
       "variants": [
@@ -1434,7 +1459,7 @@
       "end": "2026-11-07",
       "start_d": "1–7 ноя",
       "detailed": true,
-      "is_now": true,
+      "is_now": false,
       "is_next": false,
       "run_km": 56,
       "long_km": 14,
@@ -1442,7 +1467,7 @@
       "bike_h": 1.0,
       "swim_h": 0.5,
       "ofp_h": 0.0,
-      "goal_text": "темповый тест · 3K time trial · 4:40/км",
+      "goal_text": "Набираем 56 км за 9 тренировок · работа по плану",
       "phase": "run_base",
       "color": "cp",
       "variants": [
@@ -1467,16 +1492,17 @@
       "intensity_pct": 7.9,
       "deload": false,
       "sessions_target": 9,
+      "tt_text": "темповый тест · 3K time trial · 4:40/км",
       "is_tt": true,
       "actual": {
-        "run_km": 24.1,
+        "run_km": 57.4,
         "bike_km": 20.3,
-        "swim_km": 0,
-        "sessions": 3,
-        "total_h": 3.52,
-        "run_h": 2.4,
+        "swim_km": 1.9,
+        "sessions": 7,
+        "total_h": 7.29,
+        "run_h": 5.5,
         "bike_h": 1.1,
-        "swim_h": 0.0
+        "swim_h": 0.7
       }
     },
     {
@@ -1486,14 +1512,14 @@
       "start_d": "8–14 ноя",
       "detailed": true,
       "is_now": false,
-      "is_next": true,
+      "is_next": false,
       "run_km": 57,
       "long_km": 14,
       "run_h": 5.4,
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 0.0,
-      "goal_text": "Развиваем порог и VO2max в одной сессии",
+      "goal_text": "Набираем 57 км за 9 тренировок · работа по плану",
       "phase": "run_base",
       "color": "ember",
       "variants": [
@@ -1513,7 +1539,17 @@
       "run_km_easy": 38.4,
       "intensity_pct": 11.5,
       "deload": false,
-      "sessions_target": 9
+      "sessions_target": 9,
+      "actual": {
+        "run_km": 52.7,
+        "bike_km": 0,
+        "swim_km": 2.6,
+        "sessions": 6,
+        "total_h": 5.97,
+        "run_h": 5.0,
+        "bike_h": 0.0,
+        "swim_h": 1.0
+      }
     },
     {
       "w": 6,
@@ -1521,7 +1557,7 @@
       "end": "2026-11-21",
       "start_d": "15–21 ноя",
       "detailed": true,
-      "is_now": false,
+      "is_now": true,
       "is_next": false,
       "run_km": 57,
       "long_km": 14,
@@ -1529,7 +1565,7 @@
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 0.0,
-      "goal_text": "Развиваем переключение зон",
+      "goal_text": "Набираем 57 км за 9 тренировок · работа по плану",
       "phase": "run_base",
       "color": "violet",
       "variants": [
@@ -1549,7 +1585,17 @@
       "run_km_easy": 40.8,
       "intensity_pct": 5.2,
       "deload": false,
-      "sessions_target": 9
+      "sessions_target": 9,
+      "actual": {
+        "run_km": 43.4,
+        "bike_km": 0,
+        "swim_km": 0,
+        "sessions": 3,
+        "total_h": 4.07,
+        "run_h": 4.1,
+        "bike_h": 0.0,
+        "swim_h": 0.0
+      }
     },
     {
       "w": 7,
@@ -1558,14 +1604,14 @@
       "start_d": "22–28 ноя",
       "detailed": true,
       "is_now": false,
-      "is_next": false,
+      "is_next": true,
       "run_km": 57,
       "long_km": 14,
       "run_h": 5.4,
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем аэробную мощность",
+      "goal_text": "Набираем 57 км за 8 тренировок · работа по плану",
       "phase": "run_build",
       "color": "orange",
       "variants": [
@@ -1601,7 +1647,7 @@
       "bike_h": 2.0,
       "swim_h": 0.7,
       "ofp_h": 1.0,
-      "goal_text": "тест на максимум · 5K max · 4:30/км",
+      "goal_text": "Набираем 58 км за 8 тренировок · работа по плану",
       "phase": "run_build",
       "color": "cp",
       "variants": [
@@ -1622,6 +1668,7 @@
       "intensity_pct": 10.4,
       "deload": false,
       "sessions_target": 8,
+      "tt_text": "тест на максимум · 5K max · 4:30/км",
       "is_tt": true
     },
     {
@@ -1638,7 +1685,7 @@
       "bike_h": 2.0,
       "swim_h": 0.7,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем аэробную мощность",
+      "goal_text": "Набираем 60 км за 8 тренировок · работа по плану",
       "phase": "run_build",
       "color": "orange",
       "variants": [
@@ -1674,7 +1721,7 @@
       "bike_h": 2.0,
       "swim_h": 1.3,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем threshold pace",
+      "goal_text": "Набираем 61 км за 8 тренировок · работа по плану",
       "phase": "run_build",
       "color": "orange",
       "variants": [
@@ -1714,7 +1761,7 @@
       "bike_h": 2.0,
       "swim_h": 1.3,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем threshold pace",
+      "goal_text": "Набираем 62 км за 8 тренировок · работа по плану",
       "phase": "run_build",
       "color": "orange",
       "variants": [
@@ -1754,7 +1801,7 @@
       "bike_h": 1.0,
       "swim_h": 0.7,
       "ofp_h": 0.8,
-      "goal_text": "тест на максимум · 3K max · 4:07/км",
+      "goal_text": "Набираем 64 км за 8 тренировок · работа по плану",
       "phase": "run_build",
       "color": "cp",
       "variants": [
@@ -1779,6 +1826,7 @@
       "intensity_pct": 6.7,
       "deload": true,
       "sessions_target": 8,
+      "tt_text": "тест на максимум · 3K max · 4:07/км",
       "is_tt": true
     },
     {
@@ -1795,7 +1843,7 @@
       "bike_h": 2.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем threshold pace",
+      "goal_text": "Набираем 65 км за 8 тренировок · работа по плану",
       "phase": "run_build",
       "color": "orange",
       "variants": [
@@ -1835,7 +1883,7 @@
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем аэробную мощность",
+      "goal_text": "Набираем 65 км за 8 тренировок · работа по плану",
       "phase": "run_specific",
       "color": "orange",
       "variants": [
@@ -1875,7 +1923,7 @@
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем аэробную мощность",
+      "goal_text": "Набираем 66 км за 8 тренировок · работа по плану",
       "phase": "run_specific",
       "color": "orange",
       "variants": [
@@ -1915,7 +1963,7 @@
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "тест на максимум · 5K max · 4:06/км",
+      "goal_text": "Набираем 67 км за 8 тренировок · работа по плану",
       "phase": "run_specific",
       "color": "cp",
       "variants": [
@@ -1936,6 +1984,7 @@
       "intensity_pct": 9.1,
       "deload": false,
       "sessions_target": 8,
+      "tt_text": "тест на максимум · 5K max · 4:06/км",
       "is_tt": true
     },
     {
@@ -1952,7 +2001,7 @@
       "bike_h": 2.5,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем threshold pace",
+      "goal_text": "Набираем 68 км за 8 тренировок · работа по плану",
       "phase": "run_specific",
       "color": "orange",
       "variants": [
@@ -1992,7 +2041,7 @@
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем VO2max",
+      "goal_text": "Набираем 68 км за 8 тренировок · работа по плану",
       "phase": "run_specific",
       "color": "red",
       "variants": [
@@ -2032,7 +2081,7 @@
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем threshold pace",
+      "goal_text": "Набираем 69 км за 8 тренировок · работа по плану",
       "phase": "run_specific",
       "color": "orange",
       "variants": [
@@ -2072,7 +2121,7 @@
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Развиваем VO2max",
+      "goal_text": "Набираем 70 км за 8 тренировок · работа по плану",
       "phase": "run_specific",
       "color": "red",
       "variants": [
@@ -2112,7 +2161,7 @@
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Сохраняем гонка-темп, снимая объём",
+      "goal_text": "Набираем 60 км за 8 тренировок · работа по плану",
       "phase": "run_taper",
       "color": "gray",
       "variants": [
@@ -2148,7 +2197,7 @@
       "bike_h": 3.0,
       "swim_h": 1.5,
       "ofp_h": 1.0,
-      "goal_text": "Сохраняем гонка-темп, снимая объём",
+      "goal_text": "Набираем 53 км за 8 тренировок · работа по плану",
       "phase": "run_taper",
       "color": "gray",
       "variants": [
@@ -2184,7 +2233,7 @@
       "bike_h": 0.8,
       "swim_h": 0.6,
       "ofp_h": 0.4,
-      "goal_text": "темповый тест · 5K @ race pace · 4:00/км",
+      "goal_text": "Набираем 45 км за 8 тренировок · работа по плану",
       "phase": "run_taper",
       "color": "cp",
       "variants": [
@@ -2209,6 +2258,7 @@
       "intensity_pct": 9.1,
       "deload": true,
       "sessions_target": 8,
+      "tt_text": "темповый тест · 5K @ race pace · 4:00/км",
       "is_tt": true
     },
     {
@@ -2225,7 +2275,7 @@
       "bike_h": 0.8,
       "swim_h": 0.6,
       "ofp_h": 0.4,
-      "goal_text": "Сохраняем гонка-темп, снимая объём",
+      "goal_text": "Набираем 38 км за 8 тренировок · работа по плану",
       "phase": "run_taper",
       "color": "gray",
       "variants": [
@@ -2261,7 +2311,7 @@
       "bike_h": 0.7,
       "swim_h": 0.5,
       "ofp_h": 0.4,
-      "goal_text": "Сохраняем гонка-темп, снимая объём",
+      "goal_text": "Набираем 31 км за 8 тренировок · работа по плану",
       "phase": "run_taper",
       "color": "gray",
       "variants": [
@@ -2297,7 +2347,7 @@
       "bike_h": 0.5,
       "swim_h": 0.4,
       "ofp_h": 0.3,
-      "goal_text": "Сохраняем гонка-темп, снимая объём",
+      "goal_text": "Набираем 23 км за 7 тренировок · работа по плану",
       "phase": "run_taper",
       "color": "gray",
       "variants": [
@@ -2333,7 +2383,7 @@
       "bike_h": 0.4,
       "swim_h": 0.3,
       "ofp_h": 0.2,
-      "goal_text": "Сохраняем гонка-темп, снимая объём",
+      "goal_text": "Набираем 16 км за 6 тренировок · работа по плану",
       "phase": "run_taper",
       "color": "gray",
       "variants": [
@@ -2655,9 +2705,9 @@
   "peak_week": 20,
   "peak_km": 70,
   "max_week_h": 12.74,
-  "actual_weeks": 4,
-  "actual_run_km": 128.2,
-  "actual_h": 21.8,
+  "actual_weeks": 6,
+  "actual_run_km": 257.59999999999997,
+  "actual_h": 35.6,
   "color_label": {
     "teal": "объём",
     "orange": "threshold / tempo",
@@ -3433,6 +3483,6 @@
       "decision": ""
     }
   ],
-  "current_week": 4,
-  "generated_at": "03.11.2026 21:49"
+  "current_week": 6,
+  "generated_at": "19.11.2026 00:27"
 }

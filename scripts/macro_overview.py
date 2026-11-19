@@ -142,7 +142,13 @@ def build_data(season_plan_path: Path, athlete_path: Path,
                 "bike_h": round(_mins(entry.get("bike", "")) / 60, 1),
                 "swim_h": round(_mins(entry.get("swim", "")) / 60, 1),
                 "ofp_h": round(_mins(entry.get("core", "")) / 60, 1),
-                "goal_text": q.get("goal_text") or tpl.get("goal", ""),
+                # Описание недели — про объём (`week_goal`), а не цель
+                # одной тренировки (`quality.goal_text`): «Набираем 57 км
+                # за 8 тренировок». Раньше здесь стояла цель тренировки,
+                # и календарь сезона показывал «Развиваем threshold pace»
+                # вместо объёма недели.
+                "goal_text": entry.get("week_goal") or q.get("goal_text")
+                or tpl.get("goal", ""),
                 "phase": entry.get("phase", ""),
                 "color": FOCUS_COLOR.get(gid, "gray"),
                 "variants": [{"label": v.get("label"), "work_m": v.get("work_m")}
@@ -168,10 +174,14 @@ def build_data(season_plan_path: Path, athlete_path: Path,
                 types = {"pace": "темповый тест", "max": "тест на максимум",
                          "sim": "симуляция", "metric": "замер"}
                 label = types.get(tt["test_type"], tt["test_type"])
-                w["goal_text"] = label + " · " + tt["what"]
-                w["is_tt"] = True
+                # Описание недели — про объём, даже в неделю теста. Сам
+                # тест показывается отдельным признаком (`is_tt`), иначе
+                # неделя с контрольной точкой выглядит «неделей про тест»
+                # и объём в ней не читается.
+                w["tt_text"] = label + " · " + tt["what"]
                 if tt["pace"]:
-                    w["goal_text"] += " · " + tt["pace"] + "/км"
+                    w["tt_text"] += " · " + tt["pace"] + "/км"
+                w["is_tt"] = True
         else:
             w["color"] = "gray"
 
